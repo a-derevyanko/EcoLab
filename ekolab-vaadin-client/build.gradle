@@ -1,0 +1,28 @@
+plugins {
+    id 'fi.jasoft.plugin.vaadin' version '1.0'
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://maven.vaadin.com/vaadin-addons'
+    }
+}
+
+dependencies {
+
+    compile group: 'com.vaadin.addon',               name: 'vaadin-context-menu',                   version: '+'
+    compile group: 'org.vaadin.addon',               name: 'confirmdialog',                         version: '+'
+    compile group: 'at.downdrown.vaadinaddons',      name: 'highchartsapi',                         version: '+'
+    compile group: 'org.vaadin.addons',              name: 'sizereporter',                          version: '+'
+    compile group: 'org.vaadin.addons',              name: 'wizards-for-vaadin',                    version: '+'
+
+    compile group: 'com.vaadin',                     name: 'vaadin-client',                         version: '+'
+    compile group: 'com.vaadin',                     name: 'vaadin-client-compiled',                version: '+'
+
+}
+
+jar.dependsOn 'vaadinCompile'

@@ -1,0 +1,42 @@
+apply plugin: 'war'
+apply plugin: 'org.springframework.boot'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:+")
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://maven.vaadin.com/vaadin-addons'
+    }
+}
+
+dependencies {
+    compile project (':ekolab-vaadin-client')
+    //compile project (':ekolab-server')
+    compile group: 'org.apache.commons',            name: 'commons-lang3',                      version: '+'
+    //TODO дождаться новой версии стартера
+    compile group: 'com.vaadin',                    name: 'vaadin-spring-boot-starter',         version: '1.+'
+    //compile group: 'com.vaadin',                    name: 'vaadin-spring-boot-starter',         version: '+'
+
+    compile group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-security',         version: '+'
+    compile group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-boot',             version: '+'
+}
+
+springBoot.mainClass = 'org.aderevyanko.restorator.vaadin.server.VaadinApplication'
+
+clean.delete 'src/main/webapp'
+
+compileJava.dependsOn 'copyVaadinClient'
+
+task copyVaadinClient(type: Copy) {
+    from project (':ekolab-vaadin-client').file('/src/main/webapp')
+    into 'src/main/webapp'
+}
