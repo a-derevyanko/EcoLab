@@ -1,0 +1,77 @@
+.keyboard_container {
+    /*font: Verdana, Sans-Serif; /*71%*/
+    background: #eee;
+    text-align: center;
+    padding: 10px;
+    width: 900px;
+    height: 300px;
+    border-radius: 15px;
+}
+
+.keyboard_container .virtual_key {
+    font-size: 1.5em !important;
+    margin: 0 5px 5px 0;
+    background: #fff;
+    border: 1px solid #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 1px rgba(50, 50, 50, 0.5);
+    height: 50px;
+    width: 50px;
+}
+
+.virtual_keyboard_selector {
+    width: 110px;
+    padding: 5px !important;
+    font-size: 1.3em !important;
+    margin: 0 5px 5px 0;
+    background: #fff;
+    border: 1px solid #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px #000000;
+	overflow: hidden;
+	outline: none;
+    height: 50px;
+}
+
+.keyboard_container .shift {
+    font-size: 1.3em !important;
+    padding: 5px;
+    width: 140px;
+}
+
+.keyboard_container .tab {
+    padding: 5px 18px;
+    font-size: 1.3em !important;
+    width: 120px;
+}
+
+.keyboard_container .bksp {
+    font-size: 1.3em !important;
+    padding: 6px;
+    width: 120px;
+}
+
+.keyboard_container .space {
+    width: 430px;
+}
+
+.keyboard_container .alt {
+    font-size: 1.3em !important;
+    width: 100px;
+}
+
+.keyboard_container .cplk {
+    font-size: 1.3em !important;
+    vertical-align: middle;
+    width: 125px;
+}
+
+.keyboard_container .enter {
+    font-size: 1.3em !important;
+    padding: 5px;
+    width: 100px;
+}
+
+.keyboard_container .pressed {
+    background-color: #d9d9d9;
+}

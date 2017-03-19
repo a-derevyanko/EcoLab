@@ -30,7 +30,7 @@ dependencies {
     compile group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-boot',             version: '+'
 }
 
-springBoot.mainClass = 'org.aderevyanko.restorator.vaadin.server.VaadinApplication'
+springBoot.mainClass = 'org.ekolab.client.vaadin.server.VaadinApplication'
 
 clean.delete 'src/main/webapp'
 

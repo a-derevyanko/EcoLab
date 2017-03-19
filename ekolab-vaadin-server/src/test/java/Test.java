@@ -9,7 +9,7 @@ public class Test {
         Wizard w = new Wizard();
         w.getBackButton().isDisableOnClick();
         w.setUriFragmentEnabled(true);
-        w.addStep();
+        //w.addStep();
         w.addListener(new WizardProgressListener() {
             @Override
             public void activeStepChanged(WizardStepActivationEvent event) {

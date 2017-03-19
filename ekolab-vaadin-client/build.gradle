@@ -23,6 +23,8 @@ dependencies {
     compile group: 'com.vaadin',                     name: 'vaadin-client',                         version: '+'
     compile group: 'com.vaadin',                     name: 'vaadin-client-compiled',                version: '+'
 
+    compile group: 'com.vaadin',                     name: 'vaadin-icons',                          version: '+'
+
 }
 
 jar.dependsOn 'vaadinCompile'

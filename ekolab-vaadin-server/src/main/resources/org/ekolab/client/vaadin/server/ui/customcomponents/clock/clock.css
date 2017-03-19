@@ -1,0 +1,12 @@
+.clock_container {
+    /*font: Verdana, Sans-Serif; /*71%*/
+    /*background: green;*/
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    white-space: nowrap;
+    padding: 10px;
+    width: 200px;
+    height: 30px;
+    border-radius: 15px;
+}
