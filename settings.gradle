@@ -1,4 +1,9 @@
 rootProject.name = 'EkoLab'
+
+include 'eko-db'
+include 'eko-api'
+
 include 'ekolab-vaadin-server'
 include 'ekolab-vaadin-client'
+include 'eko-server'
 

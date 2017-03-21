@@ -1,0 +1,60 @@
+plugins {
+    id 'nu.studer.jooq' version '2.0.5'
+}
+
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.jooq:jooq:3.9.1'
+    jooqRuntime "com.h2database:h2:$h2Version"
+    jooqRuntime "postgresql:postgresql:$pgVersion"
+
+    testCompile "com.h2database:h2:$h2Version"
+}
+
+jooq {
+    //version = '3.9.1'
+    edition = 'OSS'
+    h2(sourceSets.main) {
+        jdbc {
+            driver = 'org.h2.Driver'
+            url = 'jdbc:h2:~/test;AUTO_SERVER=TRUE'
+            user = 'sa'
+            password = ''
+        }
+        generator {
+            name = 'org.jooq.util.DefaultGenerator'
+            database {
+                name = 'org.jooq.util.h2.H2Database'
+                includes = '.*'
+                excludes = ''
+            }
+            target {
+                packageName = 'org.ekolab.server.db.h2'
+            }
+        }
+    }
+    postgres(sourceSets.main) {
+        jdbc {
+            driver = 'org.postgresql.Driver'
+            url = 'jdbc:h2:~/test;AUTO_SERVER=TRUE'
+            user = 'sa'
+            password = ''
+        }
+        generator {
+            name = 'org.jooq.util.DefaultGenerator'
+            database {
+                name = 'org.jooq.util.postgres.PostgresDatabase'
+                includes = '.*'
+                excludes = ''
+            }
+            target {
+                packageName = 'org.ekolab.server.db.postgres'
+            }
+        }
+    }
+}

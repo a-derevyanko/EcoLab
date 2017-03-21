@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+    compile project (':eko-server')
     compile project (':ekolab-vaadin-client')
     //compile project (':ekolab-server')
     compile group: 'org.apache.commons',            name: 'commons-lang3',                      version: '+'
