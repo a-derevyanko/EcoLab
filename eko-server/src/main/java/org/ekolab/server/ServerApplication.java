@@ -1,17 +1,16 @@
 package org.ekolab.server;
 
-import org.aderevyanko.restorator.entity.BaseEntity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.util.Arrays;
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = ServerApplication.class)
-@EntityScan(basePackageClasses = BaseEntity.class)
+@ComponentScan(basePackageClasses = {ServerApplication.class})
+@EnableCaching
 public class ServerApplication {
     public static void main(String... args) {
         ApplicationContext ctx = SpringApplication.run(ServerApplication.class, args);

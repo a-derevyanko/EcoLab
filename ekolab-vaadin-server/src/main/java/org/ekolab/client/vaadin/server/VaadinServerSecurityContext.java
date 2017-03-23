@@ -1,6 +1,7 @@
 package org.ekolab.client.vaadin.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +20,7 @@ import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
 /**
  * Created by Андрей on 11.09.2016.
  */
-@Configuration
+@SpringBootConfiguration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, proxyTargetClass = true)
 @EnableVaadinSharedSecurity

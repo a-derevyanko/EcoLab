@@ -2,6 +2,7 @@ package org.ekolab.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -11,9 +12,10 @@ import java.util.Arrays;
 @SpringBootApplication
 @EnableWebSecurity
 @EnableWebMvc
-public class Application {
+@EnableCaching
+public class WebMvcApplication {
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(Application.class, args);
+        ApplicationContext ctx = SpringApplication.run(WebMvcApplication.class, args);
 
         System.out.println("Let's inspect the beans provided by Spring Boot:");
 
