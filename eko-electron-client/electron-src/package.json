@@ -1,0 +1,12 @@
+{
+  "name": "electron-vaadin",
+  "version": "0.1.0",
+  "main": "main.js",
+  "license": "Apache 2.0",
+  "devDependencies": {
+    "electron": "^1.4.13",
+    "request-promise": "^4.1.1",
+    "tree-kill": "^1.1.0",
+    "properties-reader": "^0.0.15"
+  }
+}

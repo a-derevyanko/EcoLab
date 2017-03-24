@@ -6,4 +6,5 @@ include 'eko-api'
 include 'ekolab-vaadin-server'
 include 'ekolab-vaadin-client'
 include 'eko-server'
+include 'eko-electron-client'
 

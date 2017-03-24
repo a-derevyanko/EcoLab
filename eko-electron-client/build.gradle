@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+allprojects {
+    group = 'org.strangeway'
+    version = '0.1'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+/*sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+        }
+        resources {
+            srcDir 'src/resources'
+        }
+    }
+    test {
+        java {
+            srcDir 'test'
+        }
+        resources {
+            srcDir 'test'
+        }
+    }
+}*/
+
+dependencies {
+    compile 'ch.qos.logback:logback-classic:1.1.2'
+
+    compile 'org.eclipse.jetty:jetty-server:9.4.0.v20161208'
+    compile 'org.eclipse.jetty:jetty-webapp:9.4.0.v20161208'
+    compile 'org.eclipse.jetty.websocket:websocket-server:9.4.0.v20161208'
+
+    compile 'com.vaadin:vaadin-server:7.7.6'
+    compile 'com.vaadin:vaadin-push:7.7.6'
+    compile 'com.vaadin:vaadin-client-compiled:7.7.6'
+    compile 'com.vaadin:vaadin-themes:7.7.6'
+}
+
+applicationName = 'electron-vaadin'
+mainClassName = 'electronvaadin.Launcher'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+configurations.archives.artifacts.removeAll {
+    it.file =~ 'tar'
+}
