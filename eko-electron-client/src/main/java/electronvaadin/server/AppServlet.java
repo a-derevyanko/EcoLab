@@ -11,7 +11,7 @@ import javax.servlet.annotation.WebServlet;
 /**
  * @author Yuriy Artamonov
  */
-@WebServlet(value = "/*")
+@WebServlet(value = "/desktop")
 @VaadinServletConfiguration(productionMode = false, ui = MainUI.class)
 public class AppServlet extends VaadinServlet implements BootstrapListener {
     @Override

@@ -1,5 +1,6 @@
 package org.ekolab.client.vaadin.server.ui;
 
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
@@ -27,36 +28,28 @@ import java.util.Locale;
 @Title("EkoLab")
 @Widgetset("AppWidgetset")
 @Theme(ValoTheme.THEME_NAME)
+@PreserveOnRefresh
 public class VaadinUI extends UI {
     private static final long serialVersionUID = -2988327335267095955L;
     private static final Logger LOG = LoggerFactory.getLogger(VaadinUI.class);
 
     @Autowired
-    private final EkoLabNavigator navigator;
+    private EkoLabNavigator navigator;
 
     @Autowired
-    private final VaadinSecurity vaadinSecurity;
+    private VaadinSecurity vaadinSecurity;
 
     @Autowired
-    private final EkoLabToolBar toolBar;
+    private EkoLabToolBar toolBar;
 
     @Autowired
-    private final ExceptionNotification exceptionNotification;
+    private ExceptionNotification exceptionNotification;
 
     @Autowired
-    private final ViewContainerPanel viewContainer;
+    private ViewContainerPanel viewContainer;
 
     // ----------------------------- Графические компоненты --------------------------------
     private final VerticalLayout root = new VerticalLayout();
-
-    @Autowired
-    public VaadinUI(EkoLabNavigator navigator, VaadinSecurity vaadinSecurity, EkoLabToolBar toolBar, ExceptionNotification exceptionNotification, ViewContainerPanel viewContainer) {
-        this.navigator = navigator;
-        this.vaadinSecurity = vaadinSecurity;
-        this.toolBar = toolBar;
-        this.exceptionNotification = exceptionNotification;
-        this.viewContainer = viewContainer;
-    }
 
     @Override
     protected void init(VaadinRequest request) {

@@ -84,3 +84,9 @@ gradle-app.setting
 .idea/
 EkoLab.ipr
 build/
+/eko-electron-client/electron-src/node_modules/
+/eko-electron-client/electron-src/app.properties
+/ekolab-vaadin-server/src/main/webapp/VAADIN/
+/eko-electron-client/electron-src/electron-vaadin-win32-x64/
+/eko-electron-client/electron-src/electron-vaadin/
+/ekolab-vaadin-client/src/

@@ -40,7 +40,7 @@ app.on('ready', function () {
     console.log("Server PID: " + serverProcess.pid);
 
     const requestPromise = require('request-promise');
-    let appUrl = `${appConfig.get('address')}:${appConfig.get('port')}`;
+    let appUrl = `${appConfig.get('host')}:${appConfig.get('port')}/${appConfig.get('address')}`;
 
     const openWindow = function () {
         mainWindow = new BrowserWindow({

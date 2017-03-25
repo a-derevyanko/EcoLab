@@ -4,36 +4,8 @@ buildscript {
     }
 }
 
-allprojects {
-    group = 'org.strangeway'
-    version = '0.1'
-
-    repositories {
-        mavenCentral()
-    }
-}
-
 apply plugin: 'java'
 apply plugin: 'application'
-
-/*sourceSets {
-    main {
-        java {
-            srcDir 'src/java'
-        }
-        resources {
-            srcDir 'src/resources'
-        }
-    }
-    test {
-        java {
-            srcDir 'test'
-        }
-        resources {
-            srcDir 'test'
-        }
-    }
-}*/
 
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.2'
