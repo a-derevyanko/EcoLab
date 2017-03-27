@@ -1,15 +1,19 @@
+import org.flywaydb.gradle.FlywayExtension
+import org.flywaydb.gradle.task.FlywayMigrateTask
+
 plugins {
     id 'nu.studer.jooq' version '2.0.5'
+    id "org.flywaydb.flyway" version "4.1.2"
 }
 
 apply plugin: 'java'
 
-repositories {
-    jcenter()
-}
 
 dependencies {
     compile 'org.jooq:jooq:3.9.1'
+
+    compile "com.h2database:h2:$h2Version"
+
     jooqRuntime "com.h2database:h2:$h2Version"
     jooqRuntime "postgresql:postgresql:$pgVersion"
 
@@ -17,14 +21,13 @@ dependencies {
 }
 
 jooq {
-    //version = '3.9.1'
     edition = 'OSS'
     h2(sourceSets.main) {
         jdbc {
-            driver = 'org.h2.Driver'
-            url = 'jdbc:h2:file:D:/work/EkoLab/EkoLab-H2DB'
-            user = 'user'
-            password = 'password'
+            driver = "$h2Driver"
+            url = "$h2Url"
+            user = "$h2User"
+            password = "$h2Password"
         }
         generator {
             name = 'org.jooq.util.DefaultGenerator'
@@ -59,5 +62,37 @@ jooq {
     }
 }
 
-// removes the task dependency from compileJava to generateSampleJooqSchemaSource
-compileJava.dependsOn -= 'generateH2JooqSchemaSource'
+task flywayMigrateH2(type: FlywayMigrateTask) {
+    println(System.getProperty("user.dir"))
+    extension = new FlywayExtension()
+    extension.with {
+        locations = ['filesystem:src/main/resources/db/migration/h2']
+        outOfOrder = true
+        validateOnMigrate = true
+        baselineOnMigrate = true
+        driver = "$h2Driver"
+        url = "$h2Url"
+        user = "$h2User"
+        password = "$h2Password"
+    }
+}
+
+//todo
+task flywayMigratePostgres(type: FlywayMigrateTask) {
+    extension = new org.flywaydb.gradle.FlywayExtension()
+    extension.with {
+        locations = ['classpath:db/migration/h2']
+        outOfOrder = true
+        validateOnMigrate = true
+        baselineOnMigrate = true
+        driver = "$h2Driver"
+        url = "$h2Url"
+        user = "$h2User"
+        password = "$h2Password"
+    }
+}
+
+/*flywayMigrateH2.dependsOn(compileJava)
+flywayMigratePostgres.dependsOn(compileJava)*/
+generateH2JooqSchemaSource.dependsOn(flywayMigrateH2)
+generatePostgresJooqSchemaSource.dependsOn(flywayMigratePostgres)

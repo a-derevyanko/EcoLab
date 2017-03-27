@@ -1,6 +1,7 @@
 package org.ekolab.server;
 
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,9 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.*;
 
 import static org.ekolab.server.db.h2.public_.Tables.AUTHORITIES;
+import static org.ekolab.server.db.h2.public_.Tables.GROUPS;
+import static org.ekolab.server.db.h2.public_.Tables.GROUP_AUTHORITIES;
+import static org.ekolab.server.db.h2.public_.Tables.GROUP_MEMBERS;
 import static org.ekolab.server.db.h2.public_.Tables.USERS;
 
 /**
@@ -25,14 +29,6 @@ public class ServerSecurityContext {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(11);
-    }
-
-    @Bean
-    public PersistentTokenRepository persistentTokenRepository(JdbcTemplate jdbcTemplate) {
-        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
-        tokenRepository.setJdbcTemplate(jdbcTemplate);
-        //todo переопределить sql выражения
-        return tokenRepository;
     }
 
     @Bean
@@ -63,43 +59,37 @@ public class ServerSecurityContext {
                 values("", "", "", "", "", "", true).getSQL());
         userDetailsManager.setDeleteUserSql(dsl.deleteFrom(USERS).where(USERS.LOGIN.eq("")).getSQL());
         userDetailsManager.setUpdateUserSql(dsl.update(USERS).set(USERS.PASSWORD, "").set(USERS.ENABLED, true).getSQL());
-        String s = dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq("")).getSQL();
-        userDetailsManager.setCreateAuthoritySql(dsl.insertInto(AUTHORITIES, AUTHORITIES.USER_ID, AUTHORITIES.AUTHORITY).
-                values(USERS.ID.cast(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq("")).getSQL(), "").getSQL());
+        userDetailsManager.setCreateAuthoritySql(
+                dsl.insertInto(AUTHORITIES, AUTHORITIES.USER_ID, AUTHORITIES.AUTHORITY).
+                        select(dsl.select(USERS.ID, DSL.val("").as(AUTHORITIES.AUTHORITY)).from(USERS).where(USERS.LOGIN.eq(""))).getSQL());
         userDetailsManager.setChangePasswordSql(dsl.update(USERS).set(USERS.PASSWORD, "").where(USERS.LOGIN.eq("")).getSQL());
         userDetailsManager.setUsersByUsernameQuery(dsl.select(USERS.LOGIN, USERS.PASSWORD, USERS.ENABLED).from(USERS).where(USERS.LOGIN.eq("")).getSQL());
         userDetailsManager.setAuthoritiesByUsernameQuery(dsl.select(USERS.LOGIN, AUTHORITIES.AUTHORITY).
                 from(AUTHORITIES).join(USERS).on(USERS.ID.eq(AUTHORITIES.USER_ID)).where(USERS.LOGIN.eq("")).getSQL());
         userDetailsManager.setUserExistsSql(dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.eq("")).getSQL());
-        //userDetailsManager.setFindAllGroupsSql(dsl.select(LOGIN).from(USERS).where(USERS.LOGIN.eq("")).getSQL());
+        userDetailsManager.setFindAllGroupsSql(dsl.select(GROUPS.GROUP_NAME).from(GROUPS).getSQL());
+        userDetailsManager.setDeleteUserAuthoritiesSql(dsl.deleteFrom(AUTHORITIES).where(USERS.LOGIN.eq("")).getSQL());
+        userDetailsManager.setGroupAuthoritiesByUsernameQuery(dsl.select(GROUPS.ID, GROUPS.GROUP_NAME, GROUP_AUTHORITIES.AUTHORITY)
+                .from(GROUPS.join(GROUP_AUTHORITIES).on(GROUP_AUTHORITIES.GROUP_ID.eq(GROUPS.ID)).join(GROUP_MEMBERS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID)))
+                .where(GROUP_MEMBERS.USER_ID.eq(dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.eq("")).asField())).getSQL());
+        userDetailsManager.setFindUsersInGroupSql(dsl.select(USERS.LOGIN).from(USERS).join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID))
+                .join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID)).where(GROUPS.GROUP_NAME.eq("")).getSQL());
+        userDetailsManager.setInsertGroupSql(dsl.insertInto(GROUPS, GROUPS.GROUP_NAME).values("").getSQL());
+        userDetailsManager.setFindGroupIdSql(dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq("")).getSQL());
+        userDetailsManager.setInsertGroupAuthoritySql(dsl.insertInto(GROUP_AUTHORITIES, GROUP_AUTHORITIES.GROUP_ID, GROUP_AUTHORITIES.AUTHORITY).
+                values(1L, "").getSQL());
+        userDetailsManager.deleteGroup(dsl.deleteFrom(GROUPS).where(GROUPS.ID.eq(1L)).getSQL());
+        userDetailsManager.setDeleteUserAuthoritiesSql(dsl.deleteFrom(GROUP_AUTHORITIES).where(GROUPS.ID.eq(1L)).getSQL());
+        userDetailsManager.setDeleteGroupMembersSql(dsl.deleteFrom(GROUP_MEMBERS).where(GROUPS.ID.eq(1L)).getSQL());
+        userDetailsManager.setRenameGroupSql(dsl.update(GROUPS).set(GROUPS.GROUP_NAME, "").where(GROUPS.GROUP_NAME.eq("")).getSQL());
+        userDetailsManager.setInsertGroupSql(dsl.insertInto(GROUP_MEMBERS, GROUP_MEMBERS.GROUP_ID, GROUP_MEMBERS.USER_ID)
+                .select(dsl.select(DSL.val(1L), USERS.ID).from(USERS).where(USERS.LOGIN.eq(""))).getSQL());
+        userDetailsManager.setDeleteGroupMemberSql(dsl.deleteFrom(GROUP_MEMBERS).where(GROUPS.ID.eq(1L)
+                .and(GROUP_MEMBERS.USER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(""))))).getSQL());
+        userDetailsManager.setDeleteGroupAuthoritySql(dsl.deleteFrom(GROUP_AUTHORITIES).where(GROUPS.ID.eq(1L)
+                .and(GROUP_AUTHORITIES.AUTHORITY.eq(""))).getSQL());
+        userDetailsManager.setGroupAuthoritiesSql(dsl.select(GROUPS.ID, GROUPS.GROUP_NAME, GROUP_AUTHORITIES.AUTHORITY).
+                from(GROUPS).join(GROUP_AUTHORITIES).on(GROUPS.ID.eq(GROUP_AUTHORITIES.GROUP_ID)).where(GROUPS.GROUP_NAME.eq("")).getSQL());
         return userDetailsManager;
     }
-
-    public static final String DEF_GROUP_AUTHORITIES_BY_USERNAME_QUERY = "select g.id, g.group_name, ga.authority "
-            + "from groups g, group_members gm, group_authorities ga "
-            + "where gm.username = ? " + "and g.id = ga.group_id "
-            + "and g.id = gm.group_id";
-
-
-    public static final String DEF_DELETE_USER_AUTHORITIES_SQL = "delete from authorities where username = ?";
-
-    // GroupManager SQL
-    public static final String DEF_FIND_GROUPS_SQL = "select group_name from groups";
-    public static final String DEF_FIND_USERS_IN_GROUP_SQL = "select username from group_members gm, groups g "
-            + "where gm.group_id = g.id" + " and g.group_name = ?";
-    public static final String DEF_INSERT_GROUP_SQL = "insert into groups (group_name) values (?)";
-    public static final String DEF_FIND_GROUP_ID_SQL = "select id from groups where group_name = ?";
-    public static final String DEF_INSERT_GROUP_AUTHORITY_SQL = "insert into group_authorities (group_id, authority) values (?,?)";
-    public static final String DEF_DELETE_GROUP_SQL = "delete from groups where id = ?";
-    public static final String DEF_DELETE_GROUP_AUTHORITIES_SQL = "delete from group_authorities where group_id = ?";
-    public static final String DEF_DELETE_GROUP_MEMBERS_SQL = "delete from group_members where group_id = ?";
-    public static final String DEF_RENAME_GROUP_SQL = "update groups set group_name = ? where group_name = ?";
-    public static final String DEF_INSERT_GROUP_MEMBER_SQL = "insert into group_members (group_id, username) values (?,?)";
-    public static final String DEF_DELETE_GROUP_MEMBER_SQL = "delete from group_members where group_id = ? and username = ?";
-    public static final String DEF_GROUP_AUTHORITIES_QUERY_SQL = "select g.id, g.group_name, ga.authority "
-            + "from groups g, group_authorities ga "
-            + "where g.group_name = ? "
-            + "and g.id = ga.group_id ";
-    public static final String DEF_DELETE_GROUP_AUTHORITY_SQL = "delete from group_authorities where group_id = ? and authority = ?";
-
 }
