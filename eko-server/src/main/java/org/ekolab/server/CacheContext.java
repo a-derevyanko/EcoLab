@@ -2,10 +2,11 @@ package org.ekolab.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.jcache.config.JCacheConfigurerSupport;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.cache.SpringCacheBasedUserCache;
 

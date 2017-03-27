@@ -1,12 +1,19 @@
-repositories {
-    mavenLocal()
-    mavenCentral()
+apply plugin: 'org.springframework.boot'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:+")
+    }
 }
 
 dependencies {
     compile project (':eko-db')
 
-    compile group: 'org.springframework',      name: 'spring-context-support',                      version: '+'
+    compile group: 'org.springframework',       name: 'spring-context-support',                      version: '+'
 
     compile group: 'org.springframework.boot',  name: 'spring-boot-starter-jetty',                  version: '+'
     compile group: 'org.springframework.boot',  name: 'spring-boot-starter-security',               version: '+'
@@ -16,6 +23,7 @@ dependencies {
     compile group: 'org.springframework.boot',  name: 'spring-boot-configuration-processor',        version: '+'
 
     compile group: 'org.springframework.boot',  name: 'spring-boot-starter-jdbc',                   version: '+'
+    compile group: 'org.flywaydb',             name: 'flyway-core',                             version: '+'
 
     compile group: 'com.zaxxer',                name: 'HikariCP',                                   version: '+'
 
@@ -25,3 +33,5 @@ dependencies {
 
     testCompile group: 'com.h2database',            name: 'h2',                                     version: '+'
 }
+
+bootRun.systemProperties = System.properties

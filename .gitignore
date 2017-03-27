@@ -9,6 +9,7 @@
 .idea/dictionaries
 
 # Sensitive or high-churn files:
+/.ideaDataSources/
 .idea/**/dataSources/
 .idea/**/dataSources.ids
 .idea/**/dataSources.xml
@@ -90,3 +91,4 @@ build/
 /eko-electron-client/electron-src/electron-vaadin-win32-x64/
 /eko-electron-client/electron-src/electron-vaadin/
 /ekolab-vaadin-client/src/
+/EkoLab-H2DB.mv.db
