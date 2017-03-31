@@ -55,15 +55,15 @@ public class VaadinUI extends UI {
     protected void init(VaadinRequest request) {
         setLocale(Locale.getDefault());
         setErrorHandler((ErrorHandler) event -> {
-            exceptionNotification.show(Page.getCurrent());
+            exceptionNotification.show(Page.getCurrent(), event.getThrowable());
             LOG.error(event.getThrowable().getLocalizedMessage(), ExceptionUtils.getRootCause(event.getThrowable()));
         });
         setContent(root);
 
         root.setSizeFull();
-        root.addComponents(toolBar, viewContainer);
+        root.addComponents(/*toolBar, */viewContainer);
 
-        root.setExpandRatio(toolBar, 0.1f);
+        //root.setExpandRatio(toolBar, 0.1f);
         root.setExpandRatio(viewContainer, 2.0f);
 
         navigator.addViewChangeListener(toolBar);

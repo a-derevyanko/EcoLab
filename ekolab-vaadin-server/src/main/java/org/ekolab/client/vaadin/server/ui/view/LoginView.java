@@ -1,6 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.view;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
@@ -34,10 +35,9 @@ public class LoginView extends VerticalLayout implements View {
     protected final HorizontalLayout fields = new HorizontalLayout();
     protected final VerticalLayout loginPanel = new VerticalLayout();
     protected final Label welcome = new Label("Welcome");
-    protected final Label title = new Label("QuickTickets Dashboard");
+    protected final Label title = new Label("EkoLab Project");
     protected final Button signin = new Button("Sign In", (ClickListener) event -> login());
     protected final CheckBox rememberMe = new CheckBox("Remember me");
-    protected final VirtualKeyboard keyboard = new VirtualKeyboard(false);
     protected final TextField username = new TextField("Username");
     protected final PasswordField password = new PasswordField("Password");
     protected final Notification notification = new Notification("Welcome to Dashboard Demo");
@@ -65,15 +65,12 @@ public class LoginView extends VerticalLayout implements View {
         title.addStyleName(ValoTheme.LABEL_LIGHT);
 
         username.setCaption(i18N.get("login-view.username"));
-        username.setIcon(FontAwesome.USER);
+        username.setIcon(VaadinIcons.USER);
         username.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 
         password.setCaption(i18N.get("login-view.password"));
-        password.setIcon(FontAwesome.LOCK);
+        password.setIcon(VaadinIcons.LOCK);
         password.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-
-        keyboard.attachComponent(username);
-        keyboard.attachComponent(password);
 
         signin.setCaption(i18N.get("login-view.signin"));
         signin.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -91,11 +88,9 @@ public class LoginView extends VerticalLayout implements View {
 
         addComponent(title);
         addComponent(loginPanel);
-        addComponent(keyboard);
 
         setExpandRatio(title, 1.0F);
         setExpandRatio(loginPanel, 1.0F);
-        setExpandRatio(keyboard, 3.0F);
 
         notification.setCaption(i18N.get("login-view.ekolab-welcome"));
         notification.setDescription("<span>This application is not real, it only demonstrates an application built with the <a href=\"https://vaadin.com\">Vaadin framework</a>.</span> <span>No username or password is required, just click the <b>Sign In</b> button to continue.</span>");

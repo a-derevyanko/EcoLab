@@ -36,6 +36,9 @@ jooq {
                 includes = '.*'
                 excludes = ''
             }
+            generate {
+                javaTimeTypes = true
+            }
             target {
                 packageName = 'org.ekolab.server.db.h2'
             }
@@ -55,6 +58,9 @@ jooq {
                 includes = '.*'
                 excludes = ''
             }
+            generate {
+                javaTimeTypes = true
+            }
             target {
                 packageName = 'org.ekolab.server.db.postgres'
             }
@@ -63,10 +69,9 @@ jooq {
 }
 
 task flywayMigrateH2(type: FlywayMigrateTask) {
-    println(System.getProperty("user.dir"))
     extension = new FlywayExtension()
     extension.with {
-        locations = ['filesystem:src/main/resources/db/migration/h2']
+        locations = ["filesystem:${sourceSets.main.resources.srcDirs.path[0]}/db/migration/h2"]
         outOfOrder = true
         validateOnMigrate = true
         baselineOnMigrate = true
@@ -78,8 +83,8 @@ task flywayMigrateH2(type: FlywayMigrateTask) {
 }
 
 //todo
-task flywayMigratePostgres(type: FlywayMigrateTask) {
-    extension = new org.flywaydb.gradle.FlywayExtension()
+/*task flywayMigratePostgres(type: FlywayMigrateTask) {
+    extension = new FlywayExtension()
     extension.with {
         locations = ['classpath:db/migration/h2']
         outOfOrder = true
@@ -90,9 +95,9 @@ task flywayMigratePostgres(type: FlywayMigrateTask) {
         user = "$h2User"
         password = "$h2Password"
     }
-}
+}*/
 
 /*flywayMigrateH2.dependsOn(compileJava)
 flywayMigratePostgres.dependsOn(compileJava)*/
 generateH2JooqSchemaSource.dependsOn(flywayMigrateH2)
-generatePostgresJooqSchemaSource.dependsOn(flywayMigratePostgres)
+//generatePostgresJooqSchemaSource.dependsOn(flywayMigratePostgres)

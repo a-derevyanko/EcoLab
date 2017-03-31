@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.*;
 
@@ -50,13 +51,12 @@ public class ServerSecurityContext {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserCache userCache, JdbcTemplate jdbcTemplate, DSLContext dsl) {
+    public UserDetailsManager userDetailsManager(UserCache userCache, JdbcTemplate jdbcTemplate, DSLContext dsl) {
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager();
         userDetailsManager.setJdbcTemplate(jdbcTemplate);
         userDetailsManager.setUserCache(userCache);
-        userDetailsManager.setCreateUserSql(dsl.insertInto(USERS, USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME,
-                USERS.LAST_NAME, USERS.NOTE, USERS.PASSWORD, USERS.ENABLED).
-                values("", "", "", "", "", "", true).getSQL());
+        userDetailsManager.setCreateUserSql(dsl.insertInto(USERS, USERS.LOGIN, USERS.PASSWORD, USERS.ENABLED).
+                values("", "", true).getSQL());
         userDetailsManager.setDeleteUserSql(dsl.deleteFrom(USERS).where(USERS.LOGIN.eq("")).getSQL());
         userDetailsManager.setUpdateUserSql(dsl.update(USERS).set(USERS.PASSWORD, "").set(USERS.ENABLED, true).getSQL());
         userDetailsManager.setCreateAuthoritySql(
@@ -68,7 +68,8 @@ public class ServerSecurityContext {
                 from(AUTHORITIES).join(USERS).on(USERS.ID.eq(AUTHORITIES.USER_ID)).where(USERS.LOGIN.eq("")).getSQL());
         userDetailsManager.setUserExistsSql(dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.eq("")).getSQL());
         userDetailsManager.setFindAllGroupsSql(dsl.select(GROUPS.GROUP_NAME).from(GROUPS).getSQL());
-        userDetailsManager.setDeleteUserAuthoritiesSql(dsl.deleteFrom(AUTHORITIES).where(USERS.LOGIN.eq("")).getSQL());
+        userDetailsManager.setDeleteUserAuthoritiesSql(dsl.deleteFrom(AUTHORITIES).where(
+                AUTHORITIES.USER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq("")))).getSQL());
         userDetailsManager.setGroupAuthoritiesByUsernameQuery(dsl.select(GROUPS.ID, GROUPS.GROUP_NAME, GROUP_AUTHORITIES.AUTHORITY)
                 .from(GROUPS.join(GROUP_AUTHORITIES).on(GROUP_AUTHORITIES.GROUP_ID.eq(GROUPS.ID)).join(GROUP_MEMBERS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID)))
                 .where(GROUP_MEMBERS.USER_ID.eq(dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.eq("")).asField())).getSQL());
@@ -78,8 +79,8 @@ public class ServerSecurityContext {
         userDetailsManager.setFindGroupIdSql(dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq("")).getSQL());
         userDetailsManager.setInsertGroupAuthoritySql(dsl.insertInto(GROUP_AUTHORITIES, GROUP_AUTHORITIES.GROUP_ID, GROUP_AUTHORITIES.AUTHORITY).
                 values(1L, "").getSQL());
-        userDetailsManager.deleteGroup(dsl.deleteFrom(GROUPS).where(GROUPS.ID.eq(1L)).getSQL());
-        userDetailsManager.setDeleteUserAuthoritiesSql(dsl.deleteFrom(GROUP_AUTHORITIES).where(GROUPS.ID.eq(1L)).getSQL());
+        userDetailsManager.setDeleteGroupSql(dsl.deleteFrom(GROUPS).where(GROUPS.ID.eq(1L)).getSQL());
+        userDetailsManager.setDeleteGroupAuthoritiesSql(dsl.deleteFrom(GROUP_AUTHORITIES).where(GROUPS.ID.eq(1L)).getSQL());
         userDetailsManager.setDeleteGroupMembersSql(dsl.deleteFrom(GROUP_MEMBERS).where(GROUPS.ID.eq(1L)).getSQL());
         userDetailsManager.setRenameGroupSql(dsl.update(GROUPS).set(GROUPS.GROUP_NAME, "").where(GROUPS.GROUP_NAME.eq("")).getSQL());
         userDetailsManager.setInsertGroupSql(dsl.insertInto(GROUP_MEMBERS, GROUP_MEMBERS.GROUP_ID, GROUP_MEMBERS.USER_ID)

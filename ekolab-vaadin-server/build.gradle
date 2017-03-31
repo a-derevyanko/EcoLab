@@ -29,9 +29,16 @@ dependencies {
 
     compile group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-security',         version: '+'
     compile group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-boot',             version: '+'
+
+    runtime group: 'de.codecentric',                name: 'spring-boot-admin-server-ui',            version: '+'
 }
 
 springBoot.mainClass = 'org.ekolab.client.vaadin.server.VaadinApplication'
+
+bootRun {
+    systemProperties(System.properties)
+    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.active=dev", "-Dorg.jooq.no-logo=true"]
+}
 
 clean.delete 'src/main/webapp'
 

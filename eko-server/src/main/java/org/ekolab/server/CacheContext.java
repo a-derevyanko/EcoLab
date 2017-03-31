@@ -2,11 +2,9 @@ package org.ekolab.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.jcache.config.JCacheConfigurerSupport;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.cache.SpringCacheBasedUserCache;
 
@@ -14,7 +12,7 @@ import org.springframework.security.core.userdetails.cache.SpringCacheBasedUserC
  * Created by Андрей on 11.09.2016.
  */
 @SpringBootConfiguration
-public class CacheContext extends JCacheConfigurerSupport {
+public class CacheContext {
     private final CacheManager cacheManager;
 
     @Autowired

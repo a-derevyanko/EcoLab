@@ -8,4 +8,9 @@ public class Profiles {
         public static final String H2 = "h2";
         public static final String POSTGRES = "postgres";
     }
+    public class MODE {
+        public static final String TEST = "test";
+        public static final String DEV = "dev";
+        public static final String PROD = "production";
+    }
 }

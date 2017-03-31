@@ -1,4 +1,4 @@
-package org.ekolab.server.service;
+package org.ekolab.server.service.impl;
 
 import org.ekolab.server.dao.api.TokenRepositoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +6,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentReme
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -17,22 +18,22 @@ public class PersistentTokenRepositoryImpl implements PersistentTokenRepository 
     private TokenRepositoryDao tokenRepositoryDao;
 
     @Override
-    public void createNewToken(PersistentRememberMeToken token) {
+    public void createNewToken(@NotNull PersistentRememberMeToken token) {
         tokenRepositoryDao.insertToken(token.getUsername(), token.getSeries(), token.getTokenValue(), token.getDate());
     }
 
     @Override
     public void updateToken(String series, String tokenValue, Date lastUsed) {
-
+        tokenRepositoryDao.updateToken(series, tokenValue, lastUsed);
     }
 
     @Override
     public PersistentRememberMeToken getTokenForSeries(String seriesId) {
-        return null;
+        return tokenRepositoryDao.getTokenForSeries(seriesId);
     }
 
     @Override
     public void removeUserTokens(String username) {
-
+        tokenRepositoryDao.removeTokensByUser(username);
     }
 }

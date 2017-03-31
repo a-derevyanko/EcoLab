@@ -10,7 +10,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.ui.customcomponents.clock.Clock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.security.VaadinSecurity;
 
@@ -36,9 +35,9 @@ public class EkoLabToolBar extends HorizontalLayout implements ViewChangeListene
     private final Button exitButton = new Button(VaadinIcons.CLOSE);
     private final Button editButton = new Button(VaadinIcons.PENCIL);
     private final Button management = new Button(VaadinIcons.COG);
-    private final Clock clock = new Clock();
+    //private final Clock clock = new Clock();
     private final HorizontalLayout leftButtonPanel = new HorizontalLayout();
-    private final HorizontalLayout centerPanel = new HorizontalLayout(clock);
+    //private final HorizontalLayout centerPanel = new HorizontalLayout(clock);
     private final HorizontalLayout rightButtonPanel = new HorizontalLayout(editButton, management, exitButton);
 
     @Autowired
@@ -52,13 +51,13 @@ public class EkoLabToolBar extends HorizontalLayout implements ViewChangeListene
         prepareButton(exitButton, "toolbar.exit");
         prepareButton(editButton, "toolbar.edit");
         prepareButton(management, "toolbar.management");
-        clock.setWidth(400.0F, Unit.PIXELS);
-        addComponents(leftButtonPanel, centerPanel, rightButtonPanel);
+        //clock.setWidth(400.0F, Unit.PIXELS);
+        addComponents(leftButtonPanel, /*centerPanel,*/ rightButtonPanel);
         setComponentAlignment(leftButtonPanel, Alignment.MIDDLE_LEFT);
-        setComponentAlignment(centerPanel, Alignment.MIDDLE_CENTER);
+        //setComponentAlignment(centerPanel, Alignment.MIDDLE_CENTER);
         setComponentAlignment(rightButtonPanel, Alignment.MIDDLE_RIGHT);
         setExpandRatio(leftButtonPanel, 1.0F);
-        setExpandRatio(centerPanel, 0.5F);
+        //setExpandRatio(centerPanel, 0.5F);
         setExpandRatio(rightButtonPanel, 1.0F);
     }
 
