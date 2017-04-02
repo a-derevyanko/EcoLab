@@ -90,5 +90,8 @@ build/
 /ekolab-vaadin-server/src/main/webapp/VAADIN/
 /eko-electron-client/electron-src/electron-vaadin-win32-x64/
 /eko-electron-client/electron-src/electron-vaadin/
-/ekolab-vaadin-client/src/
 /EkoLab-H2DB.mv.db
+/ekolab-vaadin-client/src/main/webapp/VAADIN/widgetsets/
+/ekolab-vaadin-client/src/main/resources/AppWidgetset.gwt.xml
+/ekolab-vaadin-client/src/main/webapp/VAADIN/themes/EkoLab/styles.css.gz
+/ekolab-vaadin-client/src/main/webapp/VAADIN/themes/EkoLab/styles.css

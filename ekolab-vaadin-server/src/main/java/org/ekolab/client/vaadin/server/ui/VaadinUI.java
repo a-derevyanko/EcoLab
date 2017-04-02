@@ -4,12 +4,14 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
-import com.vaadin.server.*;
+import com.vaadin.server.Page;
+import com.vaadin.server.Responsive;
+import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
+import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ import java.util.Locale;
 @SpringUI
 @Title("EkoLab")
 @Widgetset("AppWidgetset")
-@Theme(ValoTheme.THEME_NAME)
+@Theme(EkoLabTheme.THEME_NAME)
 @PreserveOnRefresh
 public class VaadinUI extends UI {
     private static final long serialVersionUID = -2988327335267095955L;
@@ -36,7 +38,7 @@ public class VaadinUI extends UI {
     private VaadinSecurity vaadinSecurity;
 
     @Autowired
-    private EkoLabToolBar toolBar;
+    private EkoLabMenuBar menuBar;
 
     @Autowired
     private ExceptionNotification exceptionNotification;
@@ -51,15 +53,16 @@ public class VaadinUI extends UI {
     protected void init(VaadinRequest request) {
         setLocale(Locale.getDefault());
         setErrorHandler(event -> exceptionNotification.show(Page.getCurrent(), event.getThrowable()));
-        setContent(root);
+        setContent(viewContainer);
+        addStyleName(EkoLabTheme.UI_WITH_MENU);
 
-        root.setSizeFull();
-        root.addComponents(toolBar, viewContainer);
+        /*root.setSizeFull();
+        root.addComponents(menuBar, viewContainer);
 
-        root.setExpandRatio(toolBar, 0.1f);
+        root.setExpandRatio(menuBar, 0.1f);
         root.setExpandRatio(viewContainer, 2.0f);
-
-        navigator.addViewChangeListener(toolBar);
+*/
+        navigator.addViewChangeListener(menuBar);
 
         Responsive.makeResponsive(this);
     }
@@ -69,7 +72,7 @@ public class VaadinUI extends UI {
         return "VaadinUI{" +
                 "navigator=" + navigator +
                 ", vaadinSecurity=" + vaadinSecurity +
-                ", toolBar=" + toolBar +
+                ", menuBar=" + menuBar +
                 ", exceptionNotification=" + exceptionNotification +
                 ", root=" + root +
                 ", viewContainer=" + viewContainer +

@@ -2,6 +2,7 @@ package org.ekolab.client.vaadin.server.service;
 
 import com.vaadin.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class I18N {
+    private static final String CACHE_NAME = "I18N";
+
     @Autowired
     private final MessageSource messageSource;
 
@@ -17,6 +20,7 @@ public class I18N {
         this.messageSource = messageSource;
     }
 
+    @Cacheable(CACHE_NAME)
     public String get(String key, Object... args) {
         return messageSource.getMessage(key, args, VaadinSession.getCurrent().getLocale());
     }

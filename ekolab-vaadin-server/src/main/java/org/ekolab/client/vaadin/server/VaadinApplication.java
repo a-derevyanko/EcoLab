@@ -7,13 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Import;
-import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
 
 import java.util.Arrays;
 
 @SpringBootApplication
-@Import(VaadinSharedSecurityConfiguration.class)
 @EnableAdminServer
 public class VaadinApplication extends ServerApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(VaadinApplication.class);
@@ -30,8 +27,8 @@ public class VaadinApplication extends ServerApplication {
         }
 
         LOGGER.info("-------------------------------------------------------");
-        LOGGER.info("|              Vaadin Server metrics                  |", beanNames.length);
-        LOGGER.info("|                  Beans count: {}                    |", beanNames.length);
+        LOGGER.info("|              Vaadin Server metrics                  |");
+        LOGGER.info("|                  Beans count: {}                   |", beanNames.length);
         LOGGER.info("-------------------------------------------------------");
     }
 }

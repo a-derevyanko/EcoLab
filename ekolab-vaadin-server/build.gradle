@@ -37,7 +37,7 @@ springBoot.mainClass = 'org.ekolab.client.vaadin.server.VaadinApplication'
 
 bootRun {
     systemProperties(System.properties)
-    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.active=dev", "-Dorg.jooq.no-logo=true"]
+    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.active=dev-h2", "-Dorg.jooq.no-logo=true"]
 }
 
 clean.delete 'src/main/webapp'

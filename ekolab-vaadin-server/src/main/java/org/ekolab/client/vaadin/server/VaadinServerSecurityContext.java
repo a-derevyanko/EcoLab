@@ -3,6 +3,7 @@ package org.ekolab.client.vaadin.server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,6 +15,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
+import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
 import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
 
 /**
@@ -23,6 +25,7 @@ import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, proxyTargetClass = true)
 @EnableVaadinSharedSecurity
+@Import(VaadinSharedSecurityConfiguration.class)
 public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     private final AuthenticationProvider authenticationProvider;
     private final RememberMeServices rememberMeServices;

@@ -5,9 +5,9 @@ import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.themes.ValoTheme;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.common.Profiles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class ExceptionNotification extends Notification {
     @Autowired
     public ExceptionNotification(I18N i18N) {
         super(i18N.get("exception.title"), Type.TRAY_NOTIFICATION);
-        setStyleName(ValoTheme.NOTIFICATION_CLOSABLE);
+        setStyleName(EkoLabTheme.NOTIFICATION_CLOSABLE);
         setPosition(Position.BOTTOM_CENTER);
     }
 

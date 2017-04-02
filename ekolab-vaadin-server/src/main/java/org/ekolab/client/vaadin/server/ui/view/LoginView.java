@@ -2,7 +2,6 @@ package org.ekolab.client.vaadin.server.ui.view;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
@@ -10,8 +9,9 @@ import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.ValoTheme;
 import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.service.ResourceLoader;
+import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.common.Profiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -34,11 +34,13 @@ public class LoginView extends VerticalLayout implements BaseView {
     @Autowired
     protected I18N i18N;
 
+    @Autowired
+    protected ResourceLoader loader;
+
     // ---------------------------- Графические компоненты --------------------
     protected final HorizontalLayout fields = new HorizontalLayout();
     protected final VerticalLayout loginPanel = new VerticalLayout();
     protected final Label welcome = new Label("Welcome");
-    protected final Label title = new Label("EkoLab Project");
     protected final Button signin = new Button("Sign In", (ClickListener) event -> login());
     protected final CheckBox rememberMe = new CheckBox("Remember me");
     protected final TextField username = new TextField("Username");
@@ -47,51 +49,53 @@ public class LoginView extends VerticalLayout implements BaseView {
 
     @PostConstruct
     protected void init() {
+        setSizeFull();
         setCaption(i18N.get("login-view.title"));
-        setSpacing(true);
+        setMargin(false);
+        setSpacing(false);
+        addStyleName(EkoLabTheme.VIEW_LOGIN); //todo убрать при уходе
+
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
         loginPanel.setSizeUndefined();
-        loginPanel.setSpacing(true);
+        loginPanel.setMargin(false);
         Responsive.makeResponsive(loginPanel);
 
         welcome.setValue(i18N.get("login-view.welcome"));
         welcome.setSizeUndefined();
-        welcome.addStyleName(ValoTheme.LABEL_H4);
-        welcome.addStyleName(ValoTheme.LABEL_COLORED);
-
-        title.setValue(i18N.get("login-view.title"));
-        title.setSizeUndefined();
-        title.addStyleName(ValoTheme.LABEL_H1);
-        title.addStyleName(ValoTheme.LABEL_LIGHT);
+        welcome.addStyleName(EkoLabTheme.LABEL_H4);
+        welcome.addStyleName(EkoLabTheme.LABEL_COLORED);
 
         username.setCaption(i18N.get("login-view.username"));
         username.setIcon(VaadinIcons.USER);
-        username.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+        username.addStyleName(EkoLabTheme.TEXTFIELD_INLINE_ICON);
 
         password.setCaption(i18N.get("login-view.password"));
         password.setIcon(VaadinIcons.LOCK);
-        password.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+        password.addStyleName(EkoLabTheme.TEXTFIELD_INLINE_ICON);
 
         signin.setCaption(i18N.get("login-view.signin"));
-        signin.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        signin.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         signin.setClickShortcut(KeyCode.ENTER);
 
         rememberMe.setCaption(i18N.get("login-view.remember"));
 
         fields.addComponents(username, password, signin);
-        fields.setComponentAlignment(signin, Alignment.BOTTOM_LEFT);
+        fields.setComponentAlignment(signin, Alignment.BOTTOM_CENTER);
         fields.setSpacing(true);
 
-        loginPanel.addComponent(welcome);
+        loginPanel.addStyleName(EkoLabTheme.PANEL_LOGIN);
+
+        Image logo = loader.getImage(EkoLabTheme.IMAGE_TEXT_LOGO);
+        logo.setWidth(30, Unit.EM);
+        logo.setHeight(15, Unit.EM);
+
+        loginPanel.addComponent(logo);
         loginPanel.addComponent(fields);
         loginPanel.addComponent(rememberMe);
 
-        addComponent(title);
+        //addComponent(logo);
         addComponent(loginPanel);
-
-        setExpandRatio(title, 1.0F);
-        setExpandRatio(loginPanel, 1.0F);
 
         notification.setCaption(i18N.get("login-view.ekolab-welcome"));
         notification.setDescription("<span>This application is not real, it only demonstrates an application built with the <a href=\"https://vaadin.com\">Vaadin framework</a>.</span> <span>No username or password is required, just click the <b>Sign In</b> button to continue.</span>");
