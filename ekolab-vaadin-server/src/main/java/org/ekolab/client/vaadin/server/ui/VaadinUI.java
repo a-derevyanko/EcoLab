@@ -4,15 +4,11 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
-import com.vaadin.server.ErrorHandler;
-import com.vaadin.server.Page;
-import com.vaadin.server.Responsive;
-import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,16 +50,13 @@ public class VaadinUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         setLocale(Locale.getDefault());
-        setErrorHandler((ErrorHandler) event -> {
-            exceptionNotification.show(Page.getCurrent(), event.getThrowable());
-            LOG.error(event.getThrowable().getLocalizedMessage(), ExceptionUtils.getRootCause(event.getThrowable()));
-        });
+        setErrorHandler(event -> exceptionNotification.show(Page.getCurrent(), event.getThrowable()));
         setContent(root);
 
         root.setSizeFull();
-        root.addComponents(/*toolBar, */viewContainer);
+        root.addComponents(toolBar, viewContainer);
 
-        //root.setExpandRatio(toolBar, 0.1f);
+        root.setExpandRatio(toolBar, 0.1f);
         root.setExpandRatio(viewContainer, 2.0f);
 
         navigator.addViewChangeListener(toolBar);

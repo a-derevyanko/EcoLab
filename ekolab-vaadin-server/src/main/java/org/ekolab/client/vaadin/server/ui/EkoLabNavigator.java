@@ -16,11 +16,7 @@ import javax.validation.constraints.NotNull;
 @SpringComponent
 public class EkoLabNavigator extends SpringNavigator {
     @Autowired
-    private final VaadinSecurity vaadinSecurity;
-
-    public EkoLabNavigator(VaadinSecurity vaadinSecurity) {
-        this.vaadinSecurity = vaadinSecurity;
-    }
+    private VaadinSecurity vaadinSecurity;
 
     @NotNull
     @Override

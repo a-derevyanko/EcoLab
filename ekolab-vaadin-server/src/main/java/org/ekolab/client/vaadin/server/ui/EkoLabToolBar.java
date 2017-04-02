@@ -1,59 +1,44 @@
 package org.ekolab.client.vaadin.server.ui;
 
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.AlignmentInfo;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.ui.view.BaseView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.security.VaadinSecurity;
+
+import javax.annotation.PostConstruct;
+
+import static com.vaadin.ui.Alignment.MIDDLE_LEFT;
 
 /**
  * При изменении VIEW меняются кнопки в тулбаре.
  */
 @UIScope
 @SpringComponent
-public class EkoLabToolBar extends HorizontalLayout implements ViewChangeListener, ClickListener {
+public class EkoLabToolBar extends HorizontalLayout implements ViewChangeListener {
     @Autowired
-    private final VaadinSecurity vaadinSecurity;
+    private I18N i18N;
 
     @Autowired
-    private final I18N i18N;
-
-    @Autowired
-    private final EkoLabNavigator navigator;
+    private EkoLabNavigator navigator;
 
     // ---------------------- Данные экземпляра ----------------------------------
 
     // ---------------------- Графические компоненты -----------------------------
-    private final Button settingsButton = new Button(VaadinIcons.COG);
-    private final Button exitButton = new Button(VaadinIcons.CLOSE);
-    private final Button editButton = new Button(VaadinIcons.PENCIL);
-    private final Button management = new Button(VaadinIcons.COG);
-    //private final Clock clock = new Clock();
     private final HorizontalLayout leftButtonPanel = new HorizontalLayout();
-    //private final HorizontalLayout centerPanel = new HorizontalLayout(clock);
-    private final HorizontalLayout rightButtonPanel = new HorizontalLayout(editButton, management, exitButton);
+    private final HorizontalLayout rightButtonPanel = new HorizontalLayout();
 
-    @Autowired
-    public EkoLabToolBar(VaadinSecurity vaadinSecurity, I18N i18N, EkoLabNavigator navigator) {
-        this.vaadinSecurity = vaadinSecurity;
-        this.i18N = i18N;
-        this.navigator = navigator;
+    @PostConstruct
+    protected void init() {
         setWidth(100.0F, Unit.PERCENTAGE);
         setMargin(false);
-        prepareButton(settingsButton, "toolbar.settings");
-        prepareButton(exitButton, "toolbar.exit");
-        prepareButton(editButton, "toolbar.edit");
-        prepareButton(management, "toolbar.management");
-        //clock.setWidth(400.0F, Unit.PIXELS);
         addComponents(leftButtonPanel, /*centerPanel,*/ rightButtonPanel);
-        setComponentAlignment(leftButtonPanel, Alignment.MIDDLE_LEFT);
+        setComponentAlignment(leftButtonPanel, MIDDLE_LEFT);
         //setComponentAlignment(centerPanel, Alignment.MIDDLE_CENTER);
         setComponentAlignment(rightButtonPanel, Alignment.MIDDLE_RIGHT);
         setExpandRatio(leftButtonPanel, 1.0F);
@@ -66,9 +51,15 @@ public class EkoLabToolBar extends HorizontalLayout implements ViewChangeListene
      * @param button кнопка.
      * @param captionProperty ключ ресурса, содержащего лейбл кнопки.
      */
-    private void prepareButton(Button button, String captionProperty) {
-        button.addClickListener(this);
+    public void addButton(Button button, String captionProperty, AlignmentInfo alignment) {
         button.setCaption(i18N.get(captionProperty));
+        if (alignment == AlignmentInfo.LEFT) {
+            leftButtonPanel.addComponent(button);
+        } else if (alignment == AlignmentInfo.RIGHT) {
+            rightButtonPanel.addComponent(button);
+        } else {
+            throw new IllegalArgumentException("Unknown alignment");
+        }
     }
 
     // ------------------------------ Реализация обработчиков событий ----------------
@@ -79,26 +70,6 @@ public class EkoLabToolBar extends HorizontalLayout implements ViewChangeListene
 
     @Override
     public void afterViewChange(ViewChangeEvent event) {
-        boolean showButtons = true;//!navigator.isLoginView();
-        leftButtonPanel.forEach(component -> component.setVisible(showButtons));
-        rightButtonPanel.forEach(component -> component.setVisible(showButtons));
-        //editButton.setVisible(navigator.isCurrentViewEditable());
-    }
-
-    @Override
-    public void buttonClick(ClickEvent event) {
-        /*if (event.getButton() == settingsButton) {
-            //TODO перемещаем на вид настроек
-        } else if (event.getButton() == exitButton) {
-            vaadinSecurity.logout();
-        } else if (event.getButton() == editButton) {
-            if (navigator.getCurrentEditableView().switchEditMode()) {
-                editButton.setIcon(FontAwesome.SAVE);
-                editButton.setCaption(i18N.get("toolbar.apply"));
-            } else {
-                editButton.setIcon(FontAwesome.PENCIL_SQUARE_O);
-                editButton.setCaption(i18N.get("toolbar.edit"));
-            }
-        }*/
+        ((BaseView) event.getNewView()).placeToolBarActions(this);
     }
 }

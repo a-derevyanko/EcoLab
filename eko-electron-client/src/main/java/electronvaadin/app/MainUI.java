@@ -2,16 +2,15 @@ package electronvaadin.app;
 
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
-import com.vaadin.data.Container;
-import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import elemental.json.Json;
 import elemental.json.JsonArray;
 import elemental.json.JsonString;
+
+import static com.vaadin.shared.ui.ContentMode.PREFORMATTED;
 
 /**
  * @author Yuriy Artamonov
@@ -42,7 +41,7 @@ public class MainUI extends UI {
         titleLabel.setStyleName(ValoTheme.LABEL_H1);
         centerLayout.addComponent(titleLabel);
 
-        Button addButton = new Button("Add", FontAwesome.PLUS);
+        /*Button addButton = new Button("Add", FontAwesome.PLUS);
         addButton.focus();
         addButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
         addButton.addClickListener(event -> {
@@ -83,7 +82,7 @@ public class MainUI extends UI {
         tasksGrid.addSelectionListener(event -> {
             boolean enableRemove = !event.getSelected().isEmpty();
             removeButton.setEnabled(enableRemove);
-        });
+        });*/
 
         centerLayout.addComponent(tasksGrid);
         centerLayout.setExpandRatio(tasksGrid, 1);
@@ -133,7 +132,7 @@ public class MainUI extends UI {
         content.setSpacing(true);
 
         Label aboutLabel = new Label("Electron+Vaadin Demo\nAuthor: Yuriy Artamonov");
-        aboutLabel.setContentMode(ContentMode.PREFORMATTED);
+        aboutLabel.setContentMode(PREFORMATTED);
         aboutLabel.setSizeUndefined();
 
         content.addComponent(aboutLabel);

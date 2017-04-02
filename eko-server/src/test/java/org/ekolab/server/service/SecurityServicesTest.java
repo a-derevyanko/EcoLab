@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentReme
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -30,7 +30,7 @@ import java.util.Date;
 @ActiveProfiles(Profiles.MODE.TEST)
 @Transactional
 @Rollback
-public class SecurityServicesTest extends AbstractTransactionalTestNGSpringContextTests {
+public class SecurityServicesTest extends AbstractTestNGSpringContextTests {
     private static final String USERNAME = "user";
 
     @Autowired

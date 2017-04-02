@@ -1,5 +1,5 @@
 plugins {
-    id 'fi.jasoft.plugin.vaadin' version '1.0'
+    id 'fi.jasoft.plugin.vaadin' version '1.1.6'
 }
 
 apply plugin: 'java'
@@ -20,8 +20,9 @@ dependencies {
     compile group: 'org.vaadin.addons',              name: 'sizereporter',                          version: '0.1.4'
     compile group: 'org.vaadin.addons',              name: 'wizards-for-vaadin',                    version: '2.0.0'
 
-    compile group: 'com.vaadin',                     name: 'vaadin-client',                         version: '8.0.4'
-    compile group: 'com.vaadin',                     name: 'vaadin-client-compiled',                version: '8.0.4'
+    compile group: 'com.vaadin',                     name: 'vaadin-client',                         version: '8.0.5'
+    compile group: 'com.vaadin',                     name: 'vaadin-client-compiled',                version: '8.0.5'
+    compile group: 'com.vaadin',                     name: 'vaadin-themes',                         version: '8.0.5'
 
     compile group: 'com.vaadin',                     name: 'vaadin-icons',                          version: '3.0.1'
 

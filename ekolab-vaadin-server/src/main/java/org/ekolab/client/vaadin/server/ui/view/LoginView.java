@@ -4,7 +4,6 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.shared.Position;
@@ -13,23 +12,27 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
 import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.ui.customcomponents.virtualkeyboard.VirtualKeyboard;
+import org.ekolab.server.common.Profiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.AuthenticationException;
 import org.vaadin.spring.security.shared.VaadinSharedSecurity;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Created by Андрей on 04.09.2016.
  */
 @SpringView(name = LoginView.NAME)
-public class LoginView extends VerticalLayout implements View {
+@Profile(Profiles.MODE.PROD)
+public class LoginView extends VerticalLayout implements BaseView {
     public static final String NAME = "login";
 
     @Autowired
-    protected final VaadinSharedSecurity vaadinSecurity;
+    protected VaadinSharedSecurity vaadinSecurity;
 
     @Autowired
-    protected final I18N i18N;
+    protected I18N i18N;
 
     // ---------------------------- Графические компоненты --------------------
     protected final HorizontalLayout fields = new HorizontalLayout();
@@ -42,10 +45,8 @@ public class LoginView extends VerticalLayout implements View {
     protected final PasswordField password = new PasswordField("Password");
     protected final Notification notification = new Notification("Welcome to Dashboard Demo");
 
-    @Autowired
-    public LoginView(VaadinSharedSecurity vaadinSecurity, I18N i18N) {
-        this.vaadinSecurity = vaadinSecurity;
-        this.i18N = i18N;
+    @PostConstruct
+    protected void init() {
         setCaption(i18N.get("login-view.title"));
         setSpacing(true);
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);

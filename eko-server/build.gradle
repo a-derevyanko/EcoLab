@@ -1,3 +1,5 @@
+import org.ekolab.gradle.CustomTest
+
 apply plugin: 'org.springframework.boot'
 
 buildscript {
@@ -31,6 +33,7 @@ dependencies {
 
     compile group: 'de.codecentric',                name: 'spring-boot-admin-server',               version: '+'
     compile group: 'de.codecentric',                name: 'spring-boot-admin-server-ui',            version: '+'
+    compile group: 'org.jolokia',                   name: 'jolokia-core',                           version: '1.3.5'
 
     // TODO
     runtime     group: 'com.h2database',            name: 'h2',                                     version: '+'
@@ -40,9 +43,31 @@ dependencies {
 }
 bootRun {
     systemProperties(System.properties)
-    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.active=dev", "-Dorg.jooq.no-logo=true"]
+    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.active=dev-h2", "-Dorg.jooq.no-logo=true"]
 }
 
 bootRepackage {
     enabled = false
 }
+
+check.dependsOn.remove(test)
+build.dependsOn.remove(test)
+
+task testH2(type:CustomTest){
+    systemProperties(System.properties)
+    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.include=dev-h2"]
+}
+
+task testPostgres(type:CustomTest){
+    systemProperties(System.properties)
+    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.include=dev-h2"]
+
+}
+
+task test(type: DefaultTask, overwrite: true) {
+    dependsOn testH2
+    dependsOn testPostgres
+}
+
+check.dependsOn test
+build.dependsOn test
