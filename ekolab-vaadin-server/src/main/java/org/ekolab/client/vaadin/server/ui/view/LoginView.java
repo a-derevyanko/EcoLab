@@ -10,22 +10,21 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickListener;
 import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.service.ResourceLoader;
+import org.ekolab.client.vaadin.server.ui.common.ResourceService;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
+import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.common.Profiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.AuthenticationException;
 import org.vaadin.spring.security.shared.VaadinSharedSecurity;
 
-import javax.annotation.PostConstruct;
-
 /**
  * Created by Андрей on 04.09.2016.
  */
 @SpringView(name = LoginView.NAME)
 @Profile(Profiles.MODE.PROD)
-public class LoginView extends VerticalLayout implements BaseView {
+public class LoginView extends VerticalLayout implements View {
     public static final String NAME = "login";
 
     @Autowired
@@ -33,9 +32,6 @@ public class LoginView extends VerticalLayout implements BaseView {
 
     @Autowired
     protected I18N i18N;
-
-    @Autowired
-    protected ResourceLoader loader;
 
     // ---------------------------- Графические компоненты --------------------
     protected final HorizontalLayout fields = new HorizontalLayout();
@@ -45,10 +41,11 @@ public class LoginView extends VerticalLayout implements BaseView {
     protected final CheckBox rememberMe = new CheckBox("Remember me");
     protected final TextField username = new TextField("Username");
     protected final PasswordField password = new PasswordField("Password");
-    protected final Notification notification = new Notification("Welcome to Dashboard Demo");
+    protected final Notification notification = new Notification("Welcome to EkoLab");
 
-    @PostConstruct
-    protected void init() {
+    @Override
+    public void init() {
+        View.super.init();
         setSizeFull();
         setCaption(i18N.get("login-view.title"));
         setMargin(false);
@@ -86,7 +83,7 @@ public class LoginView extends VerticalLayout implements BaseView {
 
         loginPanel.addStyleName(EkoLabTheme.PANEL_LOGIN);
 
-        Image logo = loader.getImage(EkoLabTheme.IMAGE_TEXT_LOGO);
+        Image logo = ResourceService.getImage(EkoLabTheme.IMAGE_TEXT_LOGO);
         logo.setWidth(30, Unit.EM);
         logo.setHeight(15, Unit.EM);
 

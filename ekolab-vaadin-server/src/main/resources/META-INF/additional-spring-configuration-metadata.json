@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "lab.autoSaveRate",
+      "type": "java.lang.Integer",
+      "description": "Интервал автосохранения выполнения лабораторных."
+  }
+] }

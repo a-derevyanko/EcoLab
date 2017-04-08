@@ -2,9 +2,13 @@ package org.ekolab.server;
 
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserCache;
@@ -28,11 +32,13 @@ import static org.ekolab.server.db.h2.public_.Tables.USERS;
 @SpringBootConfiguration
 public class ServerSecurityContext {
     @Bean
+    @Lazy
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(11);
     }
 
     @Bean
+    @Lazy
     public AuthenticationProvider authenticationProvider(UserCache userCache,
                                                          PasswordEncoder passwordEncoder,
                                                          UserDetailsService userDetailsService) {
@@ -44,6 +50,7 @@ public class ServerSecurityContext {
     }
 
     @Bean
+    @Lazy
     public RememberMeServices rememberMeServices(UserDetailsService userDetailsService,
                                                  PersistentTokenRepository tokenRepository) {
         return new PersistentTokenBasedRememberMeServices(AbstractRememberMeServices.DEFAULT_PARAMETER,
@@ -51,8 +58,11 @@ public class ServerSecurityContext {
     }
 
     @Bean
-    public UserDetailsManager userDetailsManager(UserCache userCache, JdbcTemplate jdbcTemplate, DSLContext dsl) {
+    @Lazy
+    public UserDetailsManager userDetailsManager(AuthenticationManager authenticationManager,
+                                                 UserCache userCache, JdbcTemplate jdbcTemplate, DSLContext dsl) {
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager();
+        userDetailsManager.setAuthenticationManager(authenticationManager);
         userDetailsManager.setJdbcTemplate(jdbcTemplate);
         userDetailsManager.setUserCache(userCache);
         userDetailsManager.setCreateUserSql(dsl.insertInto(USERS, USERS.LOGIN, USERS.PASSWORD, USERS.ENABLED).

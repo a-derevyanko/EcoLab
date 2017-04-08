@@ -1,11 +1,17 @@
 @import "greenefy-valo-variables";
 @import "common";
 @import "views/login";
+@import "views/labchooser";
+@import "views/labwizard";
+@import "views/labview";
 
 @mixin ekolab {
   @include valo;
   @include ekolab-common;
   @include ekolab-login-view;
+  @include ekolab-labchooser-view;
+  @include ekolab-labwizard-view;
+  @include ekolab-lab-view;
 
   /* Add your theme selectors here */
 }

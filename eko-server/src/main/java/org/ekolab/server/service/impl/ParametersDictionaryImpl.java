@@ -10,10 +10,10 @@ import javax.validation.constraints.NotNull;
  * Created by 777Al on 30.03.2017.
  */
 @Service
-@Cacheable
 public class ParametersDictionaryImpl implements ParametersDictionary {
     @Override
     @NotNull
+    @Cacheable("parameters")
     public String getParameterDescription(@NotNull String parameterName) {
         return null;
     }

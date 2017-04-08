@@ -1,0 +1,31 @@
+@mixin ekolab-lab-form-layout {
+  .lab-form-layout .v-formlayout {
+    background-color: green;
+  }
+  //
+  //.v-formlayout .v-caption {}
+  //
+  ///* Columns in a field row. */
+  //.v-formlayout-contentcell {} /* Field content. */
+  //.v-formlayout-captioncell {} /* Field caption. */
+  //.v-formlayout-errorcell {}   /* Field error indicator. */
+  //
+  ///* Overall style of field rows. */
+  //.v-formlayout-row {}
+  //.v-formlayout-firstrow {}
+  //.v-formlayout-lastrow {}
+  //
+  ///* Required field indicator. */
+  //.v-formlayout .v-required-field-indicator {}
+  //.v-formlayout-captioncell .v-caption {}
+  //.v-required-field-indicator {}
+  //
+  //
+  ///* Error indicator. */
+  //.v-formlayout-cell .v-errorindicator {}
+  //.v-formlayout-error-indicator .v-errorindicator {}
+}
+
+@mixin ekolab-lab-view {
+  @include ekolab-lab-form-layout
+}

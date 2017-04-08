@@ -7,7 +7,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.ui.view.BaseView;
+import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -53,6 +53,6 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
 
     @Override
     public void afterViewChange(ViewChangeEvent event) {
-        ((BaseView) event.getNewView()).placeMenuBarActions(this);
+        ((View) event.getNewView()).placeMenuBarActions(this);
     }
 }

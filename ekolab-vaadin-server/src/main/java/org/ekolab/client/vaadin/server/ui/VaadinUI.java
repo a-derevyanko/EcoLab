@@ -4,12 +4,16 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
+import com.vaadin.server.CustomizedSystemMessages;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
+import com.vaadin.server.SystemMessagesProvider;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.slf4j.Logger;
@@ -35,9 +39,6 @@ public class VaadinUI extends UI {
     private EkoLabNavigator navigator;
 
     @Autowired
-    private VaadinSecurity vaadinSecurity;
-
-    @Autowired
     private EkoLabMenuBar menuBar;
 
     @Autowired
@@ -45,6 +46,12 @@ public class VaadinUI extends UI {
 
     @Autowired
     private ViewContainerPanel viewContainer;
+
+    @Autowired
+    private VaadinSecurity vaadinSecurity;
+
+    @Autowired
+    private I18N i18N;
 
     // ----------------------------- Графические компоненты --------------------------------
     private final VerticalLayout root = new VerticalLayout();
@@ -65,6 +72,21 @@ public class VaadinUI extends UI {
         navigator.addViewChangeListener(menuBar);
 
         Responsive.makeResponsive(this);
+
+        VaadinService.getCurrent().setSystemMessagesProvider((SystemMessagesProvider) systemMessagesInfo -> {
+            // todo переопределить системные значения
+            Locale locale = systemMessagesInfo.getLocale();
+            CustomizedSystemMessages systemMessages = new CustomizedSystemMessages();
+
+            // =====================================================================
+            // Vaadin.SessionExpired
+            /*String message = i18N.get("Vaadin.SessionExpired.URL", null, locale);
+            systemMessages.setSessionExpiredURL(message);*/
+
+            // .... and you can get the other messages from resource file .....
+
+            return systemMessages;
+        });
     }
 
     @Override
