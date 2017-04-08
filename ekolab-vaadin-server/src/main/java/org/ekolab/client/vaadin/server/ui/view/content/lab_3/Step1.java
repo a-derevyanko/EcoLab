@@ -1,12 +1,12 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
+import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -18,11 +18,12 @@ public class Step1 extends HorizontalLayout implements LabWizardStep {
     private I18N i18N;
 
     @Autowired
-    private ParameterLayout layout;
+    private ParameterLayout<Lab3Data> firstFormLayout;
+
+    @Autowired
+    private ParameterLayout<Lab3Data> secondFormLayout;
 
     // ----------------------------- Графические компоненты --------------------------------
-    private final FormLayout firstFormLayout = new FormLayout();
-
     private final TextField powerField = new TextField("Power");
     private final TextField blockCountField = new TextField("Block count");
     private final TextField areaField = new TextField("Area");
@@ -40,7 +41,7 @@ public class Step1 extends HorizontalLayout implements LabWizardStep {
         setMargin(true);
         firstFormLayout.setMargin(true);
         firstFormLayout.setSizeFull();
-        firstFormLayout.addStyleName("lab-form-layout");
+        firstFormLayout.addStyleName(EkoLabTheme.LAYOUT_LAB);
         firstFormLayout.setCaption(i18N.get("lab1.step1.power-station-characteristics"));
         firstFormLayout.addComponent(powerField);
         firstFormLayout.addComponent(blockCountField);

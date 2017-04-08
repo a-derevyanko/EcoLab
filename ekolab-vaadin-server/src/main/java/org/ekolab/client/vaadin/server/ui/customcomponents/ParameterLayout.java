@@ -17,12 +17,13 @@ import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.annotation.PrototypeScope;
 
 /**
  * Created by 777Al on 08.04.2017.
  */
 @SpringComponent
-@ViewScope
+@PrototypeScope
 public class ParameterLayout<BEAN> extends HorizontalLayout implements UIComponent {
     @Autowired
     private Binder<BEAN> dataBinder;
@@ -46,6 +47,11 @@ public class ParameterLayout<BEAN> extends HorizontalLayout implements UICompone
         UIComponent.super.init();
     }
 
+    @Override
+    public void setCaption(String captionKey) {
+
+    }
+
     public void addIntegerField(int min, int max, ValueProvider<BEAN, Integer> getter,
                                  Setter<BEAN, Integer> setter) {
 
@@ -59,11 +65,11 @@ public class ParameterLayout<BEAN> extends HorizontalLayout implements UICompone
 
     @Override
     public void addComponent(Component c) {
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
     }
 
     @Override
     public void addComponent(Component c, int index) {
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
     }
 }

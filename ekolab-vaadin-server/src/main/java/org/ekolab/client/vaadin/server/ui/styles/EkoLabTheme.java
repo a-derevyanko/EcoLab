@@ -18,6 +18,9 @@ public class EkoLabTheme extends ValoTheme {
 
     public static final String PANEL_LABCHOOSER = "content-panel";
 
+    // ---------------------- Компоновщики  -------------------------
+    public static final String LAYOUT_LAB = "lab-form-layout";
+
     // ---------------------- Кнопки -------------------------
     //public static final String BUTTON_LABWIZARD_NEXT = "labwizard-button-next";
 
