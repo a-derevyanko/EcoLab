@@ -43,20 +43,15 @@ public class Step1 extends HorizontalLayout implements LabWizardStep {
         firstFormLayout.setSizeFull();
         firstFormLayout.addStyleName(EkoLabTheme.LAYOUT_LAB);
         firstFormLayout.setCaption(i18N.get("lab1.step1.power-station-characteristics"));
-        firstFormLayout.addComponent(powerField);
-        firstFormLayout.addComponent(blockCountField);
-        firstFormLayout.addComponent(areaField);
-        firstFormLayout.addComponent(steamProductionField);
-        firstFormLayout.addComponent(chimneyCountField);
+        firstFormLayout.addIntegerField("lab1.step1.powerField", 0, 1000000, Lab3Data::getPower, Lab3Data::setPower);
+        /*firstFormLayout.addComponent(blockCountField);
+        firstFormLayout.addComponent(areaField);*/
+        firstFormLayout.addDoubleField("lab1.step1.steamProductionField", 0.0, 1000000.0, Lab3Data::getSteamProduction, Lab3Data::setSteamProduction);
+        /*firstFormLayout.addComponent(chimneyCountField);
         firstFormLayout.addComponent(chimneyHeightField);
         firstFormLayout.addComponent(chimneyDiameterField);
         firstFormLayout.addComponent(windDirectionField);
-        firstFormLayout.addComponent(windSpeedField);/*
-        lab3DataBinder.forField(powerField).withConverter(strToInt).
-                withValidator(validators.intValidator(0, 1000000)).bind(Lab3Data::getPower, Lab3Data::setPower);
-
-        lab3DataBinder.forField(steamProductionField).withConverter(strToDouble).
-                withValidator(validators.doubleValidator(0.0, 1000000.0)).bind(Lab3Data::getSteamProduction, Lab3Data::setSteamProduction);*/
+        firstFormLayout.addComponent(windSpeedField);*/
     }
 
     @Override
