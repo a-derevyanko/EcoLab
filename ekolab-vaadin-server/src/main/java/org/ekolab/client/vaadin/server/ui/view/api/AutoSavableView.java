@@ -1,6 +1,5 @@
 package org.ekolab.client.vaadin.server.ui.view.api;
 
-import com.vaadin.server.CompositeErrorMessage;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -11,6 +10,6 @@ public interface AutoSavableView extends SavableView {
     @Scheduled(fixedRateString = "${lab.autoSaveRate:#{60000}}", initialDelayString = "${lab.autoSaveRate:#{60000}}")
     @Async
     default void autoSave() {
-        CompositeErrorMessage errorMessages = saveData();
+        saveData();
     }
 }
