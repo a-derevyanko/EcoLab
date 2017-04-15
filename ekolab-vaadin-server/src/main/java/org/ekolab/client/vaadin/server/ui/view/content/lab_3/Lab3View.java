@@ -4,6 +4,7 @@ import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.SpringView;
 import org.ekolab.client.vaadin.server.ui.common.LabWizard;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
+import org.ekolab.server.model.Lab3Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class Lab3View extends LabWizard implements AutoSavableView {
     public static final String NAME = "lab3view";
 
+    @Autowired
+    private Lab3PresentationStep presentationStep;
     @Autowired
     private Step1 step1;
 
@@ -35,6 +38,7 @@ public class Lab3View extends LabWizard implements AutoSavableView {
     @Override
     public void init() {
         super.init();
+        addStep(presentationStep);
         addStep(step1);
         addStep(step2);
         addStep(step3);

@@ -1,2 +1,8 @@
 @mixin ekolab-labwizard-view {
+  .wizard-panel {
+    background-color: #c9e7c5;
+  }
+  .wizard-step-panel {
+    background-color: rgba(205, 255, 171, 0.13);
+  }
 }

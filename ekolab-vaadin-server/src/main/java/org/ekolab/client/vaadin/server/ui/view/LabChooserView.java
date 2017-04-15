@@ -9,13 +9,11 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
-import org.ekolab.client.vaadin.server.ui.common.ResourceService;
+import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -27,6 +25,9 @@ public class LabChooserView extends VerticalLayout implements View {
     @Autowired
     private EkoLabNavigator navigator;
 
+    @Autowired
+    private ResourceService resourceService;
+
     // ---------------------------- Графические компоненты --------------------
     private final GridLayout content = new GridLayout(10, 10);
     private final Button lab1Button = new Button("Laboratory work №1");
@@ -36,9 +37,8 @@ public class LabChooserView extends VerticalLayout implements View {
     private final Label  labLabel = new Label("Environmental technologies at TPPs");
 
     @Override
-    @PostConstruct
     public void init() {
-        setSizeFull();
+        View.super.init();
         addStyleName(EkoLabTheme.VIEW_LABCHOOSER);
         setMargin(false);
         setSpacing(false);
@@ -50,7 +50,7 @@ public class LabChooserView extends VerticalLayout implements View {
         content.setSpacing(true);
         Responsive.makeResponsive(content);
 
-        Image logo = ResourceService.getImage(EkoLabTheme.IMAGE_LOGO);
+        Image logo = resourceService.getImage(EkoLabTheme.IMAGE_LOGO);
         logo.setSizeFull();
 
         lab1Button.setSizeFull();

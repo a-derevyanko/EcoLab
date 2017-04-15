@@ -43,6 +43,10 @@ bootRun {
     jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.active=dev-h2", "-Dorg.jooq.no-logo=true"]
 }
 
+bootRepackage {
+    enabled = true
+    executable = true
+}
 clean.delete 'src/main/webapp'
 
 task copyVaadinClient(type: Copy) {

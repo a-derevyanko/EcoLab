@@ -29,6 +29,7 @@ public abstract class LabWizard extends Wizard implements AutoSavableView {
         getCancelButton().setVisible(false);
         getFinishButton().setVisible(false);
 
+        addStyleName(EkoLabTheme.PANEL_WIZARD);
         getFinishButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         getNextButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         getBackButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);

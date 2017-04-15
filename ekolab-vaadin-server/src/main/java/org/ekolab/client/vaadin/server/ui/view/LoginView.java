@@ -10,7 +10,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickListener;
 import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.ui.common.ResourceService;
+import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.common.Profiles;
@@ -32,6 +32,9 @@ public class LoginView extends VerticalLayout implements View {
 
     @Autowired
     protected I18N i18N;
+
+    @Autowired
+    protected ResourceService resourceService;
 
     // ---------------------------- Графические компоненты --------------------
     protected final HorizontalLayout fields = new HorizontalLayout();
@@ -83,7 +86,7 @@ public class LoginView extends VerticalLayout implements View {
 
         loginPanel.addStyleName(EkoLabTheme.PANEL_LOGIN);
 
-        Image logo = ResourceService.getImage(EkoLabTheme.IMAGE_TEXT_LOGO);
+        Image logo = resourceService.getImage(EkoLabTheme.IMAGE_TEXT_LOGO);
         logo.setWidth(30, Unit.EM);
         logo.setHeight(15, Unit.EM);
 

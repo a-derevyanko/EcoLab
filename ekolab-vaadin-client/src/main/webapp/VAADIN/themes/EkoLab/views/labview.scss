@@ -1,10 +1,24 @@
 @mixin ekolab-lab-form-layout {
-  //.lab-form-layout .v-formlayout {
+  .lab-form-layout .v-gridlayout-spacing-on {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
 
-  //}
-  //
-  //.v-formlayout .v-caption {}
-  //
+  .v-caption-lab-form-layout {
+    text-align: center;
+    font: bold italic 110% serif;
+  }
+
+  .v-gridlayout-lab-form-layout {
+    border-radius: 15px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px dotted;
+  }
   ///* Columns in a field row. */
   //.v-formlayout-contentcell {} /* Field content. */
   //.v-formlayout-captioncell {} /* Field caption. */

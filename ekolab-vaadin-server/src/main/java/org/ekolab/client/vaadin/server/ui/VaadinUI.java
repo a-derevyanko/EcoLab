@@ -74,17 +74,10 @@ public class VaadinUI extends UI {
         Responsive.makeResponsive(this);
 
         VaadinService.getCurrent().setSystemMessagesProvider((SystemMessagesProvider) systemMessagesInfo -> {
-            // todo переопределить системные значения
-            Locale locale = systemMessagesInfo.getLocale();
             CustomizedSystemMessages systemMessages = new CustomizedSystemMessages();
 
-            // =====================================================================
-            // Vaadin.SessionExpired
-            /*String message = i18N.get("Vaadin.SessionExpired.URL", null, locale);
-            systemMessages.setSessionExpiredURL(message);*/
-
-            // .... and you can get the other messages from resource file .....
-
+            systemMessages.setSessionExpiredCaption(i18N.get("vaadin.session-expired"));
+            systemMessages.setCommunicationErrorMessage(i18N.get("vaadin.server-connection-lost"));
             return systemMessages;
         });
     }
