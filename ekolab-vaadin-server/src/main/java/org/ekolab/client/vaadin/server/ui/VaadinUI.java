@@ -4,12 +4,9 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
-import com.vaadin.server.CustomizedSystemMessages;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
-import com.vaadin.server.SystemMessagesProvider;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -73,13 +70,8 @@ public class VaadinUI extends UI {
 
         Responsive.makeResponsive(this);
 
-        VaadinService.getCurrent().setSystemMessagesProvider((SystemMessagesProvider) systemMessagesInfo -> {
-            CustomizedSystemMessages systemMessages = new CustomizedSystemMessages();
-
-            systemMessages.setSessionExpiredCaption(i18N.get("vaadin.session-expired"));
-            systemMessages.setCommunicationErrorMessage(i18N.get("vaadin.server-connection-lost"));
-            return systemMessages;
-        });
+        UI.getCurrent().getReconnectDialogConfiguration().setDialogText(i18N.get("vaadin.server-connection-lost"));
+        UI.getCurrent().getReconnectDialogConfiguration().setDialogTextGaveUp(i18N.get("vaadin.server-connection-lost-gave-up"));
     }
 
     @Override
