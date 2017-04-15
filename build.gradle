@@ -18,6 +18,7 @@ subprojects {
         //exclude group: "org.jboss.logging", module: "jboss-logging"
         //exclude group: 'spring-data-jpa', module: 'spring-data-jpa'
         exclude module: 'spring-boot-starter-tomcat'
+        exclude module: 'tomcat-jdbc'
     }
 
     apply plugin: 'java'
