@@ -5,18 +5,18 @@ import com.vaadin.server.DeploymentConfiguration;
 import com.vaadin.server.ServiceException;
 import com.vaadin.server.SystemMessagesProvider;
 import com.vaadin.server.VaadinServletService;
+import com.vaadin.spring.annotation.SpringComponent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.vaadin.spring.servlet.Vaadin4SpringServlet;
 
 /**
  * Created by 777Al on 15.04.2017.
  */
-public class CustomizedVaadinServlet extends Vaadin4SpringServlet {
-    private final MessageSource messageSource;
-
-    public CustomizedVaadinServlet(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
+@SpringComponent
+public class VaadinServlet extends Vaadin4SpringServlet {
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     protected VaadinServletService createServletService(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
