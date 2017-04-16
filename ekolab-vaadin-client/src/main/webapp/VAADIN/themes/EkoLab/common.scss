@@ -196,6 +196,21 @@
 
   }
 
+  .v-nativebutton-multiline {
+    @include valo-button-style($background-color: $v-selection-color);
+    $padding-width: round($v-unit-size/2);
+    padding: 0 $padding-width;
+    font-weight: bold;
+    $min-width: round($v-unit-size * 2.2);
+    min-width: $min-width;
+    white-space: pre;
+    text-align: center;
+  }
+
+  .v-nativebutton-multiline .v-nativebutton-caption {
+    white-space: pre;
+  }
+
   .vaadin-chart {
     transform: translateZ(0);
   }

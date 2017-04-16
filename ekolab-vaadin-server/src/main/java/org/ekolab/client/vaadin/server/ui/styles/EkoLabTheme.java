@@ -29,7 +29,7 @@ public class EkoLabTheme extends ValoTheme {
     public static final String LABEL_SIGN = "lab-form-layout-sign";
 
     // ---------------------- Кнопки -------------------------
-    //public static final String BUTTON_LABWIZARD_NEXT = "labwizard-button-next";
+    public static final String BUTTON_MULTILINE = "multiline";
 
     //public static final String BUTTON_LABWIZARD_BACK = "labwizard-button-back";
 
