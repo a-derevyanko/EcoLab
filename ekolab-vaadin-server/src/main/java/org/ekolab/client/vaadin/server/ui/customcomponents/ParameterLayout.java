@@ -61,13 +61,12 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
         Label captionLabel = new Label(i18N.get(propertyField.getName()), ContentMode.PREFORMATTED);
         Label dimensionLabel = new Label("km2", ContentMode.PREFORMATTED);
         Button infoButton = new Button(VaadinIcons.QUESTION);
-        int lastRow = getRows();
-        insertRow(lastRow);
-        newLine();
+        int lastRow = getRows() - 1;
         super.addComponent(captionLabel, 0, lastRow);
         super.addComponent(field, 1, lastRow);
         super.addComponent(dimensionLabel, 2, lastRow);
         super.addComponent(infoButton, 3, lastRow);
+        insertRow(getRows());
     }
 
     @Override
@@ -103,11 +102,15 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
 
     @Override
     public CompositeErrorMessage getComponentError() {
-        List<ErrorMessage> errorMessages = new ArrayList<>();
-        errorMessages.add(super.getComponentError());
+        List<ErrorMessage> errorMessages = new ArrayList<>(0);
+        if (super.getComponentError() != null) {
+            errorMessages.add(super.getComponentError());
+        }
         for (int i = 0; i < getRows(); i++) {
             AbstractComponent component = (AbstractComponent) getComponent(1, i); // Поля ввода данных
-            errorMessages.add(component.getErrorMessage());
+            if (component.getComponentError() != null) {
+                errorMessages.add(component.getComponentError());
+            }
         }
         return errorMessages.isEmpty() ? null : new CompositeErrorMessage(errorMessages);
     }

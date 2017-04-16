@@ -1,9 +1,9 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 
-import com.github.lotsabackscatter.blueimp.gallery.Image;
 import com.vaadin.spring.annotation.SpringView;
 import org.ekolab.client.vaadin.server.ui.common.LabPresentationStep;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -12,17 +12,15 @@ import java.util.List;
 @SpringView
 public class Lab3PresentationStep extends LabPresentationStep {
     // ---------------------------- Графические компоненты --------------------
+
     @Override
-    protected List<Image> getPresentationSlides() {
-        return resourceService.svg("img/icon.svg",
-                "img/logo.svg",
-                "img/logoCrop.svg",
-                "img/textLogo.svg"
+    protected List<String> getPresentationImageFiles() {
+        return Arrays.asList("slideArea.svg"
         );
     }
 
     @Override
-    public boolean onBack() {
-        return false;
+    protected String getLabContentFolder() {
+        return "content/lab3/";
     }
 }
