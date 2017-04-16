@@ -2,9 +2,12 @@ package org.ekolab.client.vaadin.server.service;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.UIScope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -15,7 +18,7 @@ import java.io.Serializable;
 @Service
 @UIScope
 public class I18N implements Serializable {
-    private static final String CACHE_NAME = "I18N";
+    private static final Logger LOGGER = LoggerFactory.getLogger(I18N.class);
 
     @Autowired
     private final MessageSource messageSource;
@@ -28,8 +31,13 @@ public class I18N implements Serializable {
         this.vaadinSession = vaadinSession;
     }
 
-    @Cacheable(CACHE_NAME)
+    @Cacheable("I18N")
     public String get(String key, Object... args) {
-        return messageSource.getMessage(key, args, vaadinSession.getLocale());
+        try {
+            return messageSource.getMessage(key, args, vaadinSession.getLocale());
+        } catch (NoSuchMessageException ex) {
+            LOGGER.warn(ex.getLocalizedMessage());
+            return "";
+        }
     }
 }

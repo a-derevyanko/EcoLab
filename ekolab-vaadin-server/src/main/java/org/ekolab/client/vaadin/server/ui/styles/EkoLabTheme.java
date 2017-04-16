@@ -25,6 +25,9 @@ public class EkoLabTheme extends ValoTheme {
     // ---------------------- Компоновщики  -------------------------
     public static final String LAYOUT_LAB = "lab-form-layout";
 
+    // ---------------------- Надписи -------------------------
+    public static final String LABEL_SIGN = "lab-form-layout-sign";
+
     // ---------------------- Кнопки -------------------------
     //public static final String BUTTON_LABWIZARD_NEXT = "labwizard-button-next";
 

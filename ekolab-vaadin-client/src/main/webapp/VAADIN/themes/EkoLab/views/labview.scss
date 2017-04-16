@@ -1,9 +1,19 @@
 @mixin ekolab-lab-form-layout {
   .lab-form-layout .v-gridlayout-spacing-on {
-    padding-left: 5px;
+    padding-left: 25px;
     padding-right: 5px;
     padding-top: 1px;
     padding-bottom: 1px;
+  }
+
+  .lab-form-layout-sign {
+    font-style: italic;
+    sub {
+      margin-left: +0.3em;
+    }
+    sup {
+      margin-left: -0.3em;
+    }
   }
 
   .v-caption-lab-form-layout {
@@ -15,7 +25,7 @@
     border-radius: 15px;
     padding-top: 1px;
     padding-bottom: 1px;
-    padding-left: 10px;
+    padding-left: 25px;
     padding-right: 10px;
     border: 1px dotted;
   }

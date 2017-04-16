@@ -39,6 +39,7 @@ public class Step1 extends HorizontalLayout implements AutoSavableLabWizardStep 
     @Override
     public void init() {
         AutoSavableLabWizardStep.super.init();
+        setSizeFull();
         setMargin(true);
         addComponent(firstFormLayout);
         addComponent(secondFormLayout);
@@ -56,10 +57,14 @@ public class Step1 extends HorizontalLayout implements AutoSavableLabWizardStep 
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "windDirection"));
 
         secondFormLayout.setMargin(true);
-        /*secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "windSpeed"));
-        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "windDirection"));*/
-
-
+        secondFormLayout.setCaption(i18N.get("lab3.step1.fuel-characteristics"));
+        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "lowHeatValue"));
+        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "carbonInFlyAsh"));
+        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "fuelConsumer"));
+        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "sulphurContent"));
+        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "ashContent"));
+        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "waterContent"));
+        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "ashRecyclingFactor"));
     }
 
     @Override

@@ -8,14 +8,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.server.ErrorMessage;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.*;
 import com.vaadin.util.ReflectTools;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
@@ -49,6 +42,7 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
     @Override
     public void init() {
         UIComponent.super.init();
+        setSizeUndefined();
         setColumns(4);
         setSpacing(true);
         setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
@@ -58,13 +52,14 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
     public void addField(Field propertyField) {
         Component field = getComponent(propertyField);
 
-        Label captionLabel = new Label(i18N.get(propertyField.getName()), ContentMode.PREFORMATTED);
-        Label dimensionLabel = new Label("km2", ContentMode.PREFORMATTED);
+        Label captionLabel = new Label(getFieldCaption(propertyField.getName()), ContentMode.PREFORMATTED);
+        Label signLabel = new Label(getFieldSign(propertyField.getName()), ContentMode.HTML);
+        signLabel.addStyleName(EkoLabTheme.LABEL_SIGN);
         Button infoButton = new Button(VaadinIcons.QUESTION);
         int lastRow = getRows() - 1;
         super.addComponent(captionLabel, 0, lastRow);
         super.addComponent(field, 1, lastRow);
-        super.addComponent(dimensionLabel, 2, lastRow);
+        super.addComponent(signLabel, 2, lastRow);
         super.addComponent(infoButton, 3, lastRow);
         insertRow(getRows());
     }
@@ -74,10 +69,20 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
         throw new UnsupportedOperationException();
     }
 
+    private String getFieldCaption(String fieldName) {
+        String fieldCaption = i18N.get(fieldName);
+        String fieldDimension = i18N.get(fieldName + "-dimension");
+        return fieldDimension.isEmpty() ? fieldCaption : fieldCaption + " (" + fieldDimension + ')';
+    }
+
+    private String getFieldSign(String fieldName) {
+        return i18N.get(fieldName + "-sign");
+    }
+
     private AbstractComponent getComponent(Field propertyField) {
         Class<?> propClass = ReflectTools.convertPrimitiveType(propertyField.getType());
         if (propClass.isEnum()) {
-            ComboBox<Enum<?>> comboBox = new ComboBox<Enum<?>>(null, (List) Arrays.asList(propClass.getEnumConstants()));
+            ComboBox<Enum<?>> comboBox = new ComboBox<>(null, Arrays.asList((Enum<?>[]) propClass.getEnumConstants()));
             comboBox.setItemCaptionGenerator((elem) -> i18N.get(elem.getDeclaringClass().getSimpleName() + '.' + elem.name()));
             comboBox.setTextInputAllowed(false);
             comboBox.setPageLength(15);
@@ -106,7 +111,7 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
         if (super.getComponentError() != null) {
             errorMessages.add(super.getComponentError());
         }
-        for (int i = 0; i < getRows(); i++) {
+        for (int i = 0; i < getRows() - 1; i++) {
             AbstractComponent component = (AbstractComponent) getComponent(1, i); // Поля ввода данных
             if (component.getComponentError() != null) {
                 errorMessages.add(component.getComponentError());

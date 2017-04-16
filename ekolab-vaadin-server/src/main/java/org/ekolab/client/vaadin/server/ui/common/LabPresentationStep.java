@@ -59,7 +59,9 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
     @NotEmpty
     @NotNull
     protected List<Image> getPresentationSlides() {
-        return resourceService.getGalleryImages(getPresentationImageFiles().stream().map(item ->  getLabContentFolder() + item).collect(Collectors.toList()));
+        return resourceService.
+                getGalleryImages(getPresentationImageFiles().stream().map(item -> getLabContentFolder() + item).
+                        collect(Collectors.toList()));
     }
 
     @NotEmpty
