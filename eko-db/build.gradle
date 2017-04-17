@@ -25,7 +25,7 @@ jooq {
     h2(sourceSets.main) {
         jdbc {
             driver = "$h2Driver"
-            url = "$h2Url"
+            url = "jdbc:h2:file:$project.rootProject.projectDir/$h2File"
             user = "$h2User"
             password = "$h2Password"
         }
@@ -44,7 +44,7 @@ jooq {
             }
         }
     }
-    postgres(sourceSets.main) {
+    /*postgres(sourceSets.main) {
         jdbc {
             driver = 'org.postgresql.Driver'
             url = 'jdbc:h2:~/test;AUTO_SERVER=TRUE'
@@ -65,18 +65,18 @@ jooq {
                 packageName = 'org.ekolab.server.db.postgres'
             }
         }
-    }
+    }*/
 }
 
 task flywayMigrateH2(type: FlywayMigrateTask) {
     extension = new FlywayExtension()
     extension.with {
         locations = ["filesystem:${sourceSets.main.resources.srcDirs.path[0]}/db/migration/h2"]
-        outOfOrder = true
+        outOfOrder = false
         validateOnMigrate = true
         baselineOnMigrate = true
         driver = "$h2Driver"
-        url = "$h2Url"
+        url = "jdbc:h2:file:$project.rootProject.projectDir/$h2File"
         user = "$h2User"
         password = "$h2Password"
     }
