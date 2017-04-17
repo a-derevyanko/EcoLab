@@ -36,7 +36,7 @@ public class I18N implements Serializable {
         try {
             return messageSource.getMessage(key, args, vaadinSession.getLocale());
         } catch (NoSuchMessageException ex) {
-            LOGGER.warn(ex.getLocalizedMessage());
+            LOGGER.error(ex.getLocalizedMessage());
             return "";
         }
     }

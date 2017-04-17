@@ -31,6 +31,8 @@ public class EkoLabTheme extends ValoTheme {
     // ---------------------- Кнопки -------------------------
     public static final String BUTTON_MULTILINE = "multiline";
 
+    public static final String BUTTON_CHOOSER= "chooser";
+
     //public static final String BUTTON_LABWIZARD_BACK = "labwizard-button-back";
 
 
