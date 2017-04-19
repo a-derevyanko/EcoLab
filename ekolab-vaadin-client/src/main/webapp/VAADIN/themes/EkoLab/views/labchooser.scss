@@ -24,7 +24,8 @@
   }
 
   .v-nativebutton-chooser {
-    width: 550px;
+    min-width: round($v-unit-size * 12.2);
+    min-height: round($v-unit-size * 2.2);
   }
 
   .v-ui[width-range~="0-800px"] .content-panel {

@@ -4,6 +4,7 @@ import org.ekolab.server.ServerApplication;
 import org.ekolab.server.common.Profiles;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.User;
@@ -26,7 +27,7 @@ import java.util.Date;
  * Created by 777Al on 28.03.2017.
  */
 @SpringBootTest(classes = {ServerApplication.class})
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {ManagementWebSecurityAutoConfiguration.class})
 @ActiveProfiles(Profiles.MODE.TEST)
 @Transactional
 @Rollback

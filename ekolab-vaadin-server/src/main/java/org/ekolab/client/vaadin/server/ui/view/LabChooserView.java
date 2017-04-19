@@ -52,23 +52,19 @@ public class LabChooserView extends VerticalLayout implements View {
         Image logo = resourceService.getImage(EkoLabTheme.IMAGE_LOGO);
         logo.setSizeFull();
 
-        lab1Button.setSizeFull();
-        lab1Button.setStyleName(EkoLabTheme.BUTTON_HUGE);
-        lab1Button.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        lab1Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
+        lab1Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
 
-        lab2Button.setSizeFull();
-        lab2Button.setStyleName(EkoLabTheme.BUTTON_HUGE);
-        lab2Button.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        lab2Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
+        lab2Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
 
-        lab3Button.setSizeFull();
         lab3Button.setCaption(i18N.get("lab3.title"));
         lab3Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         lab3Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
         lab3Button.addClickListener(event -> navigator.navigateTo(Lab3View.NAME));
 
-        labDefenceButton.setSizeFull();
-        labDefenceButton.setStyleName(EkoLabTheme.BUTTON_HUGE);
-        labDefenceButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        labDefenceButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
+        labDefenceButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);;
 
         labLabel.setStyleName(EkoLabTheme.LABEL_HUGE);
 

@@ -42,7 +42,6 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
     @Override
     public void init() {
         UIComponent.super.init();
-        setSizeUndefined();
         setColumns(4);
         setSpacing(true);
         setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
