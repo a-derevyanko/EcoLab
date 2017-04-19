@@ -85,6 +85,11 @@ CREATE UNIQUE INDEX ix_lab3data_user_id ON lab3data (user_id);
 /*
 * Добавим комментарии
 */
+COMMENT ON COLUMN lab3data.id IS 'Уникальный идентификатор выполненного варианта';
+COMMENT ON COLUMN lab3data.user_id IS 'ID пользователя, выполнившего задание';
+COMMENT ON COLUMN lab3data.start_date IS 'Дата и время начала выполнения лабораторной';
+COMMENT ON COLUMN lab3data.save_date IS 'Дата и время последнего сохранения результатов';
+COMMENT ON COLUMN lab3data.version IS 'Версия изменений(контроль одновременного доступа)';
 COMMENT ON COLUMN lab3data.tpp_output IS 'Мощность ГРЭС';
 /*COMMENT ON COLUMN lab3data.number_of_units IS 'Число блоков';
 *COMMENT ON COLUMN lab3data.city IS 'Район расположения ГРЭС (город)';*/
