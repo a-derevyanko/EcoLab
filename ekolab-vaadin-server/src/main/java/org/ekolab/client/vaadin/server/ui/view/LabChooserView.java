@@ -69,12 +69,12 @@ public class LabChooserView extends VerticalLayout implements View {
         labLabel.setStyleName(EkoLabTheme.LABEL_HUGE);
 
         content.addStyleName(EkoLabTheme.PANEL_LABCHOOSER);
-        content.addComponent(labLabel, 0, 1, 2, 3);
-        content.addComponent(logo, 0, 4, 2, 8);
-        content.addComponent(lab1Button, 3, 1, 9, 2);
-        content.addComponent(lab2Button, 3, 3, 9, 4);
-        content.addComponent(lab3Button, 3, 5, 9, 6);
-        content.addComponent(labDefenceButton, 3, 7, 9, 8);
+        content.addComponent(labLabel, 0, 0);
+        content.addComponent(logo, 0, 1, 0, 3);
+        content.addComponent(lab1Button, 1, 0);
+        content.addComponent(lab2Button, 1, 1);
+        content.addComponent(lab3Button, 1, 2);
+        content.addComponent(labDefenceButton, 1, 3);
 
         content.setComponentAlignment(labLabel, Alignment.MIDDLE_CENTER);
 
