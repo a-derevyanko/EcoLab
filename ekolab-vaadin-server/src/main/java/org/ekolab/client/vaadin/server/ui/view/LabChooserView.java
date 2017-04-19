@@ -28,7 +28,7 @@ public class LabChooserView extends VerticalLayout implements View {
     private I18N i18N;
 
     // ---------------------------- Графические компоненты --------------------
-    private final GridLayout content = new GridLayout(10, 10);
+    private final GridLayout content = new GridLayout(2, 4);
     private final NativeButton lab1Button = new NativeButton("Laboratory work №1");
     private final NativeButton lab2Button = new NativeButton("Laboratory work №2");
     private final NativeButton lab3Button = new NativeButton("Laboratory work №3");
