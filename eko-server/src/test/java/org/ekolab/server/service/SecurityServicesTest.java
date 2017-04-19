@@ -28,7 +28,7 @@ import java.util.Date;
  */
 @SpringBootTest(classes = {ServerApplication.class})
 @EnableAutoConfiguration(exclude = {ManagementWebSecurityAutoConfiguration.class})
-@ActiveProfiles(Profiles.MODE.TEST)
+@ActiveProfiles({Profiles.MODE.TEST, Profiles.DB.H2})
 @Transactional
 @Rollback
 public class SecurityServicesTest extends AbstractTestNGSpringContextTests {

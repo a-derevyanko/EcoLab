@@ -7,7 +7,7 @@ import javax.validation.Valid;
 /**
  * Created by 777Al on 06.04.2017.
  */
-public class Lab3Data {
+public class Lab3Data extends LabData {
     /**
      * Мощность ГРЭС
      */
