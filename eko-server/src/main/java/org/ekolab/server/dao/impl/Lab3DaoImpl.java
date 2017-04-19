@@ -18,7 +18,7 @@ public class Lab3DaoImpl implements Lab3Dao {
     private DSLContext dsl;
 
     @Override
-    public LabData getLabByUser(Long userId) {
+    public LabData getLabByUser(String userId) {
         return null;
     }
 

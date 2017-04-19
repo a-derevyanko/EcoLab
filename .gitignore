@@ -95,3 +95,4 @@ build/
 /ekolab-vaadin-client/src/main/resources/AppWidgetset.gwt.xml
 /ekolab-vaadin-client/src/main/webapp/VAADIN/themes/EkoLab/styles.css.gz
 /ekolab-vaadin-client/src/main/webapp/VAADIN/themes/EkoLab/styles.css
+/eko-server/src/main/resources/application-custom.properties
