@@ -88,10 +88,10 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager {
 
     @Override
     protected List<UserDetails> loadUsersByUsername(String username) {
-        return dsl.fetch(getUsersByUsernameQuery()).map(record -> {
-            String username1 = record.getValue(1, String.class);
-            String password = record.getValue(2, String.class);
-            boolean enabled = record.getValue(3, Boolean.class);
+        return dsl.fetch(getUsersByUsernameQuery(), username).map(record -> {
+            String username1 = record.getValue(0, String.class);
+            String password = record.getValue(1, String.class);
+            boolean enabled = record.getValue(2, Boolean.class);
             return new User(username1, password, enabled, true, true, true,
                     AuthorityUtils.NO_AUTHORITIES);
         });

@@ -1,10 +1,14 @@
 package org.ekolab.server;
 
+import org.ekolab.server.common.Profiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
@@ -13,18 +17,19 @@ import java.util.Collections;
 /**
  * Created by 777Al on 19.04.2017.
  */
+@SpringBootTest(classes = {ServerApplication.class})
+@ActiveProfiles({Profiles.MODE.TEST, Profiles.DB.H2})
+@Transactional
+@Rollback
 public abstract class AbstractTestWithUser extends AbstractTestNGSpringContextTests {
-    protected static final String USERNAME = "user";
+    protected static final String USERNAME = "testUser";
 
     @Autowired
     private UserDetailsManager userDetailsManager;
 
-    protected UserDetails userDetails;
-
     @BeforeClass
     public void generateUser() {
         userDetailsManager.createUser(new User(USERNAME, "password", Collections.emptyList()));
-        userDetails = userDetailsManager.loadUserByUsername(USERNAME);
     }
 
     @AfterClass

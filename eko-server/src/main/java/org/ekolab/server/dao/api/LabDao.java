@@ -6,7 +6,7 @@ import org.ekolab.server.model.LabData;
  * Created by 777Al on 19.04.2017.
  */
 public interface LabDao<T extends LabData> {
-    T getLabByUser(Long userId);
+    T getLabByUser(String userName);
 
     T saveLab(T labData);
 
