@@ -3,7 +3,6 @@ package org.ekolab.server.service.impl;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -12,6 +11,8 @@ import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -26,7 +27,7 @@ import static org.ekolab.server.db.h2.public_.Tables.USERS;
  * Created by 777Al on 19.04.2017.
  */
 @Service
-@Lazy
+@Transactional
 public class UserDetailsManagerImpl extends JdbcUserDetailsManager {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -87,6 +88,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager {
     }
 
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     protected List<UserDetails> loadUsersByUsername(String username) {
         return dsl.fetch(getUsersByUsernameQuery(), username).map(record -> {
             String username1 = record.getValue(0, String.class);

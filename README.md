@@ -1,9 +1,21 @@
-## Подготовка к запуску
-Перед запуском, необходимо в директории *EkoLab/eko-server/src/main/resources* 
-создать файл application-custom.properties  со следующим содержанием:  
+## Используемые технологии
+
+1. Spring Framework
+2. Vaadin Framework
+3. Electron
+4. Gradle
+5. JDK 8
+6. Jetty HTTP Server
+7. Node JS
+
+## Сборка
+Для сборки необходимо выполнить команду __gradle build__.
+Будет создана тестовая БД (H2).
+
+Настройки БД находятся в __gradle.properties__ и при сборке проекта __eko-server__ копируются в файл
+ *EkoLab/eko-server/src/main/resources/application-custom.properties*, после чего он имеет следующее содержание:  
 
         > spring.datasource.url=jdbc:h2:file:C:/work/EkoLab/EkoLab-H2DB;IFEXISTS=TRUE
         > spring.datasource.username=user
         > spring.datasource.password=password
-переопределив параметры конфигурации источника данных, 
-в котором будет вестись разработка и тестирование.
+Это параметры конфигурации источника данных, в котором будет вестись разработка и тестирование.

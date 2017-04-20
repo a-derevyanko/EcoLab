@@ -68,5 +68,26 @@ task test(type: DefaultTask, overwrite: true) {
     dependsOn testPostgres
 }
 
+def customProperties = ["spring.datasource.url" : "jdbc:h2:file:$project.rootProject.projectDir/$h2File;IFEXISTS=TRUE".toString(),
+                        "spring.datasource.username":'user',
+                        "spring.datasource.password":'password']
+
+task writeCustomProperties {
+    def file = file("${sourceSets.main.resources.srcDirs.first().path}/application-custom.properties")
+
+    def newProperties = new Properties(customProperties)
+
+    if (!file.createNewFile()) {
+        def existingProperties = new Properties()
+        file.withInputStream { stream -> existingProperties.load(stream) }
+
+        existingProperties.forEach(newProperties.&replace)
+    }
+
+    file.withOutputStream { stream -> newProperties.store(stream, null) }
+}
+
+processResources.dependsOn writeCustomProperties
+
 check.dependsOn test
 build.dependsOn test

@@ -49,4 +49,14 @@ public class Lab3DaoTest extends AbstractTestWithUser {
         Lab3Data updatedLab = lab3Dao.updateLab(createdLab);
         Assert.assertEquals(updatedLab, createdLab);
     }
+
+    @Test
+    public void testGetAllLabsByUser() {
+
+    }
+
+    @Test
+    public void testRemoveOldLabs() {
+        lab3Dao.removeOldLabs(LocalDateTime.now().toLocalDate().atStartOfDay());
+    }
 }
