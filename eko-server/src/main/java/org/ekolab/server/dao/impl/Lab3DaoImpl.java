@@ -2,11 +2,12 @@ package org.ekolab.server.dao.impl;
 
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.Lab3Dao;
-import org.ekolab.server.model.LabData;
-import org.jooq.DSLContext;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.ekolab.server.model.Lab3Data;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -14,21 +15,33 @@ import org.springframework.stereotype.Service;
 @Service
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
 public class Lab3DaoImpl implements Lab3Dao {
-    @Autowired
-    private DSLContext dsl;
-
     @Override
-    public LabData getLabByUser(String userId) {
+    public Lab3Data getLastLabByUser(String userName) {
         return null;
     }
 
     @Override
-    public LabData saveLab(LabData labData) {
+    public List<Lab3Data> getAllLabsByUser(String userName) {
         return null;
     }
 
     @Override
-    public void updateLab(LabData labData) {
+    public Lab3Data saveLab(Lab3Data labData) {
+        return null;
+    }
+
+    @Override
+    public Lab3Data updateLab(Lab3Data labData) {
+        return null;
+    }
+
+    @Override
+    public void removeLabsByUser(String userName) {
+
+    }
+
+    @Override
+    public void removeOldLabs(LocalDateTime lastSaveDate) {
 
     }
 }

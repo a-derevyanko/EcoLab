@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Сервис, необходмый для получения ресурсов. Кэшируемый.
@@ -31,22 +31,27 @@ public class ResourceService {
 
     @Cacheable(cacheNames = "THEME_GALLERY_IMAGE_SVG", key = "T(java.util.Objects).hash(#imageName, (T(com.vaadin.ui.UI).getCurrent().getTheme()))")
     public com.github.lotsabackscatter.blueimp.gallery.Image getGalleryImage(String imageName) {
+        return loadGalleryImage(getThemeImagePath() + imageName);
+    }
+
+    @Cacheable(cacheNames = "THEME_GALLERY_IMAGE_SVG", key = "T(java.util.Objects).hash(#imagesPath, (T(com.vaadin.ui.UI).getCurrent().getTheme()))" )
+    public List<com.github.lotsabackscatter.blueimp.gallery.Image> getGalleryImages(String imagesPath) {
+        return VaadinServlet.getCurrent().getServletContext().getResourcePaths(getThemeImagePath() + imagesPath)
+                .stream().map(this::loadGalleryImage).collect(Collectors.toList());
+    }
+
+    private com.github.lotsabackscatter.blueimp.gallery.Image loadGalleryImage(String path) {
+        return new com.github.lotsabackscatter.blueimp.gallery.Image.Builder().
+                href(path).
+                type(URLConnection.guessContentTypeFromName(path)).build();
+    }
+
+    private String getThemeImagePath() {
         String deploymentServerResourcesPath = VaadinService.getCurrent().getDeploymentConfiguration().getResourcesPath();
         if (StringUtils.hasText(deploymentServerResourcesPath)) {
             LOGGER.info("deploymentServerResourcesPath — " + deploymentServerResourcesPath);
         }
-        return new com.github.lotsabackscatter.blueimp.gallery.Image.Builder().
-                href((deploymentServerResourcesPath == null ? "" : deploymentServerResourcesPath) +
-                        VaadinServlet.THEME_DIR_PATH + '/' + UI.getCurrent().getTheme() + "/img/" + imageName).
-                type(URLConnection.guessContentTypeFromName(imageName)).build();
-    }
-
-    @Cacheable(cacheNames = "THEME_GALLERY_IMAGE_SVG", key = "T(java.util.Objects).hash(#imageNames, (T(com.vaadin.ui.UI).getCurrent().getTheme()))" )
-    public List<com.github.lotsabackscatter.blueimp.gallery.Image> getGalleryImages(List<String> imageNames) {
-        List<com.github.lotsabackscatter.blueimp.gallery.Image> images = new ArrayList<>(imageNames.size());
-        for (String imagePath : imageNames) {
-            images.add(getGalleryImage(imagePath));
-        }
-        return images;
+        return (deploymentServerResourcesPath == null ? "/" : deploymentServerResourcesPath) +
+                VaadinServlet.THEME_DIR_PATH + '/' + UI.getCurrent().getTheme() + "/img/";
     }
 }

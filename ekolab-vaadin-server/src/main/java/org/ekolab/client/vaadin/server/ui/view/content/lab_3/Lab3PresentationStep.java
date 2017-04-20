@@ -14,12 +14,6 @@ public class Lab3PresentationStep extends LabPresentationStep {
     // ---------------------------- Графические компоненты --------------------
 
     @Override
-    protected List<String> getPresentationImageFiles() {
-        return Arrays.asList("slideArea.svg"
-        );
-    }
-
-    @Override
     protected String getLabContentFolder() {
         return "content/lab3/";
     }

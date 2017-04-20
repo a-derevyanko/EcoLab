@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -59,14 +58,8 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
     @NotEmpty
     @NotNull
     protected List<Image> getPresentationSlides() {
-        return resourceService.
-                getGalleryImages(getPresentationImageFiles().stream().map(item -> getLabContentFolder() + item).
-                        collect(Collectors.toList()));
+        return resourceService.getGalleryImages(getLabContentFolder());
     }
-
-    @NotEmpty
-    @NotNull
-    protected abstract List<String> getPresentationImageFiles();
 
     @NotEmpty
     @NotNull
