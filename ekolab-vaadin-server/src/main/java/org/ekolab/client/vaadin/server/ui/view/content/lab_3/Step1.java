@@ -1,30 +1,26 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 
-import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationException;
-import com.vaadin.server.AbstractErrorMessage;
 import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.server.ErrorMessage;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.HorizontalLayout;
 import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.ui.common.AutoSavableLabWizardStep;
+import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.server.model.Lab3Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.util.FieldUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by 777Al on 06.04.2017.
  */
 @SpringView
-public class Step1 extends HorizontalLayout implements AutoSavableLabWizardStep {
-    @Autowired
-    private Binder<Lab3Data> lab3DataBinder;
-
+public class Step1 extends HorizontalLayout implements LabWizardStep {
     @Autowired
     private I18N i18N;
 
@@ -38,7 +34,7 @@ public class Step1 extends HorizontalLayout implements AutoSavableLabWizardStep 
 
     @Override
     public void init() {
-        AutoSavableLabWizardStep.super.init();
+        LabWizardStep.super.init();
         setSizeFull();
         setMargin(true);
         addComponent(firstFormLayout);
@@ -68,16 +64,10 @@ public class Step1 extends HorizontalLayout implements AutoSavableLabWizardStep 
     }
 
     @Override
-    public void saveData() {
-        List<ErrorMessage> messageList = new ArrayList<>();
-        messageList.add(firstFormLayout.getComponentError());
-        messageList.add(secondFormLayout.getComponentError());
-        // todo ошибка может возникунть при сохранении messageList.add(secondFormLayout.getComponentError()); lab3DataBinder.writeBeanIfValid();
-        try {
-            lab3DataBinder.writeBean(null);
-        } catch (ValidationException exception) {
-            messageList.add(AbstractErrorMessage.getErrorMessageForException(exception));
-        }
-        String error = new CompositeErrorMessage(messageList).getFormattedHtmlMessage();
+    public ErrorMessage getComponentError() {
+        Set<ErrorMessage> messageList = Stream.of(super.getComponentError(),
+                firstFormLayout.getComponentError(),  secondFormLayout.getComponentError())
+                .filter(Objects::nonNull).collect(Collectors.toSet());
+        return messageList.isEmpty() ? null : new CompositeErrorMessage(messageList);
     }
 }

@@ -1,5 +1,6 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_1;
 
+import com.vaadin.data.Binder;
 import org.ekolab.client.vaadin.server.ui.common.LabWizard;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
 
@@ -9,8 +10,8 @@ import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
 public class Lab1View extends LabWizard implements AutoSavableView {
 
     @Override
-    public void saveData() {
-
+    protected Binder getBinder() {
+        return null;
     }
 
     @Override

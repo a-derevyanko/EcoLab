@@ -5,6 +5,7 @@ import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.spring.annotation.ViewScope;
 import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.server.model.Lab3Data;
 import org.springframework.boot.SpringBootConfiguration;
@@ -24,8 +25,11 @@ public class Lab3UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterLayout<Lab3Data> parameterLayout(Binder<Lab3Data> binder, StringToIntegerConverter stringToIntegerConverter,
-                                                     StringToDoubleConverter stringToDoubleConverter, I18N i18N) {
-        return new ParameterLayout<>(binder, stringToIntegerConverter, stringToDoubleConverter, i18N);
+    public ParameterLayout<Lab3Data> parameterLayout(Binder<Lab3Data> binder,
+                                                     StringToIntegerConverter stringToIntegerConverter,
+                                                     StringToDoubleConverter stringToDoubleConverter,
+                                                     I18N i18N, ResourceService resourceService) {
+        return new ParameterLayout<>("content/lab3/additions/", binder,
+                stringToIntegerConverter, stringToDoubleConverter, i18N, resourceService);
     }
 }

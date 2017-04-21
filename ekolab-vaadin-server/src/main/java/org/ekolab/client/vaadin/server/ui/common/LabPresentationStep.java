@@ -4,11 +4,14 @@ import com.github.lotsabackscatter.blueimp.gallery.Gallery;
 import com.github.lotsabackscatter.blueimp.gallery.Image;
 import com.github.lotsabackscatter.blueimp.gallery.Options;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.UserError;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
+import org.apache.commons.lang.RandomStringUtils;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.service.ResourceService;
+import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +45,10 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
         showGallery.setCaption(i18N.get("lab.presentation.show-presentation"));
         showGallery.setStyleName(EkoLabTheme.BUTTON_HUGE);
         showGallery.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        showGallery.addClickListener(event -> gallery.showGallery(getPresentationSlides(), getPresentationOptions()));
+        showGallery.addClickListener(event -> {
+            /*gallery.showGallery(getPresentationSlides(), getPresentationOptions());*/
+            ComponentErrorNotification.show(new UserError(RandomStringUtils.randomAlphabetic(15)));
+        });
     }
 
     protected Options getPresentationOptions() {

@@ -1,6 +1,3 @@
-import org.flywaydb.gradle.FlywayExtension
-import org.flywaydb.gradle.task.FlywayMigrateTask
-
 plugins {
     id 'nu.studer.jooq' version '2.0.5'
     id "org.flywaydb.flyway" version "4.1.2"
@@ -68,25 +65,22 @@ jooq {
     }*/
 }
 
-task flywayMigrateH2(type: FlywayMigrateTask) {
-    extension = new FlywayExtension()
-    extension.with {
-        locations = ["filesystem:${sourceSets.main.resources.srcDirs.path[0]}/db/migration/h2"]
-        outOfOrder = false
-        validateOnMigrate = true
-        baselineOnMigrate = true
-        driver = "$h2Driver"
-        url = "jdbc:h2:file:$project.rootProject.projectDir/$h2File"
-        user = "$h2User"
-        password = "$h2Password"
-    }
+flyway {
+    locations = ["filesystem:${sourceSets.main.resources.srcDirs.first().path}/db/migration/h2"]
+    outOfOrder = false
+    validateOnMigrate = true
+    baselineOnMigrate = true
+    driver = "$h2Driver"
+    url = "jdbc:h2:file:$project.rootProject.projectDir/$h2File"
+    user = "$h2User"
+    password = "$h2Password"
 }
 
 //todo
 /*task flywayMigratePostgres(type: FlywayMigrateTask) {
     extension = new FlywayExtension()
     extension.with {
-        locations = ['classpath:db/migration/h2']
+        locations = ["filesystem:${sourceSets.main.resources.srcDirs.first().path}/db/migration/postgres"]
         outOfOrder = true
         validateOnMigrate = true
         baselineOnMigrate = true
@@ -99,5 +93,5 @@ task flywayMigrateH2(type: FlywayMigrateTask) {
 
 /*flywayMigrateH2.dependsOn(compileJava)
 flywayMigratePostgres.dependsOn(compileJava)*/
-generateH2JooqSchemaSource.dependsOn(flywayMigrateH2)
+generateH2JooqSchemaSource.dependsOn(flywayMigrate)
 //generatePostgresJooqSchemaSource.dependsOn(flywayMigratePostgres)

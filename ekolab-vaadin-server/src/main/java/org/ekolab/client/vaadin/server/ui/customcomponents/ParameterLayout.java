@@ -8,21 +8,34 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.server.ErrorMessage;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import com.vaadin.util.ReflectTools;
 import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
+import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.ekolab.client.vaadin.server.ui.common.ResourceWindow.show;
+
 /**
  * Created by 777Al on 08.04.2017.
  */
 public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
+    private final String parametersPath;
+
     private final Binder<BEAN> dataBinder;
 
     private final StringToIntegerConverter strToInt;
@@ -31,11 +44,15 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
 
     private final I18N i18N;
 
-    public ParameterLayout(Binder<BEAN> dataBinder, StringToIntegerConverter strToInt, StringToDoubleConverter strToDouble, I18N i18N) {
+    private final ResourceService res;
+
+    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, StringToIntegerConverter strToInt, StringToDoubleConverter strToDouble, I18N i18N, ResourceService res) {
+        this.parametersPath = parametersPath;
         this.dataBinder = dataBinder;
         this.strToInt = strToInt;
         this.strToDouble = strToDouble;
         this.i18N = i18N;
+        this.res = res;
     }
 
     // ---------------------------- Графические компоненты --------------------
@@ -43,7 +60,7 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
     public void init() {
         UIComponent.super.init();
         setColumns(4);
-        setSpacing(true);
+        setSpacing(false);
         setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         setStyleName(EkoLabTheme.LAYOUT_LAB);
     }
@@ -51,10 +68,12 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
     public void addField(Field propertyField) {
         Component field = getComponent(propertyField);
 
-        Label captionLabel = new Label(getFieldCaption(propertyField.getName()), ContentMode.PREFORMATTED);
+        Label captionLabel = new Label(getFieldCaption(propertyField.getName()), ContentMode.HTML);
         Label signLabel = new Label(getFieldSign(propertyField.getName()), ContentMode.HTML);
         signLabel.addStyleName(EkoLabTheme.LABEL_SIGN);
+        String fieldName = propertyField.getName();
         Button infoButton = new Button(VaadinIcons.QUESTION);
+        infoButton.addClickListener(event -> show(i18N.get(fieldName), res.getHtmlData(parametersPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)));
         int lastRow = getRows() - 1;
         super.addComponent(captionLabel, 0, lastRow);
         super.addComponent(field, 1, lastRow);

@@ -1,13 +1,10 @@
 import org.ekolab.client.vaadin.server.VaadinApplication;
-import org.ekolab.server.common.Profiles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
-@Profile(Profiles.MODE.TEST)
 public class VaadinTestApplication extends VaadinApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(VaadinTestApplication.class);
 

@@ -4,6 +4,7 @@ import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.BrowserFrame;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.UI;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ResourceService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceService.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceService.class);
 
     @Cacheable(cacheNames = "THEME_RESOURCE_IMAGE", key = "#imageName.concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
     public Image getImage(String imageName) {
@@ -34,10 +35,15 @@ public class ResourceService {
         return loadGalleryImage(getThemeImagePath() + imageName);
     }
 
-    @Cacheable(cacheNames = "THEME_GALLERY_IMAGE_SVG", key = "T(java.util.Objects).hash(#imagesPath, (T(com.vaadin.ui.UI).getCurrent().getTheme()))" )
+    @Cacheable(cacheNames = "THEME_GALLERY_IMAGE_SVG", key = "T(java.util.Objects).hash(#imagesPath, (T(com.vaadin.ui.UI).getCurrent().getTheme()))")
     public List<com.github.lotsabackscatter.blueimp.gallery.Image> getGalleryImages(String imagesPath) {
         return VaadinServlet.getCurrent().getServletContext().getResourcePaths(getThemeImagePath() + imagesPath)
                 .stream().map(this::loadGalleryImage).collect(Collectors.toList());
+    }
+
+    @Cacheable(cacheNames = "INFO_COMPONENT_HTML", key = "#path.concat(#resourceName).concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
+    public BrowserFrame getHtmlData(String path, String resourceName) {
+        return new BrowserFrame(null, new ThemeResource(path + resourceName));
     }
 
     private com.github.lotsabackscatter.blueimp.gallery.Image loadGalleryImage(String path) {
@@ -52,6 +58,6 @@ public class ResourceService {
             LOGGER.info("deploymentServerResourcesPath — " + deploymentServerResourcesPath);
         }
         return (deploymentServerResourcesPath == null ? "/" : deploymentServerResourcesPath) +
-                VaadinServlet.THEME_DIR_PATH + '/' + UI.getCurrent().getTheme() + "/img/";
+                VaadinServlet.THEME_DIR_PATH + '/' + UI.getCurrent().getTheme() + "/";
     }
 }

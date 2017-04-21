@@ -55,12 +55,12 @@ build.dependsOn.remove(test)
 
 task testH2(type:CustomTest){
     systemProperties(System.properties)
-    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.include=dev-h2", "-Dspring.datasource.url=jdbc:h2:file:$project.rootProject.projectDir/$h2File"]
+    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.include=dev-h2"]
 }
 
 task testPostgres(type:CustomTest){
     systemProperties(System.properties)
-    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.include=dev-h2", "-Dspring.datasource.url=jdbc:h2:file:$project.rootProject.projectDir/$h2File"]
+    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.include=dev-h2"]
 }
 
 task test(type: DefaultTask, overwrite: true) {

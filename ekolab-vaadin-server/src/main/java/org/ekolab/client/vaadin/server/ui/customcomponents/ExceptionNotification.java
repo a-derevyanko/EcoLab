@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Profile;
 @UIScope
 @Profile(Profiles.MODE.PROD)
 public class ExceptionNotification extends Notification {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Notification.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionNotification.class);
 
     @Autowired
     public ExceptionNotification(I18N i18N) {
@@ -33,5 +33,9 @@ public class ExceptionNotification extends Notification {
     public void show(Page page, Throwable ex) {
         LOGGER.error(ex.getLocalizedMessage(), ExceptionUtils.getRootCause(ex));
         super.show(page);
+    }
+
+    public void show(Throwable ex) {
+        show(Page.getCurrent(), ex);
     }
 }

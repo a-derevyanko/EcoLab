@@ -1,5 +1,6 @@
 package org.ekolab.server;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.ekolab.server.common.Profiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +23,7 @@ import java.util.Collections;
 @Transactional
 @Rollback
 public abstract class AbstractTestWithUser extends AbstractTestNGSpringContextTests {
-    protected static final String USERNAME = "testUser";
+    protected static final String USERNAME = "testUser_" + RandomStringUtils.randomAlphabetic(5);
 
     @Autowired
     private UserDetailsManager userDetailsManager;
