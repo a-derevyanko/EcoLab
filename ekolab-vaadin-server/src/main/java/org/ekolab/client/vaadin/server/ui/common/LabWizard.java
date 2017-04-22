@@ -10,6 +10,7 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
 import org.ekolab.server.model.LabData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 
@@ -62,6 +63,11 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         buttons.setColumnExpandRatio(1, 1.0F);
         buttons.addComponent(getBackButton(), 0, 0);
         buttons.addComponent(footer, 2, 0);
+    }
+
+    @Scheduled(fixedRateString = "${lab.autoSaveRate:#{60000}}", initialDelayString = "${lab.autoSaveRate:#{60000}}")
+    public void autoSave() {
+        saveData();
     }
 
     @Override
