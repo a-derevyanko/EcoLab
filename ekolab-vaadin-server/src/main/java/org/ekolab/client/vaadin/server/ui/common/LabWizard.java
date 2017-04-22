@@ -65,6 +65,7 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         buttons.addComponent(footer, 2, 0);
     }
 
+    @Override
     @Scheduled(fixedRateString = "${lab.autoSaveRate:#{60000}}", initialDelayString = "${lab.autoSaveRate:#{60000}}")
     public void autoSave() {
         saveData();
