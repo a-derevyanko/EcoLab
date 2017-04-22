@@ -60,6 +60,7 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
     public void init() {
         UIComponent.super.init();
         setColumns(4);
+        setMargin(true);
         setSpacing(false);
         setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         setStyleName(EkoLabTheme.LAYOUT_LAB);

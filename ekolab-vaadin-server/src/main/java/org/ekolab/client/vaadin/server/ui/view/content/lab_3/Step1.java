@@ -2,7 +2,8 @@ package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 
 import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.server.ErrorMessage;
-import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.HorizontalLayout;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
@@ -19,7 +20,8 @@ import java.util.stream.Stream;
 /**
  * Created by 777Al on 06.04.2017.
  */
-@SpringView
+@SpringComponent
+@ViewScope
 public class Step1 extends HorizontalLayout implements LabWizardStep {
     @Autowired
     private I18N i18N;
@@ -39,7 +41,6 @@ public class Step1 extends HorizontalLayout implements LabWizardStep {
         setMargin(true);
         addComponent(firstFormLayout);
         addComponent(secondFormLayout);
-        firstFormLayout.setMargin(true);
         firstFormLayout.setCaption(i18N.get("lab3.step1.power-station-characteristics"));
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "tppOutput"));
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "numberOfUnits"));
@@ -52,7 +53,6 @@ public class Step1 extends HorizontalLayout implements LabWizardStep {
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "windSpeed"));
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "windDirection"));
 
-        secondFormLayout.setMargin(true);
         secondFormLayout.setCaption(i18N.get("lab3.step1.fuel-characteristics"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "lowHeatValue"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "carbonInFlyAsh"));

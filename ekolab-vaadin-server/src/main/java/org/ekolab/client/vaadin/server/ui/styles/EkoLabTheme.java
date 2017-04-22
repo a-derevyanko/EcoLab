@@ -22,11 +22,15 @@ public class EkoLabTheme extends ValoTheme {
 
     public static final String PANEL_WIZARD_STEP = "wizard-step-panel";
 
+    public static final String PANEL_IMAGE_SCALING = "image-scaling-component";
+
     // ---------------------- Компоновщики  -------------------------
     public static final String LAYOUT_LAB = "lab-form-layout";
 
     // ---------------------- Надписи -------------------------
     public static final String LABEL_SIGN = "lab-form-layout-sign";
+
+    public static final String LABEL_BOLD_ITALIC = "label-bold-italic";
 
     // ---------------------- Кнопки -------------------------
     public static final String BUTTON_MULTILINE = "multiline";

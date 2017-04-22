@@ -2,7 +2,7 @@ package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 
 import com.vaadin.server.CompositeErrorMessage;
 import com.vaadin.server.ErrorMessage;
-import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.HorizontalLayout;
 import org.ekolab.client.vaadin.server.service.I18N;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 /**
  * Created by 777Al on 06.04.2017.
  */
-@SpringView
+@SpringComponent
 @ViewScope
 public class Step2 extends HorizontalLayout implements LabWizardStep {
     // ----------------------------- Графические компоненты --------------------------------
@@ -40,7 +40,6 @@ public class Step2 extends HorizontalLayout implements LabWizardStep {
         setMargin(true);
         addComponent(firstFormLayout);
         addComponent(secondFormLayout);
-        firstFormLayout.setMargin(true);
         firstFormLayout.setCaption(i18N.get("lab3.step2.eko-characteristics"));
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "flueGasNOxConcentration"));
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "stackExitTemperature"));
@@ -54,8 +53,7 @@ public class Step2 extends HorizontalLayout implements LabWizardStep {
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "so2BackgroundConcentration"));
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "ashBackgroundConcentration"));
 
-        secondFormLayout.setMargin(true);
-        secondFormLayout.setCaption(i18N.get("lab3.step1.fuel-characteristics"));
+        secondFormLayout.setCaption(i18N.get("lab3.step2.entering-coefficients"));
 
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "sulphurOxidesFractionAssociatedByFlyAsh"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "sulphurOxidesFractionAssociatedInWetDustCollector"));
