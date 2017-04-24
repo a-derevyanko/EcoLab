@@ -15,6 +15,7 @@ import org.ekolab.server.model.Lab3Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.util.FieldUtils;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public class Step4 extends GridLayout implements LabWizardStep {
     private ParameterLayout<Lab3Data> secondFormLayout;
 
     @Override
-    public void init() {
+    public void init() throws IOException {
         LabWizardStep.super.init();
         setSizeFull();
         setRows(2);

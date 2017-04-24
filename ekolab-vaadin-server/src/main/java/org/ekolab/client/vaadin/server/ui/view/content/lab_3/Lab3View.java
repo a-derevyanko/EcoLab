@@ -25,17 +25,29 @@ public class Lab3View extends LabWizard<Lab3Data> {
     private Step3 step3;
 
     @Autowired
+    private Step4 step4;
+
+    @Autowired
+    private Step5 step5;
+
+    @Autowired
+    private Step6 step6;
+
+    @Autowired
     private Binder<Lab3Data> binder;
 
     // ----------------------------- Графические компоненты --------------------------------
 
     @Override
-    public void init() {
+    public void init() throws Exception {
         super.init();
         addStep(presentationStep);
         addStep(step1);
         addStep(step2);
         addStep(step3);
+        addStep(step4);
+        addStep(step5);
+        addStep(step6);
 
         //todo binder.readBean(/*Загрузить данные*/);
     }

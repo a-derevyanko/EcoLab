@@ -15,7 +15,7 @@ public class Lab1View extends LabWizard implements AutoSavableView {
     }
 
     @Override
-    public void init() {
+    public void init() throws Exception {
         super.init();
     }
 }

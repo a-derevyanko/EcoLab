@@ -9,5 +9,5 @@ import javax.annotation.PostConstruct;
  */
 public interface UIComponent extends Sizeable {
     @PostConstruct
-    default void init() { setSizeFull();}
+    default void init() throws Exception { setSizeFull();}
 }

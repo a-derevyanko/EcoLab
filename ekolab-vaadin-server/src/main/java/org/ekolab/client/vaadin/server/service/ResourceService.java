@@ -13,6 +13,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +47,12 @@ public class ResourceService {
         return new BrowserFrame(null, new ThemeResource(path + resourceName));
     }
 
+    @Cacheable(cacheNames = "THEME_FILE", key = "#path.concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
+    public File getFileFromServer(String path) {
+        return new File((VaadinService.getCurrent() == null ? '/' :
+                VaadinService.getCurrent().getBaseDirectory().getAbsolutePath() + '/') + getThemeImagePath() + path);
+    }
+
     private com.github.lotsabackscatter.blueimp.gallery.Image loadGalleryImage(String path) {
         return new com.github.lotsabackscatter.blueimp.gallery.Image.Builder().
                 href(path).
@@ -57,7 +64,7 @@ public class ResourceService {
         if (StringUtils.hasText(deploymentServerResourcesPath)) {
             LOGGER.info("deploymentServerResourcesPath — " + deploymentServerResourcesPath);
         }
-        return (deploymentServerResourcesPath == null ? "/" : deploymentServerResourcesPath) +
+        return (deploymentServerResourcesPath == null ? "/" : deploymentServerResourcesPath + '/') +
                 VaadinServlet.THEME_DIR_PATH + '/' + UI.getCurrent().getTheme() + "/";
     }
 }

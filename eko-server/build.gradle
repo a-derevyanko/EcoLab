@@ -14,6 +14,7 @@ buildscript {
 
 dependencies {
     compile project (':eko-db')
+    compile group: 'javax.servlet',             name: 'javax.servlet-api',                          version: '+'
 
     compile group: 'org.springframework',       name: 'spring-context-support',                      version: '+'
 

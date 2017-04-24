@@ -47,7 +47,7 @@ public class LoginView extends VerticalLayout implements View {
     protected final Notification notification = new Notification("Welcome to EkoLab");
 
     @Override
-    public void init() {
+    public void init() throws Exception {
         View.super.init();
         setSizeFull();
         setCaption(i18N.get("login-view.title"));

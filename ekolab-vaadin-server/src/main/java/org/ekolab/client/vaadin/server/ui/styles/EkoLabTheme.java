@@ -22,8 +22,6 @@ public class EkoLabTheme extends ValoTheme {
 
     public static final String PANEL_WIZARD_STEP = "wizard-step-panel";
 
-    public static final String PANEL_IMAGE_SCALING = "image-scaling-component";
-
     // ---------------------- Компоновщики  -------------------------
     public static final String LAYOUT_LAB = "lab-form-layout";
 

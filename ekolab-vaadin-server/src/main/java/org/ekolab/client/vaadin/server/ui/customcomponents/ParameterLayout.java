@@ -57,7 +57,7 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
 
     // ---------------------------- Графические компоненты --------------------
     @Override
-    public void init() {
+    public void init() throws Exception {
         UIComponent.super.init();
         setColumns(4);
         setMargin(true);

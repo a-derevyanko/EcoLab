@@ -36,7 +36,7 @@ public class LabChooserView extends VerticalLayout implements View {
     private final Label  labLabel = new Label("Environmental technologies at TPPs");
 
     @Override
-    public void init() {
+    public void init() throws Exception {
         View.super.init();
         addStyleName(EkoLabTheme.VIEW_LABCHOOSER);
         setMargin(false);

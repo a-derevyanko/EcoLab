@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 @Profile(Profiles.MODE.DEV)
 public class DemoLoginView extends LoginView {
     @Override
-    public void init() {
+    public void init() throws Exception {
         super.init();
         notification.setDescription("<span>Приложение ЭкоЛаб работает в режиме демонстрации. вводить имя и пароль не требуется, просто нажмите кнопку <b>Войти</b>, чтобы продолжить.</span>");
     }

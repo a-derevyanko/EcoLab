@@ -17,7 +17,10 @@ dependencies {
 
     compile group: 'com.vaadin.addon',               name: 'vaadin-context-menu',                   version: '+'
     compile group: 'org.vaadin.addon',               name: 'confirmdialog',                         version: '3.1.1'
-    compile group: 'at.downdrown.vaadinaddons',      name: 'highchartsapi',                         version: '2.2.1'
+    compile (group: 'org.vaadin.addon',               name: 'jfreechartwrapper',                     version: '4.0.0') {
+        exclude group: 'org.apache.xmlgraphics'
+    }
+
     compile group: 'org.vaadin.addons',              name: 'sizereporter',                          version: '0.1.4'
     compile group: 'org.vaadin.addons',              name: 'wizards-for-vaadin',                    version: '2.0.1'
     compile group: 'com.github.lotsabackscatter', name: 'vaadin-blueimp-gallery', version: '1.0'
