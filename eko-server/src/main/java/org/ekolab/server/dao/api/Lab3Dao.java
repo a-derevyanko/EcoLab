@@ -1,6 +1,6 @@
 package org.ekolab.server.dao.api;
 
-import org.ekolab.server.model.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Data;
 
 /**
  * Created by 777Al on 19.04.2017.

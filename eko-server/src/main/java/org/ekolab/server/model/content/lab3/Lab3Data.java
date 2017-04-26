@@ -1,5 +1,7 @@
-package org.ekolab.server.model;
+package org.ekolab.server.model.content.lab3;
 
+import org.ekolab.server.model.Calculated;
+import org.ekolab.server.model.LabData;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.Valid;
@@ -184,31 +186,37 @@ public class Lab3Data extends LabData {
     /**
      * Средняя скорость газов на выходе из дымовой трубы
      */
+    @Calculated
     private Double stackAverageGasesSpeed;
 
     /**
      * Суммарное количество NOx поступающего в атмосферу с дымовыми газами
      */
+    @Calculated
     private Double noxMassiveInjection;
 
     /**
      * Суммарное количество NO2, поступающего в атмосферу с дымовыми газами
      */
+    @Calculated
     private Double no2MassiveInjection;
 
     /**
      * Суммарное количество NO, поступающего в атмосферу с дымовыми газами
      */
+    @Calculated
     private Double noMassiveInjection;
 
     /**
      * Суммарное количество SO2, поступающего в атмосферу с дымовыми газами
      */
+    @Calculated
     private Double so2MassiveInjection;
 
     /**
      * Суммарное количество золы, поступающей в атмосферу с дымовыми газами
      */
+    @Calculated
     private Double ashMassiveInjection;
 
     /**
@@ -249,66 +257,79 @@ public class Lab3Data extends LabData {
     /**
      * Опасная скорость ветра
      */
+    @Calculated
     private Double breakdownWindSpeed;
 
     /**
      * Максимальное значение приземной концентрации NO2 при опасной скорости ветра
      */
+    @Calculated
     private Double bwdNo2GroundLevelConcentration;
 
     /**
      * Максимальное значение приземной концентрации NO при опасной скорости ветра
      */
+    @Calculated
     private Double bwdNoGroundLevelConcentration;
 
     /**
      * Максимальное значение приземной концентрации SO2 при опасной скорости ветра
      */
+    @Calculated
     private Double bwdSo2GroundLevelConcentration;
 
     /**
      * Максимальное значение приземной концентрации золы при опасной скорости ветра
      */
+    @Calculated
     private Double bwdAshGroundLevelConcentration;
 
     /**
      * Безразмерная концентрация веществ, обладающих суммацией вредного действия (NO2 и SO2)
      */
+    @Calculated
     private Double no2AndSo2SummationGroup;
 
     /**
      * Безразмерная концентрация веществ, обладающих суммацией вредного действия (NO и SO2)
      */
+    @Calculated
     private Double noAndSo2SummationGroup;
 
     /**
      * Расстояние от источника выбросов, на котором приземные концентрации загрязняющих веществ достигают максимального значения при опасной скорости ветра
      */
+    @Calculated
     private Double bwdMaxGroundLevelConcentrationDistance;
 
     /**
      * Максимальное значение приземной концентрации NO2 при расчетной скорости ветра
      */
+    @Calculated
     private Double windSpeedMaxNo2GroundLevelConcentration;
 
     /**
      * Максимальное значение приземной концентрации NO при расчетной скорости ветра
      */
+    @Calculated
     private Double windSpeedMaxNoGroundLevelConcentration;
 
     /**
      * Максимальное значение приземной концентрации SO2 при расчетной скорости ветра
      */
+    @Calculated
     private Double windSpeedMaxSo2GroundLevelConcentration;
 
     /**
      * Максимальное значение приземной концентрации золы при расчетной скорости ветра
      */
+    @Calculated
     private Double windSpeedMaxAshGroundLevelConcentration;
 
     /**
      * Расстояние от источника выброса, на котором при скорости ветра u приземная концентрация вредных веществ достигает максимального значения
      */
+    @Calculated
     private Double windSpeedMaxGroundLevelConcentrationDistance;
 
     public Integer getTppOutput() {

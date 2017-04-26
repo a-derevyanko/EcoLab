@@ -2,7 +2,7 @@ package org.ekolab.server.dao.impl;
 
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.Lab3Dao;
-import org.ekolab.server.model.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +36,12 @@ public class Lab3DaoImpl implements Lab3Dao {
     }
 
     @Override
-    public void removeLabsByUser(String userName) {
-
+    public int removeLabsByUser(String userName) {
+        return 0;
     }
 
     @Override
-    public void removeOldLabs(LocalDateTime lastSaveDate) {
-
+    public int removeOldLabs(LocalDateTime lastSaveDate) {
+        return 0;
     }
 }

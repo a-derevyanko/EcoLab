@@ -33,12 +33,7 @@ dependencies {
 
     compile group: 'org.springframework.boot',  name: 'spring-boot-configuration-processor',   version: '+'
 
-    compile group: 'com.twelvemonkeys.imageio',     name: 'imageio-batik',                      version: '3.3.2'
-    compile group: 'org.apache.xmlgraphics',        name: 'batik-transcoder',                   version: '1.8'
-    compile group: 'org.apache.xmlgraphics',        name: 'batik-codec',                        version: '1.7'
-    compile group: 'org.apache.xmlgraphics',        name: 'xmlgraphics-commons',                version: '1.5'
-
-    runtime group: 'de.codecentric',                name: 'spring-boot-admin-server-ui',        version: '+'
+    runtime group: 'de.codecentric',            name: 'spring-boot-admin-starter-client',      version: '+'
 }
 
 springBoot.mainClass = 'org.ekolab.client.vaadin.server.VaadinApplication'

@@ -36,11 +36,22 @@ dependencies {
     compile group: 'de.codecentric',                name: 'spring-boot-admin-server-ui',            version: '+'
     compile group: 'org.jolokia',                   name: 'jolokia-core',                           version: '1.3.5'
 
-    // TODO
-    runtime     group: 'com.h2database',            name: 'h2',                                     version: '+'
-    runtime     group: 'org.postgresql',            name: 'postgresql',                             version: '+'
 
-    testCompile group: 'com.h2database',            name: 'h2',                                     version: '+'
+
+    compile group: 'com.twelvemonkeys.imageio',     name: 'imageio-batik',                      version: '3.3.2'
+    compile group: 'org.apache.xmlgraphics',        name: 'batik-transcoder',                   version: '1.8'
+    compile group: 'org.apache.xmlgraphics',        name: 'batik-codec',                        version: '1.7'
+    compile group: 'org.apache.xmlgraphics',        name: 'xmlgraphics-commons',                version: '1.5'
+
+    compile group: 'net.sf.jasperreports',          name: 'jasperreports',                      version: '6.4.0'
+    compile group: 'com.lowagie',                   name: 'itext',                              version: '2.1.7'
+    compile group: 'org.olap4j',                    name: 'olap4j',                             version: '1.2.0'
+
+    // TODO
+    runtime     group: 'com.h2database',            name: 'h2',                                 version: '+'
+    runtime     group: 'org.postgresql',            name: 'postgresql',                         version: '+'
+
+    testCompile group: 'com.h2database',            name: 'h2',                                 version: '+'
 }
 bootRun {
     systemProperties(System.properties)

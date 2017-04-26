@@ -5,6 +5,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
@@ -29,7 +30,7 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     // ---------------------------- Графические компоненты --------------------
     protected final GridLayout buttons = new GridLayout(3, 1);
 
-    protected final HorizontalLayout additionalButtonsLayout = new HorizontalLayout();
+    protected final HorizontalLayout additionalComponentsLayout = new HorizontalLayout();
 
     @Override
     public void init() throws Exception {
@@ -67,10 +68,10 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
 
         buttons.setColumnExpandRatio(1, 1.0F);
         buttons.addComponent(getBackButton(), 0, 0);
-        buttons.addComponent(additionalButtonsLayout, 1, 0);
+        buttons.addComponent(additionalComponentsLayout, 1, 0);
         buttons.addComponent(footer, 2, 0);
 
-        buttons.setComponentAlignment(additionalButtonsLayout, Alignment.MIDDLE_CENTER);
+        buttons.setComponentAlignment(additionalComponentsLayout, Alignment.MIDDLE_CENTER);
     }
 
     @Override
@@ -105,9 +106,33 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     @Override
     protected void activateStep(WizardStep step) {
         super.activateStep(step);
-        additionalButtonsLayout.removeAllComponents();
-        ((LabWizardStep) step).placeAdditionalButtons(additionalButtonsLayout);
+        additionalComponentsLayout.removeAllComponents();
+        ((LabWizardStep) step).placeAdditionalComponents(additionalComponentsLayout);
         updateButtons();
+    }
+
+    @Override
+    public void cancel() {
+        removeAllWindows();
+        super.cancel();
+    }
+
+    @Override
+    public void finish() {
+        removeAllWindows();
+        super.finish();
+    }
+
+    @Override
+    public void next() {
+        removeAllWindows();
+        super.next();
+    }
+
+    @Override
+    public void back() {
+        removeAllWindows();
+        super.back();
     }
 
     protected abstract Binder<BEAN> getBinder();
@@ -117,5 +142,9 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         getFinishButton().setVisible(lastStep);
         getNextButton().setVisible(!lastStep);
         getBackButton().setVisible(!isFirstStep(currentStep));
+    }
+
+    private void removeAllWindows() {
+        UI.getCurrent().getWindows().forEach(UI.getCurrent()::removeWindow);
     }
 }

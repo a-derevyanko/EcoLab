@@ -11,7 +11,7 @@ import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
-import org.ekolab.server.model.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.util.FieldUtils;
 

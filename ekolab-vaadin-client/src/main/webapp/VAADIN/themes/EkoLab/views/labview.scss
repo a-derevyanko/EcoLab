@@ -9,11 +9,21 @@
   .lab-form-layout-sign {
     font-style: italic;
     sup {
-      margin-left: -0.1em;
+      margin-left: 0.1em;
     }
     /*sub {
-      margin-left: +0.3em;
+      margin-left: 0.1em;
     }*/
+  }
+  .v-window-header {
+    text-align: center;
+    br  {
+      content: ' ';
+
+      &:after {
+        content: ' ';
+      }
+    }
   }
 
   .v-caption-lab-form-layout {

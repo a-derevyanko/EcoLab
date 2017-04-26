@@ -35,5 +35,5 @@ public interface LabWizardStep extends Component, View, WizardStep {
         return true;
     }
 
-    default void placeAdditionalButtons(HorizontalLayout buttonsLayout) {}
+    default void placeAdditionalComponents(HorizontalLayout buttonsLayout) {}
 }

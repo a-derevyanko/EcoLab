@@ -13,6 +13,7 @@ public class ResourceWindow extends Window {
 
     public ResourceWindow(String fieldName, BrowserFrame infoResource) {
         super(fieldName);
+        setCaptionAsHtml(true);
         setContent(content);
         setHeight(50.0F, Unit.PERCENTAGE);
         setWidth(50.0F, Unit.PERCENTAGE);

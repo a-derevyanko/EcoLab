@@ -21,6 +21,7 @@ import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
+import org.ekolab.server.service.api.content.LabService;
 import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 
 import java.lang.reflect.Field;
@@ -38,6 +39,8 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
 
     private final Binder<BEAN> dataBinder;
 
+    private final LabService labService;
+
     private final StringToIntegerConverter strToInt;
 
     private final StringToDoubleConverter strToDouble;
@@ -46,9 +49,10 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
 
     private final ResourceService res;
 
-    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, StringToIntegerConverter strToInt, StringToDoubleConverter strToDouble, I18N i18N, ResourceService res) {
+    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService labService, StringToIntegerConverter strToInt, StringToDoubleConverter strToDouble, I18N i18N, ResourceService res) {
         this.parametersPath = parametersPath;
         this.dataBinder = dataBinder;
+        this.labService = labService;
         this.strToInt = strToInt;
         this.strToDouble = strToDouble;
         this.i18N = i18N;
@@ -100,6 +104,7 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
 
     private AbstractComponent getComponent(Field propertyField) {
         Class<?> propClass = ReflectTools.convertPrimitiveType(propertyField.getType());
+        boolean readOnly = labService.isFieldCalculated(propertyField);
         if (propClass.isEnum()) {
             ComboBox<Enum<?>> comboBox = new ComboBox<>(null, Arrays.asList((Enum<?>[]) propClass.getEnumConstants()));
             comboBox.setItemCaptionGenerator((elem) -> i18N.get(elem.getDeclaringClass().getSimpleName() + '.' + elem.name()));
@@ -107,6 +112,7 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
             comboBox.setPageLength(15);
             comboBox.setEmptySelectionAllowed(false);
             dataBinder.forField(comboBox).bind(propertyField.getName());
+            comboBox.setReadOnly(readOnly);
             return comboBox;
         } else {
             TextField field = new TextField();
@@ -120,6 +126,7 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
             }
 
             dataBinder.forField(field).withConverter(converter).bind(propertyField.getName());
+            field.setReadOnly(readOnly);
             return field;
         }
     }

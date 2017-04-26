@@ -70,6 +70,18 @@
     }
   }
 
+  .v-textfield-readonly {
+    border: none;
+    background: transparent;
+    text-align: center;
+    font: bold 110% serif;
+    @include box-shadow(none);
+
+    &:focus {
+      @include box-shadow(none);
+    }
+  }
+
   .v-ui[width-range~="0-800px"] {
     .v-menubar-user-menu > .v-menubar-menuitem {
       max-width: none;

@@ -13,7 +13,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,18 +38,12 @@ public class ResourceService {
     @Cacheable(cacheNames = "THEME_GALLERY_IMAGE_SVG", key = "T(java.util.Objects).hash(#imagesPath, (T(com.vaadin.ui.UI).getCurrent().getTheme()))")
     public List<com.github.lotsabackscatter.blueimp.gallery.Image> getGalleryImages(String imagesPath) {
         return VaadinServlet.getCurrent().getServletContext().getResourcePaths(getThemeImagePath() + imagesPath)
-                .stream().map(this::loadGalleryImage).collect(Collectors.toList());
+                .stream().sorted().map(this::loadGalleryImage).collect(Collectors.toList());
     }
 
     @Cacheable(cacheNames = "INFO_COMPONENT_HTML", key = "#path.concat(#resourceName).concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
     public BrowserFrame getHtmlData(String path, String resourceName) {
         return new BrowserFrame(null, new ThemeResource(path + resourceName));
-    }
-
-    @Cacheable(cacheNames = "THEME_FILE", key = "#path.concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
-    public File getFileFromServer(String path) {
-        return new File((VaadinService.getCurrent() == null ? '/' :
-                VaadinService.getCurrent().getBaseDirectory().getAbsolutePath() + '/') + getThemeImagePath() + path);
     }
 
     private com.github.lotsabackscatter.blueimp.gallery.Image loadGalleryImage(String path) {
