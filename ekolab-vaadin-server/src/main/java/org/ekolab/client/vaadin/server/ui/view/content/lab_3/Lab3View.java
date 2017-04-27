@@ -14,8 +14,6 @@ public class Lab3View extends LabWizard<Lab3Data> {
     public static final String NAME = "lab3view";
 
     @Autowired
-    private Lab3PresentationStep presentationStep;
-    @Autowired
     private Step1 step1;
 
     @Autowired
@@ -34,14 +32,15 @@ public class Lab3View extends LabWizard<Lab3Data> {
     private Step6 step6;
 
     @Autowired
-    private Binder<Lab3Data> binder;
+    public Lab3View(Binder<Lab3Data> binder, Lab3PresentationStep presentationStep) {
+        super(binder, presentationStep);
+    }
 
     // ----------------------------- Графические компоненты --------------------------------
 
     @Override
     public void init() throws Exception {
         super.init();
-        addStep(presentationStep);
         addStep(step1);
         addStep(step2);
         addStep(step3);
@@ -50,10 +49,5 @@ public class Lab3View extends LabWizard<Lab3Data> {
         addStep(step6);
 
         //todo binder.readBean(/*Загрузить данные*/);
-    }
-
-    @Override
-    protected Binder<Lab3Data> getBinder() {
-        return binder;
     }
 }

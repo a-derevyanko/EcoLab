@@ -3,6 +3,7 @@ package org.ekolab.client.vaadin.server.ui.common;
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
@@ -27,10 +28,22 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     @Autowired
     private ExceptionNotification exceptionNotification;
 
+    @Autowired
+    private final Binder<BEAN> binder;
+
+    @Autowired
+    private final LabPresentationStep presentationStep;
+
     // ---------------------------- Графические компоненты --------------------
     protected final GridLayout buttons = new GridLayout(3, 1);
-
+    protected final Button saveButton = new Button("Save", VaadinIcons.CLOUD_DOWNLOAD_O);
+    protected final HorizontalLayout leftComponentsLayout = new HorizontalLayout();
     protected final HorizontalLayout additionalComponentsLayout = new HorizontalLayout();
+
+    protected LabWizard(Binder<BEAN> binder, LabPresentationStep presentationStep) {
+        this.binder = binder;
+        this.presentationStep = presentationStep;
+    }
 
     @Override
     public void init() throws Exception {
@@ -40,14 +53,17 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         buttons.setHeightUndefined();
         buttons.setSpacing(true);
         getHeader().setVisible(false);
+        saveButton.setVisible(false);
         getCancelButton().setVisible(false);
         getFinishButton().setVisible(false);
 
         addStyleName(EkoLabTheme.PANEL_WIZARD);
+        saveButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         getFinishButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         getNextButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         getBackButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
 
+        saveButton.setCaption(i18N.get("savable.save"));
         getBackButton().setCaption(i18N.get("labwizard.back"));
         getNextButton().setCaption(i18N.get("labwizard.next"));
         getFinishButton().setCaption(i18N.get("labwizard.finish"));
@@ -56,6 +72,7 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         getNextButton().setIcon(VaadinIcons.ARROW_FORWARD, i18N.get("labwizard.next"));
         getBackButton().setIcon(VaadinIcons.ARROW_BACKWARD, i18N.get("labwizard.back"));
 
+        saveButton.addClickListener(event -> saveData());
         getBackButton().addClickListener(event -> saveData());
         getNextButton().addClickListener(event -> saveData());
         getFinishButton().addClickListener(event -> saveData());
@@ -66,12 +83,19 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
 
         mainLayout.addComponent(buttons);
 
+        leftComponentsLayout.addComponent(getBackButton());
+        leftComponentsLayout.addComponent(saveButton);
         buttons.setColumnExpandRatio(1, 1.0F);
-        buttons.addComponent(getBackButton(), 0, 0);
+        buttons.addComponent(leftComponentsLayout, 0, 0);
         buttons.addComponent(additionalComponentsLayout, 1, 0);
         buttons.addComponent(footer, 2, 0);
 
         buttons.setComponentAlignment(additionalComponentsLayout, Alignment.MIDDLE_CENTER);
+
+        binder.addValueChangeListener(event -> updateSaveButtonState());
+        binder.addStatusChangeListener(event -> updateSaveButtonState());
+
+        addStep(presentationStep);
     }
 
     @Override
@@ -83,11 +107,7 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     @Override
     public void saveData() {
         if (getComponentError() == null) {
-            /*try {
-                getBinder().writeBean(null);
-            } catch (ValidationException e) {
-                exceptionNotification.show(e);
-            }*/
+            /* getBinder().writeBeanIfValid(null); */
         } else {
             ComponentErrorNotification.show(getComponentError());
         }
@@ -135,13 +155,15 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         super.back();
     }
 
-    protected abstract Binder<BEAN> getBinder();
-
     private void updateButtons() {
         boolean lastStep = isLastStep(currentStep);
         getFinishButton().setVisible(lastStep);
         getNextButton().setVisible(!lastStep);
         getBackButton().setVisible(!isFirstStep(currentStep));
+    }
+
+    private void updateSaveButtonState() {
+        saveButton.setVisible(binder.hasChanges());
     }
 
     private void removeAllWindows() {

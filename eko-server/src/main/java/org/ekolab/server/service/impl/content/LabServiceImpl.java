@@ -3,16 +3,22 @@ package org.ekolab.server.service.impl.content;
 import org.ekolab.server.dao.api.LabDao;
 import org.ekolab.server.model.Calculated;
 import org.ekolab.server.model.LabData;
+import org.ekolab.server.service.api.ReportsService;
 import org.ekolab.server.service.api.content.LabService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 777Al on 26.04.2017.
  */
 public abstract class LabServiceImpl<T extends LabData> implements LabService<T> {
+    @Autowired
+    protected ReportsService reportsService;
+
     private final LabDao<T> labDao;
 
     protected LabServiceImpl(LabDao<T> labDao) {
@@ -57,4 +63,8 @@ public abstract class LabServiceImpl<T extends LabData> implements LabService<T>
     }
 
     protected abstract T loadCalculatedFields(T labData);
+
+    protected byte[] createReport(String templatePath, Map<String, Object> data) {
+        return reportsService.fillReport(reportsService.compileReport(templatePath), data);
+    }
 }
