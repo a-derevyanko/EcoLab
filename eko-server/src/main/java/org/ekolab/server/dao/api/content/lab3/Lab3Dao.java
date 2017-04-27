@@ -1,5 +1,6 @@
-package org.ekolab.server.dao.api;
+package org.ekolab.server.dao.api.content.lab3;
 
+import org.ekolab.server.dao.api.content.LabDao;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 
 /**

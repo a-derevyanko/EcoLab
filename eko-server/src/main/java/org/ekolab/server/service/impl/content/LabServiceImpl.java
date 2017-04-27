@@ -1,6 +1,6 @@
 package org.ekolab.server.service.impl.content;
 
-import org.ekolab.server.dao.api.LabDao;
+import org.ekolab.server.dao.api.content.LabDao;
 import org.ekolab.server.model.Calculated;
 import org.ekolab.server.model.LabData;
 import org.ekolab.server.service.api.ReportsService;
