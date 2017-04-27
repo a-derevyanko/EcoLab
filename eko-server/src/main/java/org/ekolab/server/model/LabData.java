@@ -16,6 +16,9 @@ public abstract class LabData {
     @NotNull
     private LocalDateTime saveDate;
 
+    @NotNull
+    private boolean completed;
+
     public String getUserLogin() {
         return userLogin;
     }
@@ -40,6 +43,14 @@ public abstract class LabData {
         this.saveDate = saveDate;
     }
 
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,16 +58,18 @@ public abstract class LabData {
 
         LabData labData = (LabData) o;
 
-        if (userLogin != null ? !userLogin.equals(labData.userLogin) : labData.userLogin != null) return false;
-        if (startDate != null ? !startDate.equals(labData.startDate) : labData.startDate != null) return false;
-        return saveDate != null ? saveDate.equals(labData.saveDate) : labData.saveDate == null;
+        if (completed != labData.completed) return false;
+        if (!userLogin.equals(labData.userLogin)) return false;
+        if (!startDate.equals(labData.startDate)) return false;
+        return saveDate.equals(labData.saveDate);
     }
 
     @Override
     public int hashCode() {
-        int result = userLogin != null ? userLogin.hashCode() : 0;
-        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
-        result = 31 * result + (saveDate != null ? saveDate.hashCode() : 0);
+        int result = userLogin.hashCode();
+        result = 31 * result + startDate.hashCode();
+        result = 31 * result + saveDate.hashCode();
+        result = 31 * result + (completed ? 1 : 0);
         return result;
     }
 }
