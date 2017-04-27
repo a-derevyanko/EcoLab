@@ -6,6 +6,7 @@ import org.ekolab.server.model.LabData;
 import org.ekolab.server.service.api.ReportsService;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -31,38 +32,53 @@ public abstract class LabServiceImpl<T extends LabData> implements LabService<T>
     }
 
     @Override
+    @Transactional(readOnly = true)
     public T getLastLabByUser(String userName) {
-        return loadCalculatedFields(labDao.getLastLabByUser(userName));
+        T data = labDao.getLastLabByUser(userName);
+        data.setUserLogin(userName);
+        updateCalculatedFields(data);
+        return data;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<T> getAllLabsByUser(String userName) {
         List<T> labs = labDao.getAllLabsByUser(userName);
-        labs.forEach(this::loadCalculatedFields);
+        labs.forEach(item -> {
+            item.setUserLogin(userName);
+            updateCalculatedFields(item);
+        });
         return labs;
     }
 
     @Override
-    public T saveLab(T labData) {
+    @Transactional
+    public long saveLab(T labData) {
         return labDao.saveLab(labData);
     }
 
     @Override
-    public T updateLab(T labData) {
+    @Transactional
+    public int updateLab(T labData) {
         return labDao.updateLab(labData);
     }
 
     @Override
+    @Transactional
     public int removeLabsByUser(String userName) {
         return labDao.removeLabsByUser(userName);
     }
 
     @Override
+    @Transactional
     public int removeOldLabs(LocalDateTime lastSaveDate) {
         return labDao.removeOldLabs(lastSaveDate);
     }
 
-    protected abstract T loadCalculatedFields(T labData);
+    @Override
+    public T updateCalculatedFields(T labData) {
+        return labData;
+    }
 
     protected byte[] createReport(String templatePath, Map<String, Object> data) {
         return reportsService.fillReport(reportsService.compileReport(templatePath), data);

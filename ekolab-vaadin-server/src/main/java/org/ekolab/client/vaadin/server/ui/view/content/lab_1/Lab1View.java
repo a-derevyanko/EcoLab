@@ -9,7 +9,7 @@ import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
 public class Lab1View extends LabWizard implements AutoSavableView {
 
     public Lab1View() {
-        super(null, null);
+        super(null, null, null);
     }
 
     @Override

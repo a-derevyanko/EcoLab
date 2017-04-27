@@ -13,6 +13,7 @@ import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
 import org.ekolab.server.model.LabData;
+import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.vaadin.teemu.wizards.Wizard;
@@ -22,16 +23,9 @@ import org.vaadin.teemu.wizards.WizardStep;
  * Created by Андрей on 19.03.2017.
  */
 public abstract class LabWizard<BEAN extends LabData> extends Wizard implements AutoSavableView {
-    @Autowired
-    private I18N i18N;
-
-    @Autowired
-    private ExceptionNotification exceptionNotification;
-
-    @Autowired
+    private final LabService<BEAN> labService;
     private final Binder<BEAN> binder;
 
-    @Autowired
     private final LabPresentationStep presentationStep;
 
     // ---------------------------- Графические компоненты --------------------
@@ -40,7 +34,14 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     protected final HorizontalLayout leftComponentsLayout = new HorizontalLayout();
     protected final HorizontalLayout additionalComponentsLayout = new HorizontalLayout();
 
-    protected LabWizard(Binder<BEAN> binder, LabPresentationStep presentationStep) {
+    @Autowired
+    private I18N i18N;
+
+    @Autowired
+    private ExceptionNotification exceptionNotification;
+
+    protected LabWizard(LabService<BEAN> labService, Binder<BEAN> binder, LabPresentationStep presentationStep) {
+        this.labService = labService;
         this.binder = binder;
         this.presentationStep = presentationStep;
     }
@@ -92,7 +93,7 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
 
         buttons.setComponentAlignment(additionalComponentsLayout, Alignment.MIDDLE_CENTER);
 
-        binder.addValueChangeListener(event -> updateSaveButtonState());
+        binder.addValueChangeListener(event -> binder.readBean(labService.updateCalculatedFields(binder.getBean())));
         binder.addStatusChangeListener(event -> updateSaveButtonState());
 
         addStep(presentationStep);

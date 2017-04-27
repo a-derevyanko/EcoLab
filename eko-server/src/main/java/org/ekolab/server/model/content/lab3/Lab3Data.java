@@ -9,6 +9,7 @@ import javax.validation.Valid;
 /**
  * Created by 777Al on 06.04.2017.
  */
+//todo Переопределить equals() и hashcode()
 public class Lab3Data extends LabData {
     /**
      * Мощность ГРЭС
@@ -46,7 +47,7 @@ public class Lab3Data extends LabData {
     /**
      * Диаметр устья дымовой трубы
      */
-    private Double stacksDiameter;
+    private Integer stacksDiameter;
 
     /**
      * Расчетное направление ветра
@@ -380,11 +381,11 @@ public class Lab3Data extends LabData {
         this.stacksHeight = stacksHeight;
     }
 
-    public Double getStacksDiameter() {
+    public Integer getStacksDiameter() {
         return stacksDiameter;
     }
 
-    public void setStacksDiameter(Double stacksDiameter) {
+    public void setStacksDiameter(Integer stacksDiameter) {
         this.stacksDiameter = stacksDiameter;
     }
 

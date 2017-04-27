@@ -1,7 +1,6 @@
 package org.ekolab.server.service.api.content;
 
 import org.ekolab.server.model.LabData;
-import org.ekolab.server.model.content.lab3.Lab3Data;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -17,13 +16,15 @@ public interface LabService<T extends LabData> {
 
     List<T> getAllLabsByUser(String userName);
 
-    T saveLab(T labData);
+    long saveLab(T labData);
 
-    T updateLab(T labData);
+    int updateLab(T labData);
 
     int removeLabsByUser(String userName);
 
     int removeOldLabs(LocalDateTime lastSaveDate);
 
-    byte[] createReport(Lab3Data labData);
+    byte[] createReport(T labData);
+
+    T updateCalculatedFields(T labData);
 }

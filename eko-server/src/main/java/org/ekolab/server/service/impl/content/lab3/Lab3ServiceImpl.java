@@ -20,11 +20,6 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data> implements Lab3Ser
     }
 
     @Override
-    protected Lab3Data loadCalculatedFields(Lab3Data labData) {
-        return null;
-    }
-
-    @Override
     public byte[] createReport(Lab3Data labData) {
         return createReport("", new HashMap<>());
     }

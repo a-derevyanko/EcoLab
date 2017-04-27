@@ -1,8 +1,10 @@
 package org.ekolab.server.dao.impl;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.AbstractTestWithUser;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -25,11 +27,11 @@ public class Lab3DaoTest extends AbstractTestWithUser {
 
     @BeforeClass
     public void generateLab() {
-        Lab3Data data = new Lab3Data();
-        data.setUserLogin(USERNAME);
-        data.setStartDate(LocalDateTime.now());
-        data.setSaveDate(LocalDateTime.now());
-        createdLab = lab3Dao.saveLab(data);
+        createdLab = new Lab3Data();
+        createdLab.setUserLogin(USERNAME);
+        createdLab.setStartDate(LocalDateTime.now());
+        createdLab.setSaveDate(LocalDateTime.now());
+        lab3Dao.saveLab(createdLab);
     }
 
     @AfterClass
@@ -37,26 +39,34 @@ public class Lab3DaoTest extends AbstractTestWithUser {
         lab3Dao.removeLabsByUser(USERNAME);
     }
 
-    @Test(enabled = false)
+    @Test
     public void testGetLabByUser() throws Exception {
         Lab3Data lab3Data = lab3Dao.getLastLabByUser(USERNAME);
-        Assert.assertEquals(lab3Data, createdLab);
+        Assert.assertTrue(new ReflectionEquals(lab3Data).matches(createdLab));
     }
 
-    @Test(enabled = false)
+    @Test
     public void testUpdateLab() throws Exception {
         createdLab.setSaveDate(LocalDateTime.now());
-        Lab3Data updatedLab = lab3Dao.updateLab(createdLab);
-        Assert.assertEquals(updatedLab, createdLab);
+        Assert.assertEquals(lab3Dao.updateLab(createdLab), 1);
     }
 
     @Test
     public void testGetAllLabsByUser() {
-
+        Assert.assertEquals(lab3Dao.getAllLabsByUser(USERNAME).size(), 1);
     }
 
     @Test
     public void testRemoveOldLabs() {
-        lab3Dao.removeOldLabs(LocalDateTime.now().toLocalDate().atStartOfDay());
+        LocalDateTime dateTime = LocalDateTime.now();
+        int count = RandomUtils.nextInt(15);
+        for (int i = 0; i < count; i++) {
+            Lab3Data lab3Data = new Lab3Data();
+            lab3Data.setUserLogin(USERNAME);
+            lab3Data.setStartDate(dateTime);
+            lab3Data.setSaveDate(dateTime);
+            lab3Dao.saveLab(lab3Data);
+        }
+        Assert.assertEquals(count, lab3Dao.removeOldLabs(dateTime));
     }
 }
