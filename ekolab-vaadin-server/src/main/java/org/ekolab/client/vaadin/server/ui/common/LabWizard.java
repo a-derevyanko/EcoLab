@@ -108,7 +108,7 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     @Override
     public void saveData() {
         if (getComponentError() == null) {
-            /* getBinder().writeBeanIfValid(null); */
+             binder.writeBeanIfValid(binder.getBean());
         } else {
             ComponentErrorNotification.show(getComponentError());
         }
