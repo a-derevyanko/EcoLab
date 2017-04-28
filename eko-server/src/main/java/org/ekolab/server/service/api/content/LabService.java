@@ -12,13 +12,13 @@ import java.util.List;
 public interface LabService<T extends LabData> {
     boolean isFieldCalculated(Field field);
 
-    T getLastLabByUser(String userName);
+    T getLastUncompletedLabByUser(String userName);
 
     List<T> getAllLabsByUser(String userName);
 
-    long saveLab(T labData);
+    T saveLab(T labData);
 
-    int updateLab(T labData);
+    T updateLab(T labData);
 
     int removeLabsByUser(String userName);
 

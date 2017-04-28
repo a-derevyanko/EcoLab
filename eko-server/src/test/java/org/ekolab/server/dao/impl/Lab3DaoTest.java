@@ -41,7 +41,7 @@ public class Lab3DaoTest extends AbstractTestWithUser {
 
     @Test
     public void testGetLabByUser() throws Exception {
-        Lab3Data lab3Data = lab3Dao.getLastLabByUser(USERNAME);
+        Lab3Data lab3Data = lab3Dao.getLastUncompletedLabByUser(USERNAME);
         Assert.assertTrue(new ReflectionEquals(lab3Data).matches(createdLab));
     }
 

@@ -51,4 +51,9 @@ public class Lab3View extends LabWizard<Lab3Data> {
 
         //todo binder.readBean(/*Загрузить данные*/);
     }
+
+    @Override
+    protected Lab3Data createNewLabData() {
+        return new Lab3Data();
+    }
 }

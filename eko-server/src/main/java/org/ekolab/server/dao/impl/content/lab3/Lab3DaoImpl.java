@@ -69,7 +69,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     };
 
     @Override
-    public Lab3Data getLastLabByUser(String userName) {
+    public Lab3Data getLastUncompletedLabByUser(String userName) {
         return dsl.selectFrom(LAB3DATA).
                 where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(userName))).and(LAB3DATA.COMPLETED.isFalse()).
                 orderBy(LAB3DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB3DATA_MAPPER);

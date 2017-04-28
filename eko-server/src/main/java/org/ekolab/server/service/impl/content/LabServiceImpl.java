@@ -33,10 +33,12 @@ public abstract class LabServiceImpl<T extends LabData> implements LabService<T>
 
     @Override
     @Transactional(readOnly = true)
-    public T getLastLabByUser(String userName) {
-        T data = labDao.getLastLabByUser(userName);
-        data.setUserLogin(userName);
-        updateCalculatedFields(data);
+    public T getLastUncompletedLabByUser(String userName) {
+        T data = labDao.getLastUncompletedLabByUser(userName);
+        if (data != null) {
+            data.setUserLogin(userName);
+            updateCalculatedFields(data);
+        }
         return data;
     }
 
@@ -53,14 +55,17 @@ public abstract class LabServiceImpl<T extends LabData> implements LabService<T>
 
     @Override
     @Transactional
-    public long saveLab(T labData) {
-        return labDao.saveLab(labData);
+    public T saveLab(T labData) {
+        labData.setSaveDate(LocalDateTime.now());
+        labDao.saveLab(labData);
+        return labData;
     }
 
     @Override
     @Transactional
-    public int updateLab(T labData) {
-        return labDao.updateLab(labData);
+    public T updateLab(T labData) {
+        labDao.updateLab(labData);
+        return labData;
     }
 
     @Override

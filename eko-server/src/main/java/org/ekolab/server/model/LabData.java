@@ -58,10 +58,10 @@ public abstract class LabData {
 
         LabData labData = (LabData) o;
 
-        if (completed != labData.completed) return false;
-        if (!userLogin.equals(labData.userLogin)) return false;
-        if (!startDate.equals(labData.startDate)) return false;
-        return saveDate.equals(labData.saveDate);
+        return completed == labData.completed &&
+                userLogin.equals(labData.userLogin) &&
+                startDate.equals(labData.startDate) &&
+                saveDate.equals(labData.saveDate);
     }
 
     @Override

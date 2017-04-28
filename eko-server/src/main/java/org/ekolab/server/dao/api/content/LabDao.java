@@ -9,7 +9,7 @@ import java.util.List;
  * Created by 777Al on 19.04.2017.
  */
 public interface LabDao<T extends LabData> {
-    T getLastLabByUser(String userName);
+    T getLastUncompletedLabByUser(String userName);
 
     List<T> getAllLabsByUser(String userName);
 

@@ -2,6 +2,7 @@ package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
@@ -16,8 +17,11 @@ import org.ekolab.server.model.LabData;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
+
+import java.time.LocalDateTime;
 
 /**
  * Created by Андрей on 19.03.2017.
@@ -39,6 +43,9 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
 
     @Autowired
     private ExceptionNotification exceptionNotification;
+
+    @Autowired
+    private Authentication currentUser;
 
     protected LabWizard(LabService<BEAN> labService, Binder<BEAN> binder, LabPresentationStep presentationStep) {
         this.labService = labService;
@@ -115,6 +122,20 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     }
 
     @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        BEAN uncompletedLabData = labService.getLastUncompletedLabByUser(currentUser.getName());
+        if (uncompletedLabData == null) {
+            BEAN newLabData = createNewLabData();
+            newLabData.setUserLogin(currentUser.getName());
+            newLabData.setStartDate(LocalDateTime.now());
+            labService.saveLab(newLabData);
+            binder.readBean(newLabData);
+        } else {
+            binder.readBean(uncompletedLabData);
+        }
+    }
+
+    @Override
     public void addStep(WizardStep step, String id) {
         if (step instanceof LabWizardStep) {
             super.addStep(step, id);
@@ -155,6 +176,8 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         removeAllWindows();
         super.back();
     }
+
+    protected abstract BEAN createNewLabData();
 
     private void updateButtons() {
         boolean lastStep = isLastStep(currentStep);
