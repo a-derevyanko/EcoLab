@@ -13,6 +13,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.net.MalformedURLException;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,12 +33,12 @@ public class ResourceService {
 
     @Cacheable(cacheNames = "THEME_GALLERY_IMAGE_SVG", key = "T(java.util.Objects).hash(#imageName, (T(com.vaadin.ui.UI).getCurrent().getTheme()))")
     public com.github.lotsabackscatter.blueimp.gallery.Image getGalleryImage(String imageName) {
-        return loadGalleryImage(getThemeImagePath() + imageName);
+        return loadGalleryImage(getThemeDir() + imageName);
     }
 
     @Cacheable(cacheNames = "THEME_GALLERY_IMAGE_SVG", key = "T(java.util.Objects).hash(#imagesPath, (T(com.vaadin.ui.UI).getCurrent().getTheme()))")
     public List<com.github.lotsabackscatter.blueimp.gallery.Image> getGalleryImages(String imagesPath) {
-        return VaadinServlet.getCurrent().getServletContext().getResourcePaths(getThemeImagePath() + imagesPath)
+        return VaadinServlet.getCurrent().getServletContext().getResourcePaths(getThemeDir() + imagesPath)
                 .stream().sorted().map(this::loadGalleryImage).collect(Collectors.toList());
     }
 
@@ -46,13 +47,23 @@ public class ResourceService {
         return new BrowserFrame(null, new ThemeResource(path + resourceName));
     }
 
+    @Cacheable(cacheNames = "RESOURCE_EXIST", key = "#path.concat(#resourceName).concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
+    public boolean isResourceExists(String path, String resourceName) {
+        try {
+            return VaadinServlet.getCurrent().getServletContext().
+                    getResource(getThemeDir() + path + resourceName) != null;
+        } catch (MalformedURLException e) {
+            throw  new IllegalArgumentException(e);
+        }
+    }
+
     private com.github.lotsabackscatter.blueimp.gallery.Image loadGalleryImage(String path) {
         return new com.github.lotsabackscatter.blueimp.gallery.Image.Builder().
                 href(path).
                 type(URLConnection.guessContentTypeFromName(path)).build();
     }
 
-    private String getThemeImagePath() {
+    private String getThemeDir() {
         String deploymentServerResourcesPath = VaadinService.getCurrent().getDeploymentConfiguration().getResourcesPath();
         if (StringUtils.hasText(deploymentServerResourcesPath)) {
             LOGGER.info("deploymentServerResourcesPath — " + deploymentServerResourcesPath);

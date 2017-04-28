@@ -71,19 +71,12 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
     }
 
     public void addField(Field propertyField) {
-        Component field = getComponent(propertyField);
-
-        Label captionLabel = new Label(getFieldCaption(propertyField.getName()), ContentMode.HTML);
-        Label signLabel = new Label(getFieldSign(propertyField.getName()), ContentMode.HTML);
-        signLabel.addStyleName(EkoLabTheme.LABEL_SIGN);
-        String fieldName = propertyField.getName();
-        Button infoButton = new Button(VaadinIcons.QUESTION);
-        infoButton.addClickListener(event -> show(i18N.get(fieldName), res.getHtmlData(parametersPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)));
         int lastRow = getRows() - 1;
-        super.addComponent(captionLabel, 0, lastRow);
-        super.addComponent(field, 1, lastRow);
-        super.addComponent(signLabel, 2, lastRow);
-        super.addComponent(infoButton, 3, lastRow);
+
+        addCaption(propertyField.getName(), lastRow);
+        addComponent(propertyField, lastRow);
+        addSign(propertyField.getName(), lastRow);
+        addInfoButton(propertyField.getName(), lastRow);
         insertRow(getRows());
     }
 
@@ -92,19 +85,23 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
         throw new UnsupportedOperationException();
     }
 
-    private String getFieldCaption(String fieldName) {
+    private void addCaption(String fieldName, int row) {
         String fieldCaption = i18N.get(fieldName);
         String fieldDimension = i18N.get(fieldName + "-dimension");
-        return fieldDimension.isEmpty() ? fieldCaption : fieldCaption + " (" + fieldDimension + ')';
+        Label captionLabel = new Label(fieldDimension.isEmpty() ? fieldCaption : fieldCaption + " (" + fieldDimension + ')', ContentMode.HTML);
+        super.addComponent(captionLabel, 0, row);
     }
 
-    private String getFieldSign(String fieldName) {
-        return i18N.get(fieldName + "-sign");
+    private void addSign(String fieldName, int row) {
+        Label signLabel = new Label(i18N.get(fieldName + "-sign"), ContentMode.HTML);
+        signLabel.addStyleName(EkoLabTheme.LABEL_SIGN);
+        super.addComponent(signLabel, 2, row);
     }
 
-    private AbstractComponent getComponent(Field propertyField) {
+    private void addComponent(Field propertyField, int row) {
         Class<?> propClass = ReflectTools.convertPrimitiveType(propertyField.getType());
         boolean readOnly = labService.isFieldCalculated(propertyField);
+        AbstractComponent component;
         if (propClass.isEnum()) {
             ComboBox<Enum<?>> comboBox = new ComboBox<>(null, Arrays.asList((Enum<?>[]) propClass.getEnumConstants()));
             comboBox.setItemCaptionGenerator((elem) -> i18N.get(elem.getDeclaringClass().getSimpleName() + '.' + elem.name()));
@@ -113,7 +110,7 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
             comboBox.setEmptySelectionAllowed(false);
             dataBinder.forField(comboBox).bind(propertyField.getName());
             comboBox.setReadOnly(readOnly);
-            return comboBox;
+            component = comboBox;
         } else {
             TextField field = new TextField();
             Converter<String, ?> converter;
@@ -127,7 +124,16 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
 
             dataBinder.forField(field).withConverter(converter).bind(propertyField.getName());
             field.setReadOnly(readOnly);
-            return field;
+            component = field;
+        }
+        super.addComponent(component, 1, row);
+    }
+
+    private void addInfoButton(String fieldName, int row) {
+        if (res.isResourceExists(parametersPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)) {
+            Button infoButton = new Button(VaadinIcons.QUESTION);
+            infoButton.addClickListener(event -> show(i18N.get(fieldName), res.getHtmlData(parametersPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)));
+            super.addComponent(infoButton, 3, row);
         }
     }
 

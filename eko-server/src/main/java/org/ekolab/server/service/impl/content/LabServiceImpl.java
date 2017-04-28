@@ -80,11 +80,6 @@ public abstract class LabServiceImpl<T extends LabData> implements LabService<T>
         return labDao.removeOldLabs(lastSaveDate);
     }
 
-    @Override
-    public T updateCalculatedFields(T labData) {
-        return labData;
-    }
-
     protected byte[] createReport(String templatePath, Map<String, Object> data) {
         return reportsService.fillReport(reportsService.compileReport(templatePath), data);
     }

@@ -26,5 +26,10 @@ public interface LabService<T extends LabData> {
 
     byte[] createReport(T labData);
 
+    /**
+     * Заполняет в модели значения вычисляемых полей
+     * @param labData модель
+     * @return модель, в которой заполнены вычисляемые поля
+     */
     T updateCalculatedFields(T labData);
 }
