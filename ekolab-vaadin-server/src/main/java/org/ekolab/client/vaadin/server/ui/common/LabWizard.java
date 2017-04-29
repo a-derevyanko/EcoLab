@@ -1,6 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
@@ -80,11 +81,6 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         getNextButton().setIcon(VaadinIcons.ARROW_FORWARD, i18N.get("labwizard.next"));
         getBackButton().setIcon(VaadinIcons.ARROW_BACKWARD, i18N.get("labwizard.back"));
 
-        saveButton.addClickListener(event -> saveData());
-        getBackButton().addClickListener(event -> saveData());
-        getNextButton().addClickListener(event -> saveData());
-        getFinishButton().addClickListener(event -> saveData());
-
         footer.removeComponent(getCancelButton());
         footer.removeComponent(getBackButton());
         mainLayout.removeComponent(footer);
@@ -100,7 +96,7 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
 
         buttons.setComponentAlignment(additionalComponentsLayout, Alignment.MIDDLE_CENTER);
 
-        binder.addValueChangeListener(event -> binder.readBean(labService.updateCalculatedFields(binder.getBean())));
+        //binder.addValueChangeListener(event -> binder.readBean(labService.updateCalculatedFields(binder.getBean())));
         binder.addStatusChangeListener(event -> updateSaveButtonState());
 
         addStep(presentationStep);
@@ -113,12 +109,17 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     }
 
     @Override
-    public void saveData() {
-        if (getComponentError() == null) {
-             binder.writeBeanIfValid(binder.getBean());
-        } else {
-            ComponentErrorNotification.show(getComponentError());
+    public boolean saveData() {
+        if (binder.hasChanges()) {
+            try {
+                binder.writeBean(binder.getBean());
+                labService.updateLab(binder.getBean());
+                return true;
+            } catch (ValidationException e) {
+                ComponentErrorNotification.show(i18N.get("savable.save-exception"), e);
+            }
         }
+        return false;
     }
 
     @Override
@@ -129,9 +130,9 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
             newLabData.setUserLogin(currentUser.getName());
             newLabData.setStartDate(LocalDateTime.now());
             labService.saveLab(newLabData);
-            binder.readBean(newLabData);
+            binder.setBean(newLabData);
         } else {
-            binder.readBean(uncompletedLabData);
+            binder.setBean(uncompletedLabData);
         }
     }
 
@@ -161,20 +162,27 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
 
     @Override
     public void finish() {
-        removeAllWindows();
-        super.finish();
+        binder.getBean().setCompleted(true);
+        if (saveData()) {
+            removeAllWindows();
+            super.finish();
+        }
     }
 
     @Override
     public void next() {
-        removeAllWindows();
-        super.next();
+        if (saveData()) {
+            removeAllWindows();
+            super.next();
+        }
     }
 
     @Override
     public void back() {
-        removeAllWindows();
-        super.back();
+        if (saveData()) {
+            removeAllWindows();
+            super.back();
+        }
     }
 
     protected abstract BEAN createNewLabData();

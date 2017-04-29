@@ -5,8 +5,6 @@ import com.vaadin.data.Converter;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.CompositeErrorMessage;
-import com.vaadin.server.ErrorMessage;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Alignment;
@@ -25,9 +23,7 @@ import org.ekolab.server.service.api.content.LabService;
 import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.ekolab.client.vaadin.server.ui.common.ResourceWindow.show;
 
@@ -41,20 +37,14 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
 
     private final LabService labService;
 
-    private final StringToIntegerConverter strToInt;
-
-    private final StringToDoubleConverter strToDouble;
-
     private final I18N i18N;
 
     private final ResourceService res;
 
-    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService labService, StringToIntegerConverter strToInt, StringToDoubleConverter strToDouble, I18N i18N, ResourceService res) {
+    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService labService, I18N i18N, ResourceService res) {
         this.parametersPath = parametersPath;
         this.dataBinder = dataBinder;
         this.labService = labService;
-        this.strToInt = strToInt;
-        this.strToDouble = strToDouble;
         this.i18N = i18N;
         this.res = res;
     }
@@ -113,16 +103,18 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
             component = comboBox;
         } else {
             TextField field = new TextField();
+            String validatorPrefix = i18N.get("validator.value-of-field") + " '"
+                    + i18N.get(propertyField.getName()) + "' ";
             Converter<String, ?> converter;
             if (propClass == Integer.class) {
-                converter = strToInt;
+                converter = new StringToIntegerConverter(validatorPrefix + i18N.get("validator.must-be-number"));
             } else if (propClass == Double.class) {
-                converter = strToDouble;
+                converter = new StringToDoubleConverter(validatorPrefix + i18N.get("validator.must-be-double"));
             } else {
                 throw new IllegalArgumentException("Unknown field type");
             }
 
-            dataBinder.forField(field).withConverter(converter).bind(propertyField.getName());
+            dataBinder.forField(field).withNullRepresentation("").withConverter(converter).bind(propertyField.getName());
             field.setReadOnly(readOnly);
             component = field;
         }
@@ -135,20 +127,5 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
             infoButton.addClickListener(event -> show(i18N.get(fieldName), res.getHtmlData(parametersPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)));
             super.addComponent(infoButton, 3, row);
         }
-    }
-
-    @Override
-    public CompositeErrorMessage getComponentError() {
-        List<ErrorMessage> errorMessages = new ArrayList<>(0);
-        if (super.getComponentError() != null) {
-            errorMessages.add(super.getComponentError());
-        }
-        for (int i = 0; i < getRows() - 1; i++) {
-            AbstractComponent component = (AbstractComponent) getComponent(1, i); // Поля ввода данных
-            if (component.getComponentError() != null) {
-                errorMessages.add(component.getComponentError());
-            }
-        }
-        return errorMessages.isEmpty() ? null : new CompositeErrorMessage(errorMessages);
     }
 }

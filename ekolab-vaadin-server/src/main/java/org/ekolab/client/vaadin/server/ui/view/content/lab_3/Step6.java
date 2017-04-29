@@ -2,8 +2,6 @@ package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.CompositeErrorMessage;
-import com.vaadin.server.ErrorMessage;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -18,10 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by 777Al on 06.04.2017.
@@ -55,12 +49,5 @@ public class Step6 extends VerticalLayout implements LabWizardStep {
                 new ByteArrayInputStream(lab3Service.createReport(binder.getBean())), "report.pdf"));
 
         fileDownloader.extend(saveReportButton);
-    }
-
-    @Override
-    public ErrorMessage getComponentError() {
-        Set<ErrorMessage> messageList = Stream.of(super.getComponentError())
-                .filter(Objects::nonNull).collect(Collectors.toSet());
-        return messageList.isEmpty() ? null : new CompositeErrorMessage(messageList);
     }
 }

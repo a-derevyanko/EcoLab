@@ -58,12 +58,4 @@ public class Step3 extends HorizontalLayout implements LabWizardStep {
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "so2MAC"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "ashMAC"));
     }
-
-    @Override
-    public ErrorMessage getComponentError() {
-        Set<ErrorMessage> messageList = Stream.of(super.getComponentError(),
-                firstFormLayout.getComponentError(),  secondFormLayout.getComponentError())
-                .filter(Objects::nonNull).collect(Collectors.toSet());
-        return messageList.isEmpty() ? null : new CompositeErrorMessage(messageList);
-    }
 }

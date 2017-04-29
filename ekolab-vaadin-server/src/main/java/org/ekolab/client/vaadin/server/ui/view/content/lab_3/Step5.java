@@ -1,8 +1,6 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.CompositeErrorMessage;
-import com.vaadin.server.ErrorMessage;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Button;
@@ -15,10 +13,6 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by 777Al on 06.04.2017.
@@ -62,12 +56,5 @@ public class Step5 extends GridLayout implements LabWizardStep {
     @Override
     public void placeAdditionalComponents(HorizontalLayout buttonsLayout) {
         buttonsLayout.addComponents(zoomInButton, zoomOutButton, so2MapButton, ashMapButton);
-    }
-
-    @Override
-    public ErrorMessage getComponentError() {
-        Set<ErrorMessage> messageList = Stream.of(super.getComponentError())
-                .filter(Objects::nonNull).collect(Collectors.toSet());
-        return messageList.isEmpty() ? null : new CompositeErrorMessage(messageList);
     }
 }

@@ -4,5 +4,5 @@ package org.ekolab.client.vaadin.server.ui.view.api;
  * Created by Андрей on 02.04.2017.
  */
 public interface SavableView extends View {
-    void saveData();
+    boolean saveData();
 }
