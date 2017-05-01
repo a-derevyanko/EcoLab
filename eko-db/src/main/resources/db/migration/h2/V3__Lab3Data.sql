@@ -44,12 +44,6 @@ CREATE TABLE lab3data (
   boiler_running_time DOUBLE,
   ash_proportion_entrained_gases DOUBLE,
   solid_particles_propotion_collected_in_ash DOUBLE,
-  stack_average_gases_speed DOUBLE,
-  nox_massive_injection DOUBLE,
-  no2_massive_injection DOUBLE,
-  no_massive_injection DOUBLE,
-  so2_massive_injection DOUBLE,
-  ash_massive_injection DOUBLE,
   temperature_coefficient DOUBLE,
   terrain_coefficient DOUBLE,
   harmful_substances_deposition_coefficient DOUBLE,
@@ -58,18 +52,7 @@ CREATE TABLE lab3data (
   so2_mac DOUBLE,
   ash_mac DOUBLE,
   breakdown_wind_speed DOUBLE,
-  bwd_no2_ground_level_concentration DOUBLE,
-  bwd_no_ground_level_concentration DOUBLE,
-  bwd_so2_ground_level_concentration DOUBLE,
-  bwd_ash_ground_level_concentration DOUBLE,
-  no2_and_so2_summation_group DOUBLE,
-  no_and_so2_summation_group DOUBLE,
-  bwd_max_ground_level_concentration_distance DOUBLE,
-  wind_speed_max_no2_ground_level_concentration DOUBLE,
-  wind_speed_max_no_ground_level_concentration DOUBLE,
-  wind_speed_max_so2_ground_level_concentration DOUBLE,
-  wind_speed_max_ash_ground_level_concentration DOUBLE,
-  wind_speed_max_ground_level_concentration_distance DOUBLE,
+  completed BOOLEAN NOT NULL DEFAULT FALSE,
   /**
   *Блок ключей
   */
@@ -79,12 +62,17 @@ CREATE TABLE lab3data (
 /*
 * Создадим индексы
 */
-CREATE UNIQUE INDEX ix_lab3data_id ON lab3data (id);
-CREATE UNIQUE INDEX ix_lab3data_user_id ON lab3data (user_id);
+CREATE UNIQUE INDEX ix_lab3data_id
+  ON lab3data (id);
+CREATE INDEX ix_lab3data_user_id
+  ON lab3data (user_id);
+CREATE INDEX ix_lab3data_user_id_start_date
+  ON lab3data (USER_ID, START_DATE);
 
 /*
 * Добавим комментарии
 */
+COMMENT ON TABLE LAB3DATA IS 'Данные лабораторной №3';
 COMMENT ON COLUMN lab3data.id IS 'Уникальный идентификатор выполненного варианта';
 COMMENT ON COLUMN lab3data.user_id IS 'ID пользователя, выполнившего задание';
 COMMENT ON COLUMN lab3data.start_date IS 'Дата и время начала выполнения лабораторной';
@@ -124,12 +112,6 @@ COMMENT ON COLUMN lab3data.desulphurization_system_running_time IS 'Длител
 COMMENT ON COLUMN lab3data.boiler_running_time IS 'Длительность работы котла';
 COMMENT ON COLUMN lab3data.ash_proportion_entrained_gases IS 'Доля золы, уносимой газами из котла';
 COMMENT ON COLUMN lab3data.solid_particles_propotion_collected_in_ash IS 'Доля твердых частиц, улавливаемых в золоуловителях';
-COMMENT ON COLUMN lab3data.stack_average_gases_speed IS 'Средняя скорость газов на выходе из дымовой трубы';
-COMMENT ON COLUMN lab3data.nox_massive_injection IS 'Суммарное количество NOx поступающего в атмосферу с дымовыми газами';
-COMMENT ON COLUMN lab3data.no2_massive_injection IS 'Суммарное количество NO2, поступающего в атмосферу с дымовыми газами';
-COMMENT ON COLUMN lab3data.no_massive_injection IS 'Суммарное количество NO, поступающего в атмосферу с дымовыми газами';
-COMMENT ON COLUMN lab3data.so2_massive_injection IS 'Суммарное количество SO2, поступающего в атмосферу с дымовыми газами';
-COMMENT ON COLUMN lab3data.ash_massive_injection IS 'Суммарное количество золы, поступающей в атмосферу с дымовыми газами';
 COMMENT ON COLUMN lab3data.temperature_coefficient IS 'Коэффициент, характеризующий температурную стратификацию атмосферы';
 COMMENT ON COLUMN lab3data.terrain_coefficient IS 'Коэффициент, учитывающий влияние рельефа местности';
 COMMENT ON COLUMN lab3data.harmful_substances_deposition_coefficient IS 'Безразмерный коэффициент, учитывающий скорость оседания вредных веществ в атмосферном воздухе';
@@ -137,16 +119,4 @@ COMMENT ON COLUMN lab3data.no2_mac IS 'ПДК NO2';
 COMMENT ON COLUMN lab3data.no_mac IS 'ПДК NO';
 COMMENT ON COLUMN lab3data.so2_mac IS 'ПДК SO2';
 COMMENT ON COLUMN lab3data.ash_mac IS 'ПДК золы';
-COMMENT ON COLUMN lab3data.breakdown_wind_speed IS 'Опасная скорость ветра';
-COMMENT ON COLUMN lab3data.bwd_no2_ground_level_concentration IS 'Максимальное значение приземной концентрации NO2 при опасной скорости ветра';
-COMMENT ON COLUMN lab3data.bwd_no_ground_level_concentration IS 'Максимальное значение приземной концентрации NO при опасной скорости ветра';
-COMMENT ON COLUMN lab3data.bwd_so2_ground_level_concentration IS 'Максимальное значение приземной концентрации SO2 при опасной скорости ветра';
-COMMENT ON COLUMN lab3data.bwd_ash_ground_level_concentration IS 'Максимальное значение приземной концентрации золы при опасной скорости ветра';
-COMMENT ON COLUMN lab3data.no2_and_so2_summation_group IS 'Безразмерная концентрация веществ, обладающих суммацией вредного действия (NO2 и SO2)';
-COMMENT ON COLUMN lab3data.no_and_so2_summation_group IS 'Безразмерная концентрация веществ, обладающих суммацией вредного действия (NO и SO2)';
-COMMENT ON COLUMN lab3data.bwd_max_ground_level_concentration_distance IS 'Расстояние от источника выбросов, на котором приземные концентрации загрязняющих веществ';
-COMMENT ON COLUMN lab3data.wind_speed_max_no2_ground_level_concentration IS 'Максимальное значение приземной концентрации NO2 при расчетной скорости ветра';
-COMMENT ON COLUMN lab3data.wind_speed_max_no_ground_level_concentration IS 'Максимальное значение приземной концентрации NO при расчетной скорости ветра';
-COMMENT ON COLUMN lab3data.wind_speed_max_so2_ground_level_concentration IS 'Максимальное значение приземной концентрации SO2 при расчетной скорости ветра';
-COMMENT ON COLUMN lab3data.wind_speed_max_ash_ground_level_concentration IS 'Максимальное значение приземной концентрации золы при расчетной скорости ветра';
-COMMENT ON COLUMN lab3data.wind_speed_max_ground_level_concentration_distance IS 'Расстояние от источника выброса, на котором при скорости ветра u приземная концентрация вредных веществ достигает максимального значения';
+COMMENT ON COLUMN lab3data.completed IS 'Признак завершенности лабораторной работы';

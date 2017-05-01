@@ -1,8 +1,7 @@
-package org.ekolab.server.dao.impl;
+package org.ekolab.server.service.api.content.lab3;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.AbstractTestWithUser;
-import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,60 +12,48 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.time.LocalDateTime;
-
 /**
- * Created by 777Al on 19.04.2017.
+ * Created by Андрей on 01.05.2017.
  */
 @EnableAutoConfiguration(exclude = {ManagementWebSecurityAutoConfiguration.class})
-public class Lab3DaoTest extends AbstractTestWithUser {
+public class Lab3ServiceTest extends AbstractTestWithUser {
     private Lab3Data createdLab;
 
     @Autowired
-    private Lab3Dao lab3Dao;
+    private Lab3Service lab3Service;
 
     @BeforeClass
     public void generateLab() {
-        createdLab = new Lab3Data();
-        createdLab.setUserLogin(USERNAME);
-        createdLab.setStartDate(LocalDateTime.now());
-        createdLab.setSaveDate(LocalDateTime.now());
-        lab3Dao.saveLab(createdLab);
+        createdLab = lab3Service.startNewLab(USERNAME);
     }
 
     @AfterClass
     public void removeLab() {
-        lab3Dao.removeLabsByUser(USERNAME);
+        lab3Service.removeLabsByUser(USERNAME);
     }
 
     @Test
     public void testGetLabByUser() throws Exception {
-        Lab3Data lab3Data = lab3Dao.getLastUncompletedLabByUser(USERNAME);
+        Lab3Data lab3Data = lab3Service.getLastUncompletedLabByUser(USERNAME);
         Assert.assertTrue(new ReflectionEquals(lab3Data).matches(createdLab));
     }
 
     @Test
     public void testUpdateLab() throws Exception {
-        createdLab.setSaveDate(LocalDateTime.now());
-        Assert.assertEquals(lab3Dao.updateLab(createdLab), 1);
+        Assert.assertNotSame(createdLab.getSaveDate(), lab3Service.updateLab(createdLab));
     }
 
     @Test
     public void testGetAllLabsByUser() {
-        Assert.assertEquals(lab3Dao.getAllLabsByUser(USERNAME).size(), 1);
+        Assert.assertEquals(lab3Service.getAllLabsByUser(USERNAME).size(), 1);
     }
 
-    @Test
+    @Test(timeOut = 1000L)
     public void testRemoveOldLabs() {
-        LocalDateTime dateTime = LocalDateTime.now();
         int count = RandomUtils.nextInt(15);
         for (int i = 0; i < count; i++) {
-            Lab3Data lab3Data = new Lab3Data();
-            lab3Data.setUserLogin(USERNAME);
-            lab3Data.setStartDate(dateTime);
-            lab3Data.setSaveDate(dateTime);
-            lab3Dao.saveLab(lab3Data);
+            lab3Service.startNewLab(USERNAME);
         }
-        Assert.assertEquals(count, lab3Dao.removeOldLabs(dateTime));
+        Assert.assertEquals(lab3Service.removeOldLabs(createdLab.getSaveDate()), count);
     }
 }

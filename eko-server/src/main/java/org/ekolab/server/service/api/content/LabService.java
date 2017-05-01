@@ -16,7 +16,7 @@ public interface LabService<T extends LabData> {
 
     List<T> getAllLabsByUser(String userName);
 
-    T saveLab(T labData);
+    T startNewLab(String userName);
 
     T updateLab(T labData);
 

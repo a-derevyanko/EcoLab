@@ -4,11 +4,7 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
@@ -21,8 +17,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
-
-import java.time.LocalDateTime;
 
 /**
  * Created by Андрей on 19.03.2017.
@@ -96,7 +90,6 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
 
         buttons.setComponentAlignment(additionalComponentsLayout, Alignment.MIDDLE_CENTER);
 
-        //binder.addValueChangeListener(event -> binder.readBean(labService.updateCalculatedFields(binder.getBean())));
         binder.addStatusChangeListener(event -> updateSaveButtonState());
 
         addStep(presentationStep);
@@ -113,23 +106,20 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         if (binder.hasChanges()) {
             try {
                 binder.writeBean(binder.getBean());
-                labService.updateLab(binder.getBean());
-                return true;
+                binder.readBean(labService.updateLab(binder.getBean()));
             } catch (ValidationException e) {
                 ComponentErrorNotification.show(i18N.get("savable.save-exception"), e);
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         BEAN uncompletedLabData = labService.getLastUncompletedLabByUser(currentUser.getName());
         if (uncompletedLabData == null) {
-            BEAN newLabData = createNewLabData();
-            newLabData.setUserLogin(currentUser.getName());
-            newLabData.setStartDate(LocalDateTime.now());
-            labService.saveLab(newLabData);
+            BEAN newLabData = labService.startNewLab(currentUser.getName());
             binder.setBean(newLabData);
         } else {
             binder.setBean(uncompletedLabData);
@@ -184,8 +174,6 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
             super.back();
         }
     }
-
-    protected abstract BEAN createNewLabData();
 
     private void updateButtons() {
         boolean lastStep = isLastStep(currentStep);

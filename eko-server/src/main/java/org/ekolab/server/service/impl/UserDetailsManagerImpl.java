@@ -63,7 +63,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager {
                 USER_AUTHORITIES.USER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq("")))).getSQL());
         setGroupAuthoritiesByUsernameQuery(dsl.select(GROUPS.ID, GROUPS.GROUP_NAME, AUTHORITIES.AUTHORITY_NAME)
                 .from(GROUPS.join(GROUP_AUTHORITIES).on(GROUP_AUTHORITIES.GROUP_ID.eq(GROUPS.ID)).join(AUTHORITIES).on(AUTHORITIES.ID.eq(GROUP_AUTHORITIES.AUTHORITY_ID)).join(GROUP_MEMBERS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID)))
-                .where(GROUP_MEMBERS.USER_ID.eq(dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.eq("")).asField())).getSQL());
+                .where(GROUP_MEMBERS.USER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq("")).asField())).getSQL());
         setFindUsersInGroupSql(dsl.select(USERS.LOGIN).from(USERS).join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID))
                 .join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID)).where(GROUPS.GROUP_NAME.eq("")).getSQL());
         setInsertGroupSql(dsl.insertInto(GROUPS, GROUPS.GROUP_NAME).values("").getSQL());

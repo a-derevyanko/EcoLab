@@ -55,7 +55,10 @@ public abstract class LabServiceImpl<T extends LabData> implements LabService<T>
 
     @Override
     @Transactional
-    public T saveLab(T labData) {
+    public T startNewLab(String userName) {
+        T labData = createNewLabData();
+        labData.setUserLogin(userName);
+        labData.setStartDate(LocalDateTime.now());
         labData.setSaveDate(LocalDateTime.now());
         labDao.saveLab(labData);
         return labData;
@@ -64,8 +67,9 @@ public abstract class LabServiceImpl<T extends LabData> implements LabService<T>
     @Override
     @Transactional
     public T updateLab(T labData) {
+        labData.setSaveDate(LocalDateTime.now());
         labDao.updateLab(labData);
-        return labData;
+        return updateCalculatedFields(labData);
     }
 
     @Override
@@ -83,4 +87,6 @@ public abstract class LabServiceImpl<T extends LabData> implements LabService<T>
     protected byte[] createReport(String templatePath, Map<String, Object> data) {
         return reportsService.fillReport(reportsService.compileReport(templatePath), data);
     }
+
+    protected abstract T createNewLabData();
 }

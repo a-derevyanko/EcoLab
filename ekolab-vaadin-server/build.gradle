@@ -60,7 +60,7 @@ bootRun {
         classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
     }
     systemProperties(System.properties)
-    jvmArgs = ["-Dfile.encoding=UTF-8", "-Dspring.profiles.active=dev-h2", "-Dorg.jooq.no-logo=true"]
+    jvmArgs = ["-Dspring.profiles.active=dev-h2", "-Dorg.jooq.no-logo=true"]
 }
 
 bootRepackage {

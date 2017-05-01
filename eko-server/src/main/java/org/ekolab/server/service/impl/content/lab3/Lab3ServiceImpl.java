@@ -207,4 +207,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data> implements Lab3Ser
 
         return labData;
     }
+
+    @Override
+    protected Lab3Data createNewLabData() {
+        return new Lab3Data();
+    }
 }
