@@ -12,6 +12,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
+
 /**
  * Created by Андрей on 01.05.2017.
  */
@@ -48,12 +50,14 @@ public class Lab3ServiceTest extends AbstractTestWithUser {
         Assert.assertEquals(lab3Service.getAllLabsByUser(USERNAME).size(), 1);
     }
 
-    @Test(timeOut = 1000L)
-    public void testRemoveOldLabs() {
+    @Test
+    public void testRemoveOldLabs() throws InterruptedException {
+        LocalDateTime startDate = LocalDateTime.now();
+        Thread.sleep(1000L);
         int count = RandomUtils.nextInt(15);
         for (int i = 0; i < count; i++) {
             lab3Service.startNewLab(USERNAME);
         }
-        Assert.assertEquals(lab3Service.removeOldLabs(createdLab.getSaveDate()), count);
+        Assert.assertEquals(lab3Service.removeOldLabs(startDate), count);
     }
 }
