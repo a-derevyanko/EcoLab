@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @Profile(Profiles.MODE.PROD)
 public class EkoLabNavigator extends SpringNavigator {
     @Autowired
-    private VaadinSecurity vaadinSecurity;
+    protected VaadinSecurity vaadinSecurity;
 
     @Override
     public void navigateTo(String navigationState) {

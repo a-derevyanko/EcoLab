@@ -10,10 +10,12 @@ import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotific
 import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
+import org.ekolab.server.common.Authorize;
 import org.ekolab.server.model.LabData;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
@@ -21,6 +23,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 /**
  * Created by Андрей on 19.03.2017.
  */
+@PreAuthorize(Authorize.HasAuthorities.STUDENT)
 public abstract class LabWizard<BEAN extends LabData> extends Wizard implements AutoSavableView {
     private final LabService<BEAN> labService;
     private final Binder<BEAN> binder;
@@ -96,7 +99,8 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     }
 
     @Override
-    @Scheduled(fixedRateString = "${lab.autoSaveRate:#{60000}}", initialDelayString = "${lab.autoSaveRate:#{60000}}")
+    //@Scheduled(fixedRateString = "${lab.autoSaveRate:#{60000}}", initialDelayString = "${lab.autoSaveRate:#{60000}}")
+    @Scheduled(fixedRate=5000, initialDelay = 5000)
     public void autoSave() {
         saveData();
     }
