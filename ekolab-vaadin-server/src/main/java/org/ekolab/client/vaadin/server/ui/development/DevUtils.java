@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.ui.demo;
+package org.ekolab.client.vaadin.server.ui.development;
 
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.vaadin.spring.security.VaadinSecurity;
@@ -6,7 +6,7 @@ import org.vaadin.spring.security.VaadinSecurity;
 /**
  * Утилиты для демо-версии.
  */
-public class DemoUtils {
+public class DevUtils {
     /**
      * Если есть анонимная сессия, производится попытка входа в систему
      * @param vaadinSecurity сервис аутентификации

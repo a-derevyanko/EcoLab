@@ -65,7 +65,7 @@ bootRun {
         classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
     }
     systemProperties(System.properties)
-    jvmArgs = ["-Dspring.profiles.active=demo,h2", "-Dorg.jooq.no-logo=true"]
+    jvmArgs = ["-Dspring.profiles.active=dev-h2", "-Dorg.jooq.no-logo=true"]
     addResources = true
 }
 

@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.ui.demo;
+package org.ekolab.client.vaadin.server.ui.development;
 
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Profile;
  */
 @SpringUI
 @Profile(Profiles.MODE.DEV)
-public class DemoVaadinUI extends VaadinUI {
+public class DevVaadinUI extends VaadinUI {
     @Override
     protected void init(VaadinRequest request) {
-        DemoUtils.authenticateAsAdmin(vaadinSecurity);
+        DevUtils.authenticateAsAdmin(vaadinSecurity);
         super.init(request);
     }
 }

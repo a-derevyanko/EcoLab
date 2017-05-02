@@ -99,8 +99,7 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     }
 
     @Override
-    //@Scheduled(fixedRateString = "${lab.autoSaveRate:#{60000}}", initialDelayString = "${lab.autoSaveRate:#{60000}}")
-    @Scheduled(fixedRate=5000, initialDelay = 5000)
+    @Scheduled(fixedRateString = "${lab.autoSaveRate:#{60000}}", initialDelayString = "${lab.autoSaveRate:#{60000}}")
     public void autoSave() {
         saveData();
     }
