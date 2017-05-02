@@ -13,9 +13,11 @@ import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
+import org.ekolab.server.common.Profiles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.vaadin.spring.security.VaadinSecurity;
 
 import java.util.Locale;
@@ -28,6 +30,7 @@ import java.util.Locale;
 @Widgetset("AppWidgetset")
 @Theme(EkoLabTheme.THEME_NAME)
 @PreserveOnRefresh
+@Profile(Profiles.MODE.PROD)
 public class VaadinUI extends UI {
     private static final long serialVersionUID = -2988327335267095955L;
     private static final Logger LOG = LoggerFactory.getLogger(VaadinUI.class);
@@ -45,7 +48,7 @@ public class VaadinUI extends UI {
     private ViewContainerPanel viewContainer;
 
     @Autowired
-    private VaadinSecurity vaadinSecurity;
+    protected VaadinSecurity vaadinSecurity;
 
     @Autowired
     private I18N i18N;

@@ -1,11 +1,15 @@
 package org.ekolab.server;
 
-import org.springframework.boot.SpringApplication;
+import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Arrays;
@@ -15,9 +19,14 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableWebMvc
 @EnableCaching
-public class ServerApplication {
+public class ServerApplication extends SpringBootServletInitializer implements WebApplicationInitializer {
+    /**
+     * Конфигурация, которая будет использоваться при запуске из командной строки в Embedded контейнере
+     * @param args аргументы запуска
+     */
     public static void main(String... args) {
-        ApplicationContext ctx = SpringApplication.run(ServerApplication.class, args);
+        ServerApplication serverApplication = new ServerApplication();
+        ApplicationContext ctx = serverApplication.configure(new SpringApplicationBuilder()).run(args);
 
         System.out.println("Let's inspect the beans provided by Spring Boot:");
 
@@ -26,5 +35,19 @@ public class ServerApplication {
         for (String beanName : beanNames) {
             System.out.println(beanName);
         }
+    }
+
+    /**
+     * Конфигурация, которая будет использоваться при деплое приложения в контейнер.
+     * @param builder билдер
+     * @return сконфигурированное приложение
+     */
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(ServerApplication.class).initializers(initializers()).bannerMode(Banner.Mode.OFF);
+    }
+
+    protected static ApplicationContextInitializer<?>[] initializers() {
+        return new ApplicationContextInitializer[0];
     }
 }

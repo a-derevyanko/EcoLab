@@ -1,6 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.demo;
 
 import com.vaadin.spring.annotation.SpringView;
+import org.ekolab.client.vaadin.server.ui.development.DevUtils;
 import org.ekolab.client.vaadin.server.ui.view.LoginView;
 import org.ekolab.server.common.Profiles;
 import org.springframework.context.annotation.Profile;
@@ -19,10 +20,6 @@ public class DemoLoginView extends LoginView {
 
     @Override
     protected void login() {
-        if (username.isEmpty() || password.isEmpty()) {
-            username.setValue("admin");
-            password.setValue("admin");
-        }
-        super.login();
+        DevUtils.authenticateAsAdmin(vaadinSecurity);
     }
 }
