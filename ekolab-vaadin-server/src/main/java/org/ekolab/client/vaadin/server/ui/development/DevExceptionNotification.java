@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.ui.demo;
+package org.ekolab.client.vaadin.server.ui.development;
 
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -18,9 +18,9 @@ import java.util.Arrays;
 @SpringComponent
 @UIScope
 @Profile(Profiles.MODE.DEV)
-public class DemoExceptionNotification extends ExceptionNotification {
+public class DevExceptionNotification extends ExceptionNotification {
     @Autowired
-    public DemoExceptionNotification(I18N i18N) {
+    public DevExceptionNotification(I18N i18N) {
         super(i18N);
         setStyleName(EkoLabTheme.NOTIFICATION_ERROR);
         setDelayMsec(-1);

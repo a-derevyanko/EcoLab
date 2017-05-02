@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
  */
 @UIScope
 @SpringComponent
-@Profile(Profiles.MODE.PROD)
+@Profile(value = {Profiles.MODE.PROD, Profiles.MODE.DEMO})
 public class EkoLabNavigator extends SpringNavigator {
     @Autowired
     protected VaadinSecurity vaadinSecurity;

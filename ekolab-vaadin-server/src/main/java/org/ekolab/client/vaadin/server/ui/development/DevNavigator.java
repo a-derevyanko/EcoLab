@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.ui.demo;
+package org.ekolab.client.vaadin.server.ui.development;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Profile;
 @UIScope
 @SpringComponent
 @Profile(Profiles.MODE.DEV)
-public class DemoNavigator extends EkoLabNavigator {
+public class DevNavigator extends EkoLabNavigator {
     @Override
     public void navigateTo(String navigationState) {
         if (VaadinSession.getCurrent().getState() == VaadinSession.State.OPEN) {

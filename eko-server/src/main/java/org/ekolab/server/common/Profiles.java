@@ -11,6 +11,7 @@ public class Profiles {
     public class MODE {
         public static final String TEST = "test";
         public static final String DEV = "dev";
+        public static final String DEMO = "demo";
         public static final String PROD = "production";
     }
 }
