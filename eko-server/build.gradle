@@ -1,5 +1,6 @@
 import org.ekolab.gradle.CustomTest
 
+apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
 
 buildscript {
@@ -51,11 +52,20 @@ dependencies {
     runtime     group: 'com.h2database',            name: 'h2',                                 version: '+'
     runtime     group: 'org.postgresql',            name: 'postgresql',                         version: '+'
 
+    providedRuntime group: 'org.springframework.boot',  name: 'spring-boot-starter-jetty',      version: '+'
+
     testCompile group: 'com.h2database',            name: 'h2',                                 version: '+'
 }
+
+war {
+    baseName = 'EkoLab-Server'
+    version =  '0.0.1'
+}
+
 bootRun {
     systemProperties(System.properties)
     jvmArgs = ["-Dspring.profiles.active=dev-h2", "-Dorg.jooq.no-logo=true"]
+    addResources = true
 }
 
 bootRepackage {

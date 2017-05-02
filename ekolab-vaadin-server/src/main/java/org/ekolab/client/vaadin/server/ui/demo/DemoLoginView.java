@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
  * Created by Андрей on 04.09.2016.
  */
 @SpringView(name = DemoLoginView.NAME)
-@Profile(Profiles.MODE.DEV)
+@Profile(value = {Profiles.MODE.DEMO, Profiles.MODE.DEV})
 public class DemoLoginView extends LoginView {
     @Override
     public void init() throws Exception {

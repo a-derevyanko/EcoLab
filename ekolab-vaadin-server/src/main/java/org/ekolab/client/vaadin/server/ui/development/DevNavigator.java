@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.ui.demo;
+package org.ekolab.client.vaadin.server.ui.development;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
 @UIScope
 @SpringComponent
 @Profile(Profiles.MODE.DEV)
-public class DemoNavigator extends EkoLabNavigator {
+public class DevNavigator extends EkoLabNavigator {
     @Override
     public String getState() {
         return getStateManager().getState().isEmpty() ? LabChooserView.NAME: getStateManager().getState();

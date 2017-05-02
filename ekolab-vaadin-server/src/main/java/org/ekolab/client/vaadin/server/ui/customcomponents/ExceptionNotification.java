@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Profile;
  */
 @SpringComponent
 @UIScope
-@Profile(Profiles.MODE.PROD)
+@Profile(value = {Profiles.MODE.PROD, Profiles.MODE.DEMO})
 public class ExceptionNotification extends Notification {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionNotification.class);
 
