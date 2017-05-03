@@ -33,6 +33,7 @@ dependencies {
 
     compile group: 'org.springframework.boot',  name: 'spring-boot-configuration-processor',   version: '+'
 
+    runtime group: 'org.springframework.boot',  name: 'spring-boot-starter-aop',               version: '1.5.3.RELEASE'
     runtime group: 'de.codecentric',            name: 'spring-boot-admin-starter-client',      version: '+'
 }
 
