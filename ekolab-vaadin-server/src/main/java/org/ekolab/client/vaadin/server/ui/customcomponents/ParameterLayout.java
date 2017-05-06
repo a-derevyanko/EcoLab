@@ -114,7 +114,8 @@ public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
                 throw new IllegalArgumentException("Unknown field type");
             }
 
-            dataBinder.forField(field).withNullRepresentation("").withConverter(converter).bind(propertyField.getName());
+            dataBinder.forField(field).withNullRepresentation(readOnly ? i18N.get("labwizard.unknown-value") : "")
+                    .withConverter(converter).bind(propertyField.getName());
             field.setReadOnly(readOnly);
             component = field;
         }

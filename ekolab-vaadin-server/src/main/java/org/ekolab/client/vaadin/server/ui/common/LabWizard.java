@@ -1,13 +1,17 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationException;
+import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.*;
+import com.vaadin.server.Page;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
-import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
 import org.ekolab.server.common.Authorize;
@@ -33,17 +37,20 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     // ---------------------------- Графические компоненты --------------------
     protected final GridLayout buttons = new GridLayout(3, 1);
     protected final Button saveButton = new Button("Save", VaadinIcons.CLOUD_DOWNLOAD_O);
+    protected final Button initialDataButton = new Button("Initial data", VaadinIcons.CLIPBOARD_TEXT);
+    protected final HorizontalLayout backButtonsLayout = new HorizontalLayout();
     protected final HorizontalLayout leftComponentsLayout = new HorizontalLayout();
     protected final HorizontalLayout additionalComponentsLayout = new HorizontalLayout();
+    protected final HorizontalLayout rightComponentsLayout = new HorizontalLayout();
 
     @Autowired
     private I18N i18N;
 
     @Autowired
-    private ExceptionNotification exceptionNotification;
+    private Authentication currentUser;
 
     @Autowired
-    private Authentication currentUser;
+    private InitialDataWindow initialDataWindow;
 
     protected LabWizard(LabService<BEAN> labService, Binder<BEAN> binder, LabPresentationStep presentationStep) {
         this.labService = labService;
@@ -65,11 +72,13 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
 
         addStyleName(EkoLabTheme.PANEL_WIZARD);
         saveButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        initialDataButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         getFinishButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         getNextButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         getBackButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
 
         saveButton.setCaption(i18N.get("savable.save"));
+        initialDataButton.setCaption(i18N.get("labwizard.initial-data"));
         getBackButton().setCaption(i18N.get("labwizard.back"));
         getNextButton().setCaption(i18N.get("labwizard.next"));
         getFinishButton().setCaption(i18N.get("labwizard.finish"));
@@ -82,18 +91,34 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         footer.removeComponent(getBackButton());
         mainLayout.removeComponent(footer);
 
+        footer.addComponent(initialDataButton, 0);
         mainLayout.addComponent(buttons);
 
-        leftComponentsLayout.addComponent(getBackButton());
-        leftComponentsLayout.addComponent(saveButton);
-        buttons.setColumnExpandRatio(1, 1.0F);
+        rightComponentsLayout.addComponent(footer);
+
+        backButtonsLayout.addComponent(getBackButton());
+        backButtonsLayout.addComponent(saveButton);
+        leftComponentsLayout.addComponent(backButtonsLayout);
         buttons.addComponent(leftComponentsLayout, 0, 0);
         buttons.addComponent(additionalComponentsLayout, 1, 0);
-        buttons.addComponent(footer, 2, 0);
+        buttons.addComponent(rightComponentsLayout, 2, 0);
 
+        leftComponentsLayout.setSizeFull();
+        additionalComponentsLayout.setSizeFull();
+        rightComponentsLayout.setSizeFull();
+
+        buttons.setComponentAlignment(leftComponentsLayout, Alignment.MIDDLE_LEFT);
         buttons.setComponentAlignment(additionalComponentsLayout, Alignment.MIDDLE_CENTER);
+        buttons.setComponentAlignment(rightComponentsLayout, Alignment.MIDDLE_RIGHT);
 
-        binder.addStatusChangeListener(event -> updateSaveButtonState());
+        rightComponentsLayout.setComponentAlignment(footer, Alignment.MIDDLE_RIGHT);
+
+        leftComponentsLayout.setComponentAlignment(backButtonsLayout, Alignment.MIDDLE_LEFT);
+
+        binder.addValueChangeListener(event -> saveButton.setVisible(true));
+
+        saveButton.addClickListener(event -> saveData());
+        initialDataButton.addClickListener(event -> showInitialData());
 
         addStep(presentationStep);
     }
@@ -106,12 +131,14 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
 
     @Override
     public boolean saveData() {
-        if (binder.hasChanges()) {
-            try {
-                binder.writeBean(binder.getBean());
+        if (saveButton.isVisible()) {
+            BinderValidationStatus<BEAN> validationStatus = binder.validate();
+            if (validationStatus.isOk()) {
                 binder.readBean(labService.updateLab(binder.getBean()));
-            } catch (ValidationException e) {
-                ComponentErrorNotification.show(i18N.get("savable.save-exception"), e);
+            } else {
+                if (Page.getCurrent() != null) {
+                    ComponentErrorNotification.show(i18N.get("savable.save-exception"), validationStatus.getFieldValidationErrors());
+                }
                 return false;
             }
         }
@@ -178,15 +205,15 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         }
     }
 
+    private void showInitialData() {
+        initialDataWindow.show(labService.getInitialData());
+    }
+
     private void updateButtons() {
         boolean lastStep = isLastStep(currentStep);
         getFinishButton().setVisible(lastStep);
         getNextButton().setVisible(!lastStep);
         getBackButton().setVisible(!isFirstStep(currentStep));
-    }
-
-    private void updateSaveButtonState() {
-        saveButton.setVisible(binder.hasChanges());
     }
 
     private void removeAllWindows() {

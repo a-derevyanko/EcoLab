@@ -32,7 +32,7 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
 
     @PostConstruct
     protected void init() {
-        //setWidth(100.0F, Unit.PERCENTAGE);
+        setWidth(100.0F, Unit.PERCENTAGE);
     }
 
     @Override

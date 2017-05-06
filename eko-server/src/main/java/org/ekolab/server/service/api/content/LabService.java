@@ -5,6 +5,7 @@ import org.ekolab.server.model.LabData;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -32,4 +33,16 @@ public interface LabService<T extends LabData> {
      * @return модель, в которой заполнены вычисляемые поля
      */
     T updateCalculatedFields(T labData);
+
+    /**
+     * Создаёт структуру с данными лабораторной, не сохраняя её
+     * @return новая структура с данными лабораторной, не сохраняя её
+     */
+    T createNewLabData();
+
+    /**
+     * Возвращает данные варианта лабораторной
+     * @return данные варианта.
+     */
+    Map<String,String> getInitialData();
 }

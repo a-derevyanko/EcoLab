@@ -209,7 +209,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data> implements Lab3Ser
     }
 
     @Override
-    protected Lab3Data createNewLabData() {
+    public Lab3Data createNewLabData() {
         return new Lab3Data();
     }
 }

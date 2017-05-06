@@ -66,6 +66,7 @@ public class LabChooserView extends VerticalLayout implements View {
         labDefenceButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         labDefenceButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);;
 
+        labLabel.setValue(i18N.get("labchooser.title"));
         labLabel.setStyleName(EkoLabTheme.LABEL_HUGE);
 
         content.addStyleName(EkoLabTheme.PANEL_LABCHOOSER);

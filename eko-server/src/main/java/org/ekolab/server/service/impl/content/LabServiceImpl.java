@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,5 +89,13 @@ public abstract class LabServiceImpl<T extends LabData> implements LabService<T>
         return reportsService.fillReport(reportsService.compileReport(templatePath), data);
     }
 
-    protected abstract T createNewLabData();
+    @Override
+    public Map<String, String> getInitialData() {
+        Map<String, String> data = new HashMap<>();
+        data.put("1", "1");
+        data.put("2", "2");
+        data.put("3", "3");
+        data.put("4", "4");
+        return data;
+    }
 }

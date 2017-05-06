@@ -6,6 +6,7 @@ import com.github.lotsabackscatter.blueimp.gallery.Options;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.service.ResourceService;
@@ -37,9 +38,10 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
     public void init() throws IOException {
         LabWizardStep.super.init();
         setSizeFull();
+        addStyleName(EkoLabTheme.PANEL_WIZARD_PRESENTATION);
         addComponent(gallery);
-        addComponent(showGallery);
-        setComponentAlignment(showGallery, Alignment.MIDDLE_CENTER);
+        //addComponent(showGallery);
+        //setComponentAlignment(showGallery, Alignment.BOTTOM_CENTER);
         showGallery.setCaption(i18N.get("lab.presentation.show-presentation"));
         showGallery.setStyleName(EkoLabTheme.BUTTON_HUGE);
         showGallery.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
@@ -69,5 +71,11 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
     @Override
     public boolean onBack() {
         return false;
+    }
+
+    @Override
+    public void placeAdditionalComponents(HorizontalLayout buttonsLayout) {
+        buttonsLayout.addComponent(showGallery);
+        buttonsLayout.setComponentAlignment(showGallery, Alignment.MIDDLE_CENTER);
     }
 }

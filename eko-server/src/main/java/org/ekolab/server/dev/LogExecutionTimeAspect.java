@@ -25,17 +25,9 @@ public class LogExecutionTimeAspect {
     @Pointcut("execution(@org.ekolab.server.dev.LogExecutionTime * *.*(..))")
     private void annotatedMethod() {}
 
-    @Pointcut("execution(* org.ekolab..*.*(..))")
-    private void anyMethod() {}
-
     @Around("annotatedMethod() && @annotation(annotation)")
     public Object logTimeMethod(ProceedingJoinPoint joinPoint, LogExecutionTime annotation) throws Throwable {
         return logExecutionTime(joinPoint, annotation.normalExecutionTime());
-    }
-
-    @Around("!annotatedMethod() && anyMethod()")
-    public Object logTimeMethod(ProceedingJoinPoint joinPoint) throws Throwable {
-        return logExecutionTime(joinPoint, 100L);
     }
 
     private Object logExecutionTime(ProceedingJoinPoint joinPoint, long normalExecutionTime) throws Throwable {

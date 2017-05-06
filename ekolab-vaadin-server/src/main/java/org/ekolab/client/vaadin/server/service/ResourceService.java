@@ -4,6 +4,7 @@ import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.BrowserFrame;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.UI;
@@ -22,12 +23,18 @@ import java.util.stream.Collectors;
  * Сервис, необходмый для получения ресурсов. Кэшируемый.
  */
 @Service
+@UIScope
 public class ResourceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceService.class);
 
     @Cacheable(cacheNames = "THEME_RESOURCE_IMAGE", key = "#imageName.concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
     public Image getImage(String imageName) {
-        Resource resource = new ThemeResource("img/" + imageName);
+        return getImage("img/" , imageName);
+    }
+
+    @Cacheable(cacheNames = "THEME_RESOURCE_IMAGE", key = "#imageName.concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
+    public Image getImage(String path, String imageName) {
+        Resource resource = new ThemeResource(path + imageName);
         return new Image(null, resource);
     }
 

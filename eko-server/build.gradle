@@ -78,12 +78,12 @@ build.dependsOn.remove(test)
 
 task testH2(type:CustomTest){
     systemProperties(System.properties)
-    jvmArgs = ["-Dspring.profiles.include=dev,h2"]
+    jvmArgs = ["-Dspring.profiles.include=test,h2"]
 }
 
 task testPostgres(type:CustomTest){
     systemProperties(System.properties)
-    jvmArgs = ["-Dspring.profiles.include=dev,h2"]
+    jvmArgs = ["-Dspring.profiles.include=test,h2"]
 }
 
 task test(type: DefaultTask, overwrite: true) {
