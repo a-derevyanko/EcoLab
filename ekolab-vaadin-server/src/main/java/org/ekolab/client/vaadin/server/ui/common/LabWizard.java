@@ -135,6 +135,7 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
             BinderValidationStatus<BEAN> validationStatus = binder.validate();
             if (validationStatus.isOk()) {
                 binder.readBean(labService.updateLab(binder.getBean()));
+                saveButton.setVisible(false);
             } else {
                 if (Page.getCurrent() != null) {
                     ComponentErrorNotification.show(i18N.get("savable.save-exception"), validationStatus.getFieldValidationErrors());
