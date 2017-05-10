@@ -2,9 +2,10 @@ package org.ekolab.server.model.content.lab3;
 
 import org.ekolab.server.model.Calculated;
 import org.ekolab.server.model.LabData;
-import org.hibernate.validator.constraints.Range;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 /**
  * Created by 777Al on 06.04.2017.
@@ -13,7 +14,8 @@ public class Lab3Data extends LabData {
     /**
      * Мощность ГРЭС
      */
-    @Range(max = 10000L)
+    @Max(10000L)
+    @Min(0L)
     private Integer tppOutput;
 
     /**
@@ -30,7 +32,8 @@ public class Lab3Data extends LabData {
     /**
      * Номинальная паропроизводительность одного котла
      */
-    @Range(max = 10000L)
+    @Max(10000L)
+    @Min(0L)
     private Integer steamProductionCapacity;
 
     /**
@@ -223,7 +226,8 @@ public class Lab3Data extends LabData {
      * Коэффициент, характеризующий температурную стратификацию атмосферы
      */
     //todo ставить ограничение относительно города
-    @Range(min = 140L, max = 250L)
+    @Max(250L)
+    @Min(140L)
     private Double temperatureCoefficient;
 
     /**

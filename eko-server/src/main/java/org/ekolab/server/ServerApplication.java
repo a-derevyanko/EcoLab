@@ -1,5 +1,7 @@
 package org.ekolab.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -20,6 +22,8 @@ import java.util.Arrays;
 @EnableWebMvc
 @EnableCaching
 public class ServerApplication extends SpringBootServletInitializer implements WebApplicationInitializer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerApplication.class);
+
     /**
      * Конфигурация, которая будет использоваться при запуске из командной строки в Embedded контейнере
      * @param args аргументы запуска
@@ -28,7 +32,7 @@ public class ServerApplication extends SpringBootServletInitializer implements W
         ServerApplication serverApplication = new ServerApplication();
         ApplicationContext ctx = serverApplication.configure(new SpringApplicationBuilder()).run(args);
 
-        System.out.println("Let's inspect the beans provided by Spring Boot:");
+        LOGGER.info("Let's inspect the beans provided by Spring Boot:");
 
         String[] beanNames = ctx.getBeanDefinitionNames();
         Arrays.sort(beanNames);

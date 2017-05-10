@@ -60,15 +60,19 @@ public class VaadinUI extends UI {
     protected void init(VaadinRequest request) {
         setLocale(Locale.getDefault());
         setErrorHandler(event -> exceptionNotification.show(Page.getCurrent(), event.getThrowable()));
-        setContent(viewContainer);
-        addStyleName(EkoLabTheme.UI_WITH_MENU);
 
-        /*root.setSizeFull();
+        root.setSizeFull();
+        root.setMargin(false);
+        root.setSpacing(false);
         root.addComponents(menuBar, viewContainer);
+        setContent(root);
+        viewContainer.setStyleName(EkoLabTheme.UI_WITH_MENU);
 
-        root.setExpandRatio(menuBar, 0.1f);
+        menuBar.setStyleName(EkoLabTheme.MENUBAR_BORDERLESS);
+
+        root.setExpandRatio(menuBar, 0.05f);
         root.setExpandRatio(viewContainer, 2.0f);
-*/
+
         navigator.addViewChangeListener(menuBar);
 
         Responsive.makeResponsive(this);
