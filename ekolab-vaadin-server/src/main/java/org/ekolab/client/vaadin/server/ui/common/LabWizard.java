@@ -5,7 +5,11 @@ import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
@@ -20,7 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 
 /**
  * Created by Андрей on 19.03.2017.
@@ -216,10 +220,6 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     }
 
     private void removeAllWindows() {
-        UI components1 = UI.getCurrent();
-        for (Iterator<Window> iterator = UI.getCurrent().getWindows().iterator(); iterator.hasNext(); ) {
-            Window components = iterator.next();
-            components1.removeWindow(components);
-        }
+        new ArrayList<>(UI.getCurrent().getWindows()).forEach(UI.getCurrent()::removeWindow);
     }
 }
