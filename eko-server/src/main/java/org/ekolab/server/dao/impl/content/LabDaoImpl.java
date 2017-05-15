@@ -1,7 +1,7 @@
 package org.ekolab.server.dao.impl.content;
 
 import org.ekolab.server.dao.api.content.LabDao;
-import org.ekolab.server.model.LabData;
+import org.ekolab.server.model.content.LabData;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Select;

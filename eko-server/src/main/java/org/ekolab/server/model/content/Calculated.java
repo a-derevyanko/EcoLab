@@ -1,4 +1,4 @@
-package org.ekolab.server.model;
+package org.ekolab.server.model.content;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

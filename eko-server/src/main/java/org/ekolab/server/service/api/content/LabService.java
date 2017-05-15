@@ -1,6 +1,7 @@
 package org.ekolab.server.service.api.content;
 
-import org.ekolab.server.model.LabData;
+import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.LabVariant;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -36,7 +37,7 @@ public interface LabService<T extends LabData> {
 
     /**
      * Создаёт структуру с данными лабораторной, не сохраняя её
-     * @return новая структура с данными лабораторной, не сохраняя её
+     * @return новая структура с данными лабораторной
      */
     T createNewLabData();
 

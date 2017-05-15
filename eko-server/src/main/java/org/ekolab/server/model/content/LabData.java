@@ -1,12 +1,18 @@
-package org.ekolab.server.model;
+package org.ekolab.server.model.content;
+
+import org.ekolab.server.model.DomainModel;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Created by 777Al on 19.04.2017.
  */
-public abstract class LabData {
+public abstract class LabData<V extends LabVariant> implements DomainModel {
+    @NotNull
+    private V variant;
+
     @NotNull
     private String userLogin;
 
@@ -51,25 +57,28 @@ public abstract class LabData {
         this.completed = completed;
     }
 
+    public V getVariant() {
+        return variant;
+    }
+
+    public void setVariant(V variant) {
+        this.variant = variant;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        LabData labData = (LabData) o;
-
+        if (!(o instanceof LabData)) return false;
+        LabData<?> labData = (LabData<?>) o;
         return completed == labData.completed &&
-                userLogin.equals(labData.userLogin) &&
-                startDate.equals(labData.startDate) &&
-                saveDate.equals(labData.saveDate);
+                Objects.equals(variant, labData.variant) &&
+                Objects.equals(userLogin, labData.userLogin) &&
+                Objects.equals(startDate, labData.startDate) &&
+                Objects.equals(saveDate, labData.saveDate);
     }
 
     @Override
     public int hashCode() {
-        int result = userLogin.hashCode();
-        result = 31 * result + startDate.hashCode();
-        result = 31 * result + saveDate.hashCode();
-        result = 31 * result + (completed ? 1 : 0);
-        return result;
+        return Objects.hash(variant, userLogin, startDate, saveDate, completed);
     }
 }

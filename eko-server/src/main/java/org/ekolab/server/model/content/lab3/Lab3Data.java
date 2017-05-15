@@ -1,21 +1,22 @@
 package org.ekolab.server.model.content.lab3;
 
-import org.ekolab.server.model.Calculated;
-import org.ekolab.server.model.LabData;
+import org.ekolab.server.model.content.Calculated;
+import org.ekolab.server.model.content.LabData;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 /**
  * Created by 777Al on 06.04.2017.
  */
-public class Lab3Data extends LabData {
+public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * Мощность ГРЭС
      */
-    @Max(10000L)
-    @Min(0L)
+    @Max(3200L)
+    @Min(1200L)
     private Integer tppOutput;
 
     /**
@@ -32,8 +33,8 @@ public class Lab3Data extends LabData {
     /**
      * Номинальная паропроизводительность одного котла
      */
-    @Max(10000L)
-    @Min(0L)
+    @Max(2450L)
+    @Min(580L)
     private Integer steamProductionCapacity;
 
     /**
@@ -44,6 +45,8 @@ public class Lab3Data extends LabData {
     /**
      * Высота дымовой трубы
      */
+    @Max(240L)
+    @Min(120L)
     private Integer stacksHeight;
 
     /**
@@ -64,6 +67,9 @@ public class Lab3Data extends LabData {
     /**
      * Низшая теплота сгорания топлива
      */
+    /*@Max(40)
+    @Min(28)*/
+    @Digits(integer = 2, fraction = 2)
     private Double lowHeatValue;
 
     /**
@@ -74,6 +80,9 @@ public class Lab3Data extends LabData {
     /**
      * Потери тепла от механической неполноты сгорания топлива
      */
+    /*@Max(1.5)
+    @Min(0)*/
+    @Digits(integer = 1, fraction = 1)
     private Double carbonInFlyAsh;
 
     /**
@@ -84,6 +93,9 @@ public class Lab3Data extends LabData {
     /**
      * Зольность топлива
      */
+    /*@Max(99)
+    @Min(0)*/
+    @Digits(integer = 2, fraction = 1)
     private Double ashContent;
 
     /**
@@ -104,51 +116,63 @@ public class Lab3Data extends LabData {
     /**
      * Температура газов на выходе из дымовой трубы
      */
+    @Max(200L)
+    @Min(100L)
     private Integer stackExitTemperature;
 
     /**
      * Температура наружного воздуха
      */
+    @Max(100L)
+    @Min(-100L)
     private Integer outsideAirTemperature;
 
     /**
      * Коэффициент избытка воздуха в уходящих газах
      */
+    // Всегда == 1,4
     private Double excessAirRatio;
 
     /**
      * Теоретический объем продуктов сгорания
      */
+    @Digits(integer = 100000, fraction = 2)
     private Double combustionProductsVolume;
 
     /**
      * Теоретический объем паров воды
      */
+    @Digits(integer = 100000, fraction = 2)
     private Double waterVaporVolume;
 
     /**
      * Теоретический объем воздуха
      */
+    @Digits(integer = 100000, fraction = 2)
     private Double airVolume;
 
     /**
      * Фоновая концентрация NO2
      */
+    @Digits(integer = 100000, fraction = 3)
     private Double no2BackgroundConcentration;
 
     /**
      * Фоновая концентрация NO
      */
+    @Digits(integer = 100000, fraction = 3)
     private Double noBackgroundConcentration;
 
     /**
      * Фоновая концентрация SO2
      */
+    @Digits(integer = 100000, fraction = 3)
     private Double so2BackgroundConcentration;
 
     /**
      * Фоновая концентрация золы
      */
+    @Digits(integer = 100000, fraction = 3)
     private Double ashBackgroundConcentration;
 
     /**

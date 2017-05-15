@@ -1,8 +1,8 @@
 package org.ekolab.server.service.impl.content;
 
 import org.ekolab.server.dao.api.content.LabDao;
-import org.ekolab.server.model.Calculated;
-import org.ekolab.server.model.LabData;
+import org.ekolab.server.model.content.Calculated;
+import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.service.api.ReportsService;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +61,7 @@ public abstract class LabServiceImpl<T extends LabData> implements LabService<T>
         labData.setUserLogin(userName);
         labData.setStartDate(LocalDateTime.now());
         labData.setSaveDate(LocalDateTime.now());
+        labData.setVariant(null /**todo*/);
         labDao.saveLab(labData);
         return labData;
     }

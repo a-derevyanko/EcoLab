@@ -1,6 +1,6 @@
 package org.ekolab.server.dao.api.content;
 
-import org.ekolab.server.model.LabData;
+import org.ekolab.server.model.content.LabData;
 
 import java.time.LocalDateTime;
 import java.util.List;

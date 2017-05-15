@@ -15,7 +15,7 @@ import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotific
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
 import org.ekolab.server.common.Authorize;
-import org.ekolab.server.model.LabData;
+import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
