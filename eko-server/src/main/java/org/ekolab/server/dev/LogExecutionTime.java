@@ -12,5 +12,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LogExecutionTime {
-    long normalExecutionTime() default 0;
+    long value() default 0;
 }

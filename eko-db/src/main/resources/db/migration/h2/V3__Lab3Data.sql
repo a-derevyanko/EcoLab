@@ -120,3 +120,76 @@ COMMENT ON COLUMN lab3data.no_mac IS 'ПДК NO';
 COMMENT ON COLUMN lab3data.so2_mac IS 'ПДК SO2';
 COMMENT ON COLUMN lab3data.ash_mac IS 'ПДК золы';
 COMMENT ON COLUMN lab3data.completed IS 'Признак завершенности лабораторной работы';
+
+CREATE TABLE lab3variant (
+  id BIGINT IDENTITY PRIMARY KEY REFERENCES lab3data(id) ON DELETE CASCADE,
+  version INT,
+  /**
+  *Блок свойств лабы
+  */
+  tpp_output INT,
+  /*number_of_units
+  *city*/
+  steam_production_capacity INT,
+  /*number_of_stacks*/
+  stacks_height INT,
+  /*wind_direction*/
+  wind_speed DOUBLE,
+  low_heat_value DOUBLE,
+  fuel_consumer DOUBLE,
+  carbon_in_fly_ash DOUBLE,
+  sulphur_content DOUBLE,
+  ash_content DOUBLE,
+  water_content DOUBLE,
+  ash_recycling_factor DOUBLE,
+  flue_gas_nox_concentration DOUBLE,
+  stack_exit_temperature INT,
+  outside_air_temperature INT,
+  excess_air_ratio DOUBLE,
+  combustion_product_volume DOUBLE,
+  water_vapor_volume DOUBLE,
+  air_volume DOUBLE,
+  no2_background_concentration DOUBLE,
+  no_background_concentration DOUBLE,
+  so2_background_concentration DOUBLE,
+  ash_background_concentration DOUBLE
+);
+
+/*
+* Создадим индексы
+*/
+CREATE UNIQUE INDEX ix_lab3variant_id
+  ON lab3variant (id);
+
+/*
+* Добавим комментарии
+*/
+COMMENT ON TABLE LAB3VARIANT IS 'Вариант лабораторной №3';
+COMMENT ON COLUMN lab3variant.id IS 'Уникальный идентификатор выполненного варианта';
+COMMENT ON COLUMN lab3variant.version IS 'Версия изменений(контроль одновременного доступа)';
+COMMENT ON COLUMN lab3variant.tpp_output IS 'Мощность ГРЭС';
+/*COMMENT ON COLUMN lab3variant.number_of_units IS 'Число блоков';
+*COMMENT ON COLUMN lab3variant.city IS 'Район расположения ГРЭС (город)';*/
+COMMENT ON COLUMN lab3variant.steam_production_capacity IS 'Номинальная паропроизводительность одного котла';
+/*COMMENT ON COLUMN lab3variant.number_of_stacks IS 'Число дымовых труб';*/
+COMMENT ON COLUMN lab3variant.stacks_height IS 'Высота дымовой трубы';
+/*COMMENT ON COLUMN lab3variant.wind_direction IS 'Расчетное направление ветра';*/
+COMMENT ON COLUMN lab3variant.wind_speed IS 'Расчетная скорость ветра';
+COMMENT ON COLUMN lab3variant.low_heat_value IS 'Низшая теплота сгорания топлива';
+COMMENT ON COLUMN lab3variant.fuel_consumer IS 'Расход топлива на 1 блок';
+COMMENT ON COLUMN lab3variant.carbon_in_fly_ash IS 'Потери тепла от механической неполноты сгорания топлива';
+COMMENT ON COLUMN lab3variant.sulphur_content IS 'Содержание серы в топливе';
+COMMENT ON COLUMN lab3variant.ash_content IS 'Зольность топлива';
+COMMENT ON COLUMN lab3variant.water_content IS 'Влажность топлива';
+COMMENT ON COLUMN lab3variant.ash_recycling_factor IS 'Степень улавливания золы';
+COMMENT ON COLUMN lab3variant.flue_gas_nox_concentration IS 'Концентрация оксидов азота в сухих газах';
+COMMENT ON COLUMN lab3variant.stack_exit_temperature IS 'Температура газов на выходе из дымовой трубы';
+COMMENT ON COLUMN lab3variant.outside_air_temperature IS 'Температура наружного воздуха';
+COMMENT ON COLUMN lab3variant.excess_air_ratio IS 'Коэффициент избытка воздуха в уходящих газах';
+COMMENT ON COLUMN lab3variant.combustion_product_volume IS 'Теоретический объем продуктов сгорания';
+COMMENT ON COLUMN lab3variant.water_vapor_volume IS 'Теоретический объем паров воды';
+COMMENT ON COLUMN lab3variant.air_volume IS 'Теоретический объем воздуха';
+COMMENT ON COLUMN lab3variant.no2_background_concentration IS 'Фоновая концентрация NO2';
+COMMENT ON COLUMN lab3variant.no_background_concentration IS 'Фоновая концентрация NO';
+COMMENT ON COLUMN lab3variant.so2_background_concentration IS 'Фоновая концентрация SO2';
+COMMENT ON COLUMN lab3variant.ash_background_concentration IS 'Фоновая концентрация золы';

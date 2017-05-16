@@ -2,6 +2,7 @@ package org.ekolab.server.service.impl.content.lab3;
 
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
 import org.ekolab.server.service.impl.content.LabServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.HashMap;
  * Created by 777Al on 26.04.2017.
  */
 @Service
-public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data> implements Lab3Service {
+public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> implements Lab3Service {
     @Autowired
     public Lab3ServiceImpl(Lab3Dao lab3Dao) {
         super(lab3Dao);
@@ -211,5 +212,12 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data> implements Lab3Ser
     @Override
     public Lab3Data createNewLabData() {
         return new Lab3Data();
+    }
+
+    @Override
+    public Lab3Variant generateNewLabVariant() {
+        Lab3Variant variant = new Lab3Variant();
+        //todo
+        return variant;
     }
 }

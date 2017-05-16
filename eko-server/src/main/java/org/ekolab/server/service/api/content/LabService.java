@@ -1,11 +1,11 @@
 package org.ekolab.server.service.api.content;
 
 import org.ekolab.server.model.content.LabData;
-import org.ekolab.server.model.content.LabVariant;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -42,8 +42,10 @@ public interface LabService<T extends LabData> {
     T createNewLabData();
 
     /**
-     * Возвращает данные варианта лабораторной
-     * @return данные варианта.
+     * Возвращает печатный вариант исходных данных в PDF формате
+     * @param values
+     * @param locale
+     * @return печатный вариант исходных данных в PDF формате
      */
-    Map<String,String> getInitialData();
+    byte[] printInitialData(Map<String, String> values, Locale locale);
 }

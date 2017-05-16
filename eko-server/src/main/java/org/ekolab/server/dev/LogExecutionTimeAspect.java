@@ -27,7 +27,7 @@ public class LogExecutionTimeAspect {
 
     @Around("annotatedMethod() && @annotation(annotation)")
     public Object logTimeMethod(ProceedingJoinPoint joinPoint, LogExecutionTime annotation) throws Throwable {
-        return logExecutionTime(joinPoint, annotation.normalExecutionTime());
+        return logExecutionTime(joinPoint, annotation.value());
     }
 
     private Object logExecutionTime(ProceedingJoinPoint joinPoint, long normalExecutionTime) throws Throwable {

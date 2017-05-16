@@ -1,6 +1,8 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FileDownloader;
+import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
@@ -11,9 +13,16 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
+import org.ekolab.server.model.content.LabVariant;
+import org.ekolab.server.service.api.content.LabService;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ReflectionUtils;
 
 import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -50,10 +59,21 @@ public class InitialDataWindow extends Window {
         center();
     }
 
-    public void show(Map<String, String> values) {
+    public void show(LabVariant variant, LabService<?> labService) {
         if (!UI.getCurrent().getWindows().contains(this)) {
+            Map<String, String> values = new HashMap<>();
+            ReflectionUtils.doWithFields(variant.getClass(), field -> {
+                field.setAccessible(true);
+                values.put(Jsoup.parse(i18N.get(field.getName())).text(), String.valueOf(field.get(variant)));
+            });
             valuesGrid.setItems(values.entrySet());
             UI.getCurrent().addWindow(this);
+
+            new ArrayList<>(printDataButton.getExtensions()).forEach(printDataButton::removeExtension);
+
+            new FileDownloader(new StreamResource(() ->
+                    new ByteArrayInputStream(labService.printInitialData(values, UI.getCurrent().getLocale())),
+                    "initialData.pdf")).extend(printDataButton);
         }
     }
 }

@@ -19,6 +19,7 @@ import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
+import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 
@@ -30,7 +31,7 @@ import static org.ekolab.client.vaadin.server.ui.common.ResourceWindow.show;
 /**
  * Created by 777Al on 08.04.2017.
  */
-public class ParameterLayout<BEAN> extends GridLayout implements UIComponent {
+public class ParameterLayout<BEAN extends LabData> extends GridLayout implements UIComponent {
     private final String parametersPath;
 
     private final Binder<BEAN> dataBinder;

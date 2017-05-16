@@ -41,10 +41,7 @@ public class Step6 extends VerticalLayout implements LabWizardStep {
         setSizeFull();
         setMargin(true);
         addComponent(saveReportButton);
-        saveReportButton.addClickListener(event -> saveReport());
-    }
 
-    private void saveReport() {
         FileDownloader fileDownloader = new FileDownloader(new StreamResource(() ->
                 new ByteArrayInputStream(lab3Service.createReport(binder.getBean())), "report.pdf"));
 

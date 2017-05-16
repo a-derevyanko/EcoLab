@@ -17,6 +17,12 @@ repositories {
     maven {
         url 'http://maven.vaadin.com/vaadin-addons'
     }
+    maven {
+        url 'http://jasperreports.sourceforge.net/maven2/'
+    }
+    maven {
+        url 'http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/'
+    }
 }
 
 dependencies {
@@ -35,6 +41,8 @@ dependencies {
 
     runtime group: 'org.springframework.boot',  name: 'spring-boot-starter-aop',               version: '1.5.3.RELEASE'
     runtime group: 'de.codecentric',            name: 'spring-boot-admin-starter-client',      version: '+'
+
+    runtime group: 'net.sf.jasperreports',          name: 'jasperreports-fonts',                version: '6.0.0'
 }
 
 war {

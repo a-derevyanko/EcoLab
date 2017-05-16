@@ -4,6 +4,7 @@ import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.dao.impl.content.LabDaoImpl;
 import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.springframework.context.annotation.Profile;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.ekolab.server.db.h2.public_.tables.Lab3variant.LAB3VARIANT;
 import static org.ekolab.server.db.h2.public_.tables.Lab3data.LAB3DATA;
 
 /**
@@ -65,24 +67,56 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         data.setNoMAC(record.get(LAB3DATA.NO_MAC));
         data.setSo2MAC(record.get(LAB3DATA.SO2_MAC));
         data.setAshMAC(record.get(LAB3DATA.ASH_MAC));
+
+        Lab3Variant variant = new Lab3Variant();
+        variant.setTppOutput(record.get(LAB3VARIANT.TPP_OUTPUT));
+        //variant.setNumberOfUnits(record.get(LAB3VARIANT.NUMBER_OF_UNITS));
+        //variant.setCity(record.get(LAB3VARIANT.CITY));
+        variant.setSteamProductionCapacity(record.get(LAB3VARIANT.STEAM_PRODUCTION_CAPACITY));
+        //variant.setNumberOfStacks(record.get(LAB3VARIANT.NUMBER));
+        variant.setStacksHeight(record.get(LAB3VARIANT.STACKS_HEIGHT));
+        //variant.setWindDirection(record.get(LAB3VARIANT.WIND));
+        variant.setWindSpeed(record.get(LAB3VARIANT.WIND_SPEED));
+        variant.setLowHeatValue(record.get(LAB3VARIANT.LOW_HEAT_VALUE));
+        variant.setFuelConsumer(record.get(LAB3VARIANT.FUEL_CONSUMER));
+        variant.setCarbonInFlyAsh(record.get(LAB3VARIANT.CARBON_IN_FLY_ASH));
+        variant.setSulphurContent(record.get(LAB3VARIANT.SULPHUR_CONTENT));
+        variant.setAshContent(record.get(LAB3VARIANT.ASH_CONTENT));
+        variant.setWaterContent(record.get(LAB3VARIANT.WATER_CONTENT));
+        variant.setAshRecyclingFactor(record.get(LAB3VARIANT.ASH_RECYCLING_FACTOR));
+        variant.setFlueGasNOxConcentration(record.get(LAB3VARIANT.FLUE_GAS_NOX_CONCENTRATION));
+        variant.setStackExitTemperature(record.get(LAB3VARIANT.STACK_EXIT_TEMPERATURE));
+        variant.setOutsideAirTemperature(record.get(LAB3VARIANT.OUTSIDE_AIR_TEMPERATURE));
+        variant.setExcessAirRatio(record.get(LAB3VARIANT.EXCESS_AIR_RATIO));
+        variant.setCombustionProductsVolume(record.get(LAB3VARIANT.COMBUSTION_PRODUCT_VOLUME));
+        variant.setWaterVaporVolume(record.get(LAB3VARIANT.WATER_VAPOR_VOLUME));
+        variant.setAirVolume(record.get(LAB3VARIANT.AIR_VOLUME));
+        variant.setNo2BackgroundConcentration(record.get(LAB3VARIANT.NO2_BACKGROUND_CONCENTRATION));
+        variant.setNoBackgroundConcentration(record.get(LAB3VARIANT.NO_BACKGROUND_CONCENTRATION));
+        variant.setSo2BackgroundConcentration(record.get(LAB3VARIANT.SO2_BACKGROUND_CONCENTRATION));
+        variant.setAshBackgroundConcentration(record.get(LAB3VARIANT.ASH_BACKGROUND_CONCENTRATION));
+
+        data.setVariant(variant);
+
         return data;
     };
 
     @Override
     public Lab3Data getLastUncompletedLabByUser(String userName) {
-        return dsl.selectFrom(LAB3DATA).
+        return dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID)).
                 where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(userName))).and(LAB3DATA.COMPLETED.isFalse()).
                 orderBy(LAB3DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB3DATA_MAPPER);
     }
 
     @Override
     public List<Lab3Data> getAllLabsByUser(String userName) {
-        return dsl.selectFrom(LAB3DATA).where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(userName))).fetch(LAB3DATA_MAPPER);
+        return dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID))
+                .where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(userName))).fetch(LAB3DATA_MAPPER);
     }
 
     @Override
     public long saveLab(Lab3Data data) {
-        return dsl.insertInto(LAB3DATA,
+        long id = dsl.insertInto(LAB3DATA,
                 LAB3DATA.USER_ID,
                 LAB3DATA.START_DATE,
                 LAB3DATA.SAVE_DATE,
@@ -173,6 +207,66 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         data.getSo2MAC(),
                         data.getAshMAC()
                 ).returning(LAB3DATA.ID).fetchOne().getId();
+
+        Lab3Variant variant = data.getVariant();
+        dsl.insertInto(LAB3VARIANT,
+                LAB3VARIANT.ID,
+                LAB3VARIANT.TPP_OUTPUT,
+                //LAB3VARIANT.NUMBER_OF_UNITS,
+                //LAB3VARIANT.CITY,
+                LAB3VARIANT.STEAM_PRODUCTION_CAPACITY,
+                //LAB3VARIANT.NUMBER,
+                LAB3VARIANT.STACKS_HEIGHT,
+                //LAB3VARIANT.WIND,
+                LAB3VARIANT.WIND_SPEED,
+                LAB3VARIANT.LOW_HEAT_VALUE,
+                LAB3VARIANT.FUEL_CONSUMER,
+                LAB3VARIANT.CARBON_IN_FLY_ASH,
+                LAB3VARIANT.SULPHUR_CONTENT,
+                LAB3VARIANT.ASH_CONTENT,
+                LAB3VARIANT.WATER_CONTENT,
+                LAB3VARIANT.ASH_RECYCLING_FACTOR,
+                LAB3VARIANT.FLUE_GAS_NOX_CONCENTRATION,
+                LAB3VARIANT.STACK_EXIT_TEMPERATURE,
+                LAB3VARIANT.OUTSIDE_AIR_TEMPERATURE,
+                LAB3VARIANT.EXCESS_AIR_RATIO,
+                LAB3VARIANT.COMBUSTION_PRODUCT_VOLUME,
+                LAB3VARIANT.WATER_VAPOR_VOLUME,
+                LAB3VARIANT.AIR_VOLUME,
+                LAB3VARIANT.NO2_BACKGROUND_CONCENTRATION,
+                LAB3VARIANT.NO_BACKGROUND_CONCENTRATION,
+                LAB3VARIANT.SO2_BACKGROUND_CONCENTRATION,
+                LAB3VARIANT.ASH_BACKGROUND_CONCENTRATION).
+                values(
+                        id,
+                        variant.getTppOutput(),
+                        //variant.getNumberOfUnits(),
+                        //variant.getCity(),
+                        variant.getSteamProductionCapacity(),
+                        //variant.getNumberOfStacks(),
+                        variant.getStacksHeight(),
+                        //variant.getWindDirection(WIND));
+                        variant.getWindSpeed(),
+                        variant.getLowHeatValue(),
+                        variant.getFuelConsumer(),
+                        variant.getCarbonInFlyAsh(),
+                        variant.getSulphurContent(),
+                        variant.getAshContent(),
+                        variant.getWaterContent(),
+                        variant.getAshRecyclingFactor(),
+                        variant.getFlueGasNOxConcentration(),
+                        variant.getStackExitTemperature(),
+                        variant.getOutsideAirTemperature(),
+                        variant.getExcessAirRatio(),
+                        variant.getCombustionProductsVolume(),
+                        variant.getWaterVaporVolume(),
+                        variant.getAirVolume(),
+                        variant.getNo2BackgroundConcentration(),
+                        variant.getNoBackgroundConcentration(),
+                        variant.getSo2BackgroundConcentration(),
+                        variant.getAshBackgroundConcentration()
+                ).execute();
+        return id;
     }
 
     @Override
@@ -221,6 +315,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 .set(LAB3DATA.NO_MAC, data.getNoMAC())
                 .set(LAB3DATA.SO2_MAC, data.getSo2MAC())
                 .set(LAB3DATA.ASH_MAC, data.getAshMAC())
+                .where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(data.getUserLogin())).and(LAB3DATA.START_DATE.eq(data.getStartDate())))
                 .execute();
     }
 

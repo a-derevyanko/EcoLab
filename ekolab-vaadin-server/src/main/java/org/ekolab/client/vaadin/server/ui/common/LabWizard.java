@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * Created by Андрей on 19.03.2017.
  */
 @PreAuthorize(Authorize.HasAuthorities.STUDENT)
-public abstract class LabWizard<BEAN extends LabData> extends Wizard implements AutoSavableView {
+public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implements AutoSavableView {
     private final LabService<BEAN> labService;
     private final Binder<BEAN> binder;
 
@@ -40,10 +40,10 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     protected final GridLayout buttons = new GridLayout(3, 1);
     protected final Button saveButton = new Button("Save", VaadinIcons.CLOUD_DOWNLOAD_O);
     protected final Button initialDataButton = new Button("Initial data", VaadinIcons.CLIPBOARD_TEXT);
-    protected final HorizontalLayout backButtonsLayout = new HorizontalLayout();
-    protected final HorizontalLayout leftComponentsLayout = new HorizontalLayout();
-    protected final HorizontalLayout additionalComponentsLayout = new HorizontalLayout();
-    protected final HorizontalLayout rightComponentsLayout = new HorizontalLayout();
+    protected final HorizontalLayout leftButtonsLayout = new HorizontalLayout();
+    protected final HorizontalLayout firstColumnLayout = new HorizontalLayout();
+    protected final HorizontalLayout secondColumnLayout = new HorizontalLayout();
+    protected final HorizontalLayout thirdComponentsLayout = new HorizontalLayout();
 
     @Autowired
     private I18N i18N;
@@ -96,26 +96,26 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
         footer.addComponent(initialDataButton, 0);
         mainLayout.addComponent(buttons);
 
-        rightComponentsLayout.addComponent(footer);
+        thirdComponentsLayout.addComponent(footer);
 
-        backButtonsLayout.addComponent(getBackButton());
-        backButtonsLayout.addComponent(saveButton);
-        leftComponentsLayout.addComponent(backButtonsLayout);
-        buttons.addComponent(leftComponentsLayout, 0, 0);
-        buttons.addComponent(additionalComponentsLayout, 1, 0);
-        buttons.addComponent(rightComponentsLayout, 2, 0);
+        leftButtonsLayout.addComponent(getBackButton());
+        leftButtonsLayout.addComponent(saveButton);
+        firstColumnLayout.addComponent(leftButtonsLayout);
+        buttons.addComponent(firstColumnLayout, 0, 0);
+        buttons.addComponent(secondColumnLayout, 1, 0);
+        buttons.addComponent(thirdComponentsLayout, 2, 0);
 
-        leftComponentsLayout.setSizeFull();
-        additionalComponentsLayout.setSizeFull();
-        rightComponentsLayout.setSizeFull();
+        firstColumnLayout.setSizeFull();
+        secondColumnLayout.setSizeFull();
+        thirdComponentsLayout.setSizeFull();
 
-        buttons.setComponentAlignment(leftComponentsLayout, Alignment.MIDDLE_LEFT);
-        buttons.setComponentAlignment(additionalComponentsLayout, Alignment.MIDDLE_CENTER);
-        buttons.setComponentAlignment(rightComponentsLayout, Alignment.MIDDLE_RIGHT);
+        buttons.setComponentAlignment(firstColumnLayout, Alignment.MIDDLE_LEFT);
+        buttons.setComponentAlignment(secondColumnLayout, Alignment.MIDDLE_CENTER);
+        buttons.setComponentAlignment(thirdComponentsLayout, Alignment.MIDDLE_RIGHT);
 
-        rightComponentsLayout.setComponentAlignment(footer, Alignment.MIDDLE_RIGHT);
+        thirdComponentsLayout.setComponentAlignment(footer, Alignment.MIDDLE_RIGHT);
 
-        leftComponentsLayout.setComponentAlignment(backButtonsLayout, Alignment.MIDDLE_LEFT);
+        firstColumnLayout.setComponentAlignment(leftButtonsLayout, Alignment.MIDDLE_LEFT);
 
         binder.addValueChangeListener(event -> saveButton.setVisible(true));
 
@@ -172,8 +172,8 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     @Override
     protected void activateStep(WizardStep step) {
         super.activateStep(step);
-        additionalComponentsLayout.removeAllComponents();
-        ((LabWizardStep) step).placeAdditionalComponents(additionalComponentsLayout);
+        secondColumnLayout.removeAllComponents();
+        ((LabWizardStep) step).placeAdditionalComponents(secondColumnLayout);
         updateButtons();
     }
 
@@ -209,7 +209,7 @@ public abstract class LabWizard<BEAN extends LabData> extends Wizard implements 
     }
 
     private void showInitialData() {
-        initialDataWindow.show(labService.getInitialData());
+        initialDataWindow.show(binder.getBean().getVariant(), labService);
     }
 
     private void updateButtons() {
