@@ -2,6 +2,8 @@ package org.ekolab.server.service.impl.content.lab3;
 
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
+import org.ekolab.server.service.impl.content.equations.ferrari.EquationFunction;
+import org.ekolab.server.service.impl.content.equations.ferrari.QuarticFunction;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -129,6 +131,11 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
                 5 * pow(y, 2) / pow(x, 2);
 
         return 1 / (1 + 5 * t + 12.8 * pow(t, 2) + 17 * pow(t, 3) + 45.1 * pow(t, 4));
+    }
+
+    private double[] countT(double s2) {
+        EquationFunction f = new QuarticFunction(45.1, 17, 12.8, 5, 1 - Math.sqrt(1 / s2));
+        return f.findRealRoots();
     }
 
     private JFreeChart createSplineChart(XYDataset dataSet, String chartTitle, String xAxisLabel, String yAxisLabel) {
