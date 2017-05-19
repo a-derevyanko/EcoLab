@@ -1,9 +1,6 @@
 package org.ekolab.server.service.impl.content.equations.ferrari;
 
 public class CubicFunction implements EquationFunction {
-    private static final double TWO_PI = 2.0 * Math.PI;
-    private static final double FOUR_PI = 4.0 * Math.PI;
-
     private double a;
     private double b;
     private double c;
@@ -62,8 +59,8 @@ public class CubicFunction implements EquationFunction {
             double theta = Math.acos(R / Math.sqrt(-Q_CUBE));
             double SQRT_Q = Math.sqrt(-Q);
             x1 = 2.0 * SQRT_Q * Math.cos(theta / 3.0) - a_over_3;
-            x2 = 2.0 * SQRT_Q * Math.cos((theta + TWO_PI) / 3.0) - a_over_3;
-            x3 = 2.0 * SQRT_Q * Math.cos((theta + FOUR_PI) / 3.0) - a_over_3;
+            x2 = 2.0 * SQRT_Q * Math.cos((theta + 2.0 * Math.PI) / 3.0) - a_over_3;
+            x3 = 2.0 * SQRT_Q * Math.cos((theta + 4.0 * Math.PI) / 3.0) - a_over_3;
         } else if (D > 0.0) {
             // One real root.
             nRoots = 1;

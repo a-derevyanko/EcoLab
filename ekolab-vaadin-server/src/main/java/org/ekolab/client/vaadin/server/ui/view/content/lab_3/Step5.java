@@ -1,16 +1,21 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 
+import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
+import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.addon.JFreeChartWrapper;
 
 import java.io.IOException;
 
@@ -30,7 +35,13 @@ public class Step5 extends GridLayout implements LabWizardStep {
     private I18N i18N;
 
     @Autowired
+    private Binder<Lab3Data> dataBinder;
+
+    @Autowired
     private ResourceService resourceService;
+
+    @Autowired
+    private IsoLineChartService isoLineChartService;
 
     @Override
     public void init() throws IOException {
@@ -50,8 +61,11 @@ public class Step5 extends GridLayout implements LabWizardStep {
         zoomInButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         zoomOutButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
 
-        //addComponent(createBasicDemo(), 4, 4, 19, 9);
-    }
+        JFreeChartWrapper chart = new JFreeChartWrapper(isoLineChartService.
+                createIsoLineChart(dataBinder.getBean(), UI.getCurrent().getLocale()));
+        chart.setSizeFull();
+        addComponent(chart, 0, 0, 19, 19);
+}
 
     @Override
     public void placeAdditionalComponents(HorizontalLayout buttonsLayout) {

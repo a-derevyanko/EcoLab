@@ -1,5 +1,6 @@
 package org.ekolab.server.service.impl.content.lab3;
 
+import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
 import org.ekolab.server.service.impl.content.equations.ferrari.EquationFunction;
@@ -21,7 +22,9 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +33,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static java.lang.Math.pow;
@@ -41,6 +45,9 @@ import static java.lang.Math.pow;
 public class IsoLineChartServiceImpl implements IsoLineChartService {
     private static final Map<Integer, float[]> dashSettings = new HashMap<>();
 
+    @Autowired
+    private MessageSource messageSource;
+
     @PostConstruct
     private void init() {
         dashSettings.put(0, new float[] {10.0f, 6.0f});
@@ -50,8 +57,9 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
 
     @Override
     @Cacheable("LAB3_ISOLINE_CHART")
-    public JFreeChart createIsoLineChart(Lab3Data data, String chartTitle, String xAxisLabel, String yAxisLabel) {
-        return createSplineChart(createDataset(data), chartTitle, xAxisLabel, yAxisLabel);
+    @LogExecutionTime(500)
+    public JFreeChart createIsoLineChart(Lab3Data data, Locale locale) {
+        return createSplineChart(createDataset(data), locale);
     }
 
     /**
@@ -100,6 +108,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
 
         // Convert latencyMap to XYDataset
         XYSeries series = new XYSeries("isolineChart");
+        series.setDescription("first chart");
 
         //for (int x = 0; x < )
         /*for (long time : latencyMap.keySet()) {
@@ -138,19 +147,24 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         return f.findRealRoots();
     }
 
-    private JFreeChart createSplineChart(XYDataset dataSet, String chartTitle, String xAxisLabel, String yAxisLabel) {
+    private JFreeChart createSplineChart(XYDataset dataSet, Locale locale) {
         // Create plot
-        NumberAxis xAxis = new NumberAxis(xAxisLabel);
-        NumberAxis yAxis = new NumberAxis(yAxisLabel);
+        NumberAxis xAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-x-axis", null, locale));
+        NumberAxis yAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-y-axis", null, locale));
         XYSplineRenderer renderer = new XYSplineRenderer();
         XYPlot plot = new XYPlot(dataSet, xAxis, yAxis, renderer);
-        plot.setBackgroundPaint(Color.lightGray);
-        plot.setDomainGridlinePaint(Color.white);
-        plot.setRangeGridlinePaint(Color.white);
+        plot.setBackgroundPaint(Color.WHITE);
+        //plot.setBackgroundImage(createStationInCityImage("map/moscow.svg", "map/moscow.svg"));
+        //plot.setBackgroundImage(createStationInCityImage("map/moscow-min.png", "map/moscow-min.png"));
+        try {
+            plot.setBackgroundImage(ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/moscow-min1.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         plot.setAxisOffset(new RectangleInsets(4, 4, 4, 4));
 
         // Create chart
-        JFreeChart chart = new JFreeChart(chartTitle,
+        JFreeChart chart = new JFreeChart(messageSource.getMessage("lab3.isoline-chart-title", null, locale),
                 JFreeChart.DEFAULT_TITLE_FONT, plot, true);
         chart.getLegend().setPosition(RectangleEdge.LEFT);
         ChartUtilities.applyCurrentTheme(chart);
@@ -199,10 +213,6 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         // get a reference to the plot for further customisation...
         CategoryPlot plot = (CategoryPlot) chart.getPlot();
         plot.setBackgroundPaint(Color.lightGray);
-        plot.setBackgroundImage(
-                createStationInCityImage(
-                        ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("img/logo.svg")),
-                        ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("img/circle.gif"))));
         plot.setDomainGridlinePaint(Color.white);
         plot.setDomainGridlinesVisible(true);
         plot.setRangeGridlinePaint(Color.white);
@@ -243,11 +253,17 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
 
     }
 
-    private static java.awt.Image createStationInCityImage(final BufferedImage bg, BufferedImage fg) {
-        Graphics2D g2d = bg.createGraphics();
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-        g2d.drawImage(fg, 0, 0, null);
-        g2d.dispose();
-        return bg;
+    private static java.awt.Image createStationInCityImage(String cityMapImage, String stationImage) {
+        try {
+            BufferedImage bg = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream(cityMapImage));
+            BufferedImage fg = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream(stationImage));
+            Graphics2D g2d = bg.createGraphics();
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+            g2d.drawImage(fg, 0, 0, null);
+            g2d.dispose();
+            return bg;
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }
