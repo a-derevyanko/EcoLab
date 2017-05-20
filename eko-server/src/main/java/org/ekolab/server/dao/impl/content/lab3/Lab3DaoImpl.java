@@ -3,8 +3,7 @@ package org.ekolab.server.dao.impl.content.lab3;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.dao.impl.content.LabDaoImpl;
-import org.ekolab.server.model.content.lab3.Lab3Data;
-import org.ekolab.server.model.content.lab3.Lab3Variant;
+import org.ekolab.server.model.content.lab3.*;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.springframework.context.annotation.Profile;
@@ -13,8 +12,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.ekolab.server.db.h2.public_.tables.Lab3variant.LAB3VARIANT;
 import static org.ekolab.server.db.h2.public_.tables.Lab3data.LAB3DATA;
+import static org.ekolab.server.db.h2.public_.tables.Lab3variant.LAB3VARIANT;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -27,13 +26,13 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         data.setStartDate(record.get(LAB3DATA.START_DATE));
         data.setSaveDate(record.get(LAB3DATA.SAVE_DATE));
         data.setTppOutput(record.get(LAB3DATA.TPP_OUTPUT));
-        //data.setNumberOfUnits(record.get(LAB3DATA.NUMBER_OF_UNITS));
-        //data.setCity(record.get(LAB3DATA.CITY));
+        data.setNumberOfUnits(record.get(LAB3DATA.NUMBER_OF_UNITS) == null ? null : NumberOfUnits.valueOf(record.get(LAB3DATA.NUMBER_OF_UNITS)));
+        data.setCity(record.get(LAB3DATA.CITY) == null ? null : City.valueOf(record.get(LAB3DATA.CITY)));
         data.setSteamProductionCapacity(record.get(LAB3DATA.STEAM_PRODUCTION_CAPACITY));
-        //data.setNumberOfStacks(record.get(LAB3DATA.NUMBER));
+        data.setNumberOfStacks(record.get(LAB3DATA.NUMBER_OF_STACKS) == null ? null : NumberOfStacks.valueOf(record.get(LAB3DATA.NUMBER_OF_STACKS)));
         data.setStacksHeight(record.get(LAB3DATA.STACKS_HEIGHT));
         data.setStacksDiameter(record.get(LAB3DATA.STACKS_DIAMETER));
-        //data.setWindDirection(record.get(LAB3DATA.WIND));
+        data.setWindDirection(record.get(LAB3DATA.WIND_DIRECTION) == null ? null : WindDirection.valueOf(record.get(LAB3DATA.WIND_DIRECTION)));
         data.setWindSpeed(record.get(LAB3DATA.WIND_SPEED));
         data.setLowHeatValue(record.get(LAB3DATA.LOW_HEAT_VALUE));
         data.setFuelConsumer(record.get(LAB3DATA.FUEL_CONSUMER));
@@ -70,12 +69,12 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
 
         Lab3Variant variant = new Lab3Variant();
         variant.setTppOutput(record.get(LAB3VARIANT.TPP_OUTPUT));
-        //variant.setNumberOfUnits(record.get(LAB3VARIANT.NUMBER_OF_UNITS));
-        //variant.setCity(record.get(LAB3VARIANT.CITY));
+        variant.setNumberOfUnits(record.get(LAB3DATA.NUMBER_OF_UNITS) == null ? null : NumberOfUnits.valueOf(record.get(LAB3DATA.NUMBER_OF_UNITS)));
+        variant.setCity(record.get(LAB3DATA.CITY) == null ? null : City.valueOf(record.get(LAB3DATA.CITY)));
         variant.setSteamProductionCapacity(record.get(LAB3VARIANT.STEAM_PRODUCTION_CAPACITY));
-        //variant.setNumberOfStacks(record.get(LAB3VARIANT.NUMBER));
+        variant.setNumberOfStacks(record.get(LAB3DATA.NUMBER_OF_STACKS) == null ? null : NumberOfStacks.valueOf(record.get(LAB3DATA.NUMBER_OF_STACKS)));
         variant.setStacksHeight(record.get(LAB3VARIANT.STACKS_HEIGHT));
-        //variant.setWindDirection(record.get(LAB3VARIANT.WIND));
+        variant.setWindDirection(record.get(LAB3DATA.WIND_DIRECTION) == null ? null : WindDirection.valueOf(record.get(LAB3DATA.WIND_DIRECTION)));
         variant.setWindSpeed(record.get(LAB3VARIANT.WIND_SPEED));
         variant.setLowHeatValue(record.get(LAB3VARIANT.LOW_HEAT_VALUE));
         variant.setFuelConsumer(record.get(LAB3VARIANT.FUEL_CONSUMER));
@@ -121,13 +120,13 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3DATA.START_DATE,
                 LAB3DATA.SAVE_DATE,
                 LAB3DATA.TPP_OUTPUT,
-                //LAB3DATA.NUMBER_OF_UNITS,
-                //LAB3DATA.CITY,
+                LAB3DATA.NUMBER_OF_UNITS,
+                LAB3DATA.CITY,
                 LAB3DATA.STEAM_PRODUCTION_CAPACITY,
-                //LAB3DATA.NUMBER,
+                LAB3DATA.NUMBER_OF_STACKS,
                 LAB3DATA.STACKS_HEIGHT,
                 LAB3DATA.STACKS_DIAMETER,
-                //LAB3DATA.WIND,
+                LAB3DATA.WIND_DIRECTION,
                 LAB3DATA.WIND_SPEED,
                 LAB3DATA.LOW_HEAT_VALUE,
                 LAB3DATA.FUEL_CONSUMER,
@@ -166,13 +165,13 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         data.getStartDate(),
                         data.getSaveDate(),
                         data.getTppOutput(),
-                        //data.getNumberOfUnits(),
-                        //data.getCity(),
+                        data.getNumberOfUnits(),
+                        data.getCity(),
                         data.getSteamProductionCapacity(),
-                        //data.getNumberOfStacks(),
+                        data.getNumberOfStacks(),
                         data.getStacksHeight(),
                         data.getStacksDiameter(),
-                        //data.getWindDirection(WIND));
+                        data.getWindDirection(),
                         data.getWindSpeed(),
                         data.getLowHeatValue(),
                         data.getFuelConsumer(),
@@ -212,12 +211,12 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         dsl.insertInto(LAB3VARIANT,
                 LAB3VARIANT.ID,
                 LAB3VARIANT.TPP_OUTPUT,
-                //LAB3VARIANT.NUMBER_OF_UNITS,
-                //LAB3VARIANT.CITY,
+                LAB3VARIANT.NUMBER_OF_UNITS,
+                LAB3VARIANT.CITY,
                 LAB3VARIANT.STEAM_PRODUCTION_CAPACITY,
-                //LAB3VARIANT.NUMBER,
+                LAB3VARIANT.NUMBER_OF_STACKS,
                 LAB3VARIANT.STACKS_HEIGHT,
-                //LAB3VARIANT.WIND,
+                LAB3VARIANT.WIND_DIRECTION,
                 LAB3VARIANT.WIND_SPEED,
                 LAB3VARIANT.LOW_HEAT_VALUE,
                 LAB3VARIANT.FUEL_CONSUMER,
@@ -240,12 +239,12 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 values(
                         id,
                         variant.getTppOutput(),
-                        //variant.getNumberOfUnits(),
-                        //variant.getCity(),
+                        variant.getNumberOfUnits(),
+                        variant.getCity(),
                         variant.getSteamProductionCapacity(),
-                        //variant.getNumberOfStacks(),
+                        variant.getNumberOfStacks(),
                         variant.getStacksHeight(),
-                        //variant.getWindDirection(WIND));
+                        variant.getWindDirection(),
                         variant.getWindSpeed(),
                         variant.getLowHeatValue(),
                         variant.getFuelConsumer(),
@@ -275,13 +274,13 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 .set(LAB3DATA.START_DATE, data.getStartDate())
                 .set(LAB3DATA.SAVE_DATE, data.getSaveDate())
                 .set(LAB3DATA.TPP_OUTPUT, data.getTppOutput())
-                //.set(LAB3DATA.NUMBER_OF_UNITS,data.getNumberOfUnits())
-                //.set(LAB3DATA.CITY,data.getCity())
+                .set(LAB3DATA.NUMBER_OF_UNITS, data.getNumberOfUnits() == null ? null : data.getNumberOfUnits().value())
+                .set(LAB3DATA.CITY, data.getCity() == null ? null : data.getCity().name())
                 .set(LAB3DATA.STEAM_PRODUCTION_CAPACITY, data.getSteamProductionCapacity())
-                //.set(//LAB3DATA.NUMBER,data.getNumberOfStacks())
+                .set(LAB3DATA.NUMBER_OF_STACKS, data.getNumberOfStacks() == null ? null : data.getNumberOfStacks().value())
                 .set(LAB3DATA.STACKS_HEIGHT, data.getStacksHeight())
                 .set(LAB3DATA.STACKS_DIAMETER, data.getStacksDiameter())
-                //.set(LAB3DATA.WIND,data.getWindDirection(WIND)))
+                .set(LAB3DATA.WIND_DIRECTION, data.getWindDirection() == null ? null : data.getWindDirection().name())
                 .set(LAB3DATA.WIND_SPEED, data.getWindSpeed())
                 .set(LAB3DATA.LOW_HEAT_VALUE, data.getLowHeatValue())
                 .set(LAB3DATA.FUEL_CONSUMER, data.getFuelConsumer())

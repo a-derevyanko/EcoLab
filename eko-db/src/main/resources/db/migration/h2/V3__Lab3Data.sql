@@ -11,13 +11,13 @@ CREATE TABLE lab3data (
   *Блок свойств лабы
   */
   tpp_output INT,
-  /*number_of_units
-  *city*/
+  number_of_units INT,
+  city VARCHAR(32),
   steam_production_capacity INT,
-  /*number_of_stacks*/
+  number_of_stacks INT,
   stacks_height INT,
   stacks_diameter INT,
-  /*wind_direction*/
+  wind_direction VARCHAR(32),
   wind_speed DOUBLE,
   low_heat_value DOUBLE,
   fuel_consumer DOUBLE,
@@ -79,13 +79,13 @@ COMMENT ON COLUMN lab3data.start_date IS 'Дата и время начала в
 COMMENT ON COLUMN lab3data.save_date IS 'Дата и время последнего сохранения результатов';
 COMMENT ON COLUMN lab3data.version IS 'Версия изменений(контроль одновременного доступа)';
 COMMENT ON COLUMN lab3data.tpp_output IS 'Мощность ГРЭС';
-/*COMMENT ON COLUMN lab3data.number_of_units IS 'Число блоков';
-*COMMENT ON COLUMN lab3data.city IS 'Район расположения ГРЭС (город)';*/
+COMMENT ON COLUMN lab3data.number_of_units IS 'Число блоков';
+COMMENT ON COLUMN lab3data.city IS 'Район расположения ГРЭС (город)';
 COMMENT ON COLUMN lab3data.steam_production_capacity IS 'Номинальная паропроизводительность одного котла';
-/*COMMENT ON COLUMN lab3data.number_of_stacks IS 'Число дымовых труб';*/
+COMMENT ON COLUMN lab3data.number_of_stacks IS 'Число дымовых труб';
 COMMENT ON COLUMN lab3data.stacks_height IS 'Высота дымовой трубы';
 COMMENT ON COLUMN lab3data.stacks_diameter IS 'Диаметр устья дымовой трубы';
-/*COMMENT ON COLUMN lab3data.wind_direction IS 'Расчетное направление ветра';*/
+COMMENT ON COLUMN lab3data.wind_direction IS 'Расчетное направление ветра';
 COMMENT ON COLUMN lab3data.wind_speed IS 'Расчетная скорость ветра';
 COMMENT ON COLUMN lab3data.low_heat_value IS 'Низшая теплота сгорания топлива';
 COMMENT ON COLUMN lab3data.fuel_consumer IS 'Расход топлива на 1 блок';
@@ -128,12 +128,12 @@ CREATE TABLE lab3variant (
   *Блок свойств лабы
   */
   tpp_output INT,
-  /*number_of_units
-  *city*/
+  number_of_units INT,
+  city VARCHAR(32),
   steam_production_capacity INT,
-  /*number_of_stacks*/
+  number_of_stacks INT,
   stacks_height INT,
-  /*wind_direction*/
+  wind_direction VARCHAR(32),
   wind_speed DOUBLE,
   low_heat_value DOUBLE,
   fuel_consumer DOUBLE,
@@ -168,12 +168,12 @@ COMMENT ON TABLE LAB3VARIANT IS 'Вариант лабораторной №3';
 COMMENT ON COLUMN lab3variant.id IS 'Уникальный идентификатор выполненного варианта';
 COMMENT ON COLUMN lab3variant.version IS 'Версия изменений(контроль одновременного доступа)';
 COMMENT ON COLUMN lab3variant.tpp_output IS 'Мощность ГРЭС';
-/*COMMENT ON COLUMN lab3variant.number_of_units IS 'Число блоков';
-*COMMENT ON COLUMN lab3variant.city IS 'Район расположения ГРЭС (город)';*/
+COMMENT ON COLUMN lab3variant.number_of_units IS 'Число блоков';
+COMMENT ON COLUMN lab3variant.city IS 'Район расположения ГРЭС (город)';
 COMMENT ON COLUMN lab3variant.steam_production_capacity IS 'Номинальная паропроизводительность одного котла';
-/*COMMENT ON COLUMN lab3variant.number_of_stacks IS 'Число дымовых труб';*/
+COMMENT ON COLUMN lab3variant.number_of_stacks IS 'Число дымовых труб';
 COMMENT ON COLUMN lab3variant.stacks_height IS 'Высота дымовой трубы';
-/*COMMENT ON COLUMN lab3variant.wind_direction IS 'Расчетное направление ветра';*/
+COMMENT ON COLUMN lab3variant.wind_direction IS 'Расчетное направление ветра';
 COMMENT ON COLUMN lab3variant.wind_speed IS 'Расчетная скорость ветра';
 COMMENT ON COLUMN lab3variant.low_heat_value IS 'Низшая теплота сгорания топлива';
 COMMENT ON COLUMN lab3variant.fuel_consumer IS 'Расход топлива на 1 блок';

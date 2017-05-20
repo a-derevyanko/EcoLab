@@ -1,5 +1,6 @@
 package org.ekolab.server.model.content.lab3;
 
+
 /**
  * Created by 777Al on 11.04.2017.
  */
@@ -14,7 +15,16 @@ public enum NumberOfUnits {
         this.numberOfUnits = numberOfUnits;
     }
 
-    public int getNumberOfUnits() {
+    public int value() {
         return numberOfUnits;
+    }
+
+    public static NumberOfUnits valueOf(int numberOfUnits) {
+        for (NumberOfUnits value : values()) {
+            if (value.value() == numberOfUnits) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("Wrong number of units: " + numberOfUnits);
     }
 }

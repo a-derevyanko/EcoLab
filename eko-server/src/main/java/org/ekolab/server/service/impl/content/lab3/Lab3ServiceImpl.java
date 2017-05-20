@@ -42,7 +42,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                     (labData.getExcessAirRatio() - 1) * labData.getAirVolume();
             double B = (1 - labData.getCarbonInFlyAsh() / 100) * labData.getFuelConsumer();
 
-            labData.setNoxMassiveInjection(labData.getFlueGasNOxConcentration() * labData.getNumberOfUnits().getNumberOfUnits() * V * B * 0.000278);
+            labData.setNoxMassiveInjection(labData.getFlueGasNOxConcentration() * labData.getNumberOfUnits().value() * V * B * 0.000278);
             labData.setNo2MassiveInjection(0.8 * labData.getNoxMassiveInjection());
 
             labData.setNoMassiveInjection(0.13 * labData.getNoxMassiveInjection());
@@ -53,7 +53,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 && labData.getSulphurOxidesFractionAssociatedInDesulphurizationSystem() != null
                 && labData.getDesulphurizationSystemRunningTime() != null
                 && labData.getBoilerRunningTime() != null) {
-            labData.setSo2MassiveInjection(0.02 * (1000 / 3.6) * labData.getNumberOfUnits().getNumberOfUnits() *
+            labData.setSo2MassiveInjection(0.02 * (1000 / 3.6) * labData.getNumberOfUnits().value() *
                     labData.getFuelConsumer() * labData.getSulphurContent() *
                     (1 - labData.getSulphurOxidesFractionAssociatedByFlyAsh()) *
                     (1 - labData.getSulphurOxidesFractionAssociatedInWetDustCollector()) *
@@ -66,7 +66,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 && labData.getCarbonInFlyAsh() != null
                 && labData.getLowHeatValue() != null
                 && labData.getAshRecyclingFactor() != null) {
-            labData.setAshMassiveInjection(0.01 * (1000 / 3.6) * labData.getNumberOfUnits().getNumberOfUnits() * labData.getFuelConsumer() * (labData.getAshProportionEntrainedGases() *
+            labData.setAshMassiveInjection(0.01 * (1000 / 3.6) * labData.getNumberOfUnits().value() * labData.getFuelConsumer() * (labData.getAshProportionEntrainedGases() *
                     labData.getAshContent() +
                     labData.getCarbonInFlyAsh() *
                             labData.getLowHeatValue() / 32.68) * (1 - labData.getAshRecyclingFactor()));
@@ -147,7 +147,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                     labData.setBwdNo2GroundLevelConcentration(labData.getTemperatureCoefficient() *
                             labData.getNo2MassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
                             n * m * labData.getBreakdownWindSpeed() * labData.getTerrainCoefficient() *
-                            Math.pow((labData.getNumberOfStacks().getNumberOfStacks() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
+                            Math.pow((labData.getNumberOfStacks().value() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
 
                     labData.setWindSpeedMaxNoGroundLevelConcentration(labData.getBwdNoGroundLevelConcentration() * r);
                 }
@@ -156,7 +156,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                     labData.setBwdNoGroundLevelConcentration(labData.getTemperatureCoefficient() *
                             labData.getNoMassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
                             n * m * labData.getBreakdownWindSpeed() * labData.getTerrainCoefficient() *
-                            Math.pow((labData.getNumberOfStacks().getNumberOfStacks() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
+                            Math.pow((labData.getNumberOfStacks().value() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
 
                     labData.setWindSpeedMaxNo2GroundLevelConcentration(labData.getBwdNo2GroundLevelConcentration() * r);
                 }
@@ -165,7 +165,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                     labData.setBwdSo2GroundLevelConcentration(labData.getTemperatureCoefficient() *
                             labData.getSo2MassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
                             n * m * labData.getBreakdownWindSpeed() * labData.getTerrainCoefficient() *
-                            Math.pow((labData.getNumberOfStacks().getNumberOfStacks() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
+                            Math.pow((labData.getNumberOfStacks().value() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
 
                     labData.setWindSpeedMaxSo2GroundLevelConcentration(labData.getBwdSo2GroundLevelConcentration() * r);
                 }
@@ -174,7 +174,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                     labData.setBwdAshGroundLevelConcentration(labData.getTemperatureCoefficient() *
                             labData.getAshMassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
                             n * m * labData.getBreakdownWindSpeed() * labData.getTerrainCoefficient() *
-                            Math.pow((labData.getNumberOfStacks().getNumberOfStacks() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
+                            Math.pow((labData.getNumberOfStacks().value() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
 
                     labData.setWindSpeedMaxAshGroundLevelConcentration(labData.getBwdAshGroundLevelConcentration() * r);
                 }

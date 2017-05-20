@@ -14,7 +14,16 @@ public enum NumberOfStacks {
         this.numberOfStacks = numberOfStacks;
     }
 
-    public int getNumberOfStacks() {
+    public int value() {
         return numberOfStacks;
+    }
+
+    public static NumberOfStacks valueOf(int numberOfStacks) {
+        for (NumberOfStacks value : values()) {
+            if (value.value() == numberOfStacks) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("Wrong number of stacks: " + numberOfStacks);
     }
 }
