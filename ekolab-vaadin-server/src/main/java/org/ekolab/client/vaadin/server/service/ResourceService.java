@@ -27,29 +27,24 @@ import java.util.stream.Collectors;
 public class ResourceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceService.class);
 
-    @Cacheable(cacheNames = "THEME_RESOURCE_IMAGE", key = "#imageName.concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
     public Image getImage(String imageName) {
         return getImage("img/" , imageName);
     }
 
-    @Cacheable(cacheNames = "THEME_RESOURCE_IMAGE", key = "#imageName.concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
     public Image getImage(String path, String imageName) {
         Resource resource = new ThemeResource(path + imageName);
         return new Image(null, resource);
     }
 
-    @Cacheable(cacheNames = "THEME_GALLERY_IMAGE_SVG", key = "T(java.util.Objects).hash(#imageName, (T(com.vaadin.ui.UI).getCurrent().getTheme()))")
     public com.github.lotsabackscatter.blueimp.gallery.Image getGalleryImage(String imageName) {
         return loadGalleryImage(getThemeDir() + imageName);
     }
 
-    @Cacheable(cacheNames = "THEME_GALLERY_IMAGE_SVG", key = "T(java.util.Objects).hash(#imagesPath, (T(com.vaadin.ui.UI).getCurrent().getTheme()))")
     public List<com.github.lotsabackscatter.blueimp.gallery.Image> getGalleryImages(String imagesPath) {
         return VaadinServlet.getCurrent().getServletContext().getResourcePaths(getThemeDir() + imagesPath)
                 .stream().sorted().map(this::loadGalleryImage).collect(Collectors.toList());
     }
 
-    @Cacheable(cacheNames = "INFO_COMPONENT_HTML", key = "#path.concat(#resourceName).concat(T(com.vaadin.ui.UI).getCurrent().getTheme())")
     public BrowserFrame getHtmlData(String path, String resourceName) {
         return new BrowserFrame(null, new ThemeResource(path + resourceName));
     }

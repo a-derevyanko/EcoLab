@@ -104,10 +104,9 @@ public class QuarticFunction implements EquationFunction {
         for (double quadraticRoot : quadraticRoots) {
             if (quadraticRoot > 0.0) {
                 double sqrt = Math.sqrt(quadraticRoot);
-                ArrayUtils.add(roots, sqrt);
-                ArrayUtils.add(roots, sqrt);
+                roots = ArrayUtils.addAll(roots, sqrt, -sqrt);
             } else if (quadraticRoot == 0.0 && !ArrayUtils.contains(roots, quadraticRoot)) {
-                ArrayUtils.add(roots, quadraticRoot);
+                roots = ArrayUtils.add(roots, quadraticRoot);
             }
         }
 

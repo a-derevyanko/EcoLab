@@ -3,7 +3,7 @@ package org.ekolab.client.vaadin.server.ui.common;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
-import org.ekolab.client.vaadin.server.ui.view.api.View;
+import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.vaadin.teemu.wizards.WizardStep;
 
@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * Created by 777Al on 05.04.2017.
  */
-public interface LabWizardStep extends Component, View, WizardStep {
+public interface LabWizardStep extends Component, UIComponent, WizardStep {
     @Override
     @PostConstruct
     @LogExecutionTime
@@ -24,6 +24,7 @@ public interface LabWizardStep extends Component, View, WizardStep {
 
     @Override
     default Component getContent() {
+        beforeEnter();
         return this;
     }
 
@@ -38,4 +39,6 @@ public interface LabWizardStep extends Component, View, WizardStep {
     }
 
     default void placeAdditionalComponents(HorizontalLayout buttonsLayout) {}
+
+    default void beforeEnter() {}
 }
