@@ -75,9 +75,9 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
     private XYDataset createDataset(Double windSpeedMaxGroundLevelConcentrationDistance,
                                       Double harmfulSubstancesDepositionCoefficient, Double windSpeed) {
         //todo
-        windSpeedMaxGroundLevelConcentrationDistance = 200.0;
+        /*windSpeedMaxGroundLevelConcentrationDistance = 200.0;
         harmfulSubstancesDepositionCoefficient = 0.5;
-        windSpeed = 15.0;
+        windSpeed = 15.0;*/
         //todo
 
         XYSeriesCollection dataset = new XYSeriesCollection();

@@ -31,6 +31,12 @@ public class Lab3Variant extends LabVariant {
     private City city;
 
     /**
+     * Тип топлива
+     */
+    @Valid
+    private FuelType fuelType;
+
+    /**
      * Номинальная паропроизводительность одного котла
      */
     @Max(2450L)
@@ -185,6 +191,14 @@ public class Lab3Variant extends LabVariant {
 
     public void setNumberOfUnits(NumberOfUnits numberOfUnits) {
         this.numberOfUnits = numberOfUnits;
+    }
+
+    public FuelType getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(FuelType fuelType) {
+        this.fuelType = fuelType;
     }
 
     public City getCity() {
@@ -387,6 +401,7 @@ public class Lab3Variant extends LabVariant {
         return Objects.equals(tppOutput, variant.tppOutput) &&
                 numberOfUnits == variant.numberOfUnits &&
                 city == variant.city &&
+                fuelType == variant.fuelType &&
                 Objects.equals(steamProductionCapacity, variant.steamProductionCapacity) &&
                 numberOfStacks == variant.numberOfStacks &&
                 Objects.equals(stacksHeight, variant.stacksHeight) &&
@@ -414,6 +429,6 @@ public class Lab3Variant extends LabVariant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(tppOutput, numberOfUnits, city, steamProductionCapacity, numberOfStacks, stacksHeight, windDirection, windSpeed, lowHeatValue, fuelConsumer, carbonInFlyAsh, sulphurContent, ashContent, waterContent, ashRecyclingFactor, flueGasNOxConcentration, stackExitTemperature, outsideAirTemperature, excessAirRatio, combustionProductsVolume, waterVaporVolume, airVolume, no2BackgroundConcentration, noBackgroundConcentration, so2BackgroundConcentration, ashBackgroundConcentration);
+        return Objects.hash(tppOutput, numberOfUnits, city, fuelType, steamProductionCapacity, numberOfStacks, stacksHeight, windDirection, windSpeed, lowHeatValue, fuelConsumer, carbonInFlyAsh, sulphurContent, ashContent, waterContent, ashRecyclingFactor, flueGasNOxConcentration, stackExitTemperature, outsideAirTemperature, excessAirRatio, combustionProductsVolume, waterVaporVolume, airVolume, no2BackgroundConcentration, noBackgroundConcentration, so2BackgroundConcentration, ashBackgroundConcentration);
     }
 }

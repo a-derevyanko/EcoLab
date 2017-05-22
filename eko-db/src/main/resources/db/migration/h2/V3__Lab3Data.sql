@@ -129,6 +129,7 @@ CREATE TABLE lab3variant (
   */
   tpp_output INT,
   number_of_units INT,
+  fuel_type VARCHAR(32),
   city VARCHAR(32),
   steam_production_capacity INT,
   number_of_stacks INT,
@@ -169,6 +170,7 @@ COMMENT ON COLUMN lab3variant.id IS 'Уникальный идентификат
 COMMENT ON COLUMN lab3variant.version IS 'Версия изменений(контроль одновременного доступа)';
 COMMENT ON COLUMN lab3variant.tpp_output IS 'Мощность ГРЭС';
 COMMENT ON COLUMN lab3variant.number_of_units IS 'Число блоков';
+COMMENT ON COLUMN lab3variant.fuel_type IS 'Тип топлива';
 COMMENT ON COLUMN lab3variant.city IS 'Район расположения ГРЭС (город)';
 COMMENT ON COLUMN lab3variant.steam_production_capacity IS 'Номинальная паропроизводительность одного котла';
 COMMENT ON COLUMN lab3variant.number_of_stacks IS 'Число дымовых труб';

@@ -30,7 +30,7 @@ import java.util.Locale;
 @Widgetset("AppWidgetset")
 @Theme(EkoLabTheme.THEME_NAME)
 @PreserveOnRefresh
-@Profile(Profiles.MODE.PROD)
+@Profile({Profiles.MODE.PROD, Profiles.MODE.DEMO})
 public class VaadinUI extends UI {
     private static final long serialVersionUID = -2988327335267095955L;
     private static final Logger LOG = LoggerFactory.getLogger(VaadinUI.class);

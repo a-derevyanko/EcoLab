@@ -69,12 +69,13 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
 
         Lab3Variant variant = new Lab3Variant();
         variant.setTppOutput(record.get(LAB3VARIANT.TPP_OUTPUT));
-        variant.setNumberOfUnits(record.get(LAB3DATA.NUMBER_OF_UNITS) == null ? null : NumberOfUnits.valueOf(record.get(LAB3DATA.NUMBER_OF_UNITS)));
-        variant.setCity(record.get(LAB3DATA.CITY) == null ? null : City.valueOf(record.get(LAB3DATA.CITY)));
+        variant.setNumberOfUnits(record.get(LAB3VARIANT.NUMBER_OF_UNITS) == null ? null : NumberOfUnits.valueOf(record.get(LAB3VARIANT.NUMBER_OF_UNITS)));
+        variant.setFuelType(record.get(LAB3VARIANT.FUEL_TYPE) == null ? null : FuelType.valueOf(record.get(LAB3VARIANT.FUEL_TYPE)));
+        variant.setCity(record.get(LAB3VARIANT.CITY) == null ? null : City.valueOf(record.get(LAB3VARIANT.CITY)));
         variant.setSteamProductionCapacity(record.get(LAB3VARIANT.STEAM_PRODUCTION_CAPACITY));
-        variant.setNumberOfStacks(record.get(LAB3DATA.NUMBER_OF_STACKS) == null ? null : NumberOfStacks.valueOf(record.get(LAB3DATA.NUMBER_OF_STACKS)));
+        variant.setNumberOfStacks(record.get(LAB3VARIANT.NUMBER_OF_STACKS) == null ? null : NumberOfStacks.valueOf(record.get(LAB3VARIANT.NUMBER_OF_STACKS)));
         variant.setStacksHeight(record.get(LAB3VARIANT.STACKS_HEIGHT));
-        variant.setWindDirection(record.get(LAB3DATA.WIND_DIRECTION) == null ? null : WindDirection.valueOf(record.get(LAB3DATA.WIND_DIRECTION)));
+        variant.setWindDirection(record.get(LAB3VARIANT.WIND_DIRECTION) == null ? null : WindDirection.valueOf(record.get(LAB3VARIANT.WIND_DIRECTION)));
         variant.setWindSpeed(record.get(LAB3VARIANT.WIND_SPEED));
         variant.setLowHeatValue(record.get(LAB3VARIANT.LOW_HEAT_VALUE));
         variant.setFuelConsumer(record.get(LAB3VARIANT.FUEL_CONSUMER));
@@ -165,13 +166,13 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         data.getStartDate(),
                         data.getSaveDate(),
                         data.getTppOutput(),
-                        data.getNumberOfUnits(),
-                        data.getCity(),
+                        data.getNumberOfUnits() == null ? null : data.getNumberOfUnits().value(),
+                        data.getCity() == null ? null : data.getCity().name(),
                         data.getSteamProductionCapacity(),
-                        data.getNumberOfStacks(),
+                        data.getNumberOfStacks() == null ? null : data.getNumberOfStacks().value(),
                         data.getStacksHeight(),
                         data.getStacksDiameter(),
-                        data.getWindDirection(),
+                        data.getWindDirection() == null ? null : data.getWindDirection().name(),
                         data.getWindSpeed(),
                         data.getLowHeatValue(),
                         data.getFuelConsumer(),
@@ -212,6 +213,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3VARIANT.ID,
                 LAB3VARIANT.TPP_OUTPUT,
                 LAB3VARIANT.NUMBER_OF_UNITS,
+                LAB3VARIANT.FUEL_TYPE,
                 LAB3VARIANT.CITY,
                 LAB3VARIANT.STEAM_PRODUCTION_CAPACITY,
                 LAB3VARIANT.NUMBER_OF_STACKS,
@@ -239,12 +241,13 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 values(
                         id,
                         variant.getTppOutput(),
-                        variant.getNumberOfUnits(),
-                        variant.getCity(),
+                        variant.getNumberOfUnits() == null ? null : variant.getNumberOfUnits().value(),
+                        variant.getFuelType() == null ? null : variant.getFuelType().name(),
+                        variant.getCity() == null ? null : variant.getCity().name(),
                         variant.getSteamProductionCapacity(),
-                        variant.getNumberOfStacks(),
+                        variant.getNumberOfStacks() == null ? null : variant.getNumberOfStacks().value(),
                         variant.getStacksHeight(),
-                        variant.getWindDirection(),
+                        variant.getWindDirection() == null ? null : variant.getWindDirection().name(),
                         variant.getWindSpeed(),
                         variant.getLowHeatValue(),
                         variant.getFuelConsumer(),
