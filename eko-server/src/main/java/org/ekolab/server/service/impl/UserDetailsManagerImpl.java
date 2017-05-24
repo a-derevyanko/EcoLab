@@ -1,14 +1,19 @@
 package org.ekolab.server.service.impl;
 
+import org.ekolab.server.model.UserGroup;
+import org.ekolab.server.model.UserInfo;
+import org.ekolab.server.service.api.UserInfoService;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,14 +22,21 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-import static org.ekolab.server.db.h2.public_.Tables.*;
+import static org.ekolab.server.db.h2.public_.Tables.AUTHORITIES;
+import static org.ekolab.server.db.h2.public_.Tables.GROUPS;
+import static org.ekolab.server.db.h2.public_.Tables.GROUP_AUTHORITIES;
+import static org.ekolab.server.db.h2.public_.Tables.GROUP_MEMBERS;
+import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEAMS;
+import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEAM_MEMBERS;
+import static org.ekolab.server.db.h2.public_.Tables.USERS;
+import static org.ekolab.server.db.h2.public_.Tables.USER_AUTHORITIES;
 
 /**
  * Created by 777Al on 19.04.2017.
  */
 @Service
 @Transactional
-public class UserDetailsManagerImpl extends JdbcUserDetailsManager {
+public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements UserInfoService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -37,6 +49,8 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager {
     @Autowired
     private DSLContext dsl;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void init() {
@@ -97,5 +111,41 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager {
             return new User(username1, password, enabled, true, true, true,
                     AuthorityUtils.NO_AUTHORITIES);
         });
+    }
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public UserInfo getUserInfo(String userName) {
+        return dsl.select(USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
+                .join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID)).join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID))
+        .where(USERS.LOGIN.eq(userName)).fetchOne().map(record -> {
+            UserInfo info = new UserInfo();
+            info.setLogin(userName);
+            info.setFirstName(record.get(USERS.FIRST_NAME));
+            info.setMiddleName(record.get(USERS.MIDDLE_NAME));
+            info.setLastName(record.get(USERS.LAST_NAME));
+            info.setNote(record.get(USERS.NOTE));
+            info.setGroup(UserGroup.valueOf(record.get(GROUPS.GROUP_NAME)));
+            return info;
+        });
+    }
+
+    @Override
+    public void changePassword(String oldPassword, String newPassword) throws AuthenticationException {
+        super.changePassword(oldPassword, passwordEncoder.encode(newPassword));
+    }
+
+    @Override
+    public void saveUserInfo(UserInfo userInfo) {
+        Long userID = dsl.update(USERS)
+                .set(USERS.FIRST_NAME, userInfo.getFirstName())
+                .set(USERS.MIDDLE_NAME, userInfo.getMiddleName())
+                .set(USERS.LAST_NAME, userInfo.getLastName())
+                .set(USERS.NOTE, userInfo.getNote()).where(USERS.LOGIN.eq(userInfo.getLastName()))
+                .returning(USERS.ID).fetchOne().getId();
+
+        dsl.update(GROUP_MEMBERS).set(GROUP_MEMBERS.GROUP_ID,
+                dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq(userInfo.getGroup().name())))
+                .where(GROUP_MEMBERS.USER_ID.eq(userID)).execute();
     }
 }

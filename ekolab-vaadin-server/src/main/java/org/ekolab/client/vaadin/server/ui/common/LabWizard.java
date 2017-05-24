@@ -133,7 +133,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
 
     @Override
     public boolean saveData() {
-        if (saveButton.isVisible()) {
+        if (hasUnsavedData()) {
             BinderValidationStatus<BEAN> validationStatus = binder.validate();
             if (validationStatus.isOk()) {
                 binder.readBean(labService.updateLab(binder.getBean()));
@@ -146,6 +146,11 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean hasUnsavedData() {
+        return saveButton.isVisible();
     }
 
     @Override

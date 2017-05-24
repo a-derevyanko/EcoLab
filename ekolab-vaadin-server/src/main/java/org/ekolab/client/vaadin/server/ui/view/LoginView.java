@@ -94,7 +94,6 @@ public class LoginView extends VerticalLayout implements View {
         loginPanel.addComponent(fields);
         loginPanel.addComponent(rememberMe);
 
-        //addComponent(logo);
         addComponent(loginPanel);
 
         notification.setCaption(i18N.get("login-view.ekolab-welcome"));
@@ -102,7 +101,7 @@ public class LoginView extends VerticalLayout implements View {
         notification.setHtmlContentAllowed(true);
         notification.setStyleName("tray dark small closable login-help");
         notification.setPosition(Position.BOTTOM_CENTER);
-        notification.setDelayMsec(20000);
+        notification.setDelayMsec(2000000);
     }
 
     @Override

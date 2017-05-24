@@ -1,5 +1,7 @@
 package org.ekolab.client.vaadin.server;
 
+import com.vaadin.data.Binder;
+import org.ekolab.server.model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +48,7 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().anyRequest().permitAll()
                 .and()
-                .logout().permitAll().addLogoutHandler(new VaadinSessionClosingLogoutHandler())
+                .logout().permitAll().addLogoutHandler(new VaadinSessionClosingLogoutHandler()).logoutSuccessUrl("/")
                 .and()
                 .csrf().disable().exceptionHandling()
                 .and()
@@ -68,5 +70,10 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     @Bean
     public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new SessionFixationProtectionStrategy();
+    }
+
+    @Bean
+    public Binder<UserInfo> userInfoBinder() {
+        return new Binder<>(UserInfo.class);
     }
 }

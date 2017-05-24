@@ -30,4 +30,8 @@ public class ComponentErrorNotification extends Notification {
                 .collect(Collectors.joining("\n"));
         new ComponentErrorNotification(caption, errors).show(Page.getCurrent());
     }
+
+    public static void show(String caption, String message) {
+        new ComponentErrorNotification(caption, message).show(Page.getCurrent());
+    }
 }

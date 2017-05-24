@@ -5,8 +5,16 @@ package org.ekolab.server.common;
  */
 public class Authorize {
     public class HasAuthorities {
-        public static final String ADMIN = "hasAuthority('ADMIN')";
-        public static final String TEACHER = "hasAuthority('TEACHER')";
-        public static final String STUDENT = "hasAuthority('STUDENT')";
+        private static final String HASAUTHORITY_PREFIX = "hasAuthority('";
+        private static final String HASAUTHORITY_POSTFIX = "')";
+
+        public static final String ADMIN = HASAUTHORITY_PREFIX + Authorities.ADMIN + HASAUTHORITY_POSTFIX;
+        public static final String TEACHER = HASAUTHORITY_PREFIX + Authorities.TEACHER + HASAUTHORITY_POSTFIX;
+        public static final String STUDENT = HASAUTHORITY_PREFIX + Authorities.STUDENT + HASAUTHORITY_POSTFIX;
+    }
+    public class Authorities {
+        public static final String ADMIN = "ADMIN";
+        public static final String TEACHER = "TEACHER";
+        public static final String STUDENT = "STUDENT";
     }
 }

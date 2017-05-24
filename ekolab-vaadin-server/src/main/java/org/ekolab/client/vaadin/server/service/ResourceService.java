@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URLConnection;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @UIScope
-public class ResourceService {
+public class ResourceService implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceService.class);
 
     public Image getImage(String imageName) {

@@ -5,4 +5,6 @@ package org.ekolab.client.vaadin.server.ui.view.api;
  */
 public interface SavableView extends View {
     boolean saveData();
+
+    boolean hasUnsavedData();
 }
