@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 /**
  * Created by 777Al on 22.05.2017.
  */
-public class UserInfo implements Cloneable, DomainModel {
+public class UserInfo implements DomainModel {
     @Size(max = 256)
     private String login;
 

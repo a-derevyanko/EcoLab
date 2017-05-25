@@ -16,8 +16,14 @@ public interface UserInfoService extends UserDetailsManager, GroupManager, UserD
      */
     UserInfo getUserInfo(String userName);
     /**
-     * Сохраняет данные пользователя
+     * Изменяет данные пользователя
      * @param userInfo данные пользователя
      */
-    void saveUserInfo(UserInfo userInfo);
+    void updateUserInfo(UserInfo userInfo);
+
+    /**
+     * Создаёт данные пользователя
+     * @param userInfo данные пользователя
+     */
+    void createUserInfo(UserInfo userInfo);
 }

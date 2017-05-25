@@ -47,7 +47,6 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
     private UserDataWindow userDataWindow;
 
     // ---------------------- Данные экземпляра ----------------------------------
-    private UserInfo userInfo;
 
     // ---------------------- Графические компоненты -----------------------------
     private final HorizontalLayout leftButtonPanel = new HorizontalLayout();
@@ -65,8 +64,8 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
         setStyleName(EkoLabTheme.MENUBAR_BORDERLESS);
         exitItem = addItem(i18N.get("menubar.exit"), VaadinIcons.SIGN_OUT, (Command) selectedItem -> vaadinSecurity.logout());
         userInfoItem = addItem("", VaadinIcons.USER, (Command) selectedItem -> {
-            userDataWindow.show(userInfo, newUserInfo -> {
-                userInfo = newUserInfo;
+            userDataWindow.show(getUI().getCurrentUserInfo(), newUserInfo -> {
+                getUI().setCurrentUserInfo(newUserInfo);
                 updateUserInfoItem();
             });
         });
@@ -90,7 +89,7 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
         if (vaadinSecurity.isAuthenticated()) {
             Authentication authentication = vaadinSecurity.getAuthentication();
             if (userInfoItem.getText().isEmpty()) {
-                userInfo = userDetailsManager.getUserInfo(authentication.getName());
+                getUI().setCurrentUserInfo(userDetailsManager.getUserInfo(authentication.getName()));
                 updateUserInfoItem();
 
                 Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -111,10 +110,18 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
             ((View) event.getNewView()).placeMenuBarActions(this);
         } else {
             setVisible(false);
+            getUI().setCurrentUserInfo(null);
+            getUI().setCurrentStudentInfo(null);
         }
     }
 
+    @Override
+    public VaadinUI getUI() {
+        return (VaadinUI) super.getUI();
+    }
+
     private void updateUserInfoItem() {
+        UserInfo userInfo = getUI().getCurrentUserInfo();
         userInfoItem.setText(userInfo.getLastName() + ' ' + userInfo.getFirstName() + ' ' + userInfo.getMiddleName());
     }
 }

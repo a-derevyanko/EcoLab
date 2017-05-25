@@ -14,6 +14,8 @@ import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.common.Profiles;
+import org.ekolab.server.model.StudentInfo;
+import org.ekolab.server.model.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,11 @@ public class VaadinUI extends UI {
     // ----------------------------- Графические компоненты --------------------------------
     private final VerticalLayout root = new VerticalLayout();
 
+    // ----------------------------- Данные экземпляра -------------------------------------
+    private UserInfo currentUserInfo;
+
+    private StudentInfo currentStudentInfo;
+
     @Override
     protected void init(VaadinRequest request) {
         setLocale(Locale.getDefault());
@@ -77,6 +84,22 @@ public class VaadinUI extends UI {
 
         UI.getCurrent().getReconnectDialogConfiguration().setDialogText(i18N.get("vaadin.server-connection-lost"));
         UI.getCurrent().getReconnectDialogConfiguration().setDialogTextGaveUp(i18N.get("vaadin.server-connection-lost-gave-up"));
+    }
+
+    public void setCurrentUserInfo(UserInfo currentUserInfo) {
+        this.currentUserInfo = currentUserInfo;
+    }
+
+    public void setCurrentStudentInfo(StudentInfo currentStudentInfo) {
+        this.currentStudentInfo = currentStudentInfo;
+    }
+
+    public UserInfo getCurrentUserInfo() {
+        return currentUserInfo;
+    }
+
+    public StudentInfo getCurrentStudentInfo() {
+        return currentStudentInfo;
     }
 
     @Override

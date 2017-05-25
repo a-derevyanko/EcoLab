@@ -1,7 +1,5 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 
-import com.vaadin.server.CompositeErrorMessage;
-import com.vaadin.server.ErrorMessage;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.HorizontalLayout;
@@ -13,10 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.util.FieldUtils;
 
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by 777Al on 06.04.2017.

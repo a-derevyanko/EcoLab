@@ -26,8 +26,6 @@ import static org.ekolab.server.db.h2.public_.Tables.AUTHORITIES;
 import static org.ekolab.server.db.h2.public_.Tables.GROUPS;
 import static org.ekolab.server.db.h2.public_.Tables.GROUP_AUTHORITIES;
 import static org.ekolab.server.db.h2.public_.Tables.GROUP_MEMBERS;
-import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEAMS;
-import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEAM_MEMBERS;
 import static org.ekolab.server.db.h2.public_.Tables.USERS;
 import static org.ekolab.server.db.h2.public_.Tables.USER_AUTHORITIES;
 
@@ -136,16 +134,46 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     }
 
     @Override
-    public void saveUserInfo(UserInfo userInfo) {
-        Long userID = dsl.update(USERS)
+    public void createUser(UserDetails userDetails) {
+        User user = new User(userDetails.getUsername(),
+                passwordEncoder.encode(userDetails.getPassword()), userDetails.getAuthorities());
+        super.createUser(user);
+    }
+
+    @Override
+    public void updateUser(UserDetails userDetails) {
+        User user = new User(userDetails.getUsername(),
+                passwordEncoder.encode(userDetails.getPassword()), userDetails.getAuthorities());
+        super.updateUser(user);
+    }
+
+    @Override
+    public void updateUserInfo(UserInfo userInfo) {
+        dsl.update(USERS)
                 .set(USERS.FIRST_NAME, userInfo.getFirstName())
                 .set(USERS.MIDDLE_NAME, userInfo.getMiddleName())
                 .set(USERS.LAST_NAME, userInfo.getLastName())
-                .set(USERS.NOTE, userInfo.getNote()).where(USERS.LOGIN.eq(userInfo.getLastName()))
-                .returning(USERS.ID).fetchOne().getId();
+                .set(USERS.NOTE, userInfo.getNote()).where(USERS.LOGIN.eq(userInfo.getLogin())).execute();
 
         dsl.update(GROUP_MEMBERS).set(GROUP_MEMBERS.GROUP_ID,
                 dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq(userInfo.getGroup().name())))
-                .where(GROUP_MEMBERS.USER_ID.eq(userID)).execute();
+                .where(GROUP_MEMBERS.USER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userInfo.getLogin())))).execute();
+    }
+
+    @Override
+    public void createUserInfo(UserInfo userInfo) {
+        Long userID = dsl.insertInto(USERS)
+                .set(USERS.FIRST_NAME, userInfo.getFirstName())
+                .set(USERS.MIDDLE_NAME, userInfo.getMiddleName())
+                .set(USERS.LAST_NAME, userInfo.getLastName())
+                .set(USERS.NOTE, userInfo.getNote())
+                .set(USERS.LOGIN, userInfo.getLogin())
+                .set(USERS.ENABLED, true)
+                .set(USERS.PASSWORD, passwordEncoder.encode(userInfo.getLogin()))
+                .returning(USERS.ID).fetchOne().getId();
+
+        dsl.insertInto(GROUP_MEMBERS)
+                .set(GROUP_MEMBERS.GROUP_ID, dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq(userInfo.getGroup().name())))
+                .set(GROUP_MEMBERS.USER_ID, userID).execute();
     }
 }

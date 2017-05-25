@@ -124,7 +124,7 @@ public class UserDataWindow extends Window {
             }
             UserInfo info = new UserInfo();
             userInfoBinder.writeBean(info);
-            userInfoService.saveUserInfo(info);
+            userInfoService.updateUserInfo(info);
             userInfoConsumer.accept(info);
             close();
             Notification.show(i18N.get("user-data-window.saved"), Notification.Type.TRAY_NOTIFICATION);
