@@ -28,13 +28,10 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
     public void generateInitialData() {
         studentInfoService.createStudentTeam(TEAMNAME);
         studentInfoService.createStudentGroup(GROUPNAME);
-        StudentInfo studentInfo = new StudentInfo();
-        studentInfo.setTeam(TEAMNAME);
-        studentInfo.setGroup(GROUPNAME);
         UserInfo userDetails = new UserInfo();
         userDetails.setLogin(USERNAME);
         userDetails.setGroup(UserGroup.STUDENT);
-        studentInfoService.createStudentInfo(userDetails, studentInfo);
+        studentInfoService.createStudentInfo(userDetails, GROUPNAME, TEAMNAME);
     }
 
     @Test
@@ -50,11 +47,8 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
         String newTeamName = TEAMNAME + RandomStringUtils.randomAlphabetic(5);
         studentInfoService.renameStudentGroup(GROUPNAME, newGroupName);
         studentInfoService.renameStudentTeam(TEAMNAME, newTeamName);
-        StudentInfo studentInfo = new StudentInfo();
-        studentInfo.setTeam(newTeamName);
-        studentInfo.setGroup(newGroupName);
-        studentInfoService.updateStudentInfo(userInfoService.getUserInfo(USERNAME), studentInfo);
-        studentInfo = studentInfoService.getStudentInfo(USERNAME);
+        studentInfoService.updateStudentInfo(userInfoService.getUserInfo(USERNAME), newGroupName, newTeamName);
+        StudentInfo studentInfo = studentInfoService.getStudentInfo(USERNAME);
         Assert.assertEquals(studentInfo.getGroup(), newGroupName);
         Assert.assertEquals(studentInfo.getTeam(), newTeamName);
     }

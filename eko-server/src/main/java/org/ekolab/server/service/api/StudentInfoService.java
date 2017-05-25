@@ -26,16 +26,20 @@ public interface StudentInfoService extends Serializable {
     /**
      * Изменяет данные студента
      * @param userInfo данные пользователя
-     * @param studentInfo данные студента
+     * @param group группа студента
+     * @param team бригада студента
+     * @return изменённые данные студента
      */
-    void updateStudentInfo(UserInfo userInfo, StudentInfo studentInfo);
+    StudentInfo updateStudentInfo(UserInfo userInfo, String group, String team);
 
     /**
      * Создаёт нового студента
      * @param userInfo данные пользователя
-     * @param studentInfo данные студента
+     * @param group группа студента
+     * @param team бригада студента
+     * @return данные студента
      */
-    void createStudentInfo(UserInfo userInfo, StudentInfo studentInfo);
+    StudentInfo createStudentInfo(UserInfo userInfo, String group, String team);
 
     /**
      * Создаёт студенческую группу

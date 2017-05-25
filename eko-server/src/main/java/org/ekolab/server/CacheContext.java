@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.cache.SpringCacheBasedUserC
  */
 @SpringBootConfiguration
 public class CacheContext {
+    public static final String STUDENT_INFO_CACHE = "STUDENT_INFO_CACHE";
+
     private final CacheManager cacheManager;
 
     @Autowired
