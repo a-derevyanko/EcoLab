@@ -15,7 +15,6 @@ import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
-import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
 
@@ -64,7 +63,7 @@ public class InitialDataWindow extends Window {
             Map<String, String> values = new HashMap<>();
             ReflectionUtils.doWithFields(variant.getClass(), field -> {
                 field.setAccessible(true);
-                values.put(Jsoup.parse(i18N.get(field.getName())).text(), String.valueOf(field.get(variant)));
+                values.put(i18N.get(field.getName()), String.valueOf(field.get(variant)));
             });
             valuesGrid.setItems(values.entrySet());
             UI.getCurrent().addWindow(this);
@@ -72,7 +71,7 @@ public class InitialDataWindow extends Window {
             new ArrayList<>(printDataButton.getExtensions()).forEach(printDataButton::removeExtension);
 
             new FileDownloader(new StreamResource(() ->
-                    new ByteArrayInputStream(labService.printInitialData(values, UI.getCurrent().getLocale())),
+                    new ByteArrayInputStream(labService.printInitialData(variant, UI.getCurrent().getLocale())),
                     "initialData.pdf")).extend(printDataButton);
         }
     }

@@ -5,6 +5,7 @@ import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.builder.tableofcontents.TableOfContentsCustomizerBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
+import net.sf.dynamicreports.report.constant.Markup;
 import net.sf.dynamicreports.report.constant.VerticalTextAlignment;
 
 import java.awt.*;
@@ -23,7 +24,7 @@ public class ReportTemplates {
     public static final StyleBuilder bold12CenteredStyle = stl.style(boldCenteredStyle).setFontSize(12);
     public static final StyleBuilder bold18CenteredStyle = stl.style(boldCenteredStyle).setFontSize(18);
     public static final StyleBuilder bold22CenteredStyle = stl.style(boldCenteredStyle).setFontSize(22);
-    public static final StyleBuilder columnStyle = stl.style(rootStyle).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE);
+    public static final StyleBuilder columnStyle = stl.style(rootStyle).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE).setMarkup(Markup.HTML);
     public static final StyleBuilder columnTitleStyle = stl.style(columnStyle)
             .setBorder(stl.pen1Point())
             .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)

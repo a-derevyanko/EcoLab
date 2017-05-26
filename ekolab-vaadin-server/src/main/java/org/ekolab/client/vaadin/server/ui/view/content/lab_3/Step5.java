@@ -28,6 +28,8 @@ public class Step5 extends GridLayout implements LabWizardStep {
     private final Button zoomInButton = new Button(VaadinIcons.PLUS_CIRCLE_O);
     private final Button zoomOutButton = new Button(VaadinIcons.MINUS_CIRCLE_O);
 
+    private JFreeChartWrapper chart;
+
     @Autowired
     private I18N i18N;
 
@@ -66,7 +68,6 @@ public class Step5 extends GridLayout implements LabWizardStep {
 
     @Override
     public void beforeEnter() {
-        Component chart = getComponent(0, 0);
         if (chart != null) {
             removeComponent(chart);
         }

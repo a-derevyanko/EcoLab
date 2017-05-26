@@ -8,8 +8,6 @@ import org.ekolab.server.service.impl.content.LabServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-
 /**
  * Created by 777Al on 26.04.2017.
  */
@@ -22,7 +20,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
 
     @Override
     public byte[] createReport(Lab3Data labData) {
-        return createReport("", new HashMap<>());
+        //return createReport("", new HashMap<>());
+        return null;
     }
 
     @Override
