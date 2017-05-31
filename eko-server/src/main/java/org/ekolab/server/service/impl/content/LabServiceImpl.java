@@ -1,16 +1,19 @@
 package org.ekolab.server.service.impl.content;
 
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
-import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
+import org.ekolab.server.common.UserInfoUtils;
 import org.ekolab.server.dao.api.content.LabDao;
 import org.ekolab.server.dev.LogExecutionTime;
+import org.ekolab.server.model.DomainModel;
+import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
+import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.impl.ReportTemplates;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,8 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.col;
 import static net.sf.dynamicreports.report.builder.DynamicReports.report;
@@ -33,6 +34,9 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.type;
  * Created by 777Al on 26.04.2017.
  */
 public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant> implements LabService<T> {
+    @Autowired
+    protected UserInfoService userInfoService;
+
     @Autowired
     protected MessageSource messageSource;
 
@@ -104,52 +108,40 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
     @Override
     @LogExecutionTime(500)
     public byte[] printInitialData(LabVariant variant, Locale locale) {
-        TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.getMessage("report.initial-data.parameter-name", null, locale), "parameterName", type.stringType());
-        TextColumnBuilder<String> parameterValueColumn = col.column(messageSource.getMessage("report.initial-data.parameter-value", null, locale), "parameterValue", type.stringType());
-        try {
-            return JasperExportManager.exportReportToPdf(report()
-                    .setTemplate(ReportTemplates.reportTemplate(locale))
-                    .title(ReportTemplates.createTitleComponent(messageSource.getMessage("report.initial-data.title", null, locale)))
-                    .columns(parameterNameColumn, parameterValueColumn)
-                    .setDataSource(createDataSourceFromParameters(mapValuesWithFieldNames(variant, locale), locale))
-                    .toJasperPrint());
-        } catch (DRException | JRException e) {
-            throw new IllegalArgumentException(e);
-        }
+        TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.
+                getMessage("report.lab-data.parameter-name", null, locale), "parameterName", type.stringType());
+        TextColumnBuilder<String> parameterValueColumn = col.column(messageSource.
+                getMessage("report.lab-data.parameter-value", null, locale), "parameterValue", type.stringType())
+                .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
+        return ReportTemplates.printReport(report()
+                .setTemplate(ReportTemplates.reportTemplate(locale))
+                .title(ReportTemplates.createTitleComponent(messageSource.getMessage("report.initial-data.title", null, locale)))
+                .columns(parameterNameColumn, parameterValueColumn)
+                .setDataSource(createDataSourceFromModel(variant, locale)));
     }
 
-    protected JRDataSource createDataSourceFromParameters(Map<String, String> values, Locale locale) {
+    protected JRDataSource createDataSourceFromModel(DomainModel data, Locale locale) {
         DRDataSource dataSource = new DRDataSource("parameterName", "parameterValue");
-        for (Map.Entry<String, String> entry : values.entrySet()) {
-            dataSource.add(entry.getKey(), entry.getValue());
+        for (Field field : data.getClass().getDeclaredFields()) {
+            ReflectionUtils.makeAccessible(field);
+            dataSource.add(messageSource.getMessage(field.getName(), null, locale), String.valueOf(ReflectionUtils.getField(field, data)));
         }
         return dataSource;
     }
 
-    public Map<String, String> mapValuesWithFieldNames(LabVariant variant, Locale locale) {
-        Map<String, String> values = new HashMap<>();
-        ReflectionUtils.doWithFields(variant.getClass(), field -> {
-            field.setAccessible(true);
-            values.put(messageSource.getMessage(field.getName(), null, locale), String.valueOf(field.get(variant)));
-        });
-        return values;
-    }
+    protected JasperReportBuilder createBaseLabReport(LabData<?> labData, int labNumber, Locale locale) {
+        UserInfo userInfo = userInfoService.getUserInfo(labData.getUserLogin());
 
-    /*protected ReportBuilder<?> createLabReport(Map<String, String> values, Locale locale) {
-        TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.getMessage("report.initial-data.parameter-name", null, locale), "parameterName", type.stringType());
-        TextColumnBuilder<String> parameterValueColumn = col.column(messageSource.getMessage("report.initial-data.parameter-value", null, locale), "parameterValue", type.stringType());
-        try {
-            return JasperExportManager.exportReportToPdf(report()
-                    .setTemplate(ReportTemplates.reportTemplate(locale))
-                    .title(ReportTemplates.createTitleComponent(messageSource.getMessage("report.initial-data.title", null, locale)))
-                    .columns(parameterNameColumn, parameterValueColumn)
-                    .pageFooter()//
-                    .setDataSource(createDataSourceFromParameters(values, locale))
-                    .toJasperPrint());
-        } catch (DRException | JRException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }*/
+        TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.getMessage("report.lab-data.parameter-name", null, locale), "parameterName", type.stringType());
+        TextColumnBuilder<String> parameterValueColumn = col.column(messageSource.getMessage("report.lab-data.parameter-value", null, locale), "parameterValue", type.stringType())
+                .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
+        return report()
+                .setTemplate(ReportTemplates.reportTemplate(locale))
+                .title(ReportTemplates.createTitleComponent(messageSource.
+                        getMessage("report.lab-data.title", new Object[]{labNumber, UserInfoUtils.getShortInitials(userInfo)}, locale)))
+                .columns(parameterNameColumn, parameterValueColumn)
+                .setDataSource(createDataSourceFromModel(labData, locale));
+    }
 
 
     /**

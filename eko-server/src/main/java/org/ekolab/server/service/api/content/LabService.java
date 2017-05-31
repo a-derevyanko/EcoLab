@@ -26,7 +26,13 @@ public interface LabService<T extends LabData> {
 
     int removeOldLabs(LocalDateTime lastSaveDate);
 
-    byte[] createReport(T labData);
+    /**
+     * Возвращает печатный вариант отчёта в PDF формате
+     * @param labData данные лабораторной работы
+     * @param locale язык
+     * @return печатный вариант данных в PDF формате
+     */
+    byte[] createReport(T labData, Locale locale);
 
     /**
      * Заполняет в модели значения вычисляемых полей
@@ -44,7 +50,7 @@ public interface LabService<T extends LabData> {
     /**
      * Возвращает печатный вариант исходных данных в PDF формате
      * @param variant вариант лабораторной работы
-     * @param locale
+     * @param locale язык
      * @return печатный вариант исходных данных в PDF формате
      */
     byte[] printInitialData(LabVariant variant, Locale locale);

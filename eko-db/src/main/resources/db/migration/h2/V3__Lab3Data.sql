@@ -16,7 +16,7 @@ CREATE TABLE lab3data (
   steam_production_capacity INT,
   number_of_stacks INT,
   stacks_height INT,
-  stacks_diameter INT,
+  stacks_diameter DOUBLE,
   wind_direction VARCHAR(32),
   wind_speed DOUBLE,
   low_heat_value DOUBLE,

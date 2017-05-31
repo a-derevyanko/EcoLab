@@ -7,6 +7,7 @@ import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
@@ -43,7 +44,8 @@ public class Step6 extends VerticalLayout implements LabWizardStep {
         addComponent(saveReportButton);
 
         FileDownloader fileDownloader = new FileDownloader(new StreamResource(() ->
-                new ByteArrayInputStream(lab3Service.createReport(binder.getBean())), "report.pdf"));
+                new ByteArrayInputStream(lab3Service.createReport(binder.getBean(), UI.getCurrent().getLocale())),
+                "report.pdf"));
 
         fileDownloader.extend(saveReportButton);
     }

@@ -3,6 +3,7 @@ package org.ekolab.client.vaadin.server.labconfig;
 import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.ViewScope;
 import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.service.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.server.model.content.lab3.Lab3Data;
@@ -26,7 +27,10 @@ public class Lab3UIConfig {
     @PrototypeScope
     public ParameterLayout<Lab3Data> parameterLayout(Binder<Lab3Data> binder,
                                                      Lab3Service labService,
-                                                     I18N i18N, ResourceService resourceService) {
-        return new ParameterLayout<>("content/lab3/additions/", binder, labService, i18N, resourceService);
+                                                     I18N i18N,
+                                                     ResourceService resourceService,
+                                                     ParameterCustomizer parameterCustomizer) {
+        return new ParameterLayout<>("content/lab3/additions/", binder, labService,
+                i18N, resourceService, parameterCustomizer);
     }
 }

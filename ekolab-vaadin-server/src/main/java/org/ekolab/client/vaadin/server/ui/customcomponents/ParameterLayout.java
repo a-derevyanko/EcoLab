@@ -16,6 +16,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.util.ReflectTools;
 import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.service.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
@@ -42,12 +43,16 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
 
     private final ResourceService res;
 
-    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService labService, I18N i18N, ResourceService res) {
+    private final ParameterCustomizer parameterCustomizer;
+
+    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService labService, I18N i18N,
+                           ResourceService res, ParameterCustomizer parameterCustomizer) {
         this.parametersPath = parametersPath;
         this.dataBinder = dataBinder;
         this.labService = labService;
         this.i18N = i18N;
         this.res = res;
+        this.parameterCustomizer = parameterCustomizer;
     }
 
     // ---------------------------- Графические компоненты --------------------
@@ -77,7 +82,7 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
     }
 
     private void addCaption(String fieldName, int row) {
-        String fieldCaption = i18N.get(fieldName);
+        String fieldCaption = parameterCustomizer.getParameterPrefix() + i18N.get(fieldName);
         String fieldDimension = i18N.get(fieldName + "-dimension");
         Label captionLabel = new Label(fieldDimension.isEmpty() ? fieldCaption : fieldCaption + " (" + fieldDimension + ')', ContentMode.HTML);
         super.addComponent(captionLabel, 0, row);

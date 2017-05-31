@@ -52,7 +52,7 @@ public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * Диаметр устья дымовой трубы
      */
-    private Integer stacksDiameter;
+    private Double stacksDiameter;
 
     /**
      * Расчетное направление ветра
@@ -410,11 +410,11 @@ public class Lab3Data extends LabData<Lab3Variant> {
         this.stacksHeight = stacksHeight;
     }
 
-    public Integer getStacksDiameter() {
+    public Double getStacksDiameter() {
         return stacksDiameter;
     }
 
-    public void setStacksDiameter(Integer stacksDiameter) {
+    public void setStacksDiameter(Double stacksDiameter) {
         this.stacksDiameter = stacksDiameter;
     }
 
