@@ -1,7 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.FileDownloader;
+import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -11,6 +11,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.renderers.HtmlRenderer;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.LabVariant;
@@ -20,6 +21,7 @@ import org.springframework.util.ReflectionUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,24 +55,24 @@ public class InitialDataWindow extends Window {
         printDataButton.setCaption(i18N.get("labwizard.initial-data-print"));
         printDataButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         valuesGrid.setSizeFull();
-        valuesGrid.addColumn(Map.Entry::getKey).setCaption(i18N.get("labwizard.initial-data-key"));
-        valuesGrid.addColumn(Map.Entry::getValue).setCaption(i18N.get("labwizard.initial-data-value")).setExpandRatio(1);
+        valuesGrid.addColumn(Map.Entry::getKey, new HtmlRenderer()).setCaption(i18N.get("labwizard.initial-data-key")).setExpandRatio(1);
+        valuesGrid.addColumn(Map.Entry::getValue).setCaption(i18N.get("labwizard.initial-data-value"));
         center();
     }
 
     public void show(LabVariant variant, LabService<?> labService) {
         if (!UI.getCurrent().getWindows().contains(this)) {
             Map<String, String> values = new HashMap<>();
-            ReflectionUtils.doWithFields(variant.getClass(), field -> {
-                field.setAccessible(true);
-                values.put(i18N.get(field.getName()), String.valueOf(field.get(variant)));
-            });
+            for (Field field : variant.getClass().getDeclaredFields()) {
+                ReflectionUtils.makeAccessible(field);
+                values.put(i18N.get(field.getName()), String.valueOf(ReflectionUtils.getField(field, variant)));
+            }
             valuesGrid.setItems(values.entrySet());
             UI.getCurrent().addWindow(this);
 
             new ArrayList<>(printDataButton.getExtensions()).forEach(printDataButton::removeExtension);
 
-            new FileDownloader(new StreamResource(() ->
+            new BrowserWindowOpener(new StreamResource(() ->
                     new ByteArrayInputStream(labService.printInitialData(variant, UI.getCurrent().getLocale())),
                     "initialData.pdf")).extend(printDataButton);
         }

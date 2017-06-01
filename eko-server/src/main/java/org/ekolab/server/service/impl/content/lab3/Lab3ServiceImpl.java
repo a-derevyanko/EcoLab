@@ -5,6 +5,7 @@ import net.sf.dynamicreports.report.constant.ComponentPositionType;
 import net.sf.dynamicreports.report.constant.ImageScale;
 import net.sf.dynamicreports.report.constant.PageType;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
+import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
@@ -235,6 +236,11 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     @Override
     public Lab3Data createNewLabData() {
         return new Lab3Data();
+    }
+
+    @Override
+    public byte[] printInitialData(LabVariant variant, Locale locale) {
+        return printInitialData(variant, 3, locale);
     }
 
     @Override

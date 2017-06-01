@@ -105,9 +105,8 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         return labDao.removeOldLabs(lastSaveDate);
     }
 
-    @Override
     @LogExecutionTime(500)
-    public byte[] printInitialData(LabVariant variant, Locale locale) {
+    protected byte[] printInitialData(LabVariant variant, int labNumber, Locale locale) {
         TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.
                 getMessage("report.lab-data.parameter-name", null, locale), "parameterName", type.stringType());
         TextColumnBuilder<String> parameterValueColumn = col.column(messageSource.
@@ -115,7 +114,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
         return ReportTemplates.printReport(report()
                 .setTemplate(ReportTemplates.reportTemplate(locale))
-                .title(ReportTemplates.createTitleComponent(messageSource.getMessage("report.initial-data.title", null, locale)))
+                .title(ReportTemplates.createTitleComponent(messageSource.getMessage("report.initial-data.title", new Object[]{labNumber}, locale)))
                 .columns(parameterNameColumn, parameterValueColumn)
                 .setDataSource(createDataSourceFromModel(variant, locale)));
     }
