@@ -4,8 +4,11 @@ import com.twelvemonkeys.image.ImageUtil;
 import net.sf.dynamicreports.report.constant.ComponentPositionType;
 import net.sf.dynamicreports.report.constant.ImageScale;
 import net.sf.dynamicreports.report.constant.PageType;
+import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.model.content.LabVariant;
+import org.ekolab.server.model.content.lab3.City;
+import org.ekolab.server.model.content.lab3.FuelType;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
@@ -15,6 +18,7 @@ import org.ekolab.server.service.impl.content.LabServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Locale;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
@@ -247,6 +251,17 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     public Lab3Variant generateNewLabVariant() {
         Lab3Variant variant = new Lab3Variant();
         //todo
+
+        //Получим случайный город
+        City RandomCity = City.values()[RandomUtils.nextInt(City.values().length)];
+        variant.setCity(RandomCity);
+        //Получим список типов топлива для этого города
+        List<FuelType> FuelList = RandomCity.getFuelTypesForTheCity();
+        //Получим случайный тип топлива из списка
+        FuelType RandomFuelType = FuelList.get(RandomUtils.nextInt(FuelList.size()));
+        variant.setFuelType(RandomFuelType);
+
+
         return variant;
     }
 }
