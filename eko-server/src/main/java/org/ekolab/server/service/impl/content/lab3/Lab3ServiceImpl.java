@@ -251,21 +251,24 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         Lab3Variant variant = new Lab3Variant();
         //todo
 
-        //Получим случайный город
+        //Получим случайный город, скорость ветра в нем
         City RandomCity = City.values()[RandomUtils.nextInt(City.values().length)];
         variant.setCity(RandomCity);
+        variant.setWindSpeed(RandomCity.getWindSpeed());
 
         //Получим список типов топлива для этого города
         List<FuelType> FuelList = RandomCity.getFuelTypesForTheCity();
 
-        //Получим случайный тип топлива из списка
+        //Получим случайный тип топлива из списка, низжую теплоту сгорания топлива для него
         FuelType RandomFuelType = FuelList.get(RandomUtils.nextInt(FuelList.size()));
         variant.setFuelType(RandomFuelType);
+        variant.setLowHeatValue(RandomFuelType.getLowHeatValue());
 
         //Получим мощность 1 блока
         Integer[] UnitOutputs = {200, 300, 500, 800};
         Integer RandomUnitOutput=UnitOutputs[RandomUtils.nextInt(UnitOutputs.length)];
 
+        int By = 0;
         List<NumberOfUnits> UnitCounts = new ArrayList<>();
         List<NumberOfStacks> StacksCounts = new ArrayList<>();
         List<Integer> StacksHeights = new ArrayList<>();
@@ -278,6 +281,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 StacksHeights.add(120);
                 StacksHeights.add(150);
                 StacksHeights.add(180);
+                if (RandomFuelType!=FuelType.STABILIZED_OIL & RandomFuelType!=FuelType.SULFUR_OIL) {By = 364;} else {By = 342;}
                 break;
             case 300:
                 UnitCounts.add(NumberOfUnits.FOUR);
@@ -287,6 +291,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 StacksHeights.add(120);
                 StacksHeights.add(150);
                 StacksHeights.add(180);
+                if (RandomFuelType!=FuelType.STABILIZED_OIL & RandomFuelType!=FuelType.SULFUR_OIL) {By = 373;} else {By = 326;}
                 break;
             case 500:
                 UnitCounts.add(NumberOfUnits.FOUR);
@@ -295,6 +300,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 StacksHeights.add(150);
                 StacksHeights.add(180);
                 StacksHeights.add(210);
+                if (RandomFuelType!=FuelType.STABILIZED_OIL & RandomFuelType!=FuelType.SULFUR_OIL) {By = 343;} else {By = 319;}
                 break;
             case 800:
                 UnitCounts.add(NumberOfUnits.TWO);
@@ -303,6 +309,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 StacksHeights.add(180);
                 StacksHeights.add(210);
                 StacksHeights.add(240);
+                if (RandomFuelType!=FuelType.STABILIZED_OIL & RandomFuelType!=FuelType.SULFUR_OIL) {By = 338;} else {By = 314;}
                 break;
         }
         NumberOfUnits RandomUnitCount = UnitCounts.get(RandomUtils.nextInt(UnitCounts.size()));
@@ -328,7 +335,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         Integer RandomStacksHeight = StacksHeights.get(RandomUtils.nextInt(StacksHeights.size()));
         variant.setStacksHeight(RandomStacksHeight);
         variant.setTppOutput(RandomUnitCount.value() * RandomUnitOutput);
-
+        variant.setFuelConsumer((int)Math.round((RandomUnitOutput * 29.3 * By) / (RandomFuelType.getLowHeatValue() * 1000)));
 
 
         return variant;
