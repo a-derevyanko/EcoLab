@@ -153,7 +153,8 @@ CREATE TABLE lab3variant (
   no2_background_concentration DOUBLE,
   no_background_concentration DOUBLE,
   so2_background_concentration DOUBLE,
-  ash_background_concentration DOUBLE
+  ash_background_concentration DOUBLE,
+  solid_particles_propotion_collected_in_ash DOUBLE
 );
 
 /*
@@ -195,3 +196,4 @@ COMMENT ON COLUMN lab3variant.no2_background_concentration IS 'Фоновая к
 COMMENT ON COLUMN lab3variant.no_background_concentration IS 'Фоновая концентрация NO';
 COMMENT ON COLUMN lab3variant.so2_background_concentration IS 'Фоновая концентрация SO2';
 COMMENT ON COLUMN lab3variant.ash_background_concentration IS 'Фоновая концентрация золы';
+COMMENT ON COLUMN lab3variant.solid_particles_propotion_collected_in_ash IS 'Доля твердых частиц, улавливаемых в золоуловителях';

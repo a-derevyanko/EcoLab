@@ -127,7 +127,8 @@ air_volume,
 no2_background_concentration,
 no_background_concentration,
 so2_background_concentration,
-ash_background_concentration
+ash_background_concentration,
+solid_particles_propotion_collected_in_ash
 ) VALUES (
 0,
 0,
@@ -157,5 +158,6 @@ ash_background_concentration
 0.05,
 0.008,
 0.1,
-0.2
+0.2,
+0
 );

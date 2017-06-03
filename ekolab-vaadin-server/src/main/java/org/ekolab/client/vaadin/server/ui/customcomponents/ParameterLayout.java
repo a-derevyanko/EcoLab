@@ -62,7 +62,7 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
         setColumns(4);
         setMargin(true);
         setSpacing(false);
-        setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+        setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         setStyleName(EkoLabTheme.LAYOUT_LAB);
     }
 
@@ -85,12 +85,15 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
         String fieldCaption = parameterCustomizer.getParameterPrefix() + i18N.get(fieldName);
         String fieldDimension = i18N.get(fieldName + "-dimension");
         Label captionLabel = new Label(fieldDimension.isEmpty() ? fieldCaption : fieldCaption + " (" + fieldDimension + ')', ContentMode.HTML);
+        captionLabel.addStyleName(EkoLabTheme.LABEL_TINY);
         super.addComponent(captionLabel, 0, row);
+        setComponentAlignment(captionLabel, Alignment.MIDDLE_LEFT);
     }
 
     private void addSign(String fieldName, int row) {
         Label signLabel = new Label(i18N.get(fieldName + "-sign"), ContentMode.HTML);
         signLabel.addStyleName(EkoLabTheme.LABEL_SIGN);
+        signLabel.addStyleName(EkoLabTheme.LABEL_TINY);
         super.addComponent(signLabel, 2, row);
     }
 
@@ -106,6 +109,7 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
             comboBox.setEmptySelectionAllowed(false);
             dataBinder.forField(comboBox).bind(propertyField.getName());
             comboBox.setReadOnly(readOnly);
+            comboBox.addStyleName(EkoLabTheme.COMBOBOX_TINY);
             component = comboBox;
         } else {
             TextField field = new TextField();
@@ -123,15 +127,18 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
             dataBinder.forField(field).withNullRepresentation(readOnly ? i18N.get("labwizard.unknown-value") : "")
                     .withConverter(converter).bind(propertyField.getName());
             field.setReadOnly(readOnly);
+            field.addStyleName(EkoLabTheme.TEXTFIELD_TINY);
             component = field;
         }
         super.addComponent(component, 1, row);
+        component.setWidth(130, Unit.PIXELS);
     }
 
     private void addInfoButton(String fieldName, int row) {
         if (res.isResourceExists(parametersPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)) {
             Button infoButton = new Button(VaadinIcons.QUESTION);
             infoButton.addClickListener(event -> show(i18N.get(fieldName), res.getHtmlData(parametersPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)));
+            infoButton.addStyleName(EkoLabTheme.BUTTON_TINY);
             super.addComponent(infoButton, 3, row);
         }
     }
