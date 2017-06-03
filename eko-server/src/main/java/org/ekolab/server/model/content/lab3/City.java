@@ -8,7 +8,6 @@ import java.util.List;
  */
 public enum City {
     MOSCOW{
-        @Override
         public List<FuelType> getFuelTypesForTheCity(){
             ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
             FuelTypesForTheCity.add(FuelType.DONETSK_COAL);
@@ -17,7 +16,6 @@ public enum City {
         }
     },
     SAINT_PETERSBURG{
-        @Override
         public List<FuelType> getFuelTypesForTheCity(){
             ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
             FuelTypesForTheCity.add(FuelType.SULFUR_OIL);
@@ -27,7 +25,6 @@ public enum City {
         }
     },
     NOVOSIBIRSK{
-        @Override
         public List<FuelType> getFuelTypesForTheCity(){
             ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
             FuelTypesForTheCity.add(FuelType.EKIBASTUZ_COAL);
@@ -38,7 +35,6 @@ public enum City {
         }
     },
     EKATERINBURG{
-        @Override
         public List<FuelType> getFuelTypesForTheCity(){
             ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
             FuelTypesForTheCity.add(FuelType.EKIBASTUZ_COAL);
@@ -48,7 +44,6 @@ public enum City {
         }
     },
     NIZHNIY_NOVGOROD{
-        @Override
         public List<FuelType> getFuelTypesForTheCity(){
             ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
             FuelTypesForTheCity.add(FuelType.DONETSK_COAL);
@@ -57,7 +52,6 @@ public enum City {
         }
     },
     KRASNOYARSK{
-        @Override
         public List<FuelType> getFuelTypesForTheCity(){
             ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
             FuelTypesForTheCity.add(FuelType.EKIBASTUZ_COAL);
@@ -68,7 +62,6 @@ public enum City {
         }
     },
     ROSTOV_NA_DONU{
-        @Override
         public List<FuelType> getFuelTypesForTheCity(){
             ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
             FuelTypesForTheCity.add(FuelType.DONETSK_COAL);
@@ -77,7 +70,6 @@ public enum City {
         }
     },
     KALININGRAD{
-        @Override
         public List<FuelType> getFuelTypesForTheCity(){
             ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
             FuelTypesForTheCity.add(FuelType.DONETSK_COAL);
@@ -86,7 +78,6 @@ public enum City {
         }
     },
     VLADIVOSTOK{
-        @Override
         public List<FuelType> getFuelTypesForTheCity(){
             ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
             FuelTypesForTheCity.add(FuelType.EKIBASTUZ_COAL);
@@ -97,7 +88,6 @@ public enum City {
         }
     },
     SURGUT{
-        @Override
         public List<FuelType> getFuelTypesForTheCity(){
             ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
             FuelTypesForTheCity.add(FuelType.SULFUR_OIL);
@@ -105,8 +95,5 @@ public enum City {
             return FuelTypesForTheCity;
         }
     };
-    public List<FuelType> getFuelTypesForTheCity(){
-        ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
-        return FuelTypesForTheCity;
-    }
+    public abstract List<FuelType> getFuelTypesForTheCity();
 }
