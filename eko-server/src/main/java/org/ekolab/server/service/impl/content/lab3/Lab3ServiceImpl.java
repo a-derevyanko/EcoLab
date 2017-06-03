@@ -7,10 +7,7 @@ import net.sf.dynamicreports.report.constant.PageType;
 import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.lab3.City;
-import org.ekolab.server.model.content.lab3.FuelType;
-import org.ekolab.server.model.content.lab3.Lab3Data;
-import org.ekolab.server.model.content.lab3.Lab3Variant;
+import org.ekolab.server.model.content.lab3.*;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
 import org.ekolab.server.service.impl.ReportTemplates;
@@ -18,6 +15,8 @@ import org.ekolab.server.service.impl.content.LabServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.Inet4Address;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -255,11 +254,81 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         //Получим случайный город
         City RandomCity = City.values()[RandomUtils.nextInt(City.values().length)];
         variant.setCity(RandomCity);
+
         //Получим список типов топлива для этого города
         List<FuelType> FuelList = RandomCity.getFuelTypesForTheCity();
+
         //Получим случайный тип топлива из списка
         FuelType RandomFuelType = FuelList.get(RandomUtils.nextInt(FuelList.size()));
         variant.setFuelType(RandomFuelType);
+
+        //Получим мощность 1 блока
+        Integer[] UnitOutputs = {200, 300, 500, 800};
+        Integer RandomUnitOutput=UnitOutputs[RandomUtils.nextInt(UnitOutputs.length)];
+
+        List<NumberOfUnits> UnitCounts = new ArrayList<>();
+        List<NumberOfStacks> StacksCounts = new ArrayList<>();
+        List<Integer> StacksHeights = new ArrayList<>();
+        //Получим количетсво блоков, паропроизводительность и общую мощность
+        switch (RandomUnitOutput){
+            case 200:
+                UnitCounts.add(NumberOfUnits.SIX);
+                UnitCounts.add(NumberOfUnits.EIGHT);
+                variant.setSteamProductionCapacity(630);
+                StacksHeights.add(120);
+                StacksHeights.add(150);
+                StacksHeights.add(180);
+                break;
+            case 300:
+                UnitCounts.add(NumberOfUnits.FOUR);
+                UnitCounts.add(NumberOfUnits.SIX);
+                UnitCounts.add(NumberOfUnits.EIGHT);
+                variant.setSteamProductionCapacity(1050);
+                StacksHeights.add(120);
+                StacksHeights.add(150);
+                StacksHeights.add(180);
+                break;
+            case 500:
+                UnitCounts.add(NumberOfUnits.FOUR);
+                UnitCounts.add(NumberOfUnits.SIX);
+                variant.setSteamProductionCapacity(1650);
+                StacksHeights.add(150);
+                StacksHeights.add(180);
+                StacksHeights.add(210);
+                break;
+            case 800:
+                UnitCounts.add(NumberOfUnits.TWO);
+                UnitCounts.add(NumberOfUnits.FOUR);
+                variant.setSteamProductionCapacity(2450);
+                StacksHeights.add(180);
+                StacksHeights.add(210);
+                StacksHeights.add(240);
+                break;
+        }
+        NumberOfUnits RandomUnitCount = UnitCounts.get(RandomUtils.nextInt(UnitCounts.size()));
+        variant.setNumberOfUnits(RandomUnitCount);
+        switch (RandomUnitCount){
+            case TWO:
+                StacksCounts.add(NumberOfStacks.ONE);
+                StacksCounts.add(NumberOfStacks.TWO);
+                break;
+            case FOUR:
+                StacksCounts.add(NumberOfStacks.TWO);
+                break;
+            case SIX:
+                StacksCounts.add(NumberOfStacks.THREE);
+                break;
+            case EIGHT:
+                StacksCounts.add(NumberOfStacks.TWO);
+                StacksCounts.add(NumberOfStacks.FOUR);
+                break;
+        }
+        NumberOfStacks RandomStacksCount = StacksCounts.get(RandomUtils.nextInt(StacksCounts.size()));
+        variant.setNumberOfStacks(RandomStacksCount);
+        Integer RandomStacksHeight = StacksHeights.get(RandomUtils.nextInt(StacksHeights.size()));
+        variant.setStacksHeight(RandomStacksHeight);
+        variant.setTppOutput(RandomUnitCount.value() * RandomUnitOutput);
+
 
 
         return variant;
