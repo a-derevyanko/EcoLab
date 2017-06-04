@@ -140,7 +140,7 @@ solid_particles_propotion_collected_in_ash
 'NORTH_WEST',
 4,
 39.73,
-72.12535,
+72,
 0,
 1.4,
 0.1,
