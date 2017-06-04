@@ -1,6 +1,7 @@
 package org.ekolab.server.model.content.lab3;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -8,11 +9,8 @@ import java.util.List;
  */
 public enum City {
     MOSCOW{
-        public List<FuelType> getFuelTypesForTheCity(){
-            ArrayList<FuelType> FuelTypesForTheCity = new ArrayList<>();
-            FuelTypesForTheCity.add(FuelType.DONETSK_COAL);
-            FuelTypesForTheCity.add(FuelType.SULFUR_OIL);
-            return FuelTypesForTheCity;
+        public List<FuelType> getFuelTypesForTheCity() {
+            return Arrays.asList(FuelType.DONETSK_COAL, FuelType.SULFUR_OIL);
         }
     },
     SAINT_PETERSBURG{
@@ -95,5 +93,6 @@ public enum City {
             return FuelTypesForTheCity;
         }
     };
+
     public abstract List<FuelType> getFuelTypesForTheCity();
 }
