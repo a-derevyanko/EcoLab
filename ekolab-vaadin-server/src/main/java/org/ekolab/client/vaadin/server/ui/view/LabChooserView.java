@@ -1,11 +1,12 @@
 package org.ekolab.client.vaadin.server.ui.view;
 
 import com.vaadin.server.Responsive;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.service.ResourceService;
+import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
@@ -33,7 +34,7 @@ public class LabChooserView extends VerticalLayout implements View {
     private final NativeButton lab2Button = new NativeButton("Laboratory work №2");
     private final NativeButton lab3Button = new NativeButton("Laboratory work №3");
     private final NativeButton labDefenceButton = new NativeButton("Defence of laboratory works");
-    private final Label  labLabel = new Label("Environmental technologies at TPPs");
+    private final Label  labLabel = new Label("Environmental technologies at TPPs", ContentMode.HTML);
 
     @Override
     public void init() throws Exception {
@@ -64,7 +65,7 @@ public class LabChooserView extends VerticalLayout implements View {
         lab3Button.addClickListener(event -> navigator.navigateTo(Lab3View.NAME));
 
         labDefenceButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        labDefenceButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);;
+        labDefenceButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
 
         labLabel.setValue(i18N.get("labchooser.title"));
         labLabel.setStyleName(EkoLabTheme.LABEL_HUGE);

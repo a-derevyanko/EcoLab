@@ -177,7 +177,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                             n * m * labData.getBreakdownWindSpeed() * labData.getTerrainCoefficient() *
                             Math.pow((labData.getNumberOfStacks().value() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
 
-                    labData.setWindSpeedMaxNoGroundLevelConcentration(labData.getBwdNoGroundLevelConcentration() * r);
+                    labData.setWindSpeedMaxNo2GroundLevelConcentration(labData.getBwdNo2GroundLevelConcentration() * r);
                 }
 
                 if (labData.getNoMassiveInjection() != null) {
@@ -186,7 +186,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                             n * m * labData.getBreakdownWindSpeed() * labData.getTerrainCoefficient() *
                             Math.pow((labData.getNumberOfStacks().value() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
 
-                    labData.setWindSpeedMaxNo2GroundLevelConcentration(labData.getBwdNo2GroundLevelConcentration() * r);
+                    labData.setWindSpeedMaxNoGroundLevelConcentration(labData.getBwdNoGroundLevelConcentration() * r);
                 }
 
                 if (labData.getSo2MassiveInjection() != null) {

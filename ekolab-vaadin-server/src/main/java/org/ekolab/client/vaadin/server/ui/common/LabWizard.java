@@ -74,10 +74,15 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
 
         addStyleName(EkoLabTheme.PANEL_WIZARD);
         saveButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        saveButton.addStyleName(EkoLabTheme.BUTTON_TINY);
         initialDataButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        initialDataButton.addStyleName(EkoLabTheme.BUTTON_TINY);
         getFinishButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        getFinishButton().addStyleName(EkoLabTheme.BUTTON_TINY);
         getNextButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        getNextButton().addStyleName(EkoLabTheme.BUTTON_TINY);
         getBackButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        getBackButton().addStyleName(EkoLabTheme.BUTTON_TINY);
 
         saveButton.setCaption(i18N.get("savable.save"));
         initialDataButton.setCaption(i18N.get("labwizard.initial-data"));

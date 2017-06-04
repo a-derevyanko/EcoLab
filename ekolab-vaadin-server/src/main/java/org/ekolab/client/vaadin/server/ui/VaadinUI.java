@@ -75,8 +75,7 @@ public class VaadinUI extends UI {
         setContent(root);
         viewContainer.setStyleName(EkoLabTheme.UI_WITH_MENU);
 
-        root.setExpandRatio(menuBar, 0.09f);
-        root.setExpandRatio(viewContainer, 2.0f);
+        root.setExpandRatio(viewContainer, 1.0f);
 
         navigator.addViewChangeListener(menuBar);
 
