@@ -45,7 +45,6 @@ INSERT INTO lab3data (
   no_mac,
   so2_mac,
   ash_mac,
-  breakdown_wind_speed,
   completed
 ) VALUES (
   0,
@@ -86,15 +85,14 @@ INSERT INTO lab3data (
   0,
   6000,
   1.0,
-  NULL,
+  0,
   160,
   1,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
+  1,
+  2,
+  3,
+  3,
+  2,
   FALSE
 );
 

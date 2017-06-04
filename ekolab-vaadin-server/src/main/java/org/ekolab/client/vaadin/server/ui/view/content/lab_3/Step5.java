@@ -56,9 +56,13 @@ public class Step5 extends GridLayout implements LabWizardStep {
         so2MapButton.setCaptionAsHtml(true);
         ashMapButton.setCaption(i18N.get("lab3.step5.ash-map"));
         so2MapButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        so2MapButton.addStyleName(EkoLabTheme.BUTTON_TINY);
         ashMapButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        ashMapButton.addStyleName(EkoLabTheme.BUTTON_TINY);
         zoomInButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        zoomInButton.addStyleName(EkoLabTheme.BUTTON_TINY);
         zoomOutButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        zoomOutButton.addStyleName(EkoLabTheme.BUTTON_TINY);
 }
 
     @Override

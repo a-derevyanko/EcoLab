@@ -213,7 +213,7 @@
     $padding-width: round($v-unit-size/2);
     padding: 0 $padding-width;
     font-weight: bold;
-    $min-width: round($v-unit-size * 2.2);
+    $min-width: round($v-unit-size * 1.8);
     min-width: $min-width;
     white-space: pre;
     text-align: center;

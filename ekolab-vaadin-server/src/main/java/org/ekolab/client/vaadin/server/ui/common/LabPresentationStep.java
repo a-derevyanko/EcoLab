@@ -43,8 +43,8 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
         //addComponent(showGallery);
         //setComponentAlignment(showGallery, Alignment.BOTTOM_CENTER);
         showGallery.setCaption(i18N.get("lab.presentation.show-presentation"));
-        showGallery.setStyleName(EkoLabTheme.BUTTON_HUGE);
-        showGallery.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        showGallery.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        showGallery.addStyleName(EkoLabTheme.BUTTON_TINY);
         showGallery.addClickListener(event -> gallery.showGallery(getPresentationSlides(), getPresentationOptions()));
     }
 
