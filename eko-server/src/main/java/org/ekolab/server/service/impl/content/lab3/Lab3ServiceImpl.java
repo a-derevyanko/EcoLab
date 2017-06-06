@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.Inet4Address;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -252,91 +253,75 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         //todo
 
         //Получим случайный город, скорость ветра в нем
-        City RandomCity = City.values()[RandomUtils.nextInt(City.values().length)];
-        variant.setCity(RandomCity);
-        variant.setWindSpeed(RandomCity.getWindSpeed());
+        City randomCity = City.values()[RandomUtils.nextInt(City.values().length)];
+        variant.setCity(randomCity);
+        variant.setWindSpeed(randomCity.getWindSpeed());
 
         //Получим список типов топлива для этого города
-        List<FuelType> FuelList = RandomCity.getFuelTypesForTheCity();
+        List<FuelType> fuelList = randomCity.getFuelTypesForTheCity();
 
         //Получим случайный тип топлива из списка, низжую теплоту сгорания топлива для него
-        FuelType RandomFuelType = FuelList.get(RandomUtils.nextInt(FuelList.size()));
-        variant.setFuelType(RandomFuelType);
-        variant.setLowHeatValue(RandomFuelType.getLowHeatValue());
+        FuelType randomFuelType = fuelList.get(RandomUtils.nextInt(fuelList.size()));
+        variant.setFuelType(randomFuelType);
+        variant.setLowHeatValue(randomFuelType.getLowHeatValue());
 
         //Получим мощность 1 блока
-        Integer[] UnitOutputs = {200, 300, 500, 800};
-        Integer RandomUnitOutput=UnitOutputs[RandomUtils.nextInt(UnitOutputs.length)];
+        Integer[] unitOutputs = {200, 300, 500, 800};
+        Integer randomUnitOutput = unitOutputs[RandomUtils.nextInt(unitOutputs.length)];
 
-        int By = 0;
-        List<NumberOfUnits> UnitCounts = new ArrayList<>();
-        List<NumberOfStacks> StacksCounts = new ArrayList<>();
-        List<Integer> StacksHeights = new ArrayList<>();
+        int by = 0;
+        List<NumberOfUnits> unitCounts = new ArrayList<>();
+        List<NumberOfStacks> stacksCounts = new ArrayList<>();
+        List<Integer> stacksHeights = new ArrayList<>();
         //Получим количетсво блоков, паропроизводительность и общую мощность
-        switch (RandomUnitOutput){
+        switch (randomUnitOutput) {
             case 200:
-                UnitCounts.add(NumberOfUnits.SIX);
-                UnitCounts.add(NumberOfUnits.EIGHT);
+                unitCounts = Arrays.asList(NumberOfUnits.SIX, NumberOfUnits.EIGHT);
+                stacksHeights = Arrays.asList(120, 150, 180);
                 variant.setSteamProductionCapacity(630);
-                StacksHeights.add(120);
-                StacksHeights.add(150);
-                StacksHeights.add(180);
-                if (RandomFuelType!=FuelType.STABILIZED_OIL & RandomFuelType!=FuelType.SULFUR_OIL) {By = 364;} else {By = 342;}
+                if (randomFuelType != FuelType.STABILIZED_OIL & randomFuelType != FuelType.SULFUR_OIL) {by = 364;} else {by = 342;}
                 break;
             case 300:
-                UnitCounts.add(NumberOfUnits.FOUR);
-                UnitCounts.add(NumberOfUnits.SIX);
-                UnitCounts.add(NumberOfUnits.EIGHT);
+                unitCounts = Arrays.asList(NumberOfUnits.FOUR, NumberOfUnits.SIX, NumberOfUnits.EIGHT);
+                stacksHeights = Arrays.asList(120, 150, 180);
                 variant.setSteamProductionCapacity(1050);
-                StacksHeights.add(120);
-                StacksHeights.add(150);
-                StacksHeights.add(180);
-                if (RandomFuelType!=FuelType.STABILIZED_OIL & RandomFuelType!=FuelType.SULFUR_OIL) {By = 373;} else {By = 326;}
+                if (randomFuelType!=FuelType.STABILIZED_OIL & randomFuelType!=FuelType.SULFUR_OIL) {by = 373;} else {by = 326;}
                 break;
             case 500:
-                UnitCounts.add(NumberOfUnits.FOUR);
-                UnitCounts.add(NumberOfUnits.SIX);
+                unitCounts = Arrays.asList(NumberOfUnits.FOUR, NumberOfUnits.SIX);
+                stacksHeights = Arrays.asList( 150, 180, 210);
                 variant.setSteamProductionCapacity(1650);
-                StacksHeights.add(150);
-                StacksHeights.add(180);
-                StacksHeights.add(210);
-                if (RandomFuelType!=FuelType.STABILIZED_OIL & RandomFuelType!=FuelType.SULFUR_OIL) {By = 343;} else {By = 319;}
+                if (randomFuelType!=FuelType.STABILIZED_OIL & randomFuelType!=FuelType.SULFUR_OIL) {by = 343;} else {by = 319;}
                 break;
             case 800:
-                UnitCounts.add(NumberOfUnits.TWO);
-                UnitCounts.add(NumberOfUnits.FOUR);
+                unitCounts = Arrays.asList(NumberOfUnits.TWO, NumberOfUnits.FOUR);
+                stacksHeights = Arrays.asList( 180, 210, 240);
                 variant.setSteamProductionCapacity(2450);
-                StacksHeights.add(180);
-                StacksHeights.add(210);
-                StacksHeights.add(240);
-                if (RandomFuelType!=FuelType.STABILIZED_OIL & RandomFuelType!=FuelType.SULFUR_OIL) {By = 338;} else {By = 314;}
+                if (randomFuelType!=FuelType.STABILIZED_OIL & randomFuelType!=FuelType.SULFUR_OIL) {by = 338;} else {by = 314;}
                 break;
         }
-        NumberOfUnits RandomUnitCount = UnitCounts.get(RandomUtils.nextInt(UnitCounts.size()));
+        NumberOfUnits RandomUnitCount = unitCounts.get(RandomUtils.nextInt(unitCounts.size()));
         variant.setNumberOfUnits(RandomUnitCount);
         switch (RandomUnitCount){
             case TWO:
-                StacksCounts.add(NumberOfStacks.ONE);
-                StacksCounts.add(NumberOfStacks.TWO);
+                stacksCounts = Arrays.asList(NumberOfStacks.ONE, NumberOfStacks.TWO);
                 break;
             case FOUR:
-                StacksCounts.add(NumberOfStacks.TWO);
+                stacksCounts = Arrays.asList(NumberOfStacks.TWO);
                 break;
             case SIX:
-                StacksCounts.add(NumberOfStacks.THREE);
+                stacksCounts = Arrays.asList(NumberOfStacks.THREE);
                 break;
             case EIGHT:
-                StacksCounts.add(NumberOfStacks.TWO);
-                StacksCounts.add(NumberOfStacks.FOUR);
+                stacksCounts = Arrays.asList(NumberOfStacks.TWO, NumberOfStacks.FOUR);
                 break;
         }
-        NumberOfStacks RandomStacksCount = StacksCounts.get(RandomUtils.nextInt(StacksCounts.size()));
-        variant.setNumberOfStacks(RandomStacksCount);
-        Integer RandomStacksHeight = StacksHeights.get(RandomUtils.nextInt(StacksHeights.size()));
-        variant.setStacksHeight(RandomStacksHeight);
-        variant.setTppOutput(RandomUnitCount.value() * RandomUnitOutput);
-        variant.setFuelConsumer((int)Math.round((RandomUnitOutput * 29.3 * By) / (RandomFuelType.getLowHeatValue() * 1000)));
-
+        NumberOfStacks randomStacksCount = stacksCounts.get(RandomUtils.nextInt(stacksCounts.size()));
+        variant.setNumberOfStacks(randomStacksCount);
+        Integer randomStacksHeight = stacksHeights.get(RandomUtils.nextInt(stacksHeights.size()));
+        variant.setStacksHeight(randomStacksHeight);
+        variant.setTppOutput(RandomUnitCount.value() * randomUnitOutput);
+        variant.setFuelConsumer((int)Math.round((randomUnitOutput * 29.3 * by) / (randomFuelType.getLowHeatValue() * 1000)));
 
         return variant;
     }
