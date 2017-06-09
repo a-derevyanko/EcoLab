@@ -168,7 +168,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                         0.67 * uUm + 1.67 * Math.pow(uUm, 2) - 1.34 * Math.pow(uUm, 3);
 
                 if (labData.getNo2MassiveInjection() != null) {
-                    labData.setBwdNo2GroundLevelConcentration(labData.getTemperatureCoefficient() *
+                    labData.setBwdNo2GroundLevelConcentration(labData.getNo2BackgroundConcentration() + labData.getTemperatureCoefficient() *
                             labData.getNo2MassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
                             n * m * 1000 * labData.getTerrainCoefficient() *
                             Math.cbrt((labData.getNumberOfStacks().value() / (V1 * labData.getNumberOfUnits().value() * dT))) / Math.pow(labData.getStacksHeight(), 2));
@@ -177,7 +177,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 }
 
                 if (labData.getNoMassiveInjection() != null) {
-                    labData.setBwdNoGroundLevelConcentration(labData.getTemperatureCoefficient() *
+                    labData.setBwdNoGroundLevelConcentration(labData.getNoBackgroundConcentration() + labData.getTemperatureCoefficient() *
                             labData.getNoMassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
                             n * m * 1000 * labData.getTerrainCoefficient() *
                             Math.cbrt((labData.getNumberOfStacks().value() / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
@@ -186,7 +186,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 }
 
                 if (labData.getSo2MassiveInjection() != null) {
-                    labData.setBwdSo2GroundLevelConcentration(labData.getTemperatureCoefficient() *
+                    labData.setBwdSo2GroundLevelConcentration(labData.getSo2BackgroundConcentration() + labData.getTemperatureCoefficient() *
                             labData.getSo2MassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
                             n * m * 1000 * labData.getTerrainCoefficient() *
                             Math.cbrt((labData.getNumberOfStacks().value() / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
@@ -195,7 +195,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 }
 
                 if (labData.getAshMassiveInjection() != null) {
-                    labData.setBwdAshGroundLevelConcentration(labData.getTemperatureCoefficient() *
+                    labData.setBwdAshGroundLevelConcentration(labData.getAshBackgroundConcentration() + labData.getTemperatureCoefficient() *
                             labData.getAshMassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
                             n * m * 1000 * labData.getTerrainCoefficient() *
                             Math.cbrt((labData.getNumberOfStacks().value() / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
