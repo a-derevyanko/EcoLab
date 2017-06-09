@@ -18,9 +18,17 @@ import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.impl.ReportTemplates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.MediaType;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailPreparationException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,6 +44,9 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.type;
 public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant> implements LabService<T> {
     @Autowired
     protected UserInfoService userInfoService;
+
+    @Autowired
+    protected JavaMailSender mailSender;
 
     @Autowired
     protected MessageSource messageSource;
@@ -105,6 +116,30 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         return labDao.removeOldLabs(lastSaveDate);
     }
 
+    @Override
+    public void sentInitialDataToEmail(LabVariant variant, Locale locale, String email) throws MailException {
+        byte[] data = printInitialData(variant, locale);
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
+            mimeMessageHelper.setFrom("ekolabserver@gmail.com");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setText(messageSource.getMessage("report.initial-data.email-data-in-attach", null, locale));
+            mimeMessageHelper.setSubject(messageSource.getMessage("report.initial-data.email-subject", null, locale));
+            mimeMessageHelper.addAttachment("initialData.pdf", new ByteArrayDataSource(data, MediaType.APPLICATION_PDF_VALUE));
+
+        } catch (MessagingException e) {
+            throw new MailPreparationException(e.getLocalizedMessage(), e);
+        }
+        mailSender.send(mimeMessage);
+    }
+
+    @Override
+    public void sendReportToEmail(T labData, Locale locale, String email) {
+
+    }
+
     @LogExecutionTime(500)
     protected byte[] printInitialData(LabVariant variant, int labNumber, Locale locale) {
         TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.
@@ -123,7 +158,14 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         DRDataSource dataSource = new DRDataSource("parameterName", "parameterValue");
         for (Field field : data.getClass().getDeclaredFields()) {
             ReflectionUtils.makeAccessible(field);
-            dataSource.add(messageSource.getMessage(field.getName(), null, locale), String.valueOf(ReflectionUtils.getField(field, data)));
+            Object value = ReflectionUtils.getField(field, data);
+            String name = messageSource.getMessage(field.getName(), null, locale);
+            if (value.getClass().isEnum()) {
+                dataSource.add(name, messageSource.getMessage(value.getClass().getSimpleName()
+                        + '.' + ((Enum<?>) value).name(), null, locale));
+            } else {
+                dataSource.add(name, String.valueOf(ReflectionUtils.getField(field, data)));
+            }
         }
         return dataSource;
     }

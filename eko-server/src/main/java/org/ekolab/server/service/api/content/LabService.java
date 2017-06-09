@@ -2,6 +2,7 @@ package org.ekolab.server.service.api.content;
 
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
+import org.springframework.mail.MailException;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -54,4 +55,21 @@ public interface LabService<T extends LabData> {
      * @return печатный вариант исходных данных в PDF формате
      */
     byte[] printInitialData(LabVariant variant, Locale locale);
+
+    /**
+     * Отправляет печатный вариант исходных данных в PDF формате на почту
+     * @param variant вариант лабораторной работы
+     * @param locale язык
+     * @param email адрес
+     */
+    void sentInitialDataToEmail(LabVariant variant, Locale locale, String email) throws MailException;
+
+
+    /**
+     * Отправляет печатный вариант отчёта в PDF формате на почту
+     * @param labData данные лабораторной работы
+     * @param locale язык
+     * @param email адрес
+     */
+    void sendReportToEmail(T labData, Locale locale, String email);
 }

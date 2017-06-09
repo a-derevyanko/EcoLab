@@ -206,11 +206,6 @@ public class Lab3Data extends LabData<Lab3Variant> {
     private Double ashProportionEntrainedGases;
 
     /**
-     * Доля твердых частиц, улавливаемых в золоуловителях
-     */
-    private Double solidParticlesProportionCollectedInAsh;
-
-    /**
      * Средняя скорость газов на выходе из дымовой трубы
      */
     @Calculated
@@ -626,14 +621,6 @@ public class Lab3Data extends LabData<Lab3Variant> {
         this.ashProportionEntrainedGases = ashProportionEntrainedGases;
     }
 
-    public Double getSolidParticlesProportionCollectedInAsh() {
-        return solidParticlesProportionCollectedInAsh;
-    }
-
-    public void setSolidParticlesProportionCollectedInAsh(Double solidParticlesProportionCollectedInAsh) {
-        this.solidParticlesProportionCollectedInAsh = solidParticlesProportionCollectedInAsh;
-    }
-
     public Double getStackAverageGasesSpeed() {
         return stackAverageGasesSpeed;
     }
@@ -908,8 +895,6 @@ public class Lab3Data extends LabData<Lab3Variant> {
             return false;
         if (ashProportionEntrainedGases != null ? !ashProportionEntrainedGases.equals(lab3Data.ashProportionEntrainedGases) : lab3Data.ashProportionEntrainedGases != null)
             return false;
-        if (solidParticlesProportionCollectedInAsh != null ? !solidParticlesProportionCollectedInAsh.equals(lab3Data.solidParticlesProportionCollectedInAsh) : lab3Data.solidParticlesProportionCollectedInAsh != null)
-            return false;
         if (stackAverageGasesSpeed != null ? !stackAverageGasesSpeed.equals(lab3Data.stackAverageGasesSpeed) : lab3Data.stackAverageGasesSpeed != null)
             return false;
         if (noxMassiveInjection != null ? !noxMassiveInjection.equals(lab3Data.noxMassiveInjection) : lab3Data.noxMassiveInjection != null)
@@ -995,7 +980,6 @@ public class Lab3Data extends LabData<Lab3Variant> {
         result = 31 * result + (desulphurizationSystemRunningTime != null ? desulphurizationSystemRunningTime.hashCode() : 0);
         result = 31 * result + (boilerRunningTime != null ? boilerRunningTime.hashCode() : 0);
         result = 31 * result + (ashProportionEntrainedGases != null ? ashProportionEntrainedGases.hashCode() : 0);
-        result = 31 * result + (solidParticlesProportionCollectedInAsh != null ? solidParticlesProportionCollectedInAsh.hashCode() : 0);
         result = 31 * result + (stackAverageGasesSpeed != null ? stackAverageGasesSpeed.hashCode() : 0);
         result = 31 * result + (noxMassiveInjection != null ? noxMassiveInjection.hashCode() : 0);
         result = 31 * result + (no2MassiveInjection != null ? no2MassiveInjection.hashCode() : 0);

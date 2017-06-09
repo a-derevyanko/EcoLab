@@ -102,12 +102,12 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 labData.getStackAverageGasesSpeed() != null &&
                 labData.getStacksDiameter() != null &&
                 labData.getStacksHeight() != null) {
-            double dT = Math.abs(labData.getStackExitTemperature() - labData.getOutsideAirTemperature());
-            double f = (Math.pow(labData.getStackAverageGasesSpeed(), 2) * labData.getStacksDiameter()) /
+            double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
+            double f = 1000 * (Math.pow(labData.getStackAverageGasesSpeed(), 2) * labData.getStacksDiameter()) /
                     (Math.pow(labData.getStacksHeight(), 2) * dT);
 
             double V1 = labData.getCombustionProductsVolume() * labData.getFuelConsumer() / 3.6;
-            double vm = 0.65 * Math.pow(V1 * dT / labData.getStacksHeight(), -3);
+            double vm = 0.65 * Math.cbrt(V1 * dT / labData.getStacksHeight());
             double vM = 1.3 * labData.getStackAverageGasesSpeed() * labData.getStacksDiameter() / labData.getStacksHeight();
 
             double fe = 800 * Math.pow(vM, 3);
@@ -117,8 +117,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
             }
 
             double m = f < 100 ?
-                    1.0 / (0.67 + 0.1 * Math.sqrt(f) + 0.34 * Math.pow(f, -3)) :
-                    1.47 / Math.pow(f, -3);
+                    1.0 / (0.67 + 0.1 * Math.sqrt(f) + 0.34 * Math.cbrt(f)) :
+                    1.47 / Math.cbrt(f);
 
             double n;
             double d;
@@ -151,10 +151,10 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                                 0.532 * Math.pow(vm, 2) - 2.13 * vm + 3.13 : 1;
 
                 d = vm < 0.5 ?
-                        2.48 * (1 + 0.28 * Math.pow(fe, -3)) :
+                        2.48 * (1 + 0.28 * Math.cbrt(fe)) :
                         vm < 2 ?
-                                4.95 * vm * (1 + 0.28 * Math.pow(f, -3)) :
-                                7 * vm * (1 + 0.28 * Math.pow(f, -3));
+                                4.95 * vm * (1 + 0.28 * Math.cbrt(f)) :
+                                7 * vm * (1 + 0.28 * Math.cbrt(f));
             }
 
             if (labData.getTemperatureCoefficient() != null &&
@@ -170,8 +170,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 if (labData.getNo2MassiveInjection() != null) {
                     labData.setBwdNo2GroundLevelConcentration(labData.getTemperatureCoefficient() *
                             labData.getNo2MassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                            n * m * labData.getBreakdownWindSpeed() * labData.getTerrainCoefficient() *
-                            Math.pow((labData.getNumberOfStacks().value() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
+                            n * m * 1000 * labData.getTerrainCoefficient() *
+                            Math.cbrt((labData.getNumberOfStacks().value() / (V1 * labData.getNumberOfUnits().value() * dT))) / Math.pow(labData.getStacksHeight(), 2));
 
                     labData.setWindSpeedMaxNo2GroundLevelConcentration(labData.getBwdNo2GroundLevelConcentration() * r);
                 }
@@ -179,8 +179,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 if (labData.getNoMassiveInjection() != null) {
                     labData.setBwdNoGroundLevelConcentration(labData.getTemperatureCoefficient() *
                             labData.getNoMassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                            n * m * labData.getBreakdownWindSpeed() * labData.getTerrainCoefficient() *
-                            Math.pow((labData.getNumberOfStacks().value() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
+                            n * m * 1000 * labData.getTerrainCoefficient() *
+                            Math.cbrt((labData.getNumberOfStacks().value() / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
 
                     labData.setWindSpeedMaxNoGroundLevelConcentration(labData.getBwdNoGroundLevelConcentration() * r);
                 }
@@ -188,8 +188,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 if (labData.getSo2MassiveInjection() != null) {
                     labData.setBwdSo2GroundLevelConcentration(labData.getTemperatureCoefficient() *
                             labData.getSo2MassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                            n * m * labData.getBreakdownWindSpeed() * labData.getTerrainCoefficient() *
-                            Math.pow((labData.getNumberOfStacks().value() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
+                            n * m * 1000 * labData.getTerrainCoefficient() *
+                            Math.cbrt((labData.getNumberOfStacks().value() / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
 
                     labData.setWindSpeedMaxSo2GroundLevelConcentration(labData.getBwdSo2GroundLevelConcentration() * r);
                 }
@@ -197,8 +197,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 if (labData.getAshMassiveInjection() != null) {
                     labData.setBwdAshGroundLevelConcentration(labData.getTemperatureCoefficient() *
                             labData.getAshMassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                            n * m * labData.getBreakdownWindSpeed() * labData.getTerrainCoefficient() *
-                            Math.pow((labData.getNumberOfStacks().value() / (V1 * dT)), -3) / Math.pow(labData.getStacksHeight(), 2));
+                            n * m * 1000 * labData.getTerrainCoefficient() *
+                            Math.cbrt((labData.getNumberOfStacks().value() / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
 
                     labData.setWindSpeedMaxAshGroundLevelConcentration(labData.getBwdAshGroundLevelConcentration() * r);
                 }

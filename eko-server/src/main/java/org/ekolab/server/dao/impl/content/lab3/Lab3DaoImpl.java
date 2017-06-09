@@ -58,7 +58,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         data.setDesulphurizationSystemRunningTime(record.get(LAB3DATA.DESULPHURIZATION_SYSTEM_RUNNING_TIME));
         data.setBoilerRunningTime(record.get(LAB3DATA.BOILER_RUNNING_TIME));
         data.setAshProportionEntrainedGases(record.get(LAB3DATA.ASH_PROPORTION_ENTRAINED_GASES));
-        data.setSolidParticlesProportionCollectedInAsh(record.get(LAB3DATA.SOLID_PARTICLES_PROPOTION_COLLECTED_IN_ASH));
         data.setTemperatureCoefficient(record.get(LAB3DATA.TEMPERATURE_COEFFICIENT));
         data.setTerrainCoefficient(record.get(LAB3DATA.TERRAIN_COEFFICIENT));
         data.setHarmfulSubstancesDepositionCoefficient(record.get(LAB3DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT));
@@ -153,7 +152,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3DATA.DESULPHURIZATION_SYSTEM_RUNNING_TIME,
                 LAB3DATA.BOILER_RUNNING_TIME,
                 LAB3DATA.ASH_PROPORTION_ENTRAINED_GASES,
-                LAB3DATA.SOLID_PARTICLES_PROPOTION_COLLECTED_IN_ASH,
                 LAB3DATA.TEMPERATURE_COEFFICIENT,
                 LAB3DATA.TERRAIN_COEFFICIENT,
                 LAB3DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT,
@@ -198,7 +196,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         data.getDesulphurizationSystemRunningTime(),
                         data.getBoilerRunningTime(),
                         data.getAshProportionEntrainedGases(),
-                        data.getSolidParticlesProportionCollectedInAsh(),
                         data.getTemperatureCoefficient(),
                         data.getTerrainCoefficient(),
                         data.getHarmfulSubstancesDepositionCoefficient(),
@@ -309,7 +306,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 .set(LAB3DATA.DESULPHURIZATION_SYSTEM_RUNNING_TIME, data.getDesulphurizationSystemRunningTime())
                 .set(LAB3DATA.BOILER_RUNNING_TIME, data.getBoilerRunningTime())
                 .set(LAB3DATA.ASH_PROPORTION_ENTRAINED_GASES, data.getAshProportionEntrainedGases())
-                .set(LAB3DATA.SOLID_PARTICLES_PROPOTION_COLLECTED_IN_ASH, data.getSolidParticlesProportionCollectedInAsh())
                 .set(LAB3DATA.TEMPERATURE_COEFFICIENT, data.getTemperatureCoefficient())
                 .set(LAB3DATA.TERRAIN_COEFFICIENT, data.getTerrainCoefficient())
                 .set(LAB3DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT, data.getHarmfulSubstancesDepositionCoefficient())

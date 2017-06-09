@@ -56,6 +56,5 @@ public class Step2 extends HorizontalLayout implements LabWizardStep {
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "desulphurizationSystemRunningTime"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "boilerRunningTime"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "ashProportionEntrainedGases"));
-        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "solidParticlesProportionCollectedInAsh"));
     }
 }
