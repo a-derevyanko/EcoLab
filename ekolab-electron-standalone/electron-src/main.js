@@ -26,7 +26,7 @@ app.on('window-all-closed', function () {
     app.quit();
 });
 
-app.on('ready', function () {
+app.on('ready', () =>{
     serverProcess = require('child_process')
         .spawn('cmd.exe', ['/c', 'electron-vaadin.bat'],
             {
@@ -44,7 +44,7 @@ app.on('ready', function () {
 
     const openWindow = function () {
         mainWindow = new BrowserWindow({
-            title: 'TODO List - Electron Vaadin application',
+            title: 'EkoLab - Electron Vaadin application',
             width: 500,
             height: 768
         });
@@ -55,7 +55,7 @@ app.on('ready', function () {
                 submenu: [
                     {
                         label: 'Exit',
-                        click: function() {
+                        click: () =>{
                             mainWindow.webContents.executeJavaScript("appMenuItemTriggered('Exit');");
                         }
                     }
@@ -63,8 +63,14 @@ app.on('ready', function () {
             },
             {
                 label: 'About',
-                click: function() {
+                click: () =>{
                     mainWindow.webContents.executeJavaScript("appMenuItemTriggered('About');");
+                }
+            },
+            {
+                label: 'Обновить страницу',
+                click: () =>{
+                    mainWindow.webContents.executeJavaScript("location.reload();");
                 }
             }
         ];

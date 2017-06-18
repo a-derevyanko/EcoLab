@@ -171,7 +171,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                     labData.setBwdNo2GroundLevelConcentration(labData.getNo2BackgroundConcentration() + labData.getTemperatureCoefficient() *
                             labData.getNo2MassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
                             n * m * 1000 * labData.getTerrainCoefficient() *
-                            Math.cbrt((labData.getNumberOfStacks().value() / (V1 * labData.getNumberOfUnits().value() * dT))) / Math.pow(labData.getStacksHeight(), 2));
+                            Math.cbrt((1.0 / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
 
                     labData.setWindSpeedMaxNo2GroundLevelConcentration(labData.getBwdNo2GroundLevelConcentration() * r);
                 }
