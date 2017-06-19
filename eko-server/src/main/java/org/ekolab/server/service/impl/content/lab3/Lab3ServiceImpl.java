@@ -170,8 +170,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 if (labData.getNo2MassiveInjection() != null) {
                     labData.setBwdNo2GroundLevelConcentration(labData.getNo2BackgroundConcentration() + labData.getTemperatureCoefficient() *
                             labData.getNo2MassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                            n * m * 1000 * labData.getTerrainCoefficient() *
-                            Math.cbrt((1.0 / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
+                            n * m * 1000 * labData.getTerrainCoefficient()
+                            / (Math.pow(labData.getStacksHeight(), 2) * Math.cbrt(((V1 * dT)))));
 
                     labData.setWindSpeedMaxNo2GroundLevelConcentration(labData.getBwdNo2GroundLevelConcentration() * r);
                 }
@@ -179,8 +179,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 if (labData.getNoMassiveInjection() != null) {
                     labData.setBwdNoGroundLevelConcentration(labData.getNoBackgroundConcentration() + labData.getTemperatureCoefficient() *
                             labData.getNoMassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                            n * m * 1000 * labData.getTerrainCoefficient() *
-                            Math.cbrt((labData.getNumberOfStacks().value() / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
+                            n * m * 1000 * labData.getTerrainCoefficient()
+                            / (Math.pow(labData.getStacksHeight(), 2) * Math.cbrt(((V1 * dT)))));
 
                     labData.setWindSpeedMaxNoGroundLevelConcentration(labData.getBwdNoGroundLevelConcentration() * r);
                 }
