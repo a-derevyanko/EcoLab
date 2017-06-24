@@ -34,6 +34,10 @@ public class LabChooserView extends VerticalLayout implements View {
     private final NativeButton lab2Button = new NativeButton("Laboratory work №2");
     private final NativeButton lab3Button = new NativeButton("Laboratory work №3");
     private final NativeButton labDefenceButton = new NativeButton("Defence of laboratory works");
+    private final Button lab1RandomDataButton = new Button("Random data");
+    private final Button lab1ExperimentButton = new NativeButton("Experiment data");
+    private final GridLayout lab1VariantChooserContent = new GridLayout(2, 2);
+    private final Window lab1VariantChooser = new Window("Choose lab 1 variant", lab1VariantChooserContent);
     private final Label  labLabel = new Label("Environmental technologies at TPPs", ContentMode.HTML);
 
     @Override
@@ -55,9 +59,22 @@ public class LabChooserView extends VerticalLayout implements View {
 
         lab1Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         lab1Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
+        lab1Button.addClickListener(event ->  UI.getCurrent().addWindow(lab1VariantChooser));
 
         lab2Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         lab2Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
+
+        lab1RandomDataButton.setSizeFull();
+        lab1ExperimentButton.setSizeFull();
+        lab1RandomDataButton.setStyleName(EkoLabTheme.BUTTON_TINY);
+        lab1ExperimentButton.setStyleName(EkoLabTheme.BUTTON_TINY);
+        lab1VariantChooser.setModal(true);
+        lab1VariantChooserContent.setWidth(40.0F, Unit.PERCENTAGE);
+        lab1VariantChooserContent.setWidth(40.0F, Unit.PERCENTAGE);
+        lab1VariantChooserContent.setRowExpandRatio(0, 10.0F);
+        lab1VariantChooserContent.setRowExpandRatio(1, 1.0F);
+        lab1VariantChooserContent.addComponent(lab1RandomDataButton, 0, 1, 0, 1);
+        lab1VariantChooserContent.addComponent(lab1ExperimentButton, 1, 1, 1, 1);
 
         lab3Button.setCaption(i18N.get("lab3.title"));
         lab3Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);

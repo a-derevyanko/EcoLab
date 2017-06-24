@@ -2,6 +2,7 @@ package org.ekolab.server.service.api.content;
 
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
+import org.jfree.chart.JFreeChart;
 import org.springframework.mail.MailException;
 
 import java.lang.reflect.Field;
@@ -72,4 +73,6 @@ public interface LabService<T extends LabData> {
      * @param email адрес
      */
     void sendReportToEmail(T labData, Locale locale, String email);
+
+    JFreeChart createChart(T labData, Locale locale, LabChartType chartType);
 }

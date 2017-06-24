@@ -8,10 +8,13 @@ import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.model.content.lab3.Lab3Variant;
+import org.ekolab.server.service.api.content.LabChartType;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
+import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
 import org.ekolab.server.service.impl.ReportTemplates;
 import org.ekolab.server.service.impl.content.LabServiceImpl;
+import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -154,7 +157,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                         2.48 * (1 + 0.28 * Math.cbrt(fe)) :
                         vm < 2 ?
                                 4.95 * vm * (1 + 0.28 * Math.cbrt(f)) :
-                                7 * vm * (1 + 0.28 * Math.cbrt(f));
+                                7 * Math.sqrt(vm) * (1 + 0.28 * Math.cbrt(f));
             }
 
             if (labData.getTemperatureCoefficient() != null &&
@@ -167,51 +170,46 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                         3 * uUm / (2 * Math.pow(uUm, 2) - uUm + 2) :
                         0.67 * uUm + 1.67 * Math.pow(uUm, 2) - 1.34 * Math.pow(uUm, 3);
 
+                double k = labData.getTemperatureCoefficient() * labData.getHarmfulSubstancesDepositionCoefficient() *
+                        n * m * labData.getTerrainCoefficient()
+                        / (Math.pow(labData.getStacksHeight(), 2) * Math.cbrt(((V1 * dT))));
                 if (labData.getNo2MassiveInjection() != null) {
-                    labData.setBwdNo2GroundLevelConcentration(labData.getNo2BackgroundConcentration() + labData.getTemperatureCoefficient() *
-                            labData.getNo2MassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                            n * m * 1000 * labData.getTerrainCoefficient()
-                            / (Math.pow(labData.getStacksHeight(), 2) * Math.cbrt(((V1 * dT)))));
+                    labData.setBwdNo2GroundLevelConcentration(labData.getNo2BackgroundConcentration() + k *
+                            labData.getNo2MassiveInjection());
 
                     labData.setWindSpeedMaxNo2GroundLevelConcentration(labData.getBwdNo2GroundLevelConcentration() * r);
                 }
 
                 if (labData.getNoMassiveInjection() != null) {
-                    labData.setBwdNoGroundLevelConcentration(labData.getNoBackgroundConcentration() + labData.getTemperatureCoefficient() *
-                            labData.getNoMassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                            n * m * 1000 * labData.getTerrainCoefficient()
-                            / (Math.pow(labData.getStacksHeight(), 2) * Math.cbrt(((V1 * dT)))));
+                    labData.setBwdNoGroundLevelConcentration(labData.getNoBackgroundConcentration() + k *
+                            labData.getNoMassiveInjection());
 
                     labData.setWindSpeedMaxNoGroundLevelConcentration(labData.getBwdNoGroundLevelConcentration() * r);
                 }
 
                 if (labData.getSo2MassiveInjection() != null) {
-                    labData.setBwdSo2GroundLevelConcentration(labData.getSo2BackgroundConcentration() + labData.getTemperatureCoefficient() *
-                            labData.getSo2MassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                            n * m * 1000 * labData.getTerrainCoefficient() *
-                            Math.cbrt((labData.getNumberOfStacks().value() / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
+                    labData.setBwdSo2GroundLevelConcentration(labData.getSo2BackgroundConcentration() + k *
+                            labData.getSo2MassiveInjection());
 
                     labData.setWindSpeedMaxSo2GroundLevelConcentration(labData.getBwdSo2GroundLevelConcentration() * r);
                 }
 
                 if (labData.getAshMassiveInjection() != null) {
-                    labData.setBwdAshGroundLevelConcentration(labData.getAshBackgroundConcentration() + labData.getTemperatureCoefficient() *
-                            labData.getAshMassiveInjection() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                            n * m * 1000 * labData.getTerrainCoefficient() *
-                            Math.cbrt((labData.getNumberOfStacks().value() / (V1 * dT))) / Math.pow(labData.getStacksHeight(), 2));
+                    labData.setBwdAshGroundLevelConcentration(labData.getAshBackgroundConcentration() + k *
+                            labData.getAshMassiveInjection());
 
                     labData.setWindSpeedMaxAshGroundLevelConcentration(labData.getBwdAshGroundLevelConcentration() * r);
                 }
 
                 if (labData.getBwdNoGroundLevelConcentration() != null && labData.getBwdSo2GroundLevelConcentration() != null) {
-                    labData.setNoAndSo2SummationGroup(labData.getBwdNoGroundLevelConcentration() / labData.getNo2MAC() +
-                            labData.getBwdSo2GroundLevelConcentration() / labData.getSo2MAC());
+                    labData.setNoAndSo2SummationGroup(labData.getBwdNoGroundLevelConcentration() / 0.4 +
+                            labData.getBwdSo2GroundLevelConcentration() / 0.5);
                 }
-                // todo "Если q больше 1 то должно выскакивать уведомление «Концентрация веществ обладающих суммацией вредного действия превышена»"
+                // todo "Если q больше 1.6 то должно выскакивать уведомление «Концентрация веществ обладающих суммацией вредного действия превышена»"
 
                 if (labData.getBwdNo2GroundLevelConcentration() != null && labData.getBwdSo2GroundLevelConcentration() != null) {
-                    labData.setNo2AndSo2SummationGroup(labData.getBwdNo2GroundLevelConcentration() / labData.getNo2MAC() +
-                            labData.getBwdSo2GroundLevelConcentration() / labData.getSo2MAC());
+                    labData.setNo2AndSo2SummationGroup(labData.getBwdNo2GroundLevelConcentration() / 0.085 +
+                            labData.getBwdSo2GroundLevelConcentration() / 0.5);
                 }
 
             }
@@ -241,6 +239,17 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     @Override
     public byte[] printInitialData(LabVariant variant, Locale locale) {
         return printInitialData(variant, 3, locale);
+    }
+
+    @Override
+    public JFreeChart createChart(Lab3Data labData, Locale locale, LabChartType chartType) {
+        if (chartType == Lab3ChartType.ISOLINE) {
+            return isoLineChartService.createIsoLineChart(labData, locale);
+        } else if (chartType == Lab3ChartType.SO2) {
+            return null;
+        } else {
+            throw new IllegalArgumentException("Unknown chart type");
+        }
     }
 
     @Override

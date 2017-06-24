@@ -81,7 +81,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         dataset.addSeries(series);
         if (windSpeedMaxGroundLevelConcentrationDistance != null
                 && harmfulSubstancesDepositionCoefficient != null  && windSpeed != null) {
-            for (int x = -1000; x < 1500; x++) {
+            for (int x = -1000; x < 1000; x++) {
                 for (double y : countY(x, windSpeedMaxGroundLevelConcentrationDistance,
                         harmfulSubstancesDepositionCoefficient, windSpeed)) {
                     series.add(x, y);
@@ -111,6 +111,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
 
     private double[] countT(double s1) {
         EquationFunction f = new QuarticFunction(45.1, 17, 12.8, 5, 1 - Math.sqrt(1 / s1));
+        LOGGER.info(" s1 = " + s1);
        /* EquationFunction f2 = new QuarticFunction(-45.1, -17, -12.8, -5,  Math.sqrt(1 / s1) - 1);
         double[] result = ArrayUtils.addAll(f1.findRealRoots(), f2.findRealRoots());*/
         return Arrays.stream(f.findRealRoots()).filter(t -> t > 0).toArray();
@@ -123,6 +124,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
 
         double[] result = new double[0];
         for (double t : countT(s1)) {
+            LOGGER.info(" t = " + t);
             double root = Math.sqrt(windSpeed > 5 ? t * x * x / 5 : t * x * x / windSpeed);
             result = ArrayUtils.addAll(result, root, -root);
         }
