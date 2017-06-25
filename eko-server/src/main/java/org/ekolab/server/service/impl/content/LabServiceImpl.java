@@ -13,6 +13,7 @@ import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
+import org.ekolab.server.model.content.Validated;
 import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.impl.ReportTemplates;
@@ -55,6 +56,11 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
 
     protected LabServiceImpl(LabDao<T> labDao) {
         this.labDao = labDao;
+    }
+
+    @Override
+    public boolean isFieldValidated(Field field) {
+        return field.getAnnotation(Validated.class) != null;
     }
 
     @Override

@@ -14,6 +14,13 @@ import java.util.Locale;
  * Created by 777Al on 26.04.2017.
  */
 public interface LabService<T extends LabData> {
+    /**
+     * Возвращает признак того, что значение поля может быть проверено программой
+     * @param field поле
+     * @return признак того, что значение поля может быть проверено программой
+     */
+    boolean isFieldValidated(Field field);
+
     boolean isFieldCalculated(Field field);
 
     T getLastUncompletedLabByUser(String userName);
@@ -42,6 +49,16 @@ public interface LabService<T extends LabData> {
      * @return модель, в которой заполнены вычисляемые поля
      */
     T updateCalculatedFields(T labData);
+
+    /**
+     * Проверяет правильность значения поля
+     * @param field поле
+     * @param value значение
+     * @return признак того, что значение верно
+     */
+    default boolean validateFieldValue(Field field, Object value) {
+        return true;
+    }
 
     /**
      * Создаёт структуру с данными лабораторной, не сохраняя её
