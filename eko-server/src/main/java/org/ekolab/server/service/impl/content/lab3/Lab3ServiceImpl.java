@@ -39,8 +39,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     /**
      * Возвращает печатный вариант отчёта в PDF формате.
      * На второй странице отчёта печатается график изолиний в вертикальной ориентации.
+     *
      * @param labData данные лабораторной работы.
-     * @param locale язык.
+     * @param locale  язык.
      * @return печатный вариант данных в PDF формате.
      */
     @Override
@@ -279,30 +280,46 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 unitCounts = Arrays.asList(NumberOfUnits.SIX, NumberOfUnits.EIGHT);
                 stacksHeights = Arrays.asList(120, 150, 180);
                 variant.setSteamProductionCapacity(630);
-                if (randomFuelType != FuelType.STABILIZED_OIL & randomFuelType != FuelType.SULFUR_OIL) {by = 364;} else {by = 342;}
+                if (randomFuelType != FuelType.STABILIZED_OIL & randomFuelType != FuelType.SULFUR_OIL) {
+                    by = 364;
+                } else {
+                    by = 342;
+                }
                 break;
             case 300:
                 unitCounts = Arrays.asList(NumberOfUnits.FOUR, NumberOfUnits.SIX, NumberOfUnits.EIGHT);
                 stacksHeights = Arrays.asList(120, 150, 180);
                 variant.setSteamProductionCapacity(1050);
-                if (randomFuelType!=FuelType.STABILIZED_OIL & randomFuelType!=FuelType.SULFUR_OIL) {by = 373;} else {by = 326;}
+                if (randomFuelType != FuelType.STABILIZED_OIL & randomFuelType != FuelType.SULFUR_OIL) {
+                    by = 373;
+                } else {
+                    by = 326;
+                }
                 break;
             case 500:
                 unitCounts = Arrays.asList(NumberOfUnits.FOUR, NumberOfUnits.SIX);
-                stacksHeights = Arrays.asList( 150, 180, 210);
+                stacksHeights = Arrays.asList(150, 180, 210);
                 variant.setSteamProductionCapacity(1650);
-                if (randomFuelType!=FuelType.STABILIZED_OIL & randomFuelType!=FuelType.SULFUR_OIL) {by = 343;} else {by = 319;}
+                if (randomFuelType != FuelType.STABILIZED_OIL & randomFuelType != FuelType.SULFUR_OIL) {
+                    by = 343;
+                } else {
+                    by = 319;
+                }
                 break;
             case 800:
                 unitCounts = Arrays.asList(NumberOfUnits.TWO, NumberOfUnits.FOUR);
-                stacksHeights = Arrays.asList( 180, 210, 240);
+                stacksHeights = Arrays.asList(180, 210, 240);
                 variant.setSteamProductionCapacity(2450);
-                if (randomFuelType!=FuelType.STABILIZED_OIL & randomFuelType!=FuelType.SULFUR_OIL) {by = 338;} else {by = 314;}
+                if (randomFuelType != FuelType.STABILIZED_OIL & randomFuelType != FuelType.SULFUR_OIL) {
+                    by = 338;
+                } else {
+                    by = 314;
+                }
                 break;
         }
-        NumberOfUnits RandomUnitCount = unitCounts.get(RandomUtils.nextInt(unitCounts.size()));
-        variant.setNumberOfUnits(RandomUnitCount);
-        switch (RandomUnitCount){
+        NumberOfUnits randomUnitCount = unitCounts.get(RandomUtils.nextInt(unitCounts.size()));
+        variant.setNumberOfUnits(randomUnitCount);
+        switch (randomUnitCount) {
             case TWO:
                 stacksCounts = Arrays.asList(NumberOfStacks.ONE, NumberOfStacks.TWO);
                 break;
@@ -320,9 +337,29 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         variant.setNumberOfStacks(randomStacksCount);
         Integer randomStacksHeight = stacksHeights.get(RandomUtils.nextInt(stacksHeights.size()));
         variant.setStacksHeight(randomStacksHeight);
-        variant.setTppOutput(RandomUnitCount.value() * randomUnitOutput);
-        variant.setFuelConsumer((int)Math.round((randomUnitOutput * 29.3 * by) / (randomFuelType.getLowHeatValue() * 1000)));
-
+        variant.setTppOutput(randomUnitCount.value() * randomUnitOutput);
+        variant.setFuelConsumer((int) Math.round((randomUnitOutput * 29.3 * by) / (randomFuelType.getLowHeatValue() * 1000)));
+        variant.setCarbonInFlyAsh(randomFuelType.getCarbonInFlyAsh());
+        variant.setSulphurContent(randomFuelType.getSulphurContent());
+        variant.setAshContent(randomFuelType.getAshContent());
+        variant.setWaterContent(randomFuelType.getWaterContent());
+        if (randomFuelType != FuelType.SULFUR_OIL & randomFuelType != FuelType.STABILIZED_OIL) {
+            variant.setAshRecyclingFactor(92.0 + RandomUtils.nextInt(15) * 0.5);
+        } else {
+            variant.setAshRecyclingFactor(0.0);
+        }
+        //ИСПРАВИТЬ ТИП НА INT в lab3variant
+        //variant.setFlueGasNOxConcentration(randomFuelType.getFlueGasNOxConcentration());
+        variant.setStackExitTemperature(randomFuelType.getStackExitTemperature());
+        variant.setOutsideAirTemperature(randomCity.getOutsideAirTemperature());
+        variant.setExcessAirRatio(1.4);
+        variant.setAirVolume(0.0889 * (randomFuelType.getCarbonContent() + 0.375 * randomFuelType.getSulphurContent()) + 0.0124 * randomFuelType.getHydrogenContent() - 0.0333 * randomFuelType.getOxygenContent());
+        variant.setWaterVaporVolume(0.111 * randomFuelType.getHydrogenContent() + 0.0124 * randomFuelType.getWaterContent() + 0.016 + variant.getAirVolume());
+        variant.setCombustionProductsVolume((1.866 * (randomFuelType.getCarbonContent() + 0.375 * randomFuelType.getSulphurContent()) / 100) + ((0.79 * variant.getAirVolume() + 0.8 * randomFuelType.getNitrogenContent()) / 100) + variant.getWaterVaporVolume());
+        variant.setNo2BackgroundConcentration(0.05 + RandomUtils.nextInt(8) * 0.01);
+        variant.setNoBackgroundConcentration(0.008 + RandomUtils.nextInt(5) * 0.01);
+        variant.setSo2BackgroundConcentration(0.1 + RandomUtils.nextInt(16) * 0.01);
+        variant.setAshBackgroundConcentration(0.2 + RandomUtils.nextInt(11) * 0.01);
         return variant;
     }
 }

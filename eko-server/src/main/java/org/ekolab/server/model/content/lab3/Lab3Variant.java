@@ -136,10 +136,10 @@ public class Lab3Variant extends LabVariant {
     private Double excessAirRatio;
 
     /**
-     * Теоретический объем продуктов сгорания
+     * Теоретический объем воздуха
      */
     @Digits(integer = 100000, fraction = 2)
-    private Double combustionProductsVolume;
+    private Double airVolume;
 
     /**
      * Теоретический объем паров воды
@@ -148,10 +148,10 @@ public class Lab3Variant extends LabVariant {
     private Double waterVaporVolume;
 
     /**
-     * Теоретический объем воздуха
+     * Теоретический объем продуктов сгорания
      */
     @Digits(integer = 100000, fraction = 2)
-    private Double airVolume;
+    private Double combustionProductsVolume;
 
     /**
      * Фоновая концентрация NO2
