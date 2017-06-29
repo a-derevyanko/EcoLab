@@ -27,8 +27,8 @@ public class ParameterWithFormulaeLayout<BEAN extends LabData> extends Parameter
     protected void addSign(String fieldName, int row) {
         String resKey = fieldName + "-sign";
         String signLabel = i18N.get(resKey);
-        if (signLabel.isEmpty() && res.isResourceExists(parametersPath, resKey)) {
-            Component signLabelComponent = res.getImage(parametersPath, resKey);
+        if (signLabel.isEmpty() && res.isResourceExists(formulaePath, resKey)) {
+            Component signLabelComponent = res.getImage(formulaePath, resKey);
             super.addComponent(signLabelComponent, 2, row);
         } else {
             super.addSign(fieldName, row);

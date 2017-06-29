@@ -15,22 +15,22 @@ public class Lab3View extends LabWizard<Lab3Data> {
     public static final String NAME = "lab3view";
 
     @Autowired
-    private Step1 step1;
+    private Lab3Step1 step1;
 
     @Autowired
-    private Step2 step2;
+    private Lab3Step2 step2;
 
     @Autowired
-    private Step3 step3;
+    private Lab3Step3 step3;
 
     @Autowired
-    private Step4 step4;
+    private Lab3Step4 step4;
 
     @Autowired
-    private Step5 step5;
+    private Lab3Step5 step5;
 
     @Autowired
-    private Step6 step6;
+    private Lab3Step6 step6;
 
     @Autowired
     public Lab3View(Lab3Service lab3Service, Binder<Lab3Data> binder, Lab3PresentationStep presentationStep) {

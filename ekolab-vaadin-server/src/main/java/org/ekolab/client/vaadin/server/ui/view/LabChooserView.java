@@ -9,6 +9,8 @@ import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_1.experiment.Lab1ExperimentView;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_1.random.Lab1RandomDataView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,7 +36,7 @@ public class LabChooserView extends VerticalLayout implements View {
     private final NativeButton lab2Button = new NativeButton("Laboratory work №2");
     private final NativeButton lab3Button = new NativeButton("Laboratory work №3");
     private final NativeButton labDefenceButton = new NativeButton("Defence of laboratory works");
-    private final Button lab1RandomDataButton = new Button("Random data");
+    private final Button lab1RandomDataButton = new NativeButton("Random data");
     private final Button lab1ExperimentButton = new NativeButton("Experiment data");
     private final GridLayout lab1VariantChooserContent = new GridLayout(2, 2);
     private final Window lab1VariantChooser = new Window("Choose lab 1 variant", lab1VariantChooserContent);
@@ -57,6 +59,7 @@ public class LabChooserView extends VerticalLayout implements View {
         Image logo = resourceService.getImage(EkoLabTheme.IMAGE_LOGO);
         logo.setSizeFull();
 
+        lab1Button.setCaption(i18N.get("lab1.title"));
         lab1Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         lab1Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
         lab1Button.addClickListener(event ->  UI.getCurrent().addWindow(lab1VariantChooser));
@@ -64,13 +67,20 @@ public class LabChooserView extends VerticalLayout implements View {
         lab2Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         lab2Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
 
-        lab1RandomDataButton.setSizeFull();
-        lab1ExperimentButton.setSizeFull();
-        lab1RandomDataButton.setStyleName(EkoLabTheme.BUTTON_TINY);
-        lab1ExperimentButton.setStyleName(EkoLabTheme.BUTTON_TINY);
+        lab1RandomDataButton.setCaption(i18N.get("lab1.random-data.title"));
+        lab1RandomDataButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
+        lab1RandomDataButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
+        lab1RandomDataButton.addClickListener(event -> navigator.navigateTo(Lab1RandomDataView.NAME));
+
+        lab1ExperimentButton.setCaption(i18N.get("lab1.experiment.title"));
+        lab1ExperimentButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
+        lab1ExperimentButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
+        lab1ExperimentButton.addClickListener(event -> navigator.navigateTo(Lab1ExperimentView.NAME));
+
         lab1VariantChooser.setModal(true);
-        lab1VariantChooserContent.setWidth(40.0F, Unit.PERCENTAGE);
-        lab1VariantChooserContent.setWidth(40.0F, Unit.PERCENTAGE);
+        lab1VariantChooser.setWidth(400.0F, Unit.PIXELS);
+        lab1VariantChooser.setHeight(200.0F, Unit.PIXELS);
+        lab1VariantChooserContent.setSizeFull();
         lab1VariantChooserContent.setRowExpandRatio(0, 10.0F);
         lab1VariantChooserContent.setRowExpandRatio(1, 1.0F);
         lab1VariantChooserContent.addComponent(lab1RandomDataButton, 0, 1, 0, 1);

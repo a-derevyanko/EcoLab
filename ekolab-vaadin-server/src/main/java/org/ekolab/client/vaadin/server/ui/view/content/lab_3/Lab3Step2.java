@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 @SpringComponent
 @ViewScope
-public class Step2 extends HorizontalLayout implements LabWizardStep {
+public class Lab3Step2 extends HorizontalLayout implements LabWizardStep {
     // ----------------------------- Графические компоненты --------------------------------
     @Autowired
     private I18N i18N;

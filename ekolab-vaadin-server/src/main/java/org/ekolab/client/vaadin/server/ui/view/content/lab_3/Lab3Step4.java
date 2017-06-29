@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 @SpringComponent
 @ViewScope
-public class Step4 extends GridLayout implements LabWizardStep {
+public class Lab3Step4 extends GridLayout implements LabWizardStep {
     // ----------------------------- Графические компоненты --------------------------------
     private final Label captionLabel = new Label("Pollution calc result");
 

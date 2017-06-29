@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 @SpringComponent
 @ViewScope
-public class Step6 extends VerticalLayout implements LabWizardStep {
+public class Lab3Step6 extends VerticalLayout implements LabWizardStep {
     // ----------------------------- Графические компоненты --------------------------------
     private final Button saveReportButton = new Button("Save report", VaadinIcons.DOWNLOAD);
 

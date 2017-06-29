@@ -30,7 +30,7 @@ import java.util.Arrays;
  */
 @SpringComponent
 @ViewScope
-public class Step5 extends GridLayout implements LabWizardStep {
+public class Lab3Step5 extends GridLayout implements LabWizardStep {
     // ----------------------------- Графические компоненты --------------------------------
     private final Button zoomInButton = new Button(VaadinIcons.PLUS_CIRCLE_O);
     private final Button zoomOutButton = new Button(VaadinIcons.MINUS_CIRCLE_O);

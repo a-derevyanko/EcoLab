@@ -2,15 +2,22 @@ package org.ekolab.client.vaadin.server.ui.customcomponents;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
-import com.vaadin.data.converter.StringToDoubleConverter;
-import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.RadioButtonGroup;
+import com.vaadin.ui.TextField;
 import com.vaadin.util.ReflectTools;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.service.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.ResourceService;
+import org.ekolab.client.vaadin.server.ui.common.UIUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
 import org.ekolab.server.model.content.LabData;
@@ -113,16 +120,7 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
             component = yesNoComponent;
         } else {
             TextField field = new TextField();
-            String validatorPrefix = i18N.get("validator.value-of-field") + " '"
-                    + i18N.get(propertyField.getName()) + "' ";
-            Converter<String, ?> converter;
-            if (propClass == Integer.class) {
-                converter = new StringToIntegerConverter(validatorPrefix + i18N.get("validator.must-be-number"));
-            } else if (propClass == Double.class) {
-                converter = new StringToDoubleConverter(validatorPrefix + i18N.get("validator.must-be-double"));
-            } else {
-                throw new IllegalArgumentException("Unknown field type");
-            }
+            Converter<String, ?> converter = UIUtils.getStringConverter(propertyField, i18N);
 
             bindField(propertyField, dataBinder.forField(field).withNullRepresentation(readOnly ? i18N.get("labwizard.unknown-value") : "")
                     .withConverter(converter));
