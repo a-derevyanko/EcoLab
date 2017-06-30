@@ -46,7 +46,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     protected final HorizontalLayout thirdComponentsLayout = new HorizontalLayout();
 
     @Autowired
-    private I18N i18N;
+    protected I18N i18N;
 
     @Autowired
     private Authentication currentUser;

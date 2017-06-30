@@ -1,5 +1,6 @@
 package org.ekolab.server.service.impl.content.lab3;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
@@ -74,19 +75,13 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
 
     private XYDataset createDataset(Double windSpeedMaxGroundLevelConcentrationDistance,
                                       Double harmfulSubstancesDepositionCoefficient, Double windSpeed) {
-        //todo
-        /*windSpeedMaxGroundLevelConcentrationDistance = 200.0;
-        harmfulSubstancesDepositionCoefficient = 0.5;
-        windSpeed = 15.0;*/
-        //todo
-
         XYSeriesCollection dataset = new XYSeriesCollection();
         XYSeries series = new XYSeries("isolineChart");
 
         dataset.addSeries(series);
         if (windSpeedMaxGroundLevelConcentrationDistance != null
                 && harmfulSubstancesDepositionCoefficient != null  && windSpeed != null) {
-            for (int x = 0; x < 100; x++) {
+            for (int x = -1000; x < 1000; x++) {
                 for (double y : countY(x, windSpeedMaxGroundLevelConcentrationDistance,
                         harmfulSubstancesDepositionCoefficient, windSpeed)) {
                     series.add(x, y);
@@ -116,16 +111,24 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
 
     private double[] countT(double s1) {
         EquationFunction f = new QuarticFunction(45.1, 17, 12.8, 5, 1 - Math.sqrt(1 / s1));
-        LOGGER.info("sqrt = " + Math.sqrt(1 / s1));
-        double[] tValues = f.findRealRoots();
-        return Arrays.stream(tValues).filter(x -> x > 0).toArray();
+        LOGGER.info(" s1 = " + s1);
+       /* EquationFunction f2 = new QuarticFunction(-45.1, -17, -12.8, -5,  Math.sqrt(1 / s1) - 1);
+        double[] result = ArrayUtils.addAll(f1.findRealRoots(), f2.findRealRoots());*/
+        return Arrays.stream(f.findRealRoots()).filter(t -> t > 0).toArray();
     }
 
     private double[] countY(double x, double windSpeedMaxGroundLevelConcentrationDistance,
                             double harmfulSubstancesDepositionCoefficient, double windSpeed) {
         double s1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient);
         LOGGER.info(" s1 = " + s1);
-        return Arrays.stream(countT(s1)).map(t -> Math.sqrt(t * x * x / windSpeed > 5 ? 5 : windSpeed)).toArray();
+
+        double[] result = new double[0];
+        for (double t : countT(s1)) {
+            LOGGER.info(" t = " + t);
+            double root = Math.sqrt(windSpeed > 5 ? t * x * x / 5 : t * x * x / windSpeed);
+            result = ArrayUtils.addAll(result, root, -root);
+        }
+        return result;
     }
 
     private JFreeChart createSplineChart(XYDataset dataSet, Locale locale) {

@@ -30,7 +30,7 @@ public class Lab3UIConfig {
                                                      I18N i18N,
                                                      ResourceService resourceService,
                                                      ParameterCustomizer parameterCustomizer) {
-        return new ParameterLayout<>("content/lab3/additions/", binder, labService,
+        return new ParameterLayout<>("content/lab3/", binder, labService,
                 i18N, resourceService, parameterCustomizer);
     }
 }

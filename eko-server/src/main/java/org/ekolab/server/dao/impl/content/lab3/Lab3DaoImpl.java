@@ -25,6 +25,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         Lab3Data data = new Lab3Data();
         data.setStartDate(record.get(LAB3DATA.START_DATE));
         data.setSaveDate(record.get(LAB3DATA.SAVE_DATE));
+        data.setCompleted(record.get(LAB3DATA.COMPLETED));
         data.setTppOutput(record.get(LAB3DATA.TPP_OUTPUT));
         data.setNumberOfUnits(record.get(LAB3DATA.NUMBER_OF_UNITS) == null ? null : NumberOfUnits.valueOf(record.get(LAB3DATA.NUMBER_OF_UNITS)));
         data.setCity(record.get(LAB3DATA.CITY) == null ? null : City.valueOf(record.get(LAB3DATA.CITY)));
@@ -58,7 +59,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         data.setDesulphurizationSystemRunningTime(record.get(LAB3DATA.DESULPHURIZATION_SYSTEM_RUNNING_TIME));
         data.setBoilerRunningTime(record.get(LAB3DATA.BOILER_RUNNING_TIME));
         data.setAshProportionEntrainedGases(record.get(LAB3DATA.ASH_PROPORTION_ENTRAINED_GASES));
-        data.setSolidParticlesProportionCollectedInAsh(record.get(LAB3DATA.SOLID_PARTICLES_PROPOTION_COLLECTED_IN_ASH));
         data.setTemperatureCoefficient(record.get(LAB3DATA.TEMPERATURE_COEFFICIENT));
         data.setTerrainCoefficient(record.get(LAB3DATA.TERRAIN_COEFFICIENT));
         data.setHarmfulSubstancesDepositionCoefficient(record.get(LAB3DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT));
@@ -120,6 +120,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3DATA.USER_ID,
                 LAB3DATA.START_DATE,
                 LAB3DATA.SAVE_DATE,
+                LAB3DATA.COMPLETED,
                 LAB3DATA.TPP_OUTPUT,
                 LAB3DATA.NUMBER_OF_UNITS,
                 LAB3DATA.CITY,
@@ -153,7 +154,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3DATA.DESULPHURIZATION_SYSTEM_RUNNING_TIME,
                 LAB3DATA.BOILER_RUNNING_TIME,
                 LAB3DATA.ASH_PROPORTION_ENTRAINED_GASES,
-                LAB3DATA.SOLID_PARTICLES_PROPOTION_COLLECTED_IN_ASH,
                 LAB3DATA.TEMPERATURE_COEFFICIENT,
                 LAB3DATA.TERRAIN_COEFFICIENT,
                 LAB3DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT,
@@ -165,6 +165,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         getFindUserIdSelect(data.getUserLogin()),
                         data.getStartDate(),
                         data.getSaveDate(),
+                        data.isCompleted(),
                         data.getTppOutput(),
                         data.getNumberOfUnits() == null ? null : data.getNumberOfUnits().value(),
                         data.getCity() == null ? null : data.getCity().name(),
@@ -198,7 +199,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         data.getDesulphurizationSystemRunningTime(),
                         data.getBoilerRunningTime(),
                         data.getAshProportionEntrainedGases(),
-                        data.getSolidParticlesProportionCollectedInAsh(),
                         data.getTemperatureCoefficient(),
                         data.getTerrainCoefficient(),
                         data.getHarmfulSubstancesDepositionCoefficient(),
@@ -309,7 +309,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 .set(LAB3DATA.DESULPHURIZATION_SYSTEM_RUNNING_TIME, data.getDesulphurizationSystemRunningTime())
                 .set(LAB3DATA.BOILER_RUNNING_TIME, data.getBoilerRunningTime())
                 .set(LAB3DATA.ASH_PROPORTION_ENTRAINED_GASES, data.getAshProportionEntrainedGases())
-                .set(LAB3DATA.SOLID_PARTICLES_PROPOTION_COLLECTED_IN_ASH, data.getSolidParticlesProportionCollectedInAsh())
                 .set(LAB3DATA.TEMPERATURE_COEFFICIENT, data.getTemperatureCoefficient())
                 .set(LAB3DATA.TERRAIN_COEFFICIENT, data.getTerrainCoefficient())
                 .set(LAB3DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT, data.getHarmfulSubstancesDepositionCoefficient())

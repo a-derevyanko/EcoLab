@@ -37,7 +37,6 @@ INSERT INTO lab3data (
   desulphurization_system_running_time,
   boiler_running_time,
   ash_proportion_entrained_gases,
-  solid_particles_propotion_collected_in_ash,
   temperature_coefficient,
   terrain_coefficient,
   harmful_substances_deposition_coefficient,
@@ -85,7 +84,6 @@ INSERT INTO lab3data (
   0,
   6000,
   1.0,
-  0,
   160,
   1,
   1,
@@ -126,7 +124,6 @@ no2_background_concentration,
 no_background_concentration,
 so2_background_concentration,
 ash_background_concentration,
-solid_particles_propotion_collected_in_ash
 ) VALUES (
 0,
 0,
@@ -140,7 +137,7 @@ solid_particles_propotion_collected_in_ash
 'NORTH_WEST',
 4,
 39.73,
-72.12535,
+72,
 0,
 1.4,
 0.1,
@@ -156,6 +153,5 @@ solid_particles_propotion_collected_in_ash
 0.05,
 0.008,
 0.1,
-0.2,
-0
+0.2
 );

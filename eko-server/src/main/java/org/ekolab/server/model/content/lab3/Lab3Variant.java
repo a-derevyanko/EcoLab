@@ -112,7 +112,9 @@ public class Lab3Variant extends LabVariant {
     /**
      * Концентрация оксидов азота в сухих газах
      */
-    private Double flueGasNOxConcentration;
+    @Max(400L)
+    @Min(200L)
+    private Integer flueGasNOxConcentration;
 
     /**
      * Температура газов на выходе из дымовой трубы
@@ -305,11 +307,11 @@ public class Lab3Variant extends LabVariant {
         this.ashRecyclingFactor = ashRecyclingFactor;
     }
 
-    public Double getFlueGasNOxConcentration() {
+    public Integer getFlueGasNOxConcentration() {
         return flueGasNOxConcentration;
     }
 
-    public void setFlueGasNOxConcentration(Double flueGasNOxConcentration) {
+    public void setFlueGasNOxConcentration(Integer flueGasNOxConcentration) {
         this.flueGasNOxConcentration = flueGasNOxConcentration;
     }
 

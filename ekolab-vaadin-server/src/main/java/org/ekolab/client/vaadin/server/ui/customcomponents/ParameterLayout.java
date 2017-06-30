@@ -2,8 +2,6 @@ package org.ekolab.client.vaadin.server.ui.customcomponents;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
-import com.vaadin.data.converter.StringToDoubleConverter;
-import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.AbstractComponent;
@@ -13,11 +11,13 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.RadioButtonGroup;
 import com.vaadin.ui.TextField;
 import com.vaadin.util.ReflectTools;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.service.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.ResourceService;
+import org.ekolab.client.vaadin.server.ui.common.UIUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
 import org.ekolab.server.model.content.LabData;
@@ -33,21 +33,24 @@ import static org.ekolab.client.vaadin.server.ui.common.ResourceWindow.show;
  * Created by 777Al on 08.04.2017.
  */
 public class ParameterLayout<BEAN extends LabData> extends GridLayout implements UIComponent {
-    private final String parametersPath;
+    protected final String parametersPath;
 
-    private final Binder<BEAN> dataBinder;
+    protected final String additionsPath;
 
-    private final LabService labService;
+    protected final Binder<BEAN> dataBinder;
 
-    private final I18N i18N;
+    protected final LabService labService;
 
-    private final ResourceService res;
+    protected final I18N i18N;
 
-    private final ParameterCustomizer parameterCustomizer;
+    protected final ResourceService res;
+
+    protected final ParameterCustomizer parameterCustomizer;
 
     public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService labService, I18N i18N,
                            ResourceService res, ParameterCustomizer parameterCustomizer) {
         this.parametersPath = parametersPath;
+        this.additionsPath = parametersPath + "additions/";
         this.dataBinder = dataBinder;
         this.labService = labService;
         this.i18N = i18N;
@@ -55,7 +58,6 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
         this.parameterCustomizer = parameterCustomizer;
     }
 
-    // ---------------------------- Графические компоненты --------------------
     @Override
     public void init() throws Exception {
         UIComponent.super.init();
@@ -90,14 +92,14 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
         setComponentAlignment(captionLabel, Alignment.MIDDLE_LEFT);
     }
 
-    private void addSign(String fieldName, int row) {
+    protected void addSign(String fieldName, int row) {
         Label signLabel = new Label(i18N.get(fieldName + "-sign"), ContentMode.HTML);
         signLabel.addStyleName(EkoLabTheme.LABEL_SIGN);
         signLabel.addStyleName(EkoLabTheme.LABEL_TINY);
         super.addComponent(signLabel, 2, row);
     }
 
-    private void addComponent(Field propertyField, int row) {
+    protected void addComponent(Field propertyField, int row) {
         Class<?> propClass = ReflectTools.convertPrimitiveType(propertyField.getType());
         boolean readOnly = labService.isFieldCalculated(propertyField);
         AbstractComponent component;
@@ -111,21 +113,17 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
             comboBox.setReadOnly(readOnly);
             comboBox.addStyleName(EkoLabTheme.COMBOBOX_TINY);
             component = comboBox;
+        } else if (propClass == Boolean.class) {
+            RadioButtonGroup<Boolean> yesNoComponent = new RadioButtonGroup<>(null, Arrays.asList(Boolean.FALSE, Boolean.TRUE));
+            yesNoComponent.setItemCaptionGenerator(item -> item ? i18N.get("labwizard.yes-value") : i18N.get("labwizard.no-value"));
+            dataBinder.forField(yesNoComponent).bind(propertyField.getName());
+            component = yesNoComponent;
         } else {
             TextField field = new TextField();
-            String validatorPrefix = i18N.get("validator.value-of-field") + " '"
-                    + i18N.get(propertyField.getName()) + "' ";
-            Converter<String, ?> converter;
-            if (propClass == Integer.class) {
-                converter = new StringToIntegerConverter(validatorPrefix + i18N.get("validator.must-be-number"));
-            } else if (propClass == Double.class) {
-                converter = new StringToDoubleConverter(validatorPrefix + i18N.get("validator.must-be-double"));
-            } else {
-                throw new IllegalArgumentException("Unknown field type");
-            }
+            Converter<String, ?> converter = UIUtils.getStringConverter(propertyField, i18N);
 
-            dataBinder.forField(field).withNullRepresentation(readOnly ? i18N.get("labwizard.unknown-value") : "")
-                    .withConverter(converter).bind(propertyField.getName());
+            bindField(propertyField, dataBinder.forField(field).withNullRepresentation(readOnly ? i18N.get("labwizard.unknown-value") : "")
+                    .withConverter(converter));
             field.setReadOnly(readOnly);
             field.addStyleName(EkoLabTheme.TEXTFIELD_TINY);
             component = field;
@@ -134,10 +132,14 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
         component.setWidth(130, Unit.PIXELS);
     }
 
+    protected void bindField(Field propertyField, Binder.BindingBuilder<?, ?> builder) {
+        builder.bind(propertyField.getName());
+    }
+
     private void addInfoButton(String fieldName, int row) {
-        if (res.isResourceExists(parametersPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)) {
+        if (res.isResourceExists(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)) {
             Button infoButton = new Button(VaadinIcons.QUESTION);
-            infoButton.addClickListener(event -> show(i18N.get(fieldName), res.getHtmlData(parametersPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)));
+            infoButton.addClickListener(event -> show(i18N.get(fieldName), res.getHtmlData(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)));
             infoButton.addStyleName(EkoLabTheme.BUTTON_TINY);
             super.addComponent(infoButton, 3, row);
         }

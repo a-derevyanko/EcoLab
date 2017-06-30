@@ -75,7 +75,7 @@ public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * Расход топлива на 1 блок
      */
-    private Double fuelConsumer;
+    private Integer fuelConsumer;
 
     /**
      * Потери тепла от механической неполноты сгорания топлива
@@ -111,7 +111,9 @@ public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * Концентрация оксидов азота в сухих газах
      */
-    private Double flueGasNOxConcentration;
+    @Max(400L)
+    @Min(200L)
+    private Integer flueGasNOxConcentration;
 
     /**
      * Температура газов на выходе из дымовой трубы
@@ -204,11 +206,6 @@ public class Lab3Data extends LabData<Lab3Variant> {
      * Доля золы, уносимой газами из котла
      */
     private Double ashProportionEntrainedGases;
-
-    /**
-     * Доля твердых частиц, улавливаемых в золоуловителях
-     */
-    private Double solidParticlesProportionCollectedInAsh;
 
     /**
      * Средняя скорость газов на выходе из дымовой трубы
@@ -442,11 +439,11 @@ public class Lab3Data extends LabData<Lab3Variant> {
         this.lowHeatValue = lowHeatValue;
     }
 
-    public Double getFuelConsumer() {
+    public Integer getFuelConsumer() {
         return fuelConsumer;
     }
 
-    public void setFuelConsumer(Double fuelConsumer) {
+    public void setFuelConsumer(Integer fuelConsumer) {
         this.fuelConsumer = fuelConsumer;
     }
 
@@ -490,11 +487,11 @@ public class Lab3Data extends LabData<Lab3Variant> {
         this.ashRecyclingFactor = ashRecyclingFactor;
     }
 
-    public Double getFlueGasNOxConcentration() {
+    public Integer getFlueGasNOxConcentration() {
         return flueGasNOxConcentration;
     }
 
-    public void setFlueGasNOxConcentration(Double flueGasNOxConcentration) {
+    public void setFlueGasNOxConcentration(Integer flueGasNOxConcentration) {
         this.flueGasNOxConcentration = flueGasNOxConcentration;
     }
 
@@ -624,14 +621,6 @@ public class Lab3Data extends LabData<Lab3Variant> {
 
     public void setAshProportionEntrainedGases(Double ashProportionEntrainedGases) {
         this.ashProportionEntrainedGases = ashProportionEntrainedGases;
-    }
-
-    public Double getSolidParticlesProportionCollectedInAsh() {
-        return solidParticlesProportionCollectedInAsh;
-    }
-
-    public void setSolidParticlesProportionCollectedInAsh(Double solidParticlesProportionCollectedInAsh) {
-        this.solidParticlesProportionCollectedInAsh = solidParticlesProportionCollectedInAsh;
     }
 
     public Double getStackAverageGasesSpeed() {
@@ -908,8 +897,6 @@ public class Lab3Data extends LabData<Lab3Variant> {
             return false;
         if (ashProportionEntrainedGases != null ? !ashProportionEntrainedGases.equals(lab3Data.ashProportionEntrainedGases) : lab3Data.ashProportionEntrainedGases != null)
             return false;
-        if (solidParticlesProportionCollectedInAsh != null ? !solidParticlesProportionCollectedInAsh.equals(lab3Data.solidParticlesProportionCollectedInAsh) : lab3Data.solidParticlesProportionCollectedInAsh != null)
-            return false;
         if (stackAverageGasesSpeed != null ? !stackAverageGasesSpeed.equals(lab3Data.stackAverageGasesSpeed) : lab3Data.stackAverageGasesSpeed != null)
             return false;
         if (noxMassiveInjection != null ? !noxMassiveInjection.equals(lab3Data.noxMassiveInjection) : lab3Data.noxMassiveInjection != null)
@@ -995,7 +982,6 @@ public class Lab3Data extends LabData<Lab3Variant> {
         result = 31 * result + (desulphurizationSystemRunningTime != null ? desulphurizationSystemRunningTime.hashCode() : 0);
         result = 31 * result + (boilerRunningTime != null ? boilerRunningTime.hashCode() : 0);
         result = 31 * result + (ashProportionEntrainedGases != null ? ashProportionEntrainedGases.hashCode() : 0);
-        result = 31 * result + (solidParticlesProportionCollectedInAsh != null ? solidParticlesProportionCollectedInAsh.hashCode() : 0);
         result = 31 * result + (stackAverageGasesSpeed != null ? stackAverageGasesSpeed.hashCode() : 0);
         result = 31 * result + (noxMassiveInjection != null ? noxMassiveInjection.hashCode() : 0);
         result = 31 * result + (no2MassiveInjection != null ? no2MassiveInjection.hashCode() : 0);

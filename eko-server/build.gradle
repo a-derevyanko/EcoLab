@@ -43,6 +43,8 @@ dependencies {
 
     compile group: 'org.springframework.boot',  name: 'spring-boot-starter-jdbc',                   version: '+'
 
+    compile group: 'org.springframework.boot',  name: 'spring-boot-starter-mail',                   version: '+'
+
     compile group: 'com.zaxxer',                name: 'HikariCP',                                   version: '+'
 
     compile group: 'com.github.ben-manes.caffeine', name: 'caffeine',                               version: '+'

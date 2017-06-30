@@ -20,13 +20,13 @@ CREATE TABLE lab3data (
   wind_direction VARCHAR(32),
   wind_speed DOUBLE,
   low_heat_value DOUBLE,
-  fuel_consumer DOUBLE,
+  fuel_consumer INT,
   carbon_in_fly_ash DOUBLE,
   sulphur_content DOUBLE,
   ash_content DOUBLE,
   water_content DOUBLE,
   ash_recycling_factor DOUBLE,
-  flue_gas_nox_concentration DOUBLE,
+  flue_gas_nox_concentration INT,
   stack_exit_temperature INT,
   outside_air_temperature INT,
   excess_air_ratio DOUBLE,
@@ -43,7 +43,6 @@ CREATE TABLE lab3data (
   desulphurization_system_running_time DOUBLE,
   boiler_running_time DOUBLE,
   ash_proportion_entrained_gases DOUBLE,
-  solid_particles_propotion_collected_in_ash DOUBLE,
   temperature_coefficient DOUBLE,
   terrain_coefficient DOUBLE,
   harmful_substances_deposition_coefficient DOUBLE,
@@ -111,7 +110,6 @@ COMMENT ON COLUMN lab3data.sulphur_oxides_fraction_associated_in_desulphurizatio
 COMMENT ON COLUMN lab3data.desulphurization_system_running_time IS 'Длительность работы сероулавливающей установки';
 COMMENT ON COLUMN lab3data.boiler_running_time IS 'Длительность работы котла';
 COMMENT ON COLUMN lab3data.ash_proportion_entrained_gases IS 'Доля золы, уносимой газами из котла';
-COMMENT ON COLUMN lab3data.solid_particles_propotion_collected_in_ash IS 'Доля твердых частиц, улавливаемых в золоуловителях';
 COMMENT ON COLUMN lab3data.temperature_coefficient IS 'Коэффициент, характеризующий температурную стратификацию атмосферы';
 COMMENT ON COLUMN lab3data.terrain_coefficient IS 'Коэффициент, учитывающий влияние рельефа местности';
 COMMENT ON COLUMN lab3data.harmful_substances_deposition_coefficient IS 'Безразмерный коэффициент, учитывающий скорость оседания вредных веществ в атмосферном воздухе';
@@ -137,13 +135,13 @@ CREATE TABLE lab3variant (
   wind_direction VARCHAR(32),
   wind_speed DOUBLE,
   low_heat_value DOUBLE,
-  fuel_consumer DOUBLE,
+  fuel_consumer INT,
   carbon_in_fly_ash DOUBLE,
   sulphur_content DOUBLE,
   ash_content DOUBLE,
   water_content DOUBLE,
   ash_recycling_factor DOUBLE,
-  flue_gas_nox_concentration DOUBLE,
+  flue_gas_nox_concentration INT,
   stack_exit_temperature INT,
   outside_air_temperature INT,
   excess_air_ratio DOUBLE,
@@ -153,8 +151,7 @@ CREATE TABLE lab3variant (
   no2_background_concentration DOUBLE,
   no_background_concentration DOUBLE,
   so2_background_concentration DOUBLE,
-  ash_background_concentration DOUBLE,
-  solid_particles_propotion_collected_in_ash DOUBLE
+  ash_background_concentration DOUBLE
 );
 
 /*
@@ -196,4 +193,3 @@ COMMENT ON COLUMN lab3variant.no2_background_concentration IS 'Фоновая к
 COMMENT ON COLUMN lab3variant.no_background_concentration IS 'Фоновая концентрация NO';
 COMMENT ON COLUMN lab3variant.so2_background_concentration IS 'Фоновая концентрация SO2';
 COMMENT ON COLUMN lab3variant.ash_background_concentration IS 'Фоновая концентрация золы';
-COMMENT ON COLUMN lab3variant.solid_particles_propotion_collected_in_ash IS 'Доля твердых частиц, улавливаемых в золоуловителях';
