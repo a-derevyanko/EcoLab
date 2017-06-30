@@ -25,6 +25,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         Lab3Data data = new Lab3Data();
         data.setStartDate(record.get(LAB3DATA.START_DATE));
         data.setSaveDate(record.get(LAB3DATA.SAVE_DATE));
+        data.setCompleted(record.get(LAB3DATA.COMPLETED));
         data.setTppOutput(record.get(LAB3DATA.TPP_OUTPUT));
         data.setNumberOfUnits(record.get(LAB3DATA.NUMBER_OF_UNITS) == null ? null : NumberOfUnits.valueOf(record.get(LAB3DATA.NUMBER_OF_UNITS)));
         data.setCity(record.get(LAB3DATA.CITY) == null ? null : City.valueOf(record.get(LAB3DATA.CITY)));
@@ -119,6 +120,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3DATA.USER_ID,
                 LAB3DATA.START_DATE,
                 LAB3DATA.SAVE_DATE,
+                LAB3DATA.COMPLETED,
                 LAB3DATA.TPP_OUTPUT,
                 LAB3DATA.NUMBER_OF_UNITS,
                 LAB3DATA.CITY,
@@ -163,6 +165,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         getFindUserIdSelect(data.getUserLogin()),
                         data.getStartDate(),
                         data.getSaveDate(),
+                        data.isCompleted(),
                         data.getTppOutput(),
                         data.getNumberOfUnits() == null ? null : data.getNumberOfUnits().value(),
                         data.getCity() == null ? null : data.getCity().name(),

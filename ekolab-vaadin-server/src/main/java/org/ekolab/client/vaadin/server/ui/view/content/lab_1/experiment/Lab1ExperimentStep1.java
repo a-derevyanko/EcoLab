@@ -56,7 +56,7 @@ public class Lab1ExperimentStep1 extends HorizontalLayout implements LabWizardSt
         addComponent(journalLayout);
         journalLayout.setSizeFull();
         journalLayout.setCaption(i18N.get("lab1.step1.experiment-journal"));
-        addField(objectNameField, FieldUtils.getField(Lab1Variant.class, "objectName"), 1);
+        addField(objectNameField, FieldUtils.getField(Lab1Variant.class, "name"), 1);
         addField(barometricPressureField, FieldUtils.getField(Lab1Variant.class, "barometricPressure"), 2);
         addField(outsideAirTemperatureField, FieldUtils.getField(Lab1Variant.class, "outsideAirTemperature"), 3);
         addField(stacksHeightField, FieldUtils.getField(Lab1Variant.class, "stacksHeight"), 4);

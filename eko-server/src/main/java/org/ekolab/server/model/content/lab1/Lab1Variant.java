@@ -14,7 +14,7 @@ public class Lab1Variant extends LabVariant {
      * Название объекта
      */
     @Nullable
-    private String objectName;
+    private String name;
 
     /**
      * Барометрическое давление
@@ -85,12 +85,12 @@ public class Lab1Variant extends LabVariant {
     private Integer flueGasNOxConcentration;
 
     @Nullable
-    public String getObjectName() {
-        return objectName;
+    public String getName() {
+        return name;
     }
 
-    public void setObjectName(@Nullable String objectName) {
-        this.objectName = objectName;
+    public void setName(@Nullable String name) {
+        this.name = name;
     }
 
     public Double getBarometricPressure() {
@@ -202,7 +202,7 @@ public class Lab1Variant extends LabVariant {
         if (this == o) return true;
         if (!(o instanceof Lab1Variant)) return false;
         Lab1Variant that = (Lab1Variant) o;
-        return Objects.equals(objectName, that.objectName) &&
+        return Objects.equals(name, that.name) &&
                 Objects.equals(barometricPressure, that.barometricPressure) &&
                 Objects.equals(outsideAirTemperature, that.outsideAirTemperature) &&
                 Objects.equals(stacksHeight, that.stacksHeight) &&
@@ -220,6 +220,6 @@ public class Lab1Variant extends LabVariant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(objectName, barometricPressure, outsideAirTemperature, stacksHeight, stacksDiameter, time, steamProductionCapacity, oxygenConcentration, oxygenConcentrationPoint, fuelConsumer, excessPressure, gasTemperature, stackExitTemperature, flueGasNOxConcentration);
+        return Objects.hash(name, barometricPressure, outsideAirTemperature, stacksHeight, stacksDiameter, time, steamProductionCapacity, oxygenConcentration, oxygenConcentrationPoint, fuelConsumer, excessPressure, gasTemperature, stackExitTemperature, flueGasNOxConcentration);
     }
 }

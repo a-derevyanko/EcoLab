@@ -4,11 +4,17 @@ import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.content.lab1.Lab1Dao;
 import org.ekolab.server.dao.impl.content.LabDaoImpl;
 import org.ekolab.server.model.content.lab1.Lab1Data;
+import org.ekolab.server.model.content.lab1.Lab1Variant;
+import org.jooq.Record;
+import org.jooq.RecordMapper;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
+import static org.ekolab.server.db.h2.public_.Tables.LAB1VARIANT;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -16,108 +22,61 @@ import java.util.List;
 @Service
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
 public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
-    @Override
-    public Lab1Data getLastUncompletedLabByUser(String userName) {
-        return null;
-    }
+    private static final RecordMapper<Record, Lab1Data> LAB1DATA_MAPPER = record -> {
+        Lab1Data data = new Lab1Data();
+        data.setStartDate(record.get(LAB1DATA.START_DATE));
+        data.setSaveDate(record.get(LAB1DATA.SAVE_DATE));
+        data.setCompleted(record.get(LAB1DATA.COMPLETED));
+        data.setName(record.get(LAB1DATA.NAME));
+        data.setBarometricPressure(record.get(LAB1DATA.BAROMETRIC_PRESSURE));
+        data.setOutsideAirTemperature(record.get(LAB1DATA.OUTSIDE_AIR_TEMPERATURE));
+        data.setStacksHeight(record.get(LAB1DATA.STACKS_HEIGHT));
+        data.setStacksDiameter(record.get(LAB1DATA.STACKS_DIAMETER));
+        data.setSteamProductionCapacity(record.get(LAB1DATA.STEAM_PRODUCTION_CAPACITY));
+        data.setOxygenConcentration(record.get(LAB1DATA.OXYGEN_CONCENTRATION));
+        data.setOxygenConcentrationPoint(record.get(LAB1DATA.OXYGEN_CONCENTRATION_POINT));
+        data.setFuelConsumer(record.get(LAB1DATA.FUEL_CONSUMER));
+        data.setExcessPressure(record.get(LAB1DATA.EXCESS_PRESSURE));
+        data.setGasTemperature(record.get(LAB1DATA.GAS_TEMPERATURE));
+        data.setStackExitTemperature(record.get(LAB1DATA.STACK_EXIT_TEMPERATURE));
+        data.setFlueGasNOxConcentration(record.get(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION));
+        data.setExcessAirRatio(record.get(LAB1DATA.EXCESS_AIR_RATIO));
+        data.setFlueGasNOxConcentrationNC(record.get(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC));
+        data.setExcessOfNorms(record.get(LAB1DATA.EXCESS_OF_NORMS));
+        data.setValidBarometricPressure(record.get(LAB1DATA.VALID_BAROMETRIC_PRESSURE));
+        data.setValidAbsolutePressure(record.get(LAB1DATA.VALID_ABSOLUTE_PRESSURE));
+        data.setCorrectionFactor(record.get(LAB1DATA.CORRECTION_FACTOR));
+        data.setFuelConsumerCorrection(record.get(LAB1DATA.FUEL_CONSUMER_CORRECTION));
+        data.setFuelConsumerNC(record.get(LAB1DATA.FUEL_CONSUMER_NC));
+        data.setFlueGasesRate(record.get(LAB1DATA.FLUE_GASES_RATE));
+        data.setDryGasesFlowRate(record.get(LAB1DATA.DRY_GASES_FLOW_RATE));
+        data.setMassEmissions(record.get(LAB1DATA.MASS_EMISSIONS));
+        data.setFlueGasesSpeed(record.get(LAB1DATA.FLUE_GASES_SPEED));
+        data.setF(record.get(LAB1DATA.F));
+        data.setM(record.get(LAB1DATA.M));
+        data.setU(record.get(LAB1DATA.U));
+        data.setN(record.get(LAB1DATA.N));
+        data.setD(record.get(LAB1DATA.D));
+        data.setHarmfulSubstancesDepositionCoefficient(record.get(LAB1DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT));
+        data.setTerrainCoefficient(record.get(LAB1DATA.TERRAIN_COEFFICIENT));
+        data.setTemperatureCoefficient(record.get(LAB1DATA.TEMPERATURE_COEFFICIENT));
+        data.setDistanceFromEmissionSource(record.get(LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE));
+        data.setMaximumSurfaceConcentration(record.get(LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION));
 
-    @Override
-    public List<Lab1Data> getAllLabsByUser(String userName) {
-        return null;
-    }
-
-    @Override
-    public long saveLab(Lab1Data labData) {
-        return 0;
-    }
-
-    @Override
-    public int updateLab(Lab1Data labData) {
-        return 0;
-    }
-
-    @Override
-    public int removeLabsByUser(String userName) {
-        return 0;
-    }
-
-    @Override
-    public int removeOldLabs(LocalDateTime lastSaveDate) {
-        return 0;
-    }
-    /*private static final RecordMapper<Record, Lab3Data> LAB3DATA_MAPPER = record -> {
-        Lab3Data data = new Lab3Data();
-        data.setStartDate(record.get(LAB3DATA.START_DATE));
-        data.setSaveDate(record.get(LAB3DATA.SAVE_DATE));
-        data.setTppOutput(record.get(LAB3DATA.TPP_OUTPUT));
-        data.setNumberOfUnits(record.get(LAB3DATA.NUMBER_OF_UNITS) == null ? null : NumberOfUnits.valueOf(record.get(LAB3DATA.NUMBER_OF_UNITS)));
-        data.setCity(record.get(LAB3DATA.CITY) == null ? null : City.valueOf(record.get(LAB3DATA.CITY)));
-        data.setSteamProductionCapacity(record.get(LAB3DATA.STEAM_PRODUCTION_CAPACITY));
-        data.setNumberOfStacks(record.get(LAB3DATA.NUMBER_OF_STACKS) == null ? null : NumberOfStacks.valueOf(record.get(LAB3DATA.NUMBER_OF_STACKS)));
-        data.setStacksHeight(record.get(LAB3DATA.STACKS_HEIGHT));
-        data.setStacksDiameter(record.get(LAB3DATA.STACKS_DIAMETER));
-        data.setWindDirection(record.get(LAB3DATA.WIND_DIRECTION) == null ? null : WindDirection.valueOf(record.get(LAB3DATA.WIND_DIRECTION)));
-        data.setWindSpeed(record.get(LAB3DATA.WIND_SPEED));
-        data.setLowHeatValue(record.get(LAB3DATA.LOW_HEAT_VALUE));
-        data.setFuelConsumer(record.get(LAB3DATA.FUEL_CONSUMER));
-        data.setCarbonInFlyAsh(record.get(LAB3DATA.CARBON_IN_FLY_ASH));
-        data.setSulphurContent(record.get(LAB3DATA.SULPHUR_CONTENT));
-        data.setAshContent(record.get(LAB3DATA.ASH_CONTENT));
-        data.setWaterContent(record.get(LAB3DATA.WATER_CONTENT));
-        data.setAshRecyclingFactor(record.get(LAB3DATA.ASH_RECYCLING_FACTOR));
-        data.setFlueGasNOxConcentration(record.get(LAB3DATA.FLUE_GAS_NOX_CONCENTRATION));
-        data.setStackExitTemperature(record.get(LAB3DATA.STACK_EXIT_TEMPERATURE));
-        data.setOutsideAirTemperature(record.get(LAB3DATA.OUTSIDE_AIR_TEMPERATURE));
-        data.setExcessAirRatio(record.get(LAB3DATA.EXCESS_AIR_RATIO));
-        data.setCombustionProductsVolume(record.get(LAB3DATA.COMBUSTION_PRODUCT_VOLUME));
-        data.setWaterVaporVolume(record.get(LAB3DATA.WATER_VAPOR_VOLUME));
-        data.setAirVolume(record.get(LAB3DATA.AIR_VOLUME));
-        data.setNo2BackgroundConcentration(record.get(LAB3DATA.NO2_BACKGROUND_CONCENTRATION));
-        data.setNoBackgroundConcentration(record.get(LAB3DATA.NO_BACKGROUND_CONCENTRATION));
-        data.setSo2BackgroundConcentration(record.get(LAB3DATA.SO2_BACKGROUND_CONCENTRATION));
-        data.setAshBackgroundConcentration(record.get(LAB3DATA.ASH_BACKGROUND_CONCENTRATION));
-        data.setSulphurOxidesFractionAssociatedByFlyAsh(record.get(LAB3DATA.SULPHUR_OXIDES_FRACTION_ASSOCIATED_BY_FLY_ASH));
-        data.setSulphurOxidesFractionAssociatedInWetDustCollector(record.get(LAB3DATA.SULPHUR_OXIDES_FRACTION_ASSOCIATED_IN_WET_DUST_COLLECTOR));
-        data.setSulphurOxidesFractionAssociatedInDesulphurizationSystem(record.get(LAB3DATA.SULPHUR_OXIDES_FRACTION_ASSOCIATED_IN_DESULPHURIZATION_SYSTEM));
-        data.setDesulphurizationSystemRunningTime(record.get(LAB3DATA.DESULPHURIZATION_SYSTEM_RUNNING_TIME));
-        data.setBoilerRunningTime(record.get(LAB3DATA.BOILER_RUNNING_TIME));
-        data.setAshProportionEntrainedGases(record.get(LAB3DATA.ASH_PROPORTION_ENTRAINED_GASES));
-        data.setTemperatureCoefficient(record.get(LAB3DATA.TEMPERATURE_COEFFICIENT));
-        data.setTerrainCoefficient(record.get(LAB3DATA.TERRAIN_COEFFICIENT));
-        data.setHarmfulSubstancesDepositionCoefficient(record.get(LAB3DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT));
-        data.setNo2MAC(record.get(LAB3DATA.NO2_MAC));
-        data.setNoMAC(record.get(LAB3DATA.NO_MAC));
-        data.setSo2MAC(record.get(LAB3DATA.SO2_MAC));
-        data.setAshMAC(record.get(LAB3DATA.ASH_MAC));
-
-        Lab3Variant variant = new Lab3Variant();
-        variant.setTppOutput(record.get(LAB3VARIANT.TPP_OUTPUT));
-        variant.setNumberOfUnits(record.get(LAB3VARIANT.NUMBER_OF_UNITS) == null ? null : NumberOfUnits.valueOf(record.get(LAB3VARIANT.NUMBER_OF_UNITS)));
-        variant.setFuelType(record.get(LAB3VARIANT.FUEL_TYPE) == null ? null : FuelType.valueOf(record.get(LAB3VARIANT.FUEL_TYPE)));
-        variant.setCity(record.get(LAB3VARIANT.CITY) == null ? null : City.valueOf(record.get(LAB3VARIANT.CITY)));
-        variant.setSteamProductionCapacity(record.get(LAB3VARIANT.STEAM_PRODUCTION_CAPACITY));
-        variant.setNumberOfStacks(record.get(LAB3VARIANT.NUMBER_OF_STACKS) == null ? null : NumberOfStacks.valueOf(record.get(LAB3VARIANT.NUMBER_OF_STACKS)));
-        variant.setStacksHeight(record.get(LAB3VARIANT.STACKS_HEIGHT));
-        variant.setWindDirection(record.get(LAB3VARIANT.WIND_DIRECTION) == null ? null : WindDirection.valueOf(record.get(LAB3VARIANT.WIND_DIRECTION)));
-        variant.setWindSpeed(record.get(LAB3VARIANT.WIND_SPEED));
-        variant.setLowHeatValue(record.get(LAB3VARIANT.LOW_HEAT_VALUE));
-        variant.setFuelConsumer(record.get(LAB3VARIANT.FUEL_CONSUMER));
-        variant.setCarbonInFlyAsh(record.get(LAB3VARIANT.CARBON_IN_FLY_ASH));
-        variant.setSulphurContent(record.get(LAB3VARIANT.SULPHUR_CONTENT));
-        variant.setAshContent(record.get(LAB3VARIANT.ASH_CONTENT));
-        variant.setWaterContent(record.get(LAB3VARIANT.WATER_CONTENT));
-        variant.setAshRecyclingFactor(record.get(LAB3VARIANT.ASH_RECYCLING_FACTOR));
-        variant.setFlueGasNOxConcentration(record.get(LAB3VARIANT.FLUE_GAS_NOX_CONCENTRATION));
-        variant.setStackExitTemperature(record.get(LAB3VARIANT.STACK_EXIT_TEMPERATURE));
-        variant.setOutsideAirTemperature(record.get(LAB3VARIANT.OUTSIDE_AIR_TEMPERATURE));
-        variant.setExcessAirRatio(record.get(LAB3VARIANT.EXCESS_AIR_RATIO));
-        variant.setCombustionProductsVolume(record.get(LAB3VARIANT.COMBUSTION_PRODUCT_VOLUME));
-        variant.setWaterVaporVolume(record.get(LAB3VARIANT.WATER_VAPOR_VOLUME));
-        variant.setAirVolume(record.get(LAB3VARIANT.AIR_VOLUME));
-        variant.setNo2BackgroundConcentration(record.get(LAB3VARIANT.NO2_BACKGROUND_CONCENTRATION));
-        variant.setNoBackgroundConcentration(record.get(LAB3VARIANT.NO_BACKGROUND_CONCENTRATION));
-        variant.setSo2BackgroundConcentration(record.get(LAB3VARIANT.SO2_BACKGROUND_CONCENTRATION));
-        variant.setAshBackgroundConcentration(record.get(LAB3VARIANT.ASH_BACKGROUND_CONCENTRATION));
+        Lab1Variant variant = new Lab1Variant();
+        variant.setName(record.get(LAB1VARIANT.NAME));
+        variant.setBarometricPressure(record.get(LAB1VARIANT.BAROMETRIC_PRESSURE));
+        variant.setOutsideAirTemperature(record.get(LAB1VARIANT.OUTSIDE_AIR_TEMPERATURE));
+        variant.setStacksHeight(record.get(LAB1VARIANT.STACKS_HEIGHT));
+        variant.setStacksDiameter(record.get(LAB1VARIANT.STACKS_DIAMETER));
+        variant.setSteamProductionCapacity(record.get(LAB1VARIANT.STEAM_PRODUCTION_CAPACITY));
+        variant.setOxygenConcentration(record.get(LAB1VARIANT.OXYGEN_CONCENTRATION));
+        variant.setOxygenConcentrationPoint(record.get(LAB1VARIANT.OXYGEN_CONCENTRATION_POINT));
+        variant.setFuelConsumer(record.get(LAB1VARIANT.FUEL_CONSUMER));
+        variant.setExcessPressure(record.get(LAB1VARIANT.EXCESS_PRESSURE));
+        variant.setGasTemperature(record.get(LAB1VARIANT.GAS_TEMPERATURE));
+        variant.setStackExitTemperature(record.get(LAB1VARIANT.STACK_EXIT_TEMPERATURE));
+        variant.setFlueGasNOxConcentration(record.get(LAB1VARIANT.FLUE_GAS_NOX_CONCENTRATION));
 
         data.setVariant(variant);
 
@@ -125,229 +84,188 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
     };
 
     @Override
-    public Lab3Data getLastUncompletedLabByUser(String userName) {
-        return dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID)).
-                where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(userName))).and(LAB3DATA.COMPLETED.isFalse()).
-                orderBy(LAB3DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB3DATA_MAPPER);
+    public Lab1Data getLastUncompletedLabByUser(String userName) {
+        return dsl.select().from(LAB1DATA).join(LAB1VARIANT).on(LAB1VARIANT.ID.eq(LAB1DATA.ID)).
+                where(LAB1DATA.USER_ID.eq(getFindUserIdSelect(userName))).and(LAB1DATA.COMPLETED.isFalse()).
+                orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB1DATA_MAPPER);
     }
 
     @Override
-    public List<Lab3Data> getAllLabsByUser(String userName) {
-        return dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID))
-                .where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(userName))).fetch(LAB3DATA_MAPPER);
+    public List<Lab1Data> getAllLabsByUser(String userName) {
+        return dsl.select().from(LAB1DATA).join(LAB1VARIANT).on(LAB1VARIANT.ID.eq(LAB1DATA.ID))
+                .where(LAB1DATA.USER_ID.eq(getFindUserIdSelect(userName))).fetch(LAB1DATA_MAPPER);
     }
 
     @Override
-    public long saveLab(Lab3Data data) {
-        long id = dsl.insertInto(LAB3DATA,
-                LAB3DATA.USER_ID,
-                LAB3DATA.START_DATE,
-                LAB3DATA.SAVE_DATE,
-                LAB3DATA.TPP_OUTPUT,
-                LAB3DATA.NUMBER_OF_UNITS,
-                LAB3DATA.CITY,
-                LAB3DATA.STEAM_PRODUCTION_CAPACITY,
-                LAB3DATA.NUMBER_OF_STACKS,
-                LAB3DATA.STACKS_HEIGHT,
-                LAB3DATA.STACKS_DIAMETER,
-                LAB3DATA.WIND_DIRECTION,
-                LAB3DATA.WIND_SPEED,
-                LAB3DATA.LOW_HEAT_VALUE,
-                LAB3DATA.FUEL_CONSUMER,
-                LAB3DATA.CARBON_IN_FLY_ASH,
-                LAB3DATA.SULPHUR_CONTENT,
-                LAB3DATA.ASH_CONTENT,
-                LAB3DATA.WATER_CONTENT,
-                LAB3DATA.ASH_RECYCLING_FACTOR,
-                LAB3DATA.FLUE_GAS_NOX_CONCENTRATION,
-                LAB3DATA.STACK_EXIT_TEMPERATURE,
-                LAB3DATA.OUTSIDE_AIR_TEMPERATURE,
-                LAB3DATA.EXCESS_AIR_RATIO,
-                LAB3DATA.COMBUSTION_PRODUCT_VOLUME,
-                LAB3DATA.WATER_VAPOR_VOLUME,
-                LAB3DATA.AIR_VOLUME,
-                LAB3DATA.NO2_BACKGROUND_CONCENTRATION,
-                LAB3DATA.NO_BACKGROUND_CONCENTRATION,
-                LAB3DATA.SO2_BACKGROUND_CONCENTRATION,
-                LAB3DATA.ASH_BACKGROUND_CONCENTRATION,
-                LAB3DATA.SULPHUR_OXIDES_FRACTION_ASSOCIATED_BY_FLY_ASH,
-                LAB3DATA.SULPHUR_OXIDES_FRACTION_ASSOCIATED_IN_WET_DUST_COLLECTOR,
-                LAB3DATA.SULPHUR_OXIDES_FRACTION_ASSOCIATED_IN_DESULPHURIZATION_SYSTEM,
-                LAB3DATA.DESULPHURIZATION_SYSTEM_RUNNING_TIME,
-                LAB3DATA.BOILER_RUNNING_TIME,
-                LAB3DATA.ASH_PROPORTION_ENTRAINED_GASES,
-                LAB3DATA.TEMPERATURE_COEFFICIENT,
-                LAB3DATA.TERRAIN_COEFFICIENT,
-                LAB3DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT,
-                LAB3DATA.NO2_MAC,
-                LAB3DATA.NO_MAC,
-                LAB3DATA.SO2_MAC,
-                LAB3DATA.ASH_MAC).
+    public long saveLab(Lab1Data data) {
+        long id = dsl.insertInto(LAB1DATA,
+                LAB1DATA.USER_ID,
+                LAB1DATA.START_DATE,
+                LAB1DATA.SAVE_DATE,
+                LAB1DATA.COMPLETED,
+                LAB1DATA.NAME,
+                LAB1DATA.BAROMETRIC_PRESSURE,
+                LAB1DATA.OUTSIDE_AIR_TEMPERATURE,
+                LAB1DATA.STACKS_HEIGHT,
+                LAB1DATA.STACKS_DIAMETER,
+                LAB1DATA.STEAM_PRODUCTION_CAPACITY,
+                LAB1DATA.OXYGEN_CONCENTRATION,
+                LAB1DATA.OXYGEN_CONCENTRATION_POINT,
+                LAB1DATA.FUEL_CONSUMER,
+                LAB1DATA.EXCESS_PRESSURE,
+                LAB1DATA.GAS_TEMPERATURE,
+                LAB1DATA.STACK_EXIT_TEMPERATURE,
+                LAB1DATA.FLUE_GAS_NOX_CONCENTRATION,
+                LAB1DATA.EXCESS_AIR_RATIO,
+                LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC,
+                LAB1DATA.EXCESS_OF_NORMS,
+                LAB1DATA.VALID_BAROMETRIC_PRESSURE,
+                LAB1DATA.VALID_ABSOLUTE_PRESSURE,
+                LAB1DATA.CORRECTION_FACTOR,
+                LAB1DATA.FUEL_CONSUMER_CORRECTION,
+                LAB1DATA.FUEL_CONSUMER_NC,
+                LAB1DATA.FLUE_GASES_RATE,
+                LAB1DATA.DRY_GASES_FLOW_RATE,
+                LAB1DATA.MASS_EMISSIONS,
+                LAB1DATA.FLUE_GASES_SPEED,
+                LAB1DATA.F,
+                LAB1DATA.M,
+                LAB1DATA.U,
+                LAB1DATA.N,
+                LAB1DATA.D,
+                LAB1DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT,
+                LAB1DATA.TERRAIN_COEFFICIENT,
+                LAB1DATA.TEMPERATURE_COEFFICIENT,
+                LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE,
+                LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION).
                 values(
                         getFindUserIdSelect(data.getUserLogin()),
                         data.getStartDate(),
                         data.getSaveDate(),
-                        data.getTppOutput(),
-                        data.getNumberOfUnits() == null ? null : data.getNumberOfUnits().value(),
-                        data.getCity() == null ? null : data.getCity().name(),
-                        data.getSteamProductionCapacity(),
-                        data.getNumberOfStacks() == null ? null : data.getNumberOfStacks().value(),
+                        data.isCompleted(),
+                        data.getName(),
+                        data.getBarometricPressure(),
+                        data.getOutsideAirTemperature(),
                         data.getStacksHeight(),
                         data.getStacksDiameter(),
-                        data.getWindDirection() == null ? null : data.getWindDirection().name(),
-                        data.getWindSpeed(),
-                        data.getLowHeatValue(),
+                        data.getSteamProductionCapacity(),
+                        data.getOxygenConcentration(),
+                        data.getOxygenConcentrationPoint(),
                         data.getFuelConsumer(),
-                        data.getCarbonInFlyAsh(),
-                        data.getSulphurContent(),
-                        data.getAshContent(),
-                        data.getWaterContent(),
-                        data.getAshRecyclingFactor(),
-                        data.getFlueGasNOxConcentration(),
+                        data.getExcessPressure(),
+                        data.getGasTemperature(),
                         data.getStackExitTemperature(),
-                        data.getOutsideAirTemperature(),
+                        data.getFlueGasNOxConcentration(),
                         data.getExcessAirRatio(),
-                        data.getCombustionProductsVolume(),
-                        data.getWaterVaporVolume(),
-                        data.getAirVolume(),
-                        data.getNo2BackgroundConcentration(),
-                        data.getNoBackgroundConcentration(),
-                        data.getSo2BackgroundConcentration(),
-                        data.getAshBackgroundConcentration(),
-                        data.getSulphurOxidesFractionAssociatedByFlyAsh(),
-                        data.getSulphurOxidesFractionAssociatedInWetDustCollector(),
-                        data.getSulphurOxidesFractionAssociatedInDesulphurizationSystem(),
-                        data.getDesulphurizationSystemRunningTime(),
-                        data.getBoilerRunningTime(),
-                        data.getAshProportionEntrainedGases(),
-                        data.getTemperatureCoefficient(),
-                        data.getTerrainCoefficient(),
+                        data.getFlueGasNOxConcentrationNC(),
+                        data.getExcessOfNorms(),
+                        data.getValidBarometricPressure(),
+                        data.getValidAbsolutePressure(),
+                        data.getCorrectionFactor(),
+                        data.getFuelConsumerCorrection(),
+                        data.getFuelConsumerNC(),
+                        data.getFlueGasesRate(),
+                        data.getDryGasesFlowRate(),
+                        data.getMassEmissions(),
+                        data.getFlueGasesSpeed(),
+                        data.getF(),
+                        data.getM(),
+                        data.getU(),
+                        data.getN(),
+                        data.getD(),
                         data.getHarmfulSubstancesDepositionCoefficient(),
-                        data.getNo2MAC(),
-                        data.getNoMAC(),
-                        data.getSo2MAC(),
-                        data.getAshMAC()
-                ).returning(LAB3DATA.ID).fetchOne().getId();
+                        data.getTerrainCoefficient(),
+                        data.getTemperatureCoefficient(),
+                        data.getDistanceFromEmissionSource(),
+                        data.getMaximumSurfaceConcentration()
+                ).returning(LAB1DATA.ID).fetchOne().getId();
 
-        Lab3Variant variant = data.getVariant();
-        dsl.insertInto(LAB3VARIANT,
-                LAB3VARIANT.ID,
-                LAB3VARIANT.TPP_OUTPUT,
-                LAB3VARIANT.NUMBER_OF_UNITS,
-                LAB3VARIANT.FUEL_TYPE,
-                LAB3VARIANT.CITY,
-                LAB3VARIANT.STEAM_PRODUCTION_CAPACITY,
-                LAB3VARIANT.NUMBER_OF_STACKS,
-                LAB3VARIANT.STACKS_HEIGHT,
-                LAB3VARIANT.WIND_DIRECTION,
-                LAB3VARIANT.WIND_SPEED,
-                LAB3VARIANT.LOW_HEAT_VALUE,
-                LAB3VARIANT.FUEL_CONSUMER,
-                LAB3VARIANT.CARBON_IN_FLY_ASH,
-                LAB3VARIANT.SULPHUR_CONTENT,
-                LAB3VARIANT.ASH_CONTENT,
-                LAB3VARIANT.WATER_CONTENT,
-                LAB3VARIANT.ASH_RECYCLING_FACTOR,
-                LAB3VARIANT.FLUE_GAS_NOX_CONCENTRATION,
-                LAB3VARIANT.STACK_EXIT_TEMPERATURE,
-                LAB3VARIANT.OUTSIDE_AIR_TEMPERATURE,
-                LAB3VARIANT.EXCESS_AIR_RATIO,
-                LAB3VARIANT.COMBUSTION_PRODUCT_VOLUME,
-                LAB3VARIANT.WATER_VAPOR_VOLUME,
-                LAB3VARIANT.AIR_VOLUME,
-                LAB3VARIANT.NO2_BACKGROUND_CONCENTRATION,
-                LAB3VARIANT.NO_BACKGROUND_CONCENTRATION,
-                LAB3VARIANT.SO2_BACKGROUND_CONCENTRATION,
-                LAB3VARIANT.ASH_BACKGROUND_CONCENTRATION).
+        Lab1Variant variant = data.getVariant();
+        dsl.insertInto(LAB1VARIANT,
+                LAB1VARIANT.ID,
+                LAB1VARIANT.NAME,
+                LAB1VARIANT.BAROMETRIC_PRESSURE,
+                LAB1VARIANT.OUTSIDE_AIR_TEMPERATURE,
+                LAB1VARIANT.STACKS_HEIGHT,
+                LAB1VARIANT.STACKS_DIAMETER,
+                LAB1VARIANT.STEAM_PRODUCTION_CAPACITY,
+                LAB1VARIANT.OXYGEN_CONCENTRATION,
+                LAB1VARIANT.OXYGEN_CONCENTRATION_POINT,
+                LAB1VARIANT.FUEL_CONSUMER,
+                LAB1VARIANT.EXCESS_PRESSURE,
+                LAB1VARIANT.GAS_TEMPERATURE,
+                LAB1VARIANT.STACK_EXIT_TEMPERATURE,
+                LAB1VARIANT.FLUE_GAS_NOX_CONCENTRATION).
                 values(
                         id,
-                        variant.getTppOutput(),
-                        variant.getNumberOfUnits() == null ? null : variant.getNumberOfUnits().value(),
-                        variant.getFuelType() == null ? null : variant.getFuelType().name(),
-                        variant.getCity() == null ? null : variant.getCity().name(),
-                        variant.getSteamProductionCapacity(),
-                        variant.getNumberOfStacks() == null ? null : variant.getNumberOfStacks().value(),
-                        variant.getStacksHeight(),
-                        variant.getWindDirection() == null ? null : variant.getWindDirection().name(),
-                        variant.getWindSpeed(),
-                        variant.getLowHeatValue(),
-                        variant.getFuelConsumer(),
-                        variant.getCarbonInFlyAsh(),
-                        variant.getSulphurContent(),
-                        variant.getAshContent(),
-                        variant.getWaterContent(),
-                        variant.getAshRecyclingFactor(),
-                        variant.getFlueGasNOxConcentration(),
-                        variant.getStackExitTemperature(),
+                        variant.getName(),
+                        variant.getBarometricPressure(),
                         variant.getOutsideAirTemperature(),
-                        variant.getExcessAirRatio(),
-                        variant.getCombustionProductsVolume(),
-                        variant.getWaterVaporVolume(),
-                        variant.getAirVolume(),
-                        variant.getNo2BackgroundConcentration(),
-                        variant.getNoBackgroundConcentration(),
-                        variant.getSo2BackgroundConcentration(),
-                        variant.getAshBackgroundConcentration()
+                        variant.getStacksHeight(),
+                        variant.getStacksDiameter(),
+                        variant.getSteamProductionCapacity(),
+                        variant.getOxygenConcentration(),
+                        variant.getOxygenConcentrationPoint(),
+                        variant.getFuelConsumer(),
+                        variant.getExcessPressure(),
+                        variant.getGasTemperature(),
+                        variant.getStackExitTemperature(),
+                        variant.getFlueGasNOxConcentration()
                 ).execute();
         return id;
     }
 
     @Override
-    public int updateLab(Lab3Data data) {
-        return dsl.update(LAB3DATA)
-                .set(LAB3DATA.START_DATE, data.getStartDate())
-                .set(LAB3DATA.SAVE_DATE, data.getSaveDate())
-                .set(LAB3DATA.TPP_OUTPUT, data.getTppOutput())
-                .set(LAB3DATA.NUMBER_OF_UNITS, data.getNumberOfUnits() == null ? null : data.getNumberOfUnits().value())
-                .set(LAB3DATA.CITY, data.getCity() == null ? null : data.getCity().name())
-                .set(LAB3DATA.STEAM_PRODUCTION_CAPACITY, data.getSteamProductionCapacity())
-                .set(LAB3DATA.NUMBER_OF_STACKS, data.getNumberOfStacks() == null ? null : data.getNumberOfStacks().value())
-                .set(LAB3DATA.STACKS_HEIGHT, data.getStacksHeight())
-                .set(LAB3DATA.STACKS_DIAMETER, data.getStacksDiameter())
-                .set(LAB3DATA.WIND_DIRECTION, data.getWindDirection() == null ? null : data.getWindDirection().name())
-                .set(LAB3DATA.WIND_SPEED, data.getWindSpeed())
-                .set(LAB3DATA.LOW_HEAT_VALUE, data.getLowHeatValue())
-                .set(LAB3DATA.FUEL_CONSUMER, data.getFuelConsumer())
-                .set(LAB3DATA.CARBON_IN_FLY_ASH, data.getCarbonInFlyAsh())
-                .set(LAB3DATA.SULPHUR_CONTENT, data.getSulphurContent())
-                .set(LAB3DATA.ASH_CONTENT, data.getAshContent())
-                .set(LAB3DATA.WATER_CONTENT, data.getWaterContent())
-                .set(LAB3DATA.ASH_RECYCLING_FACTOR, data.getAshRecyclingFactor())
-                .set(LAB3DATA.FLUE_GAS_NOX_CONCENTRATION, data.getFlueGasNOxConcentration())
-                .set(LAB3DATA.STACK_EXIT_TEMPERATURE, data.getStackExitTemperature())
-                .set(LAB3DATA.OUTSIDE_AIR_TEMPERATURE, data.getOutsideAirTemperature())
-                .set(LAB3DATA.EXCESS_AIR_RATIO, data.getExcessAirRatio())
-                .set(LAB3DATA.COMBUSTION_PRODUCT_VOLUME, data.getCombustionProductsVolume())
-                .set(LAB3DATA.WATER_VAPOR_VOLUME, data.getWaterVaporVolume())
-                .set(LAB3DATA.AIR_VOLUME, data.getAirVolume())
-                .set(LAB3DATA.NO2_BACKGROUND_CONCENTRATION, data.getNo2BackgroundConcentration())
-                .set(LAB3DATA.NO_BACKGROUND_CONCENTRATION, data.getNoBackgroundConcentration())
-                .set(LAB3DATA.SO2_BACKGROUND_CONCENTRATION, data.getSo2BackgroundConcentration())
-                .set(LAB3DATA.ASH_BACKGROUND_CONCENTRATION, data.getAshBackgroundConcentration())
-                .set(LAB3DATA.SULPHUR_OXIDES_FRACTION_ASSOCIATED_BY_FLY_ASH, data.getSulphurOxidesFractionAssociatedByFlyAsh())
-                .set(LAB3DATA.SULPHUR_OXIDES_FRACTION_ASSOCIATED_IN_WET_DUST_COLLECTOR, data.getSulphurOxidesFractionAssociatedInWetDustCollector())
-                .set(LAB3DATA.SULPHUR_OXIDES_FRACTION_ASSOCIATED_IN_DESULPHURIZATION_SYSTEM, data.getSulphurOxidesFractionAssociatedInDesulphurizationSystem())
-                .set(LAB3DATA.DESULPHURIZATION_SYSTEM_RUNNING_TIME, data.getDesulphurizationSystemRunningTime())
-                .set(LAB3DATA.BOILER_RUNNING_TIME, data.getBoilerRunningTime())
-                .set(LAB3DATA.ASH_PROPORTION_ENTRAINED_GASES, data.getAshProportionEntrainedGases())
-                .set(LAB3DATA.TEMPERATURE_COEFFICIENT, data.getTemperatureCoefficient())
-                .set(LAB3DATA.TERRAIN_COEFFICIENT, data.getTerrainCoefficient())
-                .set(LAB3DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT, data.getHarmfulSubstancesDepositionCoefficient())
-                .set(LAB3DATA.NO2_MAC, data.getNo2MAC())
-                .set(LAB3DATA.NO_MAC, data.getNoMAC())
-                .set(LAB3DATA.SO2_MAC, data.getSo2MAC())
-                .set(LAB3DATA.ASH_MAC, data.getAshMAC())
-                .where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(data.getUserLogin())).and(LAB3DATA.START_DATE.eq(data.getStartDate())))
+    public int updateLab(Lab1Data data) {
+        return dsl.update(LAB1DATA)
+                .set(LAB1DATA.START_DATE, data.getStartDate())
+                .set(LAB1DATA.SAVE_DATE, data.getSaveDate())
+                .set(LAB1DATA.NAME, data.getName())
+                .set(LAB1DATA.BAROMETRIC_PRESSURE, data.getBarometricPressure())
+                .set(LAB1DATA.OUTSIDE_AIR_TEMPERATURE, data.getOutsideAirTemperature())
+                .set(LAB1DATA.STACKS_HEIGHT, data.getStacksHeight())
+                .set(LAB1DATA.STACKS_DIAMETER, data.getStacksDiameter())
+                .set(LAB1DATA.STEAM_PRODUCTION_CAPACITY, data.getSteamProductionCapacity())
+                .set(LAB1DATA.OXYGEN_CONCENTRATION, data.getOxygenConcentration())
+                .set(LAB1DATA.OXYGEN_CONCENTRATION_POINT, data.getOxygenConcentrationPoint())
+                .set(LAB1DATA.FUEL_CONSUMER, data.getFuelConsumer())
+                .set(LAB1DATA.EXCESS_PRESSURE, data.getExcessPressure())
+                .set(LAB1DATA.GAS_TEMPERATURE, data.getGasTemperature())
+                .set(LAB1DATA.STACK_EXIT_TEMPERATURE, data.getStackExitTemperature())
+                .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION, data.getFlueGasNOxConcentration())
+                .set(LAB1DATA.EXCESS_AIR_RATIO, data.getExcessAirRatio())
+                .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC, data.getFlueGasNOxConcentrationNC())
+                .set(LAB1DATA.EXCESS_OF_NORMS, data.getExcessOfNorms())
+                .set(LAB1DATA.VALID_BAROMETRIC_PRESSURE, data.getValidBarometricPressure())
+                .set(LAB1DATA.VALID_ABSOLUTE_PRESSURE, data.getValidAbsolutePressure())
+                .set(LAB1DATA.CORRECTION_FACTOR, data.getCorrectionFactor())
+                .set(LAB1DATA.FUEL_CONSUMER_CORRECTION, data.getFuelConsumerCorrection())
+                .set(LAB1DATA.FUEL_CONSUMER_NC, data.getFuelConsumerNC())
+                .set(LAB1DATA.FLUE_GASES_RATE, data.getFlueGasesRate())
+                .set(LAB1DATA.DRY_GASES_FLOW_RATE, data.getDryGasesFlowRate())
+                .set(LAB1DATA.MASS_EMISSIONS, data.getMassEmissions())
+                .set(LAB1DATA.FLUE_GASES_SPEED, data.getFlueGasesSpeed())
+                .set(LAB1DATA.F, data.getF())
+                .set(LAB1DATA.M, data.getM())
+                .set(LAB1DATA.U, data.getU())
+                .set(LAB1DATA.N, data.getN())
+                .set(LAB1DATA.D, data.getD())
+                .set(LAB1DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT, data.getHarmfulSubstancesDepositionCoefficient())
+                .set(LAB1DATA.TERRAIN_COEFFICIENT, data.getTerrainCoefficient())
+                .set(LAB1DATA.TEMPERATURE_COEFFICIENT, data.getTemperatureCoefficient())
+                .set(LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE, data.getDistanceFromEmissionSource())
+                .set(LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION, data.getMaximumSurfaceConcentration())
+                .where(LAB1DATA.USER_ID.eq(getFindUserIdSelect(data.getUserLogin())).and(LAB1DATA.START_DATE.eq(data.getStartDate())))
                 .execute();
     }
 
     @Override
     public int removeLabsByUser(String userName) {
-        return dsl.deleteFrom(LAB3DATA).where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(userName))).execute();
+        return dsl.deleteFrom(LAB1DATA).where(LAB1DATA.USER_ID.eq(getFindUserIdSelect(userName))).execute();
     }
 
     @Override
     public int removeOldLabs(LocalDateTime lastSaveDate) {
-        return dsl.deleteFrom(LAB3DATA).where(LAB3DATA.SAVE_DATE.greaterThan(lastSaveDate)).execute();
-    }*/
+        return dsl.deleteFrom(LAB1DATA).where(LAB1DATA.SAVE_DATE.greaterThan(lastSaveDate)).execute();
+    }
 }

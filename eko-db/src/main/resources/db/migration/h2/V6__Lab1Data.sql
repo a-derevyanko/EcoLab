@@ -17,17 +17,17 @@ CREATE TABLE lab1data (
   outside_Air_Temperature                   DOUBLE,
   stacks_Height                             DOUBLE,
   stacks_Diameter                           DOUBLE,
-  steamProductionCapacity                   DOUBLE,
+  steam_Production_Capacity                 DOUBLE,
   oxygen_Concentration                      DOUBLE,
   oxygen_Concentration_Point                DOUBLE,
   fuel_Consumer                             DOUBLE,
   excess_Pressure                           DOUBLE,
   gas_Temperature                           DOUBLE,
   stack_Exit_Temperature                    DOUBLE,
-  flue_Gas_NOx_Concentration                DOUBLE,
+  flue_Gas_NOx_Concentration                INT,
   excess_Air_Ratio                          DOUBLE,
   flue_Gas_NOx_Concentration_NC             DOUBLE,
-  excess_Of_Norms                           DOUBLE,
+  excess_Of_Norms                           BOOLEAN,
   valid_Barometric_Pressure                 DOUBLE,
   valid_Absolute_Pressure                   DOUBLE,
   correction_Factor                         DOUBLE,
@@ -86,7 +86,7 @@ COMMENT ON COLUMN LAB1DATA.terrain_coefficient IS 'Коэффициент, уч�
 COMMENT ON COLUMN LAB1DATA.harmful_substances_deposition_coefficient IS 'Безразмерный коэффициент, учитывающий скорость оседания вредных веществ в атмосферном воздухе';
 COMMENT ON COLUMN LAB1DATA.name IS 'Название объекта';
 COMMENT ON COLUMN LAB1DATA.barometric_Pressure IS 'Барометрическое давление';
-COMMENT ON COLUMN LAB1DATA.steamProductionCapacity IS 'Паровая нагрузка котла';
+COMMENT ON COLUMN LAB1DATA.steam_Production_Capacity IS 'Паровая нагрузка котла';
 COMMENT ON COLUMN LAB1DATA.oxygen_Concentration IS 'Содержание кислорода за пароперегревателем';
 COMMENT ON COLUMN LAB1DATA.oxygen_Concentration_Point IS 'Содержание кислорода в сечении газохода, где проводились измерения';
 COMMENT ON COLUMN LAB1DATA.excess_Pressure IS 'Избыточное давление природного газа в магистрали';
@@ -120,16 +120,16 @@ CREATE TABLE lab1variant (
   barometric_Pressure                       DOUBLE,
   outside_Air_Temperature                   DOUBLE,
   stacks_Height                             DOUBLE,
-  stacks_Diameter                             DOUBLE,
+  stacks_Diameter                           DOUBLE,
   time                                      TIMESTAMP,
-  steamProductionCapacity                   DOUBLE,
+  steam_Production_Capacity                 DOUBLE,
   oxygen_Concentration                      DOUBLE,
   oxygen_Concentration_Point                DOUBLE,
   fuel_Consumer                             DOUBLE,
   excess_Pressure                           DOUBLE,
   gas_Temperature                           DOUBLE,
   stack_Exit_Temperature                    DOUBLE,
-  flue_Gas_NOx_Concentration                DOUBLE
+  flue_Gas_NOx_Concentration                INT
 );
 
 /*
@@ -150,7 +150,7 @@ COMMENT ON COLUMN lab1variant.stack_exit_temperature IS 'Температура 
 COMMENT ON COLUMN lab1variant.outside_air_temperature IS 'Температура наружного воздуха';
 COMMENT ON COLUMN lab1variant.name IS 'Название объекта';
 COMMENT ON COLUMN lab1variant.barometric_Pressure IS 'Барометрическое давление';
-COMMENT ON COLUMN lab1variant.steamProductionCapacity IS 'Паровая нагрузка котла';
+COMMENT ON COLUMN lab1variant.steam_Production_Capacity IS 'Паровая нагрузка котла';
 COMMENT ON COLUMN lab1variant.oxygen_Concentration IS 'Содержание кислорода за пароперегревателем';
 COMMENT ON COLUMN lab1variant.oxygen_Concentration_Point IS 'Содержание кислорода в сечении газохода, где проводились измерения';
 COMMENT ON COLUMN lab1variant.excess_Pressure IS 'Избыточное давление природного газа в магистрали';
