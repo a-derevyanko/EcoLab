@@ -7,7 +7,13 @@ import net.sf.dynamicreports.report.constant.PageType;
 import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.lab3.*;
+import org.ekolab.server.model.content.lab3.City;
+import org.ekolab.server.model.content.lab3.FuelType;
+import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Variant;
+import org.ekolab.server.model.content.lab3.NumberOfStacks;
+import org.ekolab.server.model.content.lab3.NumberOfUnits;
+import org.ekolab.server.model.content.lab3.UnitOutput;
 import org.ekolab.server.service.api.content.LabChartType;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
@@ -18,9 +24,6 @@ import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.Inet4Address;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -260,7 +263,6 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     @Override
     public Lab3Variant generateNewLabVariant() {
         Lab3Variant variant = new Lab3Variant();
-        //todo
 
         //Получим случайный город, скорость ветра в нем
         City randomCity = City.values()[RandomUtils.nextInt(City.values().length)];
@@ -276,95 +278,38 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         variant.setLowHeatValue(randomFuelType.getLowHeatValue());
 
         //Получим мощность 1 блока
-        Integer[] unitOutputs = {200, 300, 500, 800};
-        Integer randomUnitOutput = unitOutputs[RandomUtils.nextInt(unitOutputs.length)];
+        UnitOutput randomUnitOutput = UnitOutput.values()[RandomUtils.nextInt(UnitOutput.values().length)];
 
-        int by = 0;
-        List<NumberOfUnits> unitCounts = new ArrayList<>();
-        List<NumberOfStacks> stacksCounts = new ArrayList<>();
-        List<Integer> stacksHeights = new ArrayList<>();
-        //Получим количетсво блоков, паропроизводительность и общую мощность
-        switch (randomUnitOutput) {
-            case 200:
-                unitCounts = Arrays.asList(NumberOfUnits.SIX, NumberOfUnits.EIGHT);
-                stacksHeights = Arrays.asList(120, 150, 180);
-                variant.setSteamProductionCapacity(630);
-                if (randomFuelType != FuelType.STABILIZED_OIL & randomFuelType != FuelType.SULFUR_OIL) {
-                    by = 364;
-                } else {
-                    by = 342;
-                }
-                break;
-            case 300:
-                unitCounts = Arrays.asList(NumberOfUnits.FOUR, NumberOfUnits.SIX, NumberOfUnits.EIGHT);
-                stacksHeights = Arrays.asList(120, 150, 180);
-                variant.setSteamProductionCapacity(1050);
-                if (randomFuelType != FuelType.STABILIZED_OIL & randomFuelType != FuelType.SULFUR_OIL) {
-                    by = 373;
-                } else {
-                    by = 326;
-                }
-                break;
-            case 500:
-                unitCounts = Arrays.asList(NumberOfUnits.FOUR, NumberOfUnits.SIX);
-                stacksHeights = Arrays.asList(150, 180, 210);
-                variant.setSteamProductionCapacity(1650);
-                if (randomFuelType != FuelType.STABILIZED_OIL & randomFuelType != FuelType.SULFUR_OIL) {
-                    by = 343;
-                } else {
-                    by = 319;
-                }
-                break;
-            case 800:
-                unitCounts = Arrays.asList(NumberOfUnits.TWO, NumberOfUnits.FOUR);
-                stacksHeights = Arrays.asList(180, 210, 240);
-                variant.setSteamProductionCapacity(2450);
-                if (randomFuelType != FuelType.STABILIZED_OIL & randomFuelType != FuelType.SULFUR_OIL) {
-                    by = 338;
-                } else {
-                    by = 314;
-                }
-                break;
-        }
+        //Получим количество блоков, паропроизводительность и общую мощность
+        boolean oil = randomFuelType == FuelType.STABILIZED_OIL || randomFuelType == FuelType.SULFUR_OIL;
+        List<NumberOfUnits> unitCounts = randomUnitOutput.getNumberOfUnits();
+        List<Integer> stacksHeights = randomUnitOutput.getStacksHeights();
         NumberOfUnits randomUnitCount = unitCounts.get(RandomUtils.nextInt(unitCounts.size()));
         variant.setNumberOfUnits(randomUnitCount);
-        switch (randomUnitCount) {
-            case TWO:
-                stacksCounts = Arrays.asList(NumberOfStacks.ONE, NumberOfStacks.TWO);
-                break;
-            case FOUR:
-                stacksCounts = Arrays.asList(NumberOfStacks.TWO);
-                break;
-            case SIX:
-                stacksCounts = Arrays.asList(NumberOfStacks.THREE);
-                break;
-            case EIGHT:
-                stacksCounts = Arrays.asList(NumberOfStacks.TWO, NumberOfStacks.FOUR);
-                break;
-        }
+        List<NumberOfStacks> stacksCounts = randomUnitCount.getStacksCounts();
         NumberOfStacks randomStacksCount = stacksCounts.get(RandomUtils.nextInt(stacksCounts.size()));
         variant.setNumberOfStacks(randomStacksCount);
         Integer randomStacksHeight = stacksHeights.get(RandomUtils.nextInt(stacksHeights.size()));
         variant.setStacksHeight(randomStacksHeight);
-        variant.setTppOutput(randomUnitCount.value() * randomUnitOutput);
-        variant.setFuelConsumer((int) Math.round((randomUnitOutput * 29.3 * by) / (randomFuelType.getLowHeatValue() * 1000)));
+        variant.setTppOutput(randomUnitCount.value() * randomUnitOutput.getUnitOutput());
+        variant.setFuelConsumer((int) Math.round(randomUnitOutput.getUnitOutput() * 29.3 * randomUnitOutput.getBy(oil) /
+                (randomFuelType.getLowHeatValue() * 1000)));
         variant.setCarbonInFlyAsh(randomFuelType.getCarbonInFlyAsh());
         variant.setSulphurContent(randomFuelType.getSulphurContent());
         variant.setAshContent(randomFuelType.getAshContent());
         variant.setWaterContent(randomFuelType.getWaterContent());
-        if (randomFuelType != FuelType.SULFUR_OIL & randomFuelType != FuelType.STABILIZED_OIL) {
-            variant.setAshRecyclingFactor(92.0 + RandomUtils.nextInt(15) * 0.5);
-        } else {
-            variant.setAshRecyclingFactor(0.0);
-        }
-        //ИСПРАВИТЬ ТИП НА INT в lab3variant
-        //variant.setFlueGasNOxConcentration(randomFuelType.getFlueGasNOxConcentration());
+        variant.setAshRecyclingFactor(oil ? 0.0 : 92.0 + RandomUtils.nextInt(15) * 0.5);
+        variant.setFlueGasNOxConcentration(randomFuelType.getFlueGasNOxConcentration());
         variant.setStackExitTemperature(randomFuelType.getStackExitTemperature());
         variant.setOutsideAirTemperature(randomCity.getOutsideAirTemperature());
         variant.setExcessAirRatio(1.4);
-        variant.setAirVolume(0.0889 * (randomFuelType.getCarbonContent() + 0.375 * randomFuelType.getSulphurContent()) + 0.0124 * randomFuelType.getHydrogenContent() - 0.0333 * randomFuelType.getOxygenContent());
-        variant.setWaterVaporVolume(0.111 * randomFuelType.getHydrogenContent() + 0.0124 * randomFuelType.getWaterContent() + 0.016 + variant.getAirVolume());
-        variant.setCombustionProductsVolume((1.866 * (randomFuelType.getCarbonContent() + 0.375 * randomFuelType.getSulphurContent()) / 100) + ((0.79 * variant.getAirVolume() + 0.8 * randomFuelType.getNitrogenContent()) / 100) + variant.getWaterVaporVolume());
+        variant.setAirVolume(0.0889 * (randomFuelType.getCarbonContent() + 0.375 * randomFuelType.getSulphurContent()) +
+                0.0124 * randomFuelType.getHydrogenContent() - 0.0333 * randomFuelType.getOxygenContent());
+        variant.setWaterVaporVolume(0.111 * randomFuelType.getHydrogenContent() +
+                0.0124 * randomFuelType.getWaterContent() + 0.016 + variant.getAirVolume());
+        variant.setCombustionProductsVolume((1.866 * (randomFuelType.getCarbonContent() +
+                0.375 * randomFuelType.getSulphurContent()) / 100) + (0.79 * variant.getAirVolume() + 0.8 *
+                randomFuelType.getNitrogenContent() / 100) + variant.getWaterVaporVolume());
         variant.setNo2BackgroundConcentration(0.05 + RandomUtils.nextInt(8) * 0.01);
         variant.setNoBackgroundConcentration(0.008 + RandomUtils.nextInt(5) * 0.01);
         variant.setSo2BackgroundConcentration(0.1 + RandomUtils.nextInt(16) * 0.01);
