@@ -24,12 +24,17 @@ public class Lab1Data extends LabData<Lab1Variant> {
      * Температура наружного воздуха
      */
 
-    private Double outsideTemperature;
+    private Double outsideAirTemperature;
 
     /**
      * Высота дымовой трубы
      */
     private Double stacksHeight;
+
+    /**
+     * Диаметр дымовой трубы
+     */
+    private Double stacksDiameter;
 
     /**
      * Паровая нагрузка котла
@@ -39,12 +44,12 @@ public class Lab1Data extends LabData<Lab1Variant> {
     /**
      * Содержание кислорода за пароперегревателем
      */
-    private Double oxigenConcentration;
+    private Double oxygenConcentration;
 
     /**
      * Содержание кислорода в сечении газохода, где проводились измерения
      */
-    private Double oxigenConcentrationPoint;
+    private Double oxygenConcentrationPoint;
 
     /**
      * Расход природного газа на паровой котел по расходомеру
@@ -69,7 +74,7 @@ public class Lab1Data extends LabData<Lab1Variant> {
     /**
      * Концентрация оксидов азота в дымовых газах по результатам измерений
      */
-    private Double flueGasNOxConcentration;
+    private Integer flueGasNOxConcentration;
 
     /**
      * Коэффициент избытка воздуха в точке измерения
@@ -198,12 +203,12 @@ public class Lab1Data extends LabData<Lab1Variant> {
         this.barometricPressure = barometricPressure;
     }
 
-    public Double getOutsideTemperature() {
-        return outsideTemperature;
+    public Double getOutsideAirTemperature() {
+        return outsideAirTemperature;
     }
 
-    public void setOutsideTemperature(Double outsideTemperature) {
-        this.outsideTemperature = outsideTemperature;
+    public void setOutsideAirTemperature(Double outsideAirTemperature) {
+        this.outsideAirTemperature = outsideAirTemperature;
     }
 
     public Double getStacksHeight() {
@@ -214,6 +219,14 @@ public class Lab1Data extends LabData<Lab1Variant> {
         this.stacksHeight = stacksHeight;
     }
 
+    public Double getStacksDiameter() {
+        return stacksDiameter;
+    }
+
+    public void setStacksDiameter(Double stacksDiameter) {
+        this.stacksDiameter = stacksDiameter;
+    }
+
     public Double getSteamProductionCapacity() {
         return steamProductionCapacity;
     }
@@ -222,20 +235,20 @@ public class Lab1Data extends LabData<Lab1Variant> {
         this.steamProductionCapacity = steamProductionCapacity;
     }
 
-    public Double getOxigenConcentration() {
-        return oxigenConcentration;
+    public Double getOxygenConcentration() {
+        return oxygenConcentration;
     }
 
-    public void setOxigenConcentration(Double oxigenConcentration) {
-        this.oxigenConcentration = oxigenConcentration;
+    public void setOxygenConcentration(Double oxygenConcentration) {
+        this.oxygenConcentration = oxygenConcentration;
     }
 
-    public Double getOxigenConcentrationPoint() {
-        return oxigenConcentrationPoint;
+    public Double getOxygenConcentrationPoint() {
+        return oxygenConcentrationPoint;
     }
 
-    public void setOxigenConcentrationPoint(Double oxigenConcentrationPoint) {
-        this.oxigenConcentrationPoint = oxigenConcentrationPoint;
+    public void setOxygenConcentrationPoint(Double oxygenConcentrationPoint) {
+        this.oxygenConcentrationPoint = oxygenConcentrationPoint;
     }
 
     public Double getFuelConsumer() {
@@ -270,11 +283,11 @@ public class Lab1Data extends LabData<Lab1Variant> {
         this.stackExitTemperature = stackExitTemperature;
     }
 
-    public Double getFlueGasNOxConcentration() {
+    public Integer getFlueGasNOxConcentration() {
         return flueGasNOxConcentration;
     }
 
-    public void setFlueGasNOxConcentration(Double flueGasNOxConcentration) {
+    public void setFlueGasNOxConcentration(Integer flueGasNOxConcentration) {
         this.flueGasNOxConcentration = flueGasNOxConcentration;
     }
 
@@ -462,11 +475,12 @@ public class Lab1Data extends LabData<Lab1Variant> {
         Lab1Data lab1Data = (Lab1Data) o;
         return Objects.equals(name, lab1Data.name) &&
                 Objects.equals(barometricPressure, lab1Data.barometricPressure) &&
-                Objects.equals(outsideTemperature, lab1Data.outsideTemperature) &&
+                Objects.equals(outsideAirTemperature, lab1Data.outsideAirTemperature) &&
                 Objects.equals(stacksHeight, lab1Data.stacksHeight) &&
+                Objects.equals(stacksDiameter, lab1Data.stacksDiameter) &&
                 Objects.equals(steamProductionCapacity, lab1Data.steamProductionCapacity) &&
-                Objects.equals(oxigenConcentration, lab1Data.oxigenConcentration) &&
-                Objects.equals(oxigenConcentrationPoint, lab1Data.oxigenConcentrationPoint) &&
+                Objects.equals(oxygenConcentration, lab1Data.oxygenConcentration) &&
+                Objects.equals(oxygenConcentrationPoint, lab1Data.oxygenConcentrationPoint) &&
                 Objects.equals(fuelConsumer, lab1Data.fuelConsumer) &&
                 Objects.equals(excessPressure, lab1Data.excessPressure) &&
                 Objects.equals(gasTemperature, lab1Data.gasTemperature) &&
@@ -498,6 +512,13 @@ public class Lab1Data extends LabData<Lab1Variant> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, barometricPressure, outsideTemperature, stacksHeight, steamProductionCapacity, oxigenConcentration, oxigenConcentrationPoint, fuelConsumer, excessPressure, gasTemperature, stackExitTemperature, flueGasNOxConcentration, excessAirRatio, flueGasNOxConcentrationNC, excessOfNorms, validBarometricPressure, validAbsolutePressure, correctionFactor, fuelConsumerCorrection, fuelConsumerNC, flueGasesRate, dryGasesFlowRate, massEmissions, flueGasesSpeed, f, m, u, n, d, harmfulSubstancesDepositionCoefficient, terrainCoefficient, temperatureCoefficient, distanceFromEmissionSource, maximumSurfaceConcentration);
+        return Objects.hash(super.hashCode(), name, barometricPressure, outsideAirTemperature,
+                stacksHeight, stacksDiameter, steamProductionCapacity, oxygenConcentration,
+                oxygenConcentrationPoint, fuelConsumer, excessPressure, gasTemperature,
+                stackExitTemperature, flueGasNOxConcentration, excessAirRatio, flueGasNOxConcentrationNC,
+                excessOfNorms, validBarometricPressure, validAbsolutePressure, correctionFactor,
+                fuelConsumerCorrection, fuelConsumerNC, flueGasesRate, dryGasesFlowRate, massEmissions,
+                flueGasesSpeed, f, m, u, n, d, harmfulSubstancesDepositionCoefficient, terrainCoefficient,
+                temperatureCoefficient, distanceFromEmissionSource, maximumSurfaceConcentration);
     }
 }

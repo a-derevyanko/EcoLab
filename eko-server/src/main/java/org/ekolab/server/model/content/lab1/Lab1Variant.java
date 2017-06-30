@@ -26,7 +26,7 @@ public class Lab1Variant extends LabVariant {
      * Температура наружного воздуха
      */
 
-    private Double outsideTemperature;
+    private Double outsideAirTemperature;
 
     /**
      * Высота дымовой трубы
@@ -82,7 +82,7 @@ public class Lab1Variant extends LabVariant {
     /**
      * Концентрация оксидов азота в дымовых газах по результатам измерений
      */
-    private Double flueGasNOxConcentration;
+    private Integer flueGasNOxConcentration;
 
     @Nullable
     public String getObjectName() {
@@ -101,12 +101,12 @@ public class Lab1Variant extends LabVariant {
         this.barometricPressure = barometricPressure;
     }
 
-    public Double getOutsideTemperature() {
-        return outsideTemperature;
+    public Double getOutsideAirTemperature() {
+        return outsideAirTemperature;
     }
 
-    public void setOutsideTemperature(Double outsideTemperature) {
-        this.outsideTemperature = outsideTemperature;
+    public void setOutsideAirTemperature(Double outsideAirTemperature) {
+        this.outsideAirTemperature = outsideAirTemperature;
     }
 
     public Double getStacksHeight() {
@@ -189,11 +189,11 @@ public class Lab1Variant extends LabVariant {
         this.stackExitTemperature = stackExitTemperature;
     }
 
-    public Double getFlueGasNOxConcentration() {
+    public Integer getFlueGasNOxConcentration() {
         return flueGasNOxConcentration;
     }
 
-    public void setFlueGasNOxConcentration(Double flueGasNOxConcentration) {
+    public void setFlueGasNOxConcentration(Integer flueGasNOxConcentration) {
         this.flueGasNOxConcentration = flueGasNOxConcentration;
     }
 
@@ -204,7 +204,7 @@ public class Lab1Variant extends LabVariant {
         Lab1Variant that = (Lab1Variant) o;
         return Objects.equals(objectName, that.objectName) &&
                 Objects.equals(barometricPressure, that.barometricPressure) &&
-                Objects.equals(outsideTemperature, that.outsideTemperature) &&
+                Objects.equals(outsideAirTemperature, that.outsideAirTemperature) &&
                 Objects.equals(stacksHeight, that.stacksHeight) &&
                 Objects.equals(stacksDiameter, that.stacksDiameter) &&
                 Objects.equals(time, that.time) &&
@@ -220,6 +220,6 @@ public class Lab1Variant extends LabVariant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(objectName, barometricPressure, outsideTemperature, stacksHeight, stacksDiameter, time, steamProductionCapacity, oxygenConcentration, oxygenConcentrationPoint, fuelConsumer, excessPressure, gasTemperature, stackExitTemperature, flueGasNOxConcentration);
+        return Objects.hash(objectName, barometricPressure, outsideAirTemperature, stacksHeight, stacksDiameter, time, steamProductionCapacity, oxygenConcentration, oxygenConcentrationPoint, fuelConsumer, excessPressure, gasTemperature, stackExitTemperature, flueGasNOxConcentration);
     }
 }

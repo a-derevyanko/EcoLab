@@ -36,7 +36,7 @@ public class Lab1ExperimentStep1 extends HorizontalLayout implements LabWizardSt
     private final DateTimeField timeField = new DateTimeField();
     private final TextField objectNameField = new TextField();
     private final TextField barometricPressureField = new TextField();
-    private final TextField outsideTemperatureField = new TextField();
+    private final TextField outsideAirTemperatureField = new TextField();
     private final TextField stacksHeightField = new TextField();
     private final TextField stacksDiameterField = new TextField();
     private final TextField steamProductionCapacityField = new TextField();
@@ -58,7 +58,7 @@ public class Lab1ExperimentStep1 extends HorizontalLayout implements LabWizardSt
         journalLayout.setCaption(i18N.get("lab1.step1.experiment-journal"));
         addField(objectNameField, FieldUtils.getField(Lab1Variant.class, "objectName"), 1);
         addField(barometricPressureField, FieldUtils.getField(Lab1Variant.class, "barometricPressure"), 2);
-        addField(outsideTemperatureField, FieldUtils.getField(Lab1Variant.class, "outsideTemperature"), 3);
+        addField(outsideAirTemperatureField, FieldUtils.getField(Lab1Variant.class, "outsideAirTemperature"), 3);
         addField(stacksHeightField, FieldUtils.getField(Lab1Variant.class, "stacksHeight"), 4);
         addField(stacksDiameterField, FieldUtils.getField(Lab1Variant.class, "stacksDiameter"), 5);
         addField(steamProductionCapacityField, FieldUtils.getField(Lab1Variant.class, "steamProductionCapacity"), 6);
