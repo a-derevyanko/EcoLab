@@ -222,7 +222,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
         initialDataWindow.show(binder.getBean().getVariant(), labService);
     }
 
-    private void updateButtons() {
+    protected void updateButtons() {
         boolean lastStep = isLastStep(currentStep);
         getFinishButton().setVisible(lastStep);
         getNextButton().setVisible(!lastStep);

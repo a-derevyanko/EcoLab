@@ -286,6 +286,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         List<Integer> stacksHeights = randomUnitOutput.getStacksHeights();
         NumberOfUnits randomUnitCount = unitCounts.get(RandomUtils.nextInt(unitCounts.size()));
         variant.setNumberOfUnits(randomUnitCount);
+        variant.setSteamProductionCapacity(randomUnitOutput.getSteamProductionCapacity());
         List<NumberOfStacks> stacksCounts = randomUnitCount.getStacksCounts();
         NumberOfStacks randomStacksCount = stacksCounts.get(RandomUtils.nextInt(stacksCounts.size()));
         variant.setNumberOfStacks(randomStacksCount);

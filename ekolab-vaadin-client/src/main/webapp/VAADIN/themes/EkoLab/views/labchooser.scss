@@ -31,6 +31,13 @@
     height: 100%;
   }
 
+  .v-nativebutton-variant-chooser {
+    min-width: 200px;
+    min-height: 45px;
+    width: 100%;
+    height: 100%;
+  }
+
   .v-ui[width-range~="0-800px"] .content-panel {
     @include animation(animate-in-scale-up 500ms 10ms backwards, valo-animate-in-fade 300ms 100ms backwards);
   }
