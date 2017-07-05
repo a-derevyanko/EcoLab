@@ -69,17 +69,17 @@ public class LabChooserView extends VerticalLayout implements View {
 
         lab1RandomDataButton.setCaption(i18N.get("lab1.random-data.title"));
         lab1RandomDataButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        lab1RandomDataButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
-        lab1RandomDataButton.addClickListener(event -> navigator.navigateTo(Lab1RandomDataView.NAME));
+        lab1RandomDataButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
+        lab1RandomDataButton.addClickListener(event -> {navigator.navigateTo(Lab1RandomDataView.NAME); lab1VariantChooser.close();});
 
         lab1ExperimentButton.setCaption(i18N.get("lab1.experiment.title"));
         lab1ExperimentButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        lab1ExperimentButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
-        lab1ExperimentButton.addClickListener(event -> navigator.navigateTo(Lab1ExperimentView.NAME));
+        lab1ExperimentButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
+        lab1ExperimentButton.addClickListener(event -> {navigator.navigateTo(Lab1ExperimentView.NAME); lab1VariantChooser.close();});
 
         lab1VariantChooser.setModal(true);
-        lab1VariantChooser.setWidth(400.0F, Unit.PIXELS);
-        lab1VariantChooser.setHeight(200.0F, Unit.PIXELS);
+        lab1VariantChooser.setWidth(500.0F, Unit.PIXELS);
+        lab1VariantChooser.setHeight(300.0F, Unit.PIXELS);
         lab1VariantChooserContent.setSizeFull();
         lab1VariantChooserContent.setRowExpandRatio(0, 10.0F);
         lab1VariantChooserContent.setRowExpandRatio(1, 1.0F);

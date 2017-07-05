@@ -30,4 +30,13 @@ public class Lab1ExperimentView extends LabWizard<Lab1Data> {
         addStep(step1);
 
     }
+
+    /**
+     * Скрывает на первых двух шагах кнопку "Журнал наблюдений"
+     */
+    @Override
+    protected void updateButtons() {
+        super.updateButtons();
+        initialDataButton.setVisible(steps.indexOf(currentStep) > 1);
+    }
 }

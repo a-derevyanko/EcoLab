@@ -4,10 +4,16 @@ import com.twelvemonkeys.image.ImageUtil;
 import net.sf.dynamicreports.report.constant.ComponentPositionType;
 import net.sf.dynamicreports.report.constant.ImageScale;
 import net.sf.dynamicreports.report.constant.PageType;
+import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.model.content.LabVariant;
+import org.ekolab.server.model.content.lab3.City;
+import org.ekolab.server.model.content.lab3.FuelType;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.model.content.lab3.Lab3Variant;
+import org.ekolab.server.model.content.lab3.NumberOfStacks;
+import org.ekolab.server.model.content.lab3.NumberOfUnits;
+import org.ekolab.server.model.content.lab3.UnitOutput;
 import org.ekolab.server.service.api.content.LabChartType;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
@@ -18,6 +24,7 @@ import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Locale;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
@@ -38,8 +45,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     /**
      * Возвращает печатный вариант отчёта в PDF формате.
      * На второй странице отчёта печатается график изолиний в вертикальной ориентации.
+     *
      * @param labData данные лабораторной работы.
-     * @param locale язык.
+     * @param locale  язык.
      * @return печатный вариант данных в PDF формате.
      */
     @Override
@@ -255,7 +263,58 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     @Override
     public Lab3Variant generateNewLabVariant() {
         Lab3Variant variant = new Lab3Variant();
-        //todo
+
+        //Получим случайный город, скорость ветра в нем
+        City randomCity = City.values()[RandomUtils.nextInt(City.values().length)];
+        variant.setCity(randomCity);
+        variant.setWindSpeed(randomCity.getWindSpeed());
+
+        //Получим список типов топлива для этого города
+        List<FuelType> fuelList = randomCity.getFuelTypesForTheCity();
+
+        //Получим случайный тип топлива из списка, низжую теплоту сгорания топлива для него
+        FuelType randomFuelType = fuelList.get(RandomUtils.nextInt(fuelList.size()));
+        variant.setFuelType(randomFuelType);
+        variant.setLowHeatValue(randomFuelType.getLowHeatValue());
+
+        //Получим мощность 1 блока
+        UnitOutput randomUnitOutput = UnitOutput.values()[RandomUtils.nextInt(UnitOutput.values().length)];
+
+        //Получим количество блоков, паропроизводительность и общую мощность
+        boolean oil = randomFuelType == FuelType.STABILIZED_OIL || randomFuelType == FuelType.SULFUR_OIL;
+        List<NumberOfUnits> unitCounts = randomUnitOutput.getNumberOfUnits();
+        List<Integer> stacksHeights = randomUnitOutput.getStacksHeights();
+        NumberOfUnits randomUnitCount = unitCounts.get(RandomUtils.nextInt(unitCounts.size()));
+        variant.setNumberOfUnits(randomUnitCount);
+        variant.setSteamProductionCapacity(randomUnitOutput.getSteamProductionCapacity());
+        List<NumberOfStacks> stacksCounts = randomUnitCount.getStacksCounts();
+        NumberOfStacks randomStacksCount = stacksCounts.get(RandomUtils.nextInt(stacksCounts.size()));
+        variant.setNumberOfStacks(randomStacksCount);
+        Integer randomStacksHeight = stacksHeights.get(RandomUtils.nextInt(stacksHeights.size()));
+        variant.setStacksHeight(randomStacksHeight);
+        variant.setTppOutput(randomUnitCount.value() * randomUnitOutput.getUnitOutput());
+        variant.setFuelConsumer((int) Math.round(randomUnitOutput.getUnitOutput() * 29.3 * randomUnitOutput.getBy(oil) /
+                (randomFuelType.getLowHeatValue() * 1000)));
+        variant.setCarbonInFlyAsh(randomFuelType.getCarbonInFlyAsh());
+        variant.setSulphurContent(randomFuelType.getSulphurContent());
+        variant.setAshContent(randomFuelType.getAshContent());
+        variant.setWaterContent(randomFuelType.getWaterContent());
+        variant.setAshRecyclingFactor(oil ? 0.0 : 92.0 + RandomUtils.nextInt(15) * 0.5);
+        variant.setFlueGasNOxConcentration(randomFuelType.getFlueGasNOxConcentration());
+        variant.setStackExitTemperature(randomFuelType.getStackExitTemperature());
+        variant.setOutsideAirTemperature(randomCity.getOutsideAirTemperature());
+        variant.setExcessAirRatio(1.4);
+        variant.setAirVolume(0.0889 * (randomFuelType.getCarbonContent() + 0.375 * randomFuelType.getSulphurContent()) +
+                0.0124 * randomFuelType.getHydrogenContent() - 0.0333 * randomFuelType.getOxygenContent());
+        variant.setWaterVaporVolume(0.111 * randomFuelType.getHydrogenContent() +
+                0.0124 * randomFuelType.getWaterContent() + 0.016 + variant.getAirVolume());
+        variant.setCombustionProductsVolume((1.866 * (randomFuelType.getCarbonContent() +
+                0.375 * randomFuelType.getSulphurContent()) / 100) + (0.79 * variant.getAirVolume() + 0.8 *
+                randomFuelType.getNitrogenContent() / 100) + variant.getWaterVaporVolume());
+        variant.setNo2BackgroundConcentration(0.05 + RandomUtils.nextInt(8) * 0.01);
+        variant.setNoBackgroundConcentration(0.008 + RandomUtils.nextInt(5) * 0.01);
+        variant.setSo2BackgroundConcentration(0.1 + RandomUtils.nextInt(16) * 0.01);
+        variant.setAshBackgroundConcentration(0.2 + RandomUtils.nextInt(11) * 0.01);
         return variant;
     }
 }
