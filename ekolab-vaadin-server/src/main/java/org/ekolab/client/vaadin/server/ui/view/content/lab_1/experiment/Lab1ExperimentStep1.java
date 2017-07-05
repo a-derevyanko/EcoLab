@@ -60,7 +60,8 @@ public class Lab1ExperimentStep1 extends HorizontalLayout implements LabWizardSt
         setMargin(true);
         addComponent(journalLayout);
         setComponentAlignment(journalLayout, Alignment.MIDDLE_CENTER);
-        //journalLayout.setSizeFull();
+        journalLayout.setMargin(true);
+        journalLayout.setSpacing(true);
         journalLayout.setCaption(i18N.get("lab1.step1.experiment-journal"));
         addField(timeField, FieldUtils.getField(Lab1Variant.class, "time"), 0, 0);
         addField(objectNameField, FieldUtils.getField(Lab1Variant.class, "name"), 0, 1);
@@ -86,6 +87,7 @@ public class Lab1ExperimentStep1 extends HorizontalLayout implements LabWizardSt
         journalLayout.addComponent(numberLabel, column * 3, row);
         journalLayout.addComponent(captionLabel, column * 3 + 1, row);
         journalLayout.addComponent(component, column * 3 + 2, row);
+        component.setWidth(250.0F, Unit.PIXELS);
         if (component instanceof TextField) {
             Converter<String, ?> converter = UIUtils.getStringConverter(field, i18N);
             if (converter != null) {
