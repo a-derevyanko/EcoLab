@@ -1,6 +1,7 @@
 package org.ekolab.server.service.impl.content.lab3;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
@@ -107,35 +109,54 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
                 }
             }
 
-            XYSeries series = new XYSeries("Граничные линии" + 1111, false);
-            dataset.addSeries(series);
-
+            Pair<Integer, Integer> ellipseXAxisPoint;
+            Pair<Integer, Integer> ellipseYAxisPoint;
             for (int x = Math.toIntExact(Math.round(Xm)); x < 100000; x++) {
                 double s1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance,
                         harmfulSubstancesDepositionCoefficient);
                 double Cx = s1 * Cm;
 
-                for (int y = 0; y < 100000; y++) {
-                    double s2 = countS2(windSpeed, x, y);
+                if (Cx < CBackground || Cx > Cm) {
+                    break;
+                }
+
+                for (int y1 = 0; y1 < 100000; y1++) {
+                    double s2 = countS2(windSpeed, x, y1);
 
                     double Cy = s2 * Cx;
 
-                    if (Cy == CBackground || Cy < CBackground) {
-                        series.add(x, y);
-                        for (int x2 = 0; x2 < 100000; x2++) {
-                            double Cx2 = countS1(x2, windSpeedMaxGroundLevelConcentrationDistance,
-                                    harmfulSubstancesDepositionCoefficient) * Cm;
-                            if (Math.abs(Cx2 - Cy) < 0.0001) {
-                                series.add(x2, y);
+                    if (Cy < CBackground || Cy > Cm) {
+                        break;
+                    }
+
+                    //7)	Су(х1,у1) подставляется вместо Сх в уравнение (1)
+                    for (int x2 = 0; x2 < 100000; x2++) {
+                        double Cx2 = countS1(x2, windSpeedMaxGroundLevelConcentrationDistance,
+                                harmfulSubstancesDepositionCoefficient) * Cm;
+                        if (Cx2 < CBackground || Cx2 > Cm) {
+                            break;
+                        }
+                        if (Math.abs(Cx2 - Cy) < 0.0001) {
+                            ellipseYAxisPoint = Pair.of(x2, y1);
+                            // 9)	Для вычисления точки на изолинии с концентрацией Су(х2;у1)
+                            // необходимо в уравнение (1) подставить Сх=Су(х2;у1)
+                            double s1New = Cy / Cm;
+                            for (int x3 = Math.toIntExact(Math.round(Xm)); x < 100000; x++) {
+                                if (Math.abs(s1New - countS1(x3, windSpeedMaxGroundLevelConcentrationDistance,
+                                        harmfulSubstancesDepositionCoefficient)) < 0.0001) {
+                                    ellipseYAxisPoint = Pair.of(x3, 0);
+                                    break;
+                                }
                             }
                         }
-                        series.add(x, -y);
-
-                        break;
                     }
                 }
             }
         }
+
+        XYSeries series = new XYSeries("График" + 1111, false);
+        dataset.addSeries(series);
+        Ellipse2D ellipse2D = new Ellipse2D.Double();
         return dataset;
     }
 
