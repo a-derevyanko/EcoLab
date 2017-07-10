@@ -14,8 +14,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.SamplingXYLineRenderer;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYSplineRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -32,14 +31,10 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
+import java.util.List;
 
 import static java.lang.Math.pow;
 
@@ -48,6 +43,11 @@ import static java.lang.Math.pow;
  */
 @Service
 public class IsoLineChartServiceImpl implements IsoLineChartService {
+    private static final double EPS = 0.0001;
+    private static final int GRID_CELL_COUNT = 100000;
+    private static final int STEP_INCREASE_SIZE = 100;
+    private static final int MAX_POINTS_COUNT = 1;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(IsoLineChartServiceImpl.class);
     private static final Map<Integer, float[]> DASH_SETTINGS = new HashMap<>();
     private static final Map<Double[], XYDataset> DATASET_CACHE = new WeakHashMap<>();
@@ -86,16 +86,16 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
                 && harmfulSubstancesDepositionCoefficient != null && windSpeed != null) {
             windSpeed = windSpeed <= 5.0 ? windSpeed : 5.0;
             // Граничные прямые
-            double a = CBackground / Cm;
+            /*double a = CBackground / Cm;
             // Граничные прямые
             for (int x = 1; x < 100000; x++) {
                 double s1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance,
                         harmfulSubstancesDepositionCoefficient);
-                if (Math.abs(s1 - a) < 0.0001) {
+                if (Math.abs(s1 - a) < EPS) {
                     // Нашли x, пора считать игрек
                     for (int y = 1; y < 100000; y++) {
                         double s2 = countS2(windSpeed, x, y);
-                        if (Math.abs(s2 - 1) < 0.0001) {
+                        if (Math.abs(s2 - 1) < EPS) {
                             XYSeries series = new XYSeries("Граничные линии", false);
                             series.add(x, y);
                             series.add(0, 0);
@@ -107,56 +107,92 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
                     }
                     break;
                 }
-            }
+            }*/
 
-            Pair<Integer, Integer> ellipseXAxisPoint;
-            Pair<Integer, Integer> ellipseYAxisPoint;
-            for (int x = Math.toIntExact(Math.round(Xm)); x < 100000; x++) {
-                double s1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance,
-                        harmfulSubstancesDepositionCoefficient);
-                double Cx = s1 * Cm;
+            //for (double CyCoefficient = 0.1; CyCoefficient < 1.0; CyCoefficient += 0.1) {
+            boolean stop = false;
+            for (double CyCoefficient = 0.5; CyCoefficient < 1.0; CyCoefficient += 0.1) {
+                //XYSeries series = new XYSeries("Cm = " + CyCoefficient, false);
+                //dataset.addSeries(series);
 
-                if (Cx < CBackground || Cx > Cm) {
-                    break;
-                }
+                List<Pair<Integer, Integer>> points = new ArrayList<>(MAX_POINTS_COUNT * 5);
 
-                for (int y1 = 0; y1 < 100000; y1++) {
-                    double s2 = countS2(windSpeed, x, y1);
+                for (int x = Math.toIntExact(Math.round(Xm)); x < 100000 && !stop/*series.getItemCount() < MAX_POINTS_COUNT*/; x++) {
+                    double s1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance,
+                            harmfulSubstancesDepositionCoefficient);
+                    double Cx = s1 * Cm;
 
-                    double Cy = s2 * Cx;
-
-                    if (Cy < CBackground || Cy > Cm) {
+                    if (Cx < CBackground || Cx > Cm) {
                         break;
                     }
 
-                    //7)	Су(х1,у1) подставляется вместо Сх в уравнение (1)
-                    for (int x2 = 0; x2 < 100000; x2++) {
-                        double Cx2 = countS1(x2, windSpeedMaxGroundLevelConcentrationDistance,
-                                harmfulSubstancesDepositionCoefficient) * Cm;
-                        if (Cx2 < CBackground || Cx2 > Cm) {
+                    for (int y1 = 0; y1 < 100000; y1++) {
+                        double s2 = countS2(windSpeed, x, y1);
+
+                        double Cy = s2 * Cx;
+
+                        if (Cy < CBackground || Cy > Cm) {
                             break;
                         }
-                        if (Math.abs(Cx2 - Cy) < 0.0001) {
-                            ellipseYAxisPoint = Pair.of(x2, y1);
-                            // 9)	Для вычисления точки на изолинии с концентрацией Су(х2;у1)
-                            // необходимо в уравнение (1) подставить Сх=Су(х2;у1)
-                            double s1New = Cy / Cm;
-                            for (int x3 = Math.toIntExact(Math.round(Xm)); x < 100000; x++) {
-                                if (Math.abs(s1New - countS1(x3, windSpeedMaxGroundLevelConcentrationDistance,
-                                        harmfulSubstancesDepositionCoefficient)) < 0.0001) {
-                                    ellipseYAxisPoint = Pair.of(x3, 0);
-                                    break;
+
+                        if (Math.abs(Cy - CyCoefficient * Cm) > EPS) {
+                            continue;
+                        }
+
+                        double s1New = Cy / Cm;
+
+                        //7)	Су(х1,у1) подставляется вместо Сх в уравнение (1)
+                        for (int x2 = Math.toIntExact(Math.round(Xm)); x2 < GRID_CELL_COUNT && !stop/*series.getItemCount() < MAX_POINTS_COUNT*/; x2++) {
+                            double Cx2 = Cm * countS1(x2, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient);
+                            if (Cx2 < CBackground || Cx2 > Cm) {
+                                break;
+                            }
+                            if (Math.abs(Cx2 - Cy) < EPS) {
+                                // 9)	Для вычисления точки на изолинии с концентрацией Су(х2;у1)
+                                // необходимо в уравнение (1) подставить Сх=Су(х2;у1)
+                                for (int x3 = Math.toIntExact(Math.round(Xm)); x3 < 100000; x3++) {
+                                    if (Math.abs(s1New - countS1(x3, windSpeedMaxGroundLevelConcentrationDistance,
+                                            harmfulSubstancesDepositionCoefficient)) < EPS) {
+                                        // 11)	В уравнение (1) подставляется Сх=Су(х2;у1), где s1 для условия x<Xм
+                                        for (int x4 = 0; x4 < Math.toIntExact(Math.round(Xm)); x4++) {
+                                            if (Math.abs(s1New - countS1(x4, windSpeedMaxGroundLevelConcentrationDistance,
+                                                    harmfulSubstancesDepositionCoefficient)) < EPS) {
+                                                int iteration = points.size() / 5;
+                                               /* points.add(iteration + 1, Pair.of(x4, 0));
+                                                points.add(iteration + 2, Pair.of(x2, y1));
+                                                points.add(iteration  + 3, Pair.of(x3, 0));
+                                                points.add(iteration  + 4, Pair.of(x2, -y1));
+                                                points.add(iteration + 1, Pair.of(x4, 0));//Замыкаю*/
+
+
+                                                XYSeries series1 = new XYSeries("Cm1 = " + CyCoefficient, false);
+                                                dataset.addSeries(series1);
+                                                series1.add(x4, 0);
+                                                series1.add(x2, y1);
+                                                series1.add(x3, 0);
+                                                stop=true;
+
+                                                if (x2 + STEP_INCREASE_SIZE < GRID_CELL_COUNT) {
+                                                    x2 += STEP_INCREASE_SIZE;
+                                                }
+
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
                 }
+
+                /*for (Pair<Integer, Integer> point : points) {
+                    series.add(point.getLeft(), point.getRight());
+                }*/
             }
         }
 
-        XYSeries series = new XYSeries("График" + 1111, false);
-        dataset.addSeries(series);
-        Ellipse2D ellipse2D = new Ellipse2D.Double();
         return dataset;
     }
 
@@ -261,9 +297,10 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         NumberAxis xAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-x-axis", null, locale));
         NumberAxis yAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-y-axis", null, locale));
 
-        XYItemRenderer renderer = new SamplingXYLineRenderer();
+        XYSplineRenderer renderer = new XYSplineRenderer(2);
         XYPlot plot = new XYPlot(dataSet, xAxis, yAxis, renderer);
         plot.setBackgroundPaint(null);
+        plot.getRangeAxis().setRange(-1000.0, 1000.0);
         //plot.setBackgroundImage(createStationInCityImage("map/moscow.svg", "map/moscow.svg"));
         //plot.setBackgroundImage(createStationInCityImage("map/moscow-min.png", "map/moscow-min.png"));
         try {
