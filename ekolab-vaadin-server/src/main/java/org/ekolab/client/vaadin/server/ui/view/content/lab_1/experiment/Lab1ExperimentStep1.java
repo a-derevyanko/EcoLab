@@ -31,12 +31,15 @@ import java.lang.reflect.Field;
 @ViewScope
 public class Lab1ExperimentStep1 extends HorizontalLayout implements LabWizardStep {
     @Autowired
+    private Binder<Lab1Variant> binder;
+
+    @Autowired
     private I18N i18N;
 
     @Autowired
     private ParameterCustomizer parameterCustomizer;
+
     // ----------------------------- Графические компоненты --------------------------------
-    private final Binder<Lab1Variant> binder = new Binder<>(Lab1Variant.class);
     private final GridLayout journalLayout = new GridLayout(6, 7);
     private final DateTimeField timeField = new DateTimeField();
     private final TextField objectNameField = new TextField();

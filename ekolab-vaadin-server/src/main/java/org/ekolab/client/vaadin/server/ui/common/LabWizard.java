@@ -31,8 +31,8 @@ import java.util.ArrayList;
  */
 @PreAuthorize(Authorize.HasAuthorities.STUDENT)
 public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implements AutoSavableView {
-    private final LabService<BEAN> labService;
-    private final Binder<BEAN> binder;
+    protected final LabService<BEAN> labService;
+    protected final Binder<BEAN> binder;
 
     private final LabPresentationStep presentationStep;
 
@@ -49,10 +49,10 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     protected I18N i18N;
 
     @Autowired
-    private Authentication currentUser;
+    protected Authentication currentUser;
 
     @Autowired
-    private InitialDataWindow initialDataWindow;
+    protected InitialDataWindow initialDataWindow;
 
     protected LabWizard(LabService<BEAN> labService, Binder<BEAN> binder, LabPresentationStep presentationStep) {
         this.labService = labService;

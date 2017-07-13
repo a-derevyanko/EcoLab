@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
 public class ParameterWithFormulaeLayout<BEAN extends LabData> extends ParameterLayout<BEAN> {
     private final String formulaePath;
 
-    public ParameterWithFormulaeLayout(String parametersPath, Binder<BEAN> dataBinder, LabService labService, I18N i18N,
+    public ParameterWithFormulaeLayout(String parametersPath, Binder<BEAN> dataBinder, LabService<BEAN> labService, I18N i18N,
                                        ResourceService res, ParameterCustomizer parameterCustomizer) {
         super(parametersPath, dataBinder, labService, i18N, res, parameterCustomizer);
         this.formulaePath = parametersPath + "formulaePath/";
@@ -39,7 +39,7 @@ public class ParameterWithFormulaeLayout<BEAN extends LabData> extends Parameter
     protected void bindField(Field propertyField, Binder.BindingBuilder<?, ?> builder) {
         boolean validated = labService.isFieldValidated(propertyField);
         if (validated) {
-            builder.withValidator((value, context) -> labService.validateFieldValue(propertyField, value) ?
+            builder.withValidator((value, context) -> labService.validateFieldValue(propertyField, value, dataBinder.getBean()) ?
                     ValidationResult.ok() : ValidationResult.error(i18N.get("labwizard.wrong-value")));
         }
         super.bindField(propertyField, builder);

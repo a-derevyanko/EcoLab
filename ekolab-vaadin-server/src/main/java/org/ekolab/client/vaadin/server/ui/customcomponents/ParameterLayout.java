@@ -39,7 +39,7 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
 
     protected final Binder<BEAN> dataBinder;
 
-    protected final LabService labService;
+    protected final LabService<BEAN> labService;
 
     protected final I18N i18N;
 
@@ -47,7 +47,7 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
 
     protected final ParameterCustomizer parameterCustomizer;
 
-    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService labService, I18N i18N,
+    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService<BEAN> labService, I18N i18N,
                            ResourceService res, ParameterCustomizer parameterCustomizer) {
         this.parametersPath = parametersPath;
         this.additionsPath = parametersPath + "additions/";
@@ -118,7 +118,7 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
             yesNoComponent.setItemCaptionGenerator(item -> item ? i18N.get("labwizard.yes-value") : i18N.get("labwizard.no-value"));
             dataBinder.forField(yesNoComponent).bind(propertyField.getName());
             component = yesNoComponent;
-        } else {
+        } else if (propClass == String.class || Number.class.isAssignableFrom(propClass)) {
             TextField field = new TextField();
             Converter<String, ?> converter = UIUtils.getStringConverter(propertyField, i18N);
 
@@ -127,6 +127,8 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
             field.setReadOnly(readOnly);
             field.addStyleName(EkoLabTheme.TEXTFIELD_TINY);
             component = field;
+        } else {
+            throw new IllegalArgumentException("Unknown property class");
         }
         super.addComponent(component, 1, row);
         component.setWidth(130, Unit.PIXELS);

@@ -19,6 +19,7 @@ import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.impl.ReportTemplates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailPreparationException;
@@ -52,7 +53,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
     @Autowired
     protected MessageSource messageSource;
 
-    private final LabDao<T> labDao;
+    protected final LabDao<T> labDao;
 
     protected LabServiceImpl(LabDao<T> labDao) {
         this.labDao = labDao;
@@ -61,6 +62,19 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
     @Override
     public boolean isFieldValidated(Field field) {
         return field.getAnnotation(Validated.class) != null;
+    }
+
+    /**
+     * Проверяет правильность значения поля
+     * @param field поле
+     * @param value значение
+     * @param labData данные лабораторной
+     * @return признак того, что значение верно
+     */
+    @Override
+    public boolean validateFieldValue(Field field, Object value, T labData) {
+        return AnnotationUtils.findAnnotation(field, Validated.class) == null ||
+                validateFieldValue(field.getName(), value, labData);
     }
 
     @Override
@@ -93,10 +107,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
     @Override
     @Transactional
     public T startNewLab(String userName) {
-        T labData = createNewLabData();
-        labData.setUserLogin(userName);
-        labData.setStartDate(LocalDateTime.now());
-        labData.setSaveDate(LocalDateTime.now());
+        T labData = createBaseLabData(userName);
         labData.setVariant(generateNewLabVariant());
         labDao.saveLab(labData);
         return labData;
@@ -190,6 +201,17 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
                 .setDataSource(createDataSourceFromModel(labData, locale));
     }
 
+    protected T createBaseLabData(String userName) {
+        T labData = createNewLabData();
+        labData.setUserLogin(userName);
+        labData.setStartDate(LocalDateTime.now());
+        labData.setSaveDate(LocalDateTime.now());
+        return labData;
+    }
+
+    protected boolean validateFieldValue(String fieldName, Object value, T labData) {
+        return true;
+    }
 
     /**
      * Генерирует вариант лабораторной, не сохраняя его

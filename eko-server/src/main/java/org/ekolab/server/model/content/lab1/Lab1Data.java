@@ -1,6 +1,8 @@
 package org.ekolab.server.model.content.lab1;
 
+import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.Validated;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -79,86 +81,103 @@ public class Lab1Data extends LabData<Lab1Variant> {
     /**
      * Коэффициент избытка воздуха в точке измерения
      */
+    @Validated
     private Double excessAirRatio;
 
     /**
      * Концентрация оксидов азота, приведенная к стандартному коэффициенту избытка воздуха α=1,4
      */
+    @Validated
     private Double flueGasNOxConcentrationNC;
 
     /**
      * Превышение допустимых норм
      */
+    @Validated
     private Boolean excessOfNorms;
 
     /**
      * Действительное барометрическое давление
      */
+    @Validated
     private Double validBarometricPressure;
 
     /**
      * Действительное абсолютное давление топлива в газопроводе
      */
+    @Validated
     private Double validAbsolutePressure;
 
     /**
      * Поправочный  коэффициент на давление, температуру и плотность природного газа
      */
+    @Calculated
     private Double correctionFactor;
 
     /**
      * Расход природного газа на котел с учетом поправок
      */
+    @Validated
     private Double fuelConsumerCorrection;
 
     /**
      * Расход природного газа на котел, приведенный к нормальным условиям
      */
+    @Validated
     private Double fuelConsumerNC;
 
     /**
      * Расход дымовых газов, выбрасываемых в атмосферу
      */
+    @Validated
     private Double flueGasesRate;
 
     /**
      * Объемный расход сухих газов
      */
+    @Validated
     private Double dryGasesFlowRate;
 
     /**
      * Массовые выбросы оксидов азота
      */
+    @Validated
     private Double massEmissions;
 
     /**
      * Скорость дымовых газов на выходе из дымовой трубы
      */
+    @Validated
     private Double flueGasesSpeed;
 
     /**
      * Параметр f
      */
+    @Validated
     private Double f;
 
     /**
      * Коэффициент m учитывающий условия выхода газов из дымовой трубы
      */
+    @Validated
     private Double m;
 
     /**
      * Параметр υ_м
      */
+    @Validated
     private Double u;
 
     /**
      * Коэффициент n учитывающий условия выхода газов из дымовой трубы
      */
+    @Validated
     private Double n;
 
     /**
      * Безразмерный коэффициент d
      */
+    @Validated
     private Double d;
 
     /**
@@ -179,11 +198,13 @@ public class Lab1Data extends LabData<Lab1Variant> {
     /**
      * Расстояние от источника выбросов, на котором приземные концентрации загрязняющих веществ достигают максимального значения
      */
+    @Validated
     private Double distanceFromEmissionSource;
 
     /**
      * Максимальная приземная концентрация оксидов азота
      */
+    @Validated
     private Double maximumSurfaceConcentration;
 
     @Nullable

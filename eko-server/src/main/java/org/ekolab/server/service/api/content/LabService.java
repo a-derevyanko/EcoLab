@@ -54,11 +54,10 @@ public interface LabService<T extends LabData> {
      * Проверяет правильность значения поля
      * @param field поле
      * @param value значение
+     * @param labData данные лабораторной
      * @return признак того, что значение верно
      */
-    default boolean validateFieldValue(Field field, Object value) {
-        return true;
-    }
+    boolean validateFieldValue(Field field, Object value, T labData);
 
     /**
      * Создаёт структуру с данными лабораторной, не сохраняя её
