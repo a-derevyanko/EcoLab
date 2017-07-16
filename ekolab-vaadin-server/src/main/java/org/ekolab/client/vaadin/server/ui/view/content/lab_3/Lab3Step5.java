@@ -19,6 +19,7 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
+import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.addon.JFreeChartWrapper;
 
@@ -76,9 +77,12 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
                 removeComponent(chart);
             }
 
-            chart = new JFreeChartWrapper(lab3Service.createChart(dataBinder.getBean(), UI.getCurrent().getLocale(), event.getValue()));
-            chart.setSizeFull();
-            addComponent(chart, 0, 0, 19, 19);
+            JFreeChart isoLineChart = lab3Service.createChart(dataBinder.getBean(), UI.getCurrent().getLocale(), event.getValue());
+            if (isoLineChart != null) {
+                chart = new JFreeChartWrapper(isoLineChart);
+                chart.setSizeFull();
+                addComponent(chart, 0, 0, 19, 19);
+            }
         });
 
         zoomInButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);

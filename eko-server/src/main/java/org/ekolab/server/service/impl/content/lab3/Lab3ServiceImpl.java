@@ -53,7 +53,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     @Override
     public byte[] createReport(Lab3Data labData, Locale locale) {
         return ReportTemplates.printReport(super.createBaseLabReport(labData, 3, locale)
-                .summary(cmp.image(ImageUtil.createRotated(isoLineChartService.createIsoLineChart(labData, locale).
+                .summary(cmp.image(ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ISOLINE).
                         createBufferedImage(PageType.A4.getWidth(), PageType.A4.getHeight()), ImageUtil.ROTATE_90_CW))
                         .setMinDimension(Math.round(PageType.A4.getWidth() * 0.95f), Math.round(PageType.A4.getHeight() * 0.95f))
                         .setImageScale(ImageScale.FILL_FRAME).setPositionType(ComponentPositionType.FIX_RELATIVE_TO_BOTTOM)
@@ -251,13 +251,36 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
 
     @Override
     public JFreeChart createChart(Lab3Data labData, Locale locale, LabChartType chartType) {
-        if (chartType == Lab3ChartType.ISOLINE) {
-            return isoLineChartService.createIsoLineChart(labData, locale);
-        } else if (chartType == Lab3ChartType.SO2) {
-            return null;
-        } else {
-            throw new IllegalArgumentException("Unknown chart type");
+        Double windSpeedMaxGroundLevelConcentrationDistance = labData.getWindSpeedMaxGroundLevelConcentrationDistance();
+        Double harmfulSubstancesDepositionCoefficient = labData.getHarmfulSubstancesDepositionCoefficient();
+        Double windSpeed = labData.getWindSpeed();
+        if (windSpeedMaxGroundLevelConcentrationDistance != null && harmfulSubstancesDepositionCoefficient != null && windSpeed != null)
+        {
+            Double groundLevelConcentration;
+            Double backgroundConcentration;
+            Double mac;
+            if (chartType == Lab3ChartType.ISOLINE) {
+                groundLevelConcentration = labData.getBwdNo2GroundLevelConcentration();
+                backgroundConcentration = labData.getNo2BackgroundConcentration();
+                mac = labData.getNo2MAC();
+            } else if (chartType == Lab3ChartType.SO2) {
+                groundLevelConcentration = labData.getBwdSo2GroundLevelConcentration();
+                backgroundConcentration = labData.getSo2BackgroundConcentration();
+                mac = labData.getSo2MAC();
+            } else if (chartType == Lab3ChartType.ASH) {
+                groundLevelConcentration = labData.getBwdAshGroundLevelConcentration();
+                backgroundConcentration = labData.getAshBackgroundConcentration();
+                mac = labData.getAshMAC();
+            } else {
+                throw new IllegalArgumentException("Unknown chart type");
+            }
+            if (groundLevelConcentration != null && backgroundConcentration != null && mac != null) {
+                return isoLineChartService.createIsoLineChart(windSpeedMaxGroundLevelConcentrationDistance,
+                        harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+                        backgroundConcentration, windSpeed, mac, locale);
+            }
         }
+        return null;
     }
 
     @Override

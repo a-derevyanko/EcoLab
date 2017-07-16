@@ -1,23 +1,16 @@
 package org.ekolab.server.service.impl.content.lab3;
 
-import org.apache.commons.lang3.ArrayUtils;
+import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.dev.LogExecutionTime;
-import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
 import org.ekolab.server.service.impl.content.equations.ferrari.EquationFunction;
 import org.ekolab.server.service.impl.content.equations.ferrari.QuarticFunction;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.chart.renderer.xy.XYSplineRenderer;
-import org.jfree.data.category.CategoryDataset;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -29,12 +22,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.WeakHashMap;
 
 import static java.lang.Math.pow;
 
@@ -43,54 +40,119 @@ import static java.lang.Math.pow;
  */
 @Service
 public class IsoLineChartServiceImpl implements IsoLineChartService {
+    private static final int MAX_DISTANCE = 35000;
+    private static final int MAX_RIGHT_SPACE = 2000;
+    private static final int BIG_SERIES_STEP = 100;
+    private static final int SMALL_SERIES_STEP = 10;
     private static final Logger LOGGER = LoggerFactory.getLogger(IsoLineChartServiceImpl.class);
-    private static final Map<Integer, float[]> DASH_SETTINGS = new HashMap<>();
     private static final Map<Double[], XYDataset> DATASET_CACHE = new WeakHashMap<>();
 
     @Autowired
     private MessageSource messageSource;
 
-    @PostConstruct
-    private void init() {
-        DASH_SETTINGS.put(0, new float[] {10.0f, 6.0f});
-        DASH_SETTINGS.put(1, new float[] {6.0f, 6.0f});
-        DASH_SETTINGS.put(2, new float[] {2.0f, 6.0f});
-    }
-
     @Override
     @LogExecutionTime(500)
-    public JFreeChart createIsoLineChart(Lab3Data data, Locale locale) {
-        return createSplineChart(getDataSet(data), locale);
+    public JFreeChart createIsoLineChart(double windSpeedMaxGroundLevelConcentrationDistance,
+                                         double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration,
+                                         double backgroundConcentration, double windSpeed, double mac, Locale locale) {
+        return createSplineChart(getDataSet(windSpeedMaxGroundLevelConcentrationDistance,
+        harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+        backgroundConcentration, windSpeed, mac), locale);
     }
 
-    private XYDataset getDataSet(Lab3Data lab3Data) {
-        Double windSpeedMaxGroundLevelConcentrationDistance = lab3Data.getWindSpeedMaxGroundLevelConcentrationDistance();
-        Double harmfulSubstancesDepositionCoefficient = lab3Data.getHarmfulSubstancesDepositionCoefficient();
-        Double windSpeed = lab3Data.getWindSpeed();
+    private XYDataset getDataSet(double windSpeedMaxGroundLevelConcentrationDistance,
+                                 double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration,
+                                 double no2BackgroundConcentration, double windSpeed, double mac) {
+
         Double[] key = new Double[]{windSpeedMaxGroundLevelConcentrationDistance,
-                harmfulSubstancesDepositionCoefficient, windSpeed};
-        return DATASET_CACHE.computeIfAbsent(key, k -> createDataset(windSpeedMaxGroundLevelConcentrationDistance,
-                harmfulSubstancesDepositionCoefficient, windSpeed));
+                harmfulSubstancesDepositionCoefficient, windSpeed, groundLevelConcentration};
+
+        return DATASET_CACHE.computeIfAbsent(key, k -> createDataset(
+                windSpeedMaxGroundLevelConcentrationDistance,
+                harmfulSubstancesDepositionCoefficient, groundLevelConcentration, no2BackgroundConcentration, windSpeed, mac));
     }
 
-    private XYDataset createDataset(Double windSpeedMaxGroundLevelConcentrationDistance,
-                                      Double harmfulSubstancesDepositionCoefficient, Double windSpeed) {
+    private XYDataset createDataset(double windSpeedMaxGroundLevelConcentrationDistance,
+                                    double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration,
+                                    double backgroundConcentration, double windSpeed, double mac) {
         XYSeriesCollection dataset = new XYSeriesCollection();
-        XYSeries series = new XYSeries("isolineChart");
 
-        dataset.addSeries(series);
-        if (windSpeedMaxGroundLevelConcentrationDistance != null
-                && harmfulSubstancesDepositionCoefficient != null  && windSpeed != null) {
-            for (int x = -1000; x < 1000; x++) {
-                for (double y : countY(x, windSpeedMaxGroundLevelConcentrationDistance,
-                        harmfulSubstancesDepositionCoefficient, windSpeed)) {
-                    series.add(x, y);
-                    LOGGER.info("x = " + x + " y = " + y + " d = " + (double) x / windSpeedMaxGroundLevelConcentrationDistance);
-                }
+        int Xm = Math.toIntExact(Math.round(windSpeedMaxGroundLevelConcentrationDistance));
+
+        for (double CyCoefficient = 0.1; CyCoefficient < 0.95; CyCoefficient += 0.1) {
+            double C = CyCoefficient * groundLevelConcentration;
+            if (C > backgroundConcentration) {
+                XYSeries series = new XYSeries("C = " + new BigDecimal(CyCoefficient).setScale(1, RoundingMode.HALF_UP).doubleValue() + " Cm", false);
+                dataset.addSeries(series);
+                fillIsoLineSeries(series, CyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+                        windSpeed);
+            }
+        }
+
+        XYSeries macSeries = new XYSeries("ПДК = " + mac, false);
+        dataset.addSeries(macSeries);
+        fillIsoLineSeries(macSeries, mac, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+                windSpeed);
+
+
+        int x = Xm; //countX0(0, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, 0.1);
+        double C1 = groundLevelConcentration * countS1(x, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient);
+        EquationFunction f = new QuarticFunction(45.1, 17, 12.8, 5, 1 - Math.sqrt(C1 / backgroundConcentration));
+        for (double t : f.findRealRoots()) {
+            if (t > 0) {
+                XYSeries series = new XYSeries("Граничные линии", false);
+                dataset.addSeries(series);
+                double y = Math.sqrt(windSpeed > 5 ? t * x * x / 5 : t * x * x / windSpeed);
+                series.add(x, y);
+                series.add(0.0, 0.0);
+                series.add(x, -y);
+                break;
             }
         }
 
         return dataset;
+    }
+
+    private void fillIsoLineSeries(XYSeries series, double CyCoefficient, int Xm, double windSpeedMaxGroundLevelConcentrationDistance,
+                                   double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration, double windSpeed) {
+            double C = CyCoefficient * groundLevelConcentration;
+
+            // Находим граничные точки
+            int x1 = countX0(0, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, CyCoefficient);
+            int xN = countX0(Xm, MAX_DISTANCE, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, CyCoefficient);
+
+            series.add(xN, 0);
+            Map<Integer, Double> points = new TreeMap<>();
+            int step = xN - x1 < 2000 ? SMALL_SERIES_STEP : BIG_SERIES_STEP;
+            for (int x = xN - 1; x > x1; x-=step) {
+                double C1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient) * groundLevelConcentration;
+                EquationFunction f = new QuarticFunction(45.1, 17, 12.8, 5, 1 - Math.sqrt(C1 / C));
+                for (double t : f.findRealRoots()) {
+                    if (t > 0) {
+                        double y = Math.sqrt(windSpeed > 5 ? t * x * x / 5 : t * x * x / windSpeed);
+                        points.put(x, y);
+                        series.add(x, y);
+                    }
+                }
+            }
+
+            series.add(x1, 0);
+
+            for (Map.Entry<Integer, Double> point : points.entrySet()) {
+                series.add((double) point.getKey(), -point.getValue());
+            }
+            series.add(xN, 0);
+    }
+
+    private int countX0(int fromDistance, int toDistance, double windSpeedMaxGroundLevelConcentrationDistance,
+                        double harmfulSubstancesDepositionCoefficient, double CyCoefficient) {
+        for (int x = fromDistance; x < toDistance; x++) {
+            double s1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient);
+            if (MathUtils.checkEquals(s1, CyCoefficient)) {
+                return x;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 
     private double countS1(double x, double windSpeedMaxGroundLevelConcentrationDistance,
@@ -109,33 +171,11 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         }
     }
 
-    private double[] countT(double s1) {
-        EquationFunction f = new QuarticFunction(45.1, 17, 12.8, 5, 1 - Math.sqrt(1 / s1));
-        LOGGER.info(" s1 = " + s1);
-       /* EquationFunction f2 = new QuarticFunction(-45.1, -17, -12.8, -5,  Math.sqrt(1 / s1) - 1);
-        double[] result = ArrayUtils.addAll(f1.findRealRoots(), f2.findRealRoots());*/
-        return Arrays.stream(f.findRealRoots()).filter(t -> t > 0).toArray();
-    }
-
-    private double[] countY(double x, double windSpeedMaxGroundLevelConcentrationDistance,
-                            double harmfulSubstancesDepositionCoefficient, double windSpeed) {
-        double s1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient);
-        LOGGER.info(" s1 = " + s1);
-
-        double[] result = new double[0];
-        for (double t : countT(s1)) {
-            LOGGER.info(" t = " + t);
-            double root = Math.sqrt(windSpeed > 5 ? t * x * x / 5 : t * x * x / windSpeed);
-            result = ArrayUtils.addAll(result, root, -root);
-        }
-        return result;
-    }
-
     private JFreeChart createSplineChart(XYDataset dataSet, Locale locale) {
         // Create plot
         NumberAxis xAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-x-axis", null, locale));
         NumberAxis yAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-y-axis", null, locale));
-        XYSplineRenderer renderer = new XYSplineRenderer();
+        XYItemRenderer renderer = new XYLineAndShapeRenderer(true, false);
         XYPlot plot = new XYPlot(dataSet, xAxis, yAxis, renderer);
         plot.setBackgroundPaint(null);
         plot.setDomainGridlinesVisible(false);
@@ -157,10 +197,6 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         chart.getLegend().setPosition(RectangleEdge.LEFT);
         ChartUtilities.applyCurrentTheme(chart);
 
-        for (int i = 0; i < dataSet.getSeriesCount(); i++) {
-            stylizeSeriesStroke(plot, i);
-        }
-
         // Draw png
         /*BufferedImage bi = new BufferedImage(width, height,
                 BufferedImage.TYPE_INT_BGR);
@@ -171,75 +207,6 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         return chart;
     }
 
-    private void stylizeSeriesStroke(XYPlot plot, int i) {
-        plot.getRenderer().setSeriesStroke(i, new BasicStroke(
-                        2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
-                        1.0f, DASH_SETTINGS.get(i), 0.0f
-                )
-        );
-    }
-
-    private JFreeChart createChart(CategoryDataset dataset) throws IOException {
-
-        // create the chart...
-        JFreeChart chart = ChartFactory.createBarChart("Bar Chart Demo 1", // chart
-                // title
-                "Category", // domain axis label
-                "Value", // range axis label
-                dataset, // data
-                PlotOrientation.VERTICAL, // orientation
-                true, // include legend
-                true, // tooltips?
-                false // URLs?
-        );
-
-        // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
-
-        // set the background color for the chart...
-        chart.setBackgroundPaint(Color.white);
-
-        // get a reference to the plot for further customisation...
-        CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        plot.setBackgroundPaint(Color.lightGray);
-        plot.setDomainGridlinePaint(Color.white);
-        plot.setDomainGridlinesVisible(true);
-        plot.setRangeGridlinePaint(Color.white);
-
-        // ******************************************************************
-        // More than 150 demo applications are included with the JFreeChart
-        // Developer Guide...for more information, see:
-        //
-        // > http://www.object-refinery.com/jfreechart/guide.html
-        //
-        // ******************************************************************
-
-        // set the range axis to display integers only...
-        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-
-        // disable bar outlines...
-        BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        // renderer.setDrawBarOutline(false);
-
-        // set up gradient paints for series...
-        GradientPaint gp0 = new GradientPaint(0.0f, 0.0f, Color.blue, 0.0f,
-                0.0f, new Color(0, 0, 64));
-        GradientPaint gp1 = new GradientPaint(0.0f, 0.0f, Color.green, 0.0f,
-                0.0f, new Color(0, 64, 0));
-        GradientPaint gp2 = new GradientPaint(0.0f, 0.0f, Color.red, 0.0f,
-                0.0f, new Color(64, 0, 0));
-        renderer.setSeriesPaint(0, gp0);
-        renderer.setSeriesPaint(1, gp1);
-        renderer.setSeriesPaint(2, gp2);
-
-        CategoryAxis domainAxis = plot.getDomainAxis();
-        domainAxis.setCategoryLabelPositions(CategoryLabelPositions
-                .createUpRotationLabelPositions(Math.PI / 6.0));
-        // OPTIONAL CUSTOMISATION COMPLETED.
-
-        return chart;
-
-    }
 
     private static java.awt.Image createStationInCityImage(String cityMapImage, String stationImage) {
         try {
