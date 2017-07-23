@@ -209,6 +209,12 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         return labData;
     }
 
+    /**
+     * Создаёт структуру с данными лабораторной, не сохраняя её
+     * @return новая структура с данными лабораторной
+     */
+    protected abstract T createNewLabData();
+
     protected boolean validateFieldValue(String fieldName, Object value, T labData) {
         return true;
     }

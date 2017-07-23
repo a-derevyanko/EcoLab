@@ -1,6 +1,5 @@
 package org.ekolab.server.model.content.lab1;
 
-import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.Validated;
 
@@ -16,11 +15,6 @@ public class Lab1Data extends LabData<Lab1Variant> {
      */
     @Nullable
     private String name;
-
-    /**
-     * Барометрическое давление
-     */
-    private Double barometricPressure;
 
     /**
      * Температура наружного воздуха
@@ -44,29 +38,9 @@ public class Lab1Data extends LabData<Lab1Variant> {
     private Double steamProductionCapacity;
 
     /**
-     * Содержание кислорода за пароперегревателем
-     */
-    private Double oxygenConcentration;
-
-    /**
      * Содержание кислорода в сечении газохода, где проводились измерения
      */
     private Double oxygenConcentrationPoint;
-
-    /**
-     * Расход природного газа на паровой котел по расходомеру
-     */
-    private Double fuelConsumer;
-
-    /**
-     * Избыточное давление природного газа в магистрали
-     */
-    private Double excessPressure;
-
-    /**
-     * Температура природного газа в магистрали
-     */
-    private Double gasTemperature;
 
     /**
      * Температура уходящих дымовых газов
@@ -95,36 +69,6 @@ public class Lab1Data extends LabData<Lab1Variant> {
      */
     @Validated
     private Boolean excessOfNorms;
-
-    /**
-     * Действительное барометрическое давление
-     */
-    @Validated
-    private Double validBarometricPressure;
-
-    /**
-     * Действительное абсолютное давление топлива в газопроводе
-     */
-    @Validated
-    private Double validAbsolutePressure;
-
-    /**
-     * Поправочный  коэффициент на давление, температуру и плотность природного газа
-     */
-    @Calculated
-    private Double correctionFactor;
-
-    /**
-     * Расход природного газа на котел с учетом поправок
-     */
-    @Validated
-    private Double fuelConsumerCorrection;
-
-    /**
-     * Расход природного газа на котел, приведенный к нормальным условиям
-     */
-    @Validated
-    private Double fuelConsumerNC;
 
     /**
      * Расход дымовых газов, выбрасываемых в атмосферу
@@ -216,14 +160,6 @@ public class Lab1Data extends LabData<Lab1Variant> {
         this.name = name;
     }
 
-    public Double getBarometricPressure() {
-        return barometricPressure;
-    }
-
-    public void setBarometricPressure(Double barometricPressure) {
-        this.barometricPressure = barometricPressure;
-    }
-
     public Double getOutsideAirTemperature() {
         return outsideAirTemperature;
     }
@@ -256,44 +192,12 @@ public class Lab1Data extends LabData<Lab1Variant> {
         this.steamProductionCapacity = steamProductionCapacity;
     }
 
-    public Double getOxygenConcentration() {
-        return oxygenConcentration;
-    }
-
-    public void setOxygenConcentration(Double oxygenConcentration) {
-        this.oxygenConcentration = oxygenConcentration;
-    }
-
     public Double getOxygenConcentrationPoint() {
         return oxygenConcentrationPoint;
     }
 
     public void setOxygenConcentrationPoint(Double oxygenConcentrationPoint) {
         this.oxygenConcentrationPoint = oxygenConcentrationPoint;
-    }
-
-    public Double getFuelConsumer() {
-        return fuelConsumer;
-    }
-
-    public void setFuelConsumer(Double fuelConsumer) {
-        this.fuelConsumer = fuelConsumer;
-    }
-
-    public Double getExcessPressure() {
-        return excessPressure;
-    }
-
-    public void setExcessPressure(Double excessPressure) {
-        this.excessPressure = excessPressure;
-    }
-
-    public Double getGasTemperature() {
-        return gasTemperature;
-    }
-
-    public void setGasTemperature(Double gasTemperature) {
-        this.gasTemperature = gasTemperature;
     }
 
     public Double getStackExitTemperature() {
@@ -334,46 +238,6 @@ public class Lab1Data extends LabData<Lab1Variant> {
 
     public void setExcessOfNorms(Boolean excessOfNorms) {
         this.excessOfNorms = excessOfNorms;
-    }
-
-    public Double getValidBarometricPressure() {
-        return validBarometricPressure;
-    }
-
-    public void setValidBarometricPressure(Double validBarometricPressure) {
-        this.validBarometricPressure = validBarometricPressure;
-    }
-
-    public Double getValidAbsolutePressure() {
-        return validAbsolutePressure;
-    }
-
-    public void setValidAbsolutePressure(Double validAbsolutePressure) {
-        this.validAbsolutePressure = validAbsolutePressure;
-    }
-
-    public Double getCorrectionFactor() {
-        return correctionFactor;
-    }
-
-    public void setCorrectionFactor(Double correctionFactor) {
-        this.correctionFactor = correctionFactor;
-    }
-
-    public Double getFuelConsumerCorrection() {
-        return fuelConsumerCorrection;
-    }
-
-    public void setFuelConsumerCorrection(Double fuelConsumerCorrection) {
-        this.fuelConsumerCorrection = fuelConsumerCorrection;
-    }
-
-    public Double getFuelConsumerNC() {
-        return fuelConsumerNC;
-    }
-
-    public void setFuelConsumerNC(Double fuelConsumerNC) {
-        this.fuelConsumerNC = fuelConsumerNC;
     }
 
     public Double getFlueGasesRate() {
@@ -495,26 +359,16 @@ public class Lab1Data extends LabData<Lab1Variant> {
         if (!super.equals(o)) return false;
         Lab1Data lab1Data = (Lab1Data) o;
         return Objects.equals(name, lab1Data.name) &&
-                Objects.equals(barometricPressure, lab1Data.barometricPressure) &&
                 Objects.equals(outsideAirTemperature, lab1Data.outsideAirTemperature) &&
                 Objects.equals(stacksHeight, lab1Data.stacksHeight) &&
                 Objects.equals(stacksDiameter, lab1Data.stacksDiameter) &&
                 Objects.equals(steamProductionCapacity, lab1Data.steamProductionCapacity) &&
-                Objects.equals(oxygenConcentration, lab1Data.oxygenConcentration) &&
                 Objects.equals(oxygenConcentrationPoint, lab1Data.oxygenConcentrationPoint) &&
-                Objects.equals(fuelConsumer, lab1Data.fuelConsumer) &&
-                Objects.equals(excessPressure, lab1Data.excessPressure) &&
-                Objects.equals(gasTemperature, lab1Data.gasTemperature) &&
                 Objects.equals(stackExitTemperature, lab1Data.stackExitTemperature) &&
                 Objects.equals(flueGasNOxConcentration, lab1Data.flueGasNOxConcentration) &&
                 Objects.equals(excessAirRatio, lab1Data.excessAirRatio) &&
                 Objects.equals(flueGasNOxConcentrationNC, lab1Data.flueGasNOxConcentrationNC) &&
                 Objects.equals(excessOfNorms, lab1Data.excessOfNorms) &&
-                Objects.equals(validBarometricPressure, lab1Data.validBarometricPressure) &&
-                Objects.equals(validAbsolutePressure, lab1Data.validAbsolutePressure) &&
-                Objects.equals(correctionFactor, lab1Data.correctionFactor) &&
-                Objects.equals(fuelConsumerCorrection, lab1Data.fuelConsumerCorrection) &&
-                Objects.equals(fuelConsumerNC, lab1Data.fuelConsumerNC) &&
                 Objects.equals(flueGasesRate, lab1Data.flueGasesRate) &&
                 Objects.equals(dryGasesFlowRate, lab1Data.dryGasesFlowRate) &&
                 Objects.equals(massEmissions, lab1Data.massEmissions) &&
@@ -533,13 +387,11 @@ public class Lab1Data extends LabData<Lab1Variant> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, barometricPressure, outsideAirTemperature,
-                stacksHeight, stacksDiameter, steamProductionCapacity, oxygenConcentration,
-                oxygenConcentrationPoint, fuelConsumer, excessPressure, gasTemperature,
-                stackExitTemperature, flueGasNOxConcentration, excessAirRatio, flueGasNOxConcentrationNC,
-                excessOfNorms, validBarometricPressure, validAbsolutePressure, correctionFactor,
-                fuelConsumerCorrection, fuelConsumerNC, flueGasesRate, dryGasesFlowRate, massEmissions,
-                flueGasesSpeed, f, m, u, n, d, harmfulSubstancesDepositionCoefficient, terrainCoefficient,
-                temperatureCoefficient, distanceFromEmissionSource, maximumSurfaceConcentration);
+        return Objects.hash(super.hashCode(), name, outsideAirTemperature,
+                stacksHeight, stacksDiameter, steamProductionCapacity,
+                oxygenConcentrationPoint, stackExitTemperature,
+                flueGasNOxConcentration, excessAirRatio, flueGasNOxConcentrationNC, excessOfNorms, flueGasesRate,
+                dryGasesFlowRate, massEmissions, flueGasesSpeed, f, m, u, n, d, harmfulSubstancesDepositionCoefficient,
+                terrainCoefficient, temperatureCoefficient, distanceFromEmissionSource, maximumSurfaceConcentration);
     }
 }

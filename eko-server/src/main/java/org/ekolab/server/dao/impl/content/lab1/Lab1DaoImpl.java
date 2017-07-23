@@ -28,26 +28,16 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
         data.setSaveDate(record.get(LAB1DATA.SAVE_DATE));
         data.setCompleted(record.get(LAB1DATA.COMPLETED));
         data.setName(record.get(LAB1DATA.NAME));
-        data.setBarometricPressure(record.get(LAB1DATA.BAROMETRIC_PRESSURE));
         data.setOutsideAirTemperature(record.get(LAB1DATA.OUTSIDE_AIR_TEMPERATURE));
         data.setStacksHeight(record.get(LAB1DATA.STACKS_HEIGHT));
         data.setStacksDiameter(record.get(LAB1DATA.STACKS_DIAMETER));
         data.setSteamProductionCapacity(record.get(LAB1DATA.STEAM_PRODUCTION_CAPACITY));
-        data.setOxygenConcentration(record.get(LAB1DATA.OXYGEN_CONCENTRATION));
         data.setOxygenConcentrationPoint(record.get(LAB1DATA.OXYGEN_CONCENTRATION_POINT));
-        data.setFuelConsumer(record.get(LAB1DATA.FUEL_CONSUMER));
-        data.setExcessPressure(record.get(LAB1DATA.EXCESS_PRESSURE));
-        data.setGasTemperature(record.get(LAB1DATA.GAS_TEMPERATURE));
         data.setStackExitTemperature(record.get(LAB1DATA.STACK_EXIT_TEMPERATURE));
         data.setFlueGasNOxConcentration(record.get(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION));
         data.setExcessAirRatio(record.get(LAB1DATA.EXCESS_AIR_RATIO));
         data.setFlueGasNOxConcentrationNC(record.get(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC));
         data.setExcessOfNorms(record.get(LAB1DATA.EXCESS_OF_NORMS));
-        data.setValidBarometricPressure(record.get(LAB1DATA.VALID_BAROMETRIC_PRESSURE));
-        data.setValidAbsolutePressure(record.get(LAB1DATA.VALID_ABSOLUTE_PRESSURE));
-        data.setCorrectionFactor(record.get(LAB1DATA.CORRECTION_FACTOR));
-        data.setFuelConsumerCorrection(record.get(LAB1DATA.FUEL_CONSUMER_CORRECTION));
-        data.setFuelConsumerNC(record.get(LAB1DATA.FUEL_CONSUMER_NC));
         data.setFlueGasesRate(record.get(LAB1DATA.FLUE_GASES_RATE));
         data.setDryGasesFlowRate(record.get(LAB1DATA.DRY_GASES_FLOW_RATE));
         data.setMassEmissions(record.get(LAB1DATA.MASS_EMISSIONS));
@@ -65,16 +55,12 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
 
         Lab1Variant variant = new Lab1Variant();
         variant.setName(record.get(LAB1VARIANT.NAME));
-        variant.setBarometricPressure(record.get(LAB1VARIANT.BAROMETRIC_PRESSURE));
         variant.setOutsideAirTemperature(record.get(LAB1VARIANT.OUTSIDE_AIR_TEMPERATURE));
         variant.setStacksHeight(record.get(LAB1VARIANT.STACKS_HEIGHT));
         variant.setStacksDiameter(record.get(LAB1VARIANT.STACKS_DIAMETER));
         variant.setSteamProductionCapacity(record.get(LAB1VARIANT.STEAM_PRODUCTION_CAPACITY));
-        variant.setOxygenConcentration(record.get(LAB1VARIANT.OXYGEN_CONCENTRATION));
         variant.setOxygenConcentrationPoint(record.get(LAB1VARIANT.OXYGEN_CONCENTRATION_POINT));
-        variant.setFuelConsumer(record.get(LAB1VARIANT.FUEL_CONSUMER));
-        variant.setExcessPressure(record.get(LAB1VARIANT.EXCESS_PRESSURE));
-        variant.setGasTemperature(record.get(LAB1VARIANT.GAS_TEMPERATURE));
+        variant.setFuelConsumerNormalized(record.get(LAB1VARIANT.FUEL_CONSUMER));
         variant.setStackExitTemperature(record.get(LAB1VARIANT.STACK_EXIT_TEMPERATURE));
         variant.setFlueGasNOxConcentration(record.get(LAB1VARIANT.FLUE_GAS_NOX_CONCENTRATION));
 
@@ -104,26 +90,16 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
                 LAB1DATA.SAVE_DATE,
                 LAB1DATA.COMPLETED,
                 LAB1DATA.NAME,
-                LAB1DATA.BAROMETRIC_PRESSURE,
                 LAB1DATA.OUTSIDE_AIR_TEMPERATURE,
                 LAB1DATA.STACKS_HEIGHT,
                 LAB1DATA.STACKS_DIAMETER,
                 LAB1DATA.STEAM_PRODUCTION_CAPACITY,
-                LAB1DATA.OXYGEN_CONCENTRATION,
                 LAB1DATA.OXYGEN_CONCENTRATION_POINT,
-                LAB1DATA.FUEL_CONSUMER,
-                LAB1DATA.EXCESS_PRESSURE,
-                LAB1DATA.GAS_TEMPERATURE,
                 LAB1DATA.STACK_EXIT_TEMPERATURE,
                 LAB1DATA.FLUE_GAS_NOX_CONCENTRATION,
                 LAB1DATA.EXCESS_AIR_RATIO,
                 LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC,
                 LAB1DATA.EXCESS_OF_NORMS,
-                LAB1DATA.VALID_BAROMETRIC_PRESSURE,
-                LAB1DATA.VALID_ABSOLUTE_PRESSURE,
-                LAB1DATA.CORRECTION_FACTOR,
-                LAB1DATA.FUEL_CONSUMER_CORRECTION,
-                LAB1DATA.FUEL_CONSUMER_NC,
                 LAB1DATA.FLUE_GASES_RATE,
                 LAB1DATA.DRY_GASES_FLOW_RATE,
                 LAB1DATA.MASS_EMISSIONS,
@@ -144,26 +120,16 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
                         data.getSaveDate(),
                         data.isCompleted(),
                         data.getName(),
-                        data.getBarometricPressure(),
                         data.getOutsideAirTemperature(),
                         data.getStacksHeight(),
                         data.getStacksDiameter(),
                         data.getSteamProductionCapacity(),
-                        data.getOxygenConcentration(),
                         data.getOxygenConcentrationPoint(),
-                        data.getFuelConsumer(),
-                        data.getExcessPressure(),
-                        data.getGasTemperature(),
                         data.getStackExitTemperature(),
                         data.getFlueGasNOxConcentration(),
                         data.getExcessAirRatio(),
                         data.getFlueGasNOxConcentrationNC(),
                         data.getExcessOfNorms(),
-                        data.getValidBarometricPressure(),
-                        data.getValidAbsolutePressure(),
-                        data.getCorrectionFactor(),
-                        data.getFuelConsumerCorrection(),
-                        data.getFuelConsumerNC(),
                         data.getFlueGasesRate(),
                         data.getDryGasesFlowRate(),
                         data.getMassEmissions(),
@@ -184,31 +150,23 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
         dsl.insertInto(LAB1VARIANT,
                 LAB1VARIANT.ID,
                 LAB1VARIANT.NAME,
-                LAB1VARIANT.BAROMETRIC_PRESSURE,
                 LAB1VARIANT.OUTSIDE_AIR_TEMPERATURE,
                 LAB1VARIANT.STACKS_HEIGHT,
                 LAB1VARIANT.STACKS_DIAMETER,
                 LAB1VARIANT.STEAM_PRODUCTION_CAPACITY,
-                LAB1VARIANT.OXYGEN_CONCENTRATION,
                 LAB1VARIANT.OXYGEN_CONCENTRATION_POINT,
                 LAB1VARIANT.FUEL_CONSUMER,
-                LAB1VARIANT.EXCESS_PRESSURE,
-                LAB1VARIANT.GAS_TEMPERATURE,
                 LAB1VARIANT.STACK_EXIT_TEMPERATURE,
                 LAB1VARIANT.FLUE_GAS_NOX_CONCENTRATION).
                 values(
                         id,
                         variant.getName(),
-                        variant.getBarometricPressure(),
                         variant.getOutsideAirTemperature(),
                         variant.getStacksHeight(),
                         variant.getStacksDiameter(),
                         variant.getSteamProductionCapacity(),
-                        variant.getOxygenConcentration(),
                         variant.getOxygenConcentrationPoint(),
-                        variant.getFuelConsumer(),
-                        variant.getExcessPressure(),
-                        variant.getGasTemperature(),
+                        variant.getFuelConsumerNormalized(),
                         variant.getStackExitTemperature(),
                         variant.getFlueGasNOxConcentration()
                 ).execute();
@@ -221,26 +179,16 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
                 .set(LAB1DATA.START_DATE, data.getStartDate())
                 .set(LAB1DATA.SAVE_DATE, data.getSaveDate())
                 .set(LAB1DATA.NAME, data.getName())
-                .set(LAB1DATA.BAROMETRIC_PRESSURE, data.getBarometricPressure())
                 .set(LAB1DATA.OUTSIDE_AIR_TEMPERATURE, data.getOutsideAirTemperature())
                 .set(LAB1DATA.STACKS_HEIGHT, data.getStacksHeight())
                 .set(LAB1DATA.STACKS_DIAMETER, data.getStacksDiameter())
                 .set(LAB1DATA.STEAM_PRODUCTION_CAPACITY, data.getSteamProductionCapacity())
-                .set(LAB1DATA.OXYGEN_CONCENTRATION, data.getOxygenConcentration())
                 .set(LAB1DATA.OXYGEN_CONCENTRATION_POINT, data.getOxygenConcentrationPoint())
-                .set(LAB1DATA.FUEL_CONSUMER, data.getFuelConsumer())
-                .set(LAB1DATA.EXCESS_PRESSURE, data.getExcessPressure())
-                .set(LAB1DATA.GAS_TEMPERATURE, data.getGasTemperature())
                 .set(LAB1DATA.STACK_EXIT_TEMPERATURE, data.getStackExitTemperature())
                 .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION, data.getFlueGasNOxConcentration())
                 .set(LAB1DATA.EXCESS_AIR_RATIO, data.getExcessAirRatio())
                 .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC, data.getFlueGasNOxConcentrationNC())
                 .set(LAB1DATA.EXCESS_OF_NORMS, data.getExcessOfNorms())
-                .set(LAB1DATA.VALID_BAROMETRIC_PRESSURE, data.getValidBarometricPressure())
-                .set(LAB1DATA.VALID_ABSOLUTE_PRESSURE, data.getValidAbsolutePressure())
-                .set(LAB1DATA.CORRECTION_FACTOR, data.getCorrectionFactor())
-                .set(LAB1DATA.FUEL_CONSUMER_CORRECTION, data.getFuelConsumerCorrection())
-                .set(LAB1DATA.FUEL_CONSUMER_NC, data.getFuelConsumerNC())
                 .set(LAB1DATA.FLUE_GASES_RATE, data.getFlueGasesRate())
                 .set(LAB1DATA.DRY_GASES_FLOW_RATE, data.getDryGasesFlowRate())
                 .set(LAB1DATA.MASS_EMISSIONS, data.getMassEmissions())

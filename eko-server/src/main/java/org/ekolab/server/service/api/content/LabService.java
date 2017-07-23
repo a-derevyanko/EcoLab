@@ -60,12 +60,6 @@ public interface LabService<T extends LabData> {
     boolean validateFieldValue(Field field, Object value, T labData);
 
     /**
-     * Создаёт структуру с данными лабораторной, не сохраняя её
-     * @return новая структура с данными лабораторной
-     */
-    T createNewLabData();
-
-    /**
      * Возвращает печатный вариант исходных данных в PDF формате
      * @param variant вариант лабораторной работы
      * @param locale язык

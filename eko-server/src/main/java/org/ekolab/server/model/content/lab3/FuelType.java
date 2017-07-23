@@ -2,10 +2,6 @@ package org.ekolab.server.model.content.lab3;
 
 import org.apache.commons.lang.math.RandomUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Created by 777Al on 11.04.2017.
  */

@@ -17,12 +17,6 @@ public class Lab1Variant extends LabVariant {
     private String name;
 
     /**
-     * Барометрическое давление
-     */
-
-    private Double barometricPressure;
-
-    /**
      * Температура наружного воздуха
      */
 
@@ -49,30 +43,15 @@ public class Lab1Variant extends LabVariant {
     private Double steamProductionCapacity;
 
     /**
-     * Содержание кислорода за пароперегревателем
-     */
-    private Double oxygenConcentration;
-
-    /**
      * Содержание кислорода в сечении газохода, где проводились измерения
      */
     private Double oxygenConcentrationPoint;
 
 
     /**
-     * Расход природного газа на паровой котел по расходомеру
+     * Расход природного газа на котел, приведенный к нормальным условиям
      */
-    private Double fuelConsumer;
-
-    /**
-     * Избыточное давление природного газа в магистрали
-     */
-    private Double excessPressure;
-
-    /**
-     * Температура природного газа в магистрали
-     */
-    private Double gasTemperature;
+    private Double fuelConsumerNormalized;
 
     /**
      * Температура уходящих дымовых газов
@@ -91,14 +70,6 @@ public class Lab1Variant extends LabVariant {
 
     public void setName(@Nullable String name) {
         this.name = name;
-    }
-
-    public Double getBarometricPressure() {
-        return barometricPressure;
-    }
-
-    public void setBarometricPressure(Double barometricPressure) {
-        this.barometricPressure = barometricPressure;
     }
 
     public Double getOutsideAirTemperature() {
@@ -141,14 +112,6 @@ public class Lab1Variant extends LabVariant {
         this.steamProductionCapacity = steamProductionCapacity;
     }
 
-    public Double getOxygenConcentration() {
-        return oxygenConcentration;
-    }
-
-    public void setOxygenConcentration(Double oxygenConcentration) {
-        this.oxygenConcentration = oxygenConcentration;
-    }
-
     public Double getOxygenConcentrationPoint() {
         return oxygenConcentrationPoint;
     }
@@ -157,28 +120,12 @@ public class Lab1Variant extends LabVariant {
         this.oxygenConcentrationPoint = oxygenConcentrationPoint;
     }
 
-    public Double getFuelConsumer() {
-        return fuelConsumer;
+    public Double getFuelConsumerNormalized() {
+        return fuelConsumerNormalized;
     }
 
-    public void setFuelConsumer(Double fuelConsumer) {
-        this.fuelConsumer = fuelConsumer;
-    }
-
-    public Double getExcessPressure() {
-        return excessPressure;
-    }
-
-    public void setExcessPressure(Double excessPressure) {
-        this.excessPressure = excessPressure;
-    }
-
-    public Double getGasTemperature() {
-        return gasTemperature;
-    }
-
-    public void setGasTemperature(Double gasTemperature) {
-        this.gasTemperature = gasTemperature;
+    public void setFuelConsumerNormalized(Double fuelConsumerNormalized) {
+        this.fuelConsumerNormalized = fuelConsumerNormalized;
     }
 
     public Double getStackExitTemperature() {
@@ -203,23 +150,19 @@ public class Lab1Variant extends LabVariant {
         if (!(o instanceof Lab1Variant)) return false;
         Lab1Variant that = (Lab1Variant) o;
         return Objects.equals(name, that.name) &&
-                Objects.equals(barometricPressure, that.barometricPressure) &&
                 Objects.equals(outsideAirTemperature, that.outsideAirTemperature) &&
                 Objects.equals(stacksHeight, that.stacksHeight) &&
                 Objects.equals(stacksDiameter, that.stacksDiameter) &&
                 Objects.equals(time, that.time) &&
                 Objects.equals(steamProductionCapacity, that.steamProductionCapacity) &&
-                Objects.equals(oxygenConcentration, that.oxygenConcentration) &&
                 Objects.equals(oxygenConcentrationPoint, that.oxygenConcentrationPoint) &&
-                Objects.equals(fuelConsumer, that.fuelConsumer) &&
-                Objects.equals(excessPressure, that.excessPressure) &&
-                Objects.equals(gasTemperature, that.gasTemperature) &&
+                Objects.equals(fuelConsumerNormalized, that.fuelConsumerNormalized) &&
                 Objects.equals(stackExitTemperature, that.stackExitTemperature) &&
                 Objects.equals(flueGasNOxConcentration, that.flueGasNOxConcentration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, barometricPressure, outsideAirTemperature, stacksHeight, stacksDiameter, time, steamProductionCapacity, oxygenConcentration, oxygenConcentrationPoint, fuelConsumer, excessPressure, gasTemperature, stackExitTemperature, flueGasNOxConcentration);
+        return Objects.hash(name, outsideAirTemperature, stacksHeight, stacksDiameter, time, steamProductionCapacity, oxygenConcentrationPoint, fuelConsumerNormalized, stackExitTemperature, flueGasNOxConcentration);
     }
 }

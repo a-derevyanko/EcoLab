@@ -65,6 +65,7 @@ public class Lab1ServiceImpl extends LabServiceImpl<Lab1Data, Lab1Variant> imple
     @Override
     public Lab1Data startNewLabWithEmptyVariant(String userName) {
         Lab1Data lab1Data = createBaseLabData(userName);
+        lab1Data.setVariant(new Lab1Variant());
         labDao.saveLab(lab1Data);
         return lab1Data;
     }
@@ -84,37 +85,16 @@ public class Lab1ServiceImpl extends LabServiceImpl<Lab1Data, Lab1Variant> imple
                 return labData.getFlueGasNOxConcentrationNC() == null || (Boolean) value == MathUtils.checkEquals(125.0,
                         labData.getFlueGasNOxConcentrationNC());
             }
-            case "validBarometricPressure": {
-                return (Double) value > 0.0 && (Double) value < 4.0;
-            }
-            case "validAbsolutePressure": {
-                return labData.getExcessPressure() == null || labData.getValidBarometricPressure() == null ||
-                        MathUtils.checkEquals((Double) value,
-                                labData.getExcessPressure() / 13.6 + labData.getValidBarometricPressure());
-            }
-            case "fuelConsumerCorrection": {
-                return labData.getCorrectionFactor() == null || labData.getFuelConsumer() == null ||
-                        MathUtils.checkEquals((Double) value,
-                                labData.getCorrectionFactor() * labData.getFuelConsumer());
-            }
-            case "fuelConsumerNC": {
-                return labData.getFuelConsumerCorrection() == null ||
-                        labData.getGasTemperature() == null ||
-                        labData.getValidAbsolutePressure() == null ||
-                        MathUtils.checkEquals((Double) value,
-                                labData.getFuelConsumerCorrection() * 273.0 / (273.0 - labData.getGasTemperature())
-                                        * labData.getValidAbsolutePressure() / 760.0);
-            }
             case "flueGasesRate": {
-                return labData.getFuelConsumerNC() == null ||
+                return labData.getVariant().getFuelConsumerNormalized() == null ||
                         labData.getStackExitTemperature() == null ||
-                        MathUtils.checkEquals((Double) value, labData.getFuelConsumerNC() *
+                        MathUtils.checkEquals((Double) value, labData.getVariant().getFuelConsumerNormalized() *
                                 (V0g + 1.016 * (Ayx - 1) * V0) * (273 + labData.getStackExitTemperature()) / 273.0);
             }
             case "dryGasesFlowRate": {
-                return labData.getFuelConsumerNC() == null ||
+                return labData.getVariant().getFuelConsumerNormalized() == null ||
                         labData.getExcessAirRatio() == null ||
-                        MathUtils.checkEquals((Double) value, labData.getFuelConsumerNC() *
+                        MathUtils.checkEquals((Double) value, labData.getVariant().getFuelConsumerNormalized() *
                                 (V0g + (labData.getExcessAirRatio() - 1) * V0 - V_H2O));
             }
             case "massEmissions": {

@@ -13,26 +13,16 @@ CREATE TABLE lab1data (
   *Блок свойств лабы
   */
   name                                      VARCHAR(256),
-  barometric_Pressure                       DOUBLE,
   outside_Air_Temperature                   DOUBLE,
   stacks_Height                             DOUBLE,
   stacks_Diameter                           DOUBLE,
   steam_Production_Capacity                 DOUBLE,
-  oxygen_Concentration                      DOUBLE,
   oxygen_Concentration_Point                DOUBLE,
-  fuel_Consumer                             DOUBLE,
-  excess_Pressure                           DOUBLE,
-  gas_Temperature                           DOUBLE,
   stack_Exit_Temperature                    DOUBLE,
   flue_Gas_NOx_Concentration                INT,
   excess_Air_Ratio                          DOUBLE,
   flue_Gas_NOx_Concentration_NC             DOUBLE,
   excess_Of_Norms                           BOOLEAN,
-  valid_Barometric_Pressure                 DOUBLE,
-  valid_Absolute_Pressure                   DOUBLE,
-  correction_Factor                         DOUBLE,
-  fuel_Consumer_Correction                  DOUBLE,
-  fuel_Consumer_NC                          DOUBLE,
   flue_Gases_Rate                           DOUBLE,
   dry_Gases_Flow_Rate                       DOUBLE,
   mass_Emissions                            DOUBLE,
@@ -76,7 +66,6 @@ COMMENT ON COLUMN LAB1DATA.completed IS 'Признак завершенност
 
 COMMENT ON COLUMN LAB1DATA.stacks_height IS 'Высота дымовой трубы';
 COMMENT ON COLUMN LAB1DATA.stacks_diameter IS 'Диаметр устья дымовой трубы';
-COMMENT ON COLUMN LAB1DATA.fuel_consumer IS 'Расход топлива на 1 блок';
 COMMENT ON COLUMN LAB1DATA.flue_gas_nox_concentration IS 'Концентрация оксидов азота в сухих газах';
 COMMENT ON COLUMN LAB1DATA.stack_exit_temperature IS 'Температура газов на выходе из дымовой трубы';
 COMMENT ON COLUMN LAB1DATA.outside_air_temperature IS 'Температура наружного воздуха';
@@ -85,19 +74,10 @@ COMMENT ON COLUMN LAB1DATA.temperature_coefficient IS 'Коэффициент, �
 COMMENT ON COLUMN LAB1DATA.terrain_coefficient IS 'Коэффициент, учитывающий влияние рельефа местности';
 COMMENT ON COLUMN LAB1DATA.harmful_substances_deposition_coefficient IS 'Безразмерный коэффициент, учитывающий скорость оседания вредных веществ в атмосферном воздухе';
 COMMENT ON COLUMN LAB1DATA.name IS 'Название объекта';
-COMMENT ON COLUMN LAB1DATA.barometric_Pressure IS 'Барометрическое давление';
 COMMENT ON COLUMN LAB1DATA.steam_Production_Capacity IS 'Паровая нагрузка котла';
-COMMENT ON COLUMN LAB1DATA.oxygen_Concentration IS 'Содержание кислорода за пароперегревателем';
 COMMENT ON COLUMN LAB1DATA.oxygen_Concentration_Point IS 'Содержание кислорода в сечении газохода, где проводились измерения';
-COMMENT ON COLUMN LAB1DATA.excess_Pressure IS 'Избыточное давление природного газа в магистрали';
-COMMENT ON COLUMN LAB1DATA.gas_Temperature IS 'Температура природного газа в магистрали';
 COMMENT ON COLUMN LAB1DATA.flue_Gas_NOx_Concentration_NC IS 'Концентрация оксидов азота, приведенная к стандартному коэффициенту избытка воздуха α=1,4';
 COMMENT ON COLUMN LAB1DATA.excess_Of_Norms IS 'Превышение допустимых норм';
-COMMENT ON COLUMN LAB1DATA.valid_Barometric_Pressure IS 'Действительное барометрическое давление';
-COMMENT ON COLUMN LAB1DATA.valid_Absolute_Pressure IS 'Действительное абсолютное давление топлива в газопроводе';
-COMMENT ON COLUMN LAB1DATA.correction_Factor IS 'Поправочный  коэффициент на давление, температуру и плотность природного газа';
-COMMENT ON COLUMN LAB1DATA.fuel_Consumer_Correction IS 'Расход природного газа на котел с учетом поправок';
-COMMENT ON COLUMN LAB1DATA.fuel_Consumer_NC IS 'Расход природного газа на котел, приведенный к нормальным условиям';
 COMMENT ON COLUMN LAB1DATA.flue_Gases_Rate IS 'Расход дымовых газов, выбрасываемых в атмосферу';
 COMMENT ON COLUMN LAB1DATA.dry_Gases_Flow_Rate IS 'Объемный расход сухих газов';
 COMMENT ON COLUMN LAB1DATA.mass_Emissions IS 'Массовые выбросы оксидов азота';
@@ -117,17 +97,13 @@ CREATE TABLE lab1variant (
   *Блок свойств лабы
   */
   name                                      VARCHAR(256),
-  barometric_Pressure                       DOUBLE,
   outside_Air_Temperature                   DOUBLE,
   stacks_Height                             DOUBLE,
   stacks_Diameter                           DOUBLE,
   time                                      TIMESTAMP,
   steam_Production_Capacity                 DOUBLE,
-  oxygen_Concentration                      DOUBLE,
   oxygen_Concentration_Point                DOUBLE,
   fuel_Consumer                             DOUBLE,
-  excess_Pressure                           DOUBLE,
-  gas_Temperature                           DOUBLE,
   stack_Exit_Temperature                    DOUBLE,
   flue_Gas_NOx_Concentration                INT
 );
@@ -144,15 +120,10 @@ CREATE UNIQUE INDEX ix_lab1variant_id
 COMMENT ON TABLE lab1variant IS 'Вариант лабораторной №1';
 COMMENT ON COLUMN lab1variant.stacks_height IS 'Высота дымовой трубы';
 COMMENT ON COLUMN lab1variant.stacks_diameter IS 'Диаметр устья дымовой трубы';
-COMMENT ON COLUMN lab1variant.fuel_consumer IS 'Расход топлива на 1 блок';
 COMMENT ON COLUMN lab1variant.flue_gas_nox_concentration IS 'Концентрация оксидов азота в сухих газах';
 COMMENT ON COLUMN lab1variant.stack_exit_temperature IS 'Температура газов на выходе из дымовой трубы';
 COMMENT ON COLUMN lab1variant.outside_air_temperature IS 'Температура наружного воздуха';
 COMMENT ON COLUMN lab1variant.name IS 'Название объекта';
-COMMENT ON COLUMN lab1variant.barometric_Pressure IS 'Барометрическое давление';
 COMMENT ON COLUMN lab1variant.steam_Production_Capacity IS 'Паровая нагрузка котла';
-COMMENT ON COLUMN lab1variant.oxygen_Concentration IS 'Содержание кислорода за пароперегревателем';
 COMMENT ON COLUMN lab1variant.oxygen_Concentration_Point IS 'Содержание кислорода в сечении газохода, где проводились измерения';
-COMMENT ON COLUMN lab1variant.excess_Pressure IS 'Избыточное давление природного газа в магистрали';
-COMMENT ON COLUMN lab1variant.gas_Temperature IS 'Температура природного газа в магистрали';
 

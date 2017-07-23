@@ -43,16 +43,12 @@ public class Lab1ExperimentStep1 extends HorizontalLayout implements LabWizardSt
     private final GridLayout journalLayout = new GridLayout(6, 7);
     private final DateTimeField timeField = new DateTimeField();
     private final TextField objectNameField = new TextField();
-    private final TextField barometricPressureField = new TextField();
     private final TextField outsideAirTemperatureField = new TextField();
     private final TextField stacksHeightField = new TextField();
     private final TextField stacksDiameterField = new TextField();
     private final TextField steamProductionCapacityField = new TextField();
-    private final TextField oxygenConcentrationField = new TextField();
     private final TextField oxygenConcentrationPointField = new TextField();
     private final TextField fuelConsumerField = new TextField();
-    private final TextField excessPressureField = new TextField();
-    private final TextField gasTemperatureField = new TextField();
     private final TextField stackExitTemperatureField = new TextField();
     private final TextField flueGasNOxConcentrationField = new TextField();
 
@@ -68,16 +64,12 @@ public class Lab1ExperimentStep1 extends HorizontalLayout implements LabWizardSt
         journalLayout.setCaption(i18N.get("lab1.step1.experiment-journal"));
         addField(timeField, FieldUtils.getField(Lab1Variant.class, "time"), 0, 0);
         addField(objectNameField, FieldUtils.getField(Lab1Variant.class, "name"), 0, 1);
-        addField(barometricPressureField, FieldUtils.getField(Lab1Variant.class, "barometricPressure"), 0, 2);
         addField(outsideAirTemperatureField, FieldUtils.getField(Lab1Variant.class, "outsideAirTemperature"), 0, 3);
         addField(stacksHeightField, FieldUtils.getField(Lab1Variant.class, "stacksHeight"), 0, 4);
         addField(stacksDiameterField, FieldUtils.getField(Lab1Variant.class, "stacksDiameter"), 0, 5);
         addField(steamProductionCapacityField, FieldUtils.getField(Lab1Variant.class, "steamProductionCapacity"), 0, 6);
-        addField(oxygenConcentrationField, FieldUtils.getField(Lab1Variant.class, "oxygenConcentration"), 1, 0);
         addField(oxygenConcentrationPointField, FieldUtils.getField(Lab1Variant.class, "oxygenConcentrationPoint"), 1, 1);
-        addField(fuelConsumerField, FieldUtils.getField(Lab1Variant.class, "fuelConsumer"), 1, 2);
-        addField(excessPressureField, FieldUtils.getField(Lab1Variant.class, "excessPressure"), 1, 3);
-        addField(gasTemperatureField, FieldUtils.getField(Lab1Variant.class, "gasTemperature"), 1, 4);
+        addField(fuelConsumerField, FieldUtils.getField(Lab1Variant.class, "fuelConsumerNormalized"), 1, 2);
         addField(stackExitTemperatureField, FieldUtils.getField(Lab1Variant.class, "stackExitTemperature"), 1, 5);
         addField(flueGasNOxConcentrationField, FieldUtils.getField(Lab1Variant.class, "flueGasNOxConcentration"), 1, 6);
     }
