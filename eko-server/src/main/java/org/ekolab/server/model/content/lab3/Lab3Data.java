@@ -4,9 +4,7 @@ import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabData;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.*;
 
 /**
  * Created by 777Al on 06.04.2017.
@@ -264,21 +262,29 @@ public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * ПДК NO2
      */
+    @DecimalMax("0.085")
+    @DecimalMin("0.085")
     private Double no2MAC;
 
     /**
      * ПДК NO
      */
+    @DecimalMax("0.4")
+    @DecimalMin("0.4")
     private Double noMAC;
 
     /**
      * ПДК SO2
      */
+    @DecimalMax("0.5")
+    @DecimalMin("0.5")
     private Double so2MAC;
 
     /**
      * ПДК золы
      */
+    @DecimalMax("0.05")
+    @DecimalMin("0.05")
     private Double ashMAC;
 
     /**

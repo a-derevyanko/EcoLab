@@ -1,19 +1,10 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 
 import com.vaadin.data.Binder;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.ItemCaptionGenerator;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
 import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.lab3.Lab3Data;
@@ -33,12 +24,9 @@ import java.util.Arrays;
 @ViewScope
 public class Lab3Step5 extends GridLayout implements LabWizardStep {
     // ----------------------------- Графические компоненты --------------------------------
-    private final Button zoomInButton = new Button(VaadinIcons.PLUS_CIRCLE_O);
-    private final Button zoomOutButton = new Button(VaadinIcons.MINUS_CIRCLE_O);
     private final Label chartTypeLabel = new Label("Chart type");
     private final ComboBox<Lab3ChartType> chartType = new ComboBox<>(null, Arrays.asList(Lab3ChartType.values()));
     private final HorizontalLayout chartTypeLayout = new HorizontalLayout(chartTypeLabel, chartType);
-    private final HorizontalLayout zoomButtonsLayout = new HorizontalLayout(zoomInButton, zoomOutButton);
 
     private JFreeChartWrapper chart;
 
@@ -47,9 +35,6 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
 
     @Autowired
     private Binder<Lab3Data> dataBinder;
-
-    @Autowired
-    private ResourceService resourceService;
 
     @Autowired
     private Lab3Service lab3Service;
@@ -84,16 +69,11 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
                 addComponent(chart, 0, 0, 19, 19);
             }
         });
-
-        zoomInButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        zoomInButton.addStyleName(EkoLabTheme.BUTTON_TINY);
-        zoomOutButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        zoomOutButton.addStyleName(EkoLabTheme.BUTTON_TINY);
 }
 
     @Override
     public void placeAdditionalComponents(HorizontalLayout buttonsLayout) {
-        buttonsLayout.addComponents(zoomButtonsLayout, chartTypeLayout);
+        buttonsLayout.addComponents(chartTypeLayout);
     }
 
     @Override

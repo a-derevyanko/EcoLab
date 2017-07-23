@@ -1,37 +1,48 @@
 package org.ekolab.server.service.impl.content.lab3;
 
+import com.twelvemonkeys.image.ImageUtil;
 import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.dev.LogExecutionTime;
+import org.ekolab.server.model.content.lab3.City;
+import org.ekolab.server.model.content.lab3.WindDirection;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
 import org.ekolab.server.service.impl.content.equations.ferrari.EquationFunction;
 import org.ekolab.server.service.impl.content.equations.ferrari.QuarticFunction;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.annotations.XYAnnotation;
+import org.jfree.chart.annotations.XYDrawableAnnotation;
+import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.block.BlockContainer;
+import org.jfree.chart.block.GridArrangement;
+import org.jfree.chart.block.LineBorder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.title.CompositeTitle;
+import org.jfree.chart.title.ImageTitle;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.TextAnchor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.WeakHashMap;
+import java.util.*;
 
 import static java.lang.Math.pow;
 
@@ -41,23 +52,39 @@ import static java.lang.Math.pow;
 @Service
 public class IsoLineChartServiceImpl implements IsoLineChartService {
     private static final int MAX_DISTANCE = 35000;
-    private static final int MAX_RIGHT_SPACE = 2000;
     private static final int BIG_SERIES_STEP = 100;
     private static final int SMALL_SERIES_STEP = 10;
     private static final Logger LOGGER = LoggerFactory.getLogger(IsoLineChartServiceImpl.class);
     private static final Map<Double[], XYDataset> DATASET_CACHE = new WeakHashMap<>();
+    private static final Map<City, Image> WIND_ROSE_CACHE = new HashMap<>(City.values().length);
+    private static final Map<WindDirection, Image> BACKGROUND_CACHE = new HashMap<>(WindDirection.values().length * City.values().length);
 
     @Autowired
     private MessageSource messageSource;
 
+    @PostConstruct
+    private void fillWindRoseCache() throws IOException {
+        for (City city : City.values()) {
+            Image i = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("wind/" + city.name() + ".png"));
+            WIND_ROSE_CACHE.put(city, ImageUtil.createScaled(i, 200, 200, Image.SCALE_FAST));
+
+            // todo должны быть разные картинки для городов
+            Image background = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/moscow-min1.png"));
+
+            for (WindDirection direction : WindDirection.values()) {
+                BACKGROUND_CACHE.put(direction, ImageUtil.createRotated(background, direction.ordinal() * (Math.PI / 0.25)));
+            }
+        }
+    }
+
     @Override
     @LogExecutionTime(500)
-    public JFreeChart createIsoLineChart(double windSpeedMaxGroundLevelConcentrationDistance,
+    public JFreeChart createIsoLineChart(City city, WindDirection windDirection, double windSpeedMaxGroundLevelConcentrationDistance,
                                          double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration,
                                          double backgroundConcentration, double windSpeed, double mac, Locale locale) {
-        return createSplineChart(getDataSet(windSpeedMaxGroundLevelConcentrationDistance,
+        return createSplineChart(city, windDirection, getDataSet(windSpeedMaxGroundLevelConcentrationDistance,
         harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-        backgroundConcentration, windSpeed, mac), locale);
+        backgroundConcentration, windSpeed, mac), windSpeedMaxGroundLevelConcentrationDistance, locale);
     }
 
     private XYDataset getDataSet(double windSpeedMaxGroundLevelConcentrationDistance,
@@ -65,7 +92,8 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
                                  double no2BackgroundConcentration, double windSpeed, double mac) {
 
         Double[] key = new Double[]{windSpeedMaxGroundLevelConcentrationDistance,
-                harmfulSubstancesDepositionCoefficient, windSpeed, groundLevelConcentration};
+                harmfulSubstancesDepositionCoefficient, windSpeed,
+                groundLevelConcentration, no2BackgroundConcentration, mac};
 
         return DATASET_CACHE.computeIfAbsent(key, k -> createDataset(
                 windSpeedMaxGroundLevelConcentrationDistance,
@@ -89,26 +117,17 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
             }
         }
 
-        XYSeries macSeries = new XYSeries("ПДК = " + mac, false);
+        XYSeries macSeries = new XYSeries("<html>ПДК = " + mac + " мг/м<sup>3</sup></html>", false);
         dataset.addSeries(macSeries);
-        fillIsoLineSeries(macSeries, mac, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+        double macCyCoefficient = mac / groundLevelConcentration;
+        fillIsoLineSeries(macSeries, macCyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
                 windSpeed);
 
-
-        int x = Xm; //countX0(0, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, 0.1);
-        double C1 = groundLevelConcentration * countS1(x, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient);
-        EquationFunction f = new QuarticFunction(45.1, 17, 12.8, 5, 1 - Math.sqrt(C1 / backgroundConcentration));
-        for (double t : f.findRealRoots()) {
-            if (t > 0) {
-                XYSeries series = new XYSeries("Граничные линии", false);
-                dataset.addSeries(series);
-                double y = Math.sqrt(windSpeed > 5 ? t * x * x / 5 : t * x * x / windSpeed);
-                series.add(x, y);
-                series.add(0.0, 0.0);
-                series.add(x, -y);
-                break;
-            }
-        }
+        XYSeries borderSeries = new XYSeries("Граничные линии", false);
+        dataset.addSeries(borderSeries);
+        double borderCyCoefficient = backgroundConcentration / groundLevelConcentration;
+        fillIsoLineSeries(borderSeries, borderCyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+                windSpeed);
 
         return dataset;
     }
@@ -171,7 +190,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         }
     }
 
-    private JFreeChart createSplineChart(XYDataset dataSet, Locale locale) {
+    private JFreeChart createSplineChart(City city, WindDirection windDirection, XYDataset dataSet, double Xm, Locale locale) {
         // Create plot
         NumberAxis xAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-x-axis", null, locale));
         NumberAxis yAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-y-axis", null, locale));
@@ -182,29 +201,41 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         plot.setDomainMinorGridlinesVisible(false);
         plot.setRangeGridlinesVisible(false);
         plot.setRangeMinorGridlinesVisible(false);
+
+        // Добавляем маркер с Xm
+        final CircleDrawer cd = new CircleDrawer(Color.white, new BasicStroke(1.0f), Color.BLACK);
+        final XYAnnotation bestBid = new XYDrawableAnnotation(Xm, 0.0, 5.0, 5.0, cd);
+        plot.addAnnotation(bestBid);
+        final XYTextAnnotation xMMarker = new XYTextAnnotation("Cm", Xm - 70.0, 0.0);
+        xMMarker.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 9));
+        xMMarker.setPaint(Color.BLUE);
+        xMMarker.setTextAnchor(TextAnchor.HALF_ASCENT_RIGHT);
+        plot.addAnnotation(xMMarker);
         //plot.setBackgroundImage(createStationInCityImage("map/moscow.svg", "map/moscow.svg"));
         //plot.setBackgroundImage(createStationInCityImage("map/moscow-min.png", "map/moscow-min.png"));
-        try {
-            plot.setBackgroundImage(ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/moscow-min1.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        plot.setBackgroundImage(BACKGROUND_CACHE.get(windDirection));
         plot.setAxisOffset(new RectangleInsets(4, 4, 4, 4));
 
         // Create chart
         JFreeChart chart = new JFreeChart(messageSource.getMessage("lab3.isoline-chart-title", null, locale),
-                JFreeChart.DEFAULT_TITLE_FONT, plot, true);
-        chart.getLegend().setPosition(RectangleEdge.LEFT);
-        ChartUtilities.applyCurrentTheme(chart);
+                JFreeChart.DEFAULT_TITLE_FONT, plot, false);
+        ImageTitle imageTitle = new ImageTitle(WIND_ROSE_CACHE.get(city));
+        imageTitle.setPosition(RectangleEdge.LEFT);
+        LegendTitle legendTitle = new LegendTitle(plot);
+        legendTitle.setPosition(RectangleEdge.LEFT);
 
-        // Draw png
-        /*BufferedImage bi = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_BGR);
-        Graphics graphics = bi.getGraphics();
-        chartPanel.setBounds(0, 0, width, height);
-        chartPanel.paint(graphics);
-        ImageIO.write(bi, "png", new File(filename));*/
+        BlockContainer blockContainer = new BlockContainer(new GridArrangement(2, 1));
+        blockContainer.add(imageTitle);
+        blockContainer.add(legendTitle);
+        blockContainer.setWidth(200.0);
+        CompositeTitle title = new CompositeTitle(blockContainer);
+        title.setPosition(RectangleEdge.LEFT);
+        title.setMargin(new RectangleInsets(1.0, 1.0, 1.0, 1.0));
+        title.setFrame(new LineBorder());
+        chart.addSubtitle(title);
+        ChartUtilities.applyCurrentTheme(chart);
         return chart;
+
     }
 
 

@@ -274,8 +274,14 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
             } else {
                 throw new IllegalArgumentException("Unknown chart type");
             }
+
+            //todo пока проверки прибиты - нужно вынести их в валидацию полей
+            if (mac != null && mac > 1) {
+                return null;
+            }
             if (groundLevelConcentration != null && backgroundConcentration != null && mac != null) {
-                return isoLineChartService.createIsoLineChart(windSpeedMaxGroundLevelConcentrationDistance,
+                return isoLineChartService.createIsoLineChart(labData.getCity(), labData.getWindDirection(),
+                        windSpeedMaxGroundLevelConcentrationDistance,
                         harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
                         backgroundConcentration, windSpeed, mac, locale);
             }
