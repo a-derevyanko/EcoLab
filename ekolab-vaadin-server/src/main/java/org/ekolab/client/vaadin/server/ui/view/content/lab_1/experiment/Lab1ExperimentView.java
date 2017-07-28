@@ -24,6 +24,9 @@ public class Lab1ExperimentView extends Lab1View {
     private Lab1ExperimentStep1 step1;
 
     @Autowired
+    private Lab1ExperimentStep2 step2;
+
+    @Autowired
     private Lab1Service lab1Service;
 
     @Autowired
@@ -36,6 +39,7 @@ public class Lab1ExperimentView extends Lab1View {
         super.init();
         initialDataButton.setCaption(i18N.get("lab1.random-data.view.experiment-journal"));
         addStep(step1);
+        addStep(step2);
     }
 
     /**

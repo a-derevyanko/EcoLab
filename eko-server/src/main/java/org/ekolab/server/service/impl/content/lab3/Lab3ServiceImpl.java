@@ -251,42 +251,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
 
     @Override
     public JFreeChart createChart(Lab3Data labData, Locale locale, LabChartType chartType) {
-        Double windSpeedMaxGroundLevelConcentrationDistance = labData.getWindSpeedMaxGroundLevelConcentrationDistance();
-        Double harmfulSubstancesDepositionCoefficient = labData.getHarmfulSubstancesDepositionCoefficient();
-        Double windSpeed = labData.getWindSpeed();
-        if (windSpeedMaxGroundLevelConcentrationDistance != null && harmfulSubstancesDepositionCoefficient != null && windSpeed != null)
-        {
-            Double groundLevelConcentration;
-            Double backgroundConcentration;
-            Double mac;
-            if (chartType == Lab3ChartType.ISOLINE) {
-                groundLevelConcentration = labData.getBwdNo2GroundLevelConcentration();
-                backgroundConcentration = labData.getNo2BackgroundConcentration();
-                mac = labData.getNo2MAC();
-            } else if (chartType == Lab3ChartType.SO2) {
-                groundLevelConcentration = labData.getBwdSo2GroundLevelConcentration();
-                backgroundConcentration = labData.getSo2BackgroundConcentration();
-                mac = labData.getSo2MAC();
-            } else if (chartType == Lab3ChartType.ASH) {
-                groundLevelConcentration = labData.getBwdAshGroundLevelConcentration();
-                backgroundConcentration = labData.getAshBackgroundConcentration();
-                mac = labData.getAshMAC();
-            } else {
-                throw new IllegalArgumentException("Unknown chart type");
-            }
-
-            //todo пока проверки прибиты - нужно вынести их в валидацию полей
-            if (mac != null && mac > 1) {
-                return null;
-            }
-            if (groundLevelConcentration != null && backgroundConcentration != null && mac != null) {
-                return isoLineChartService.createIsoLineChart(labData.getCity(), labData.getWindDirection(),
-                        windSpeedMaxGroundLevelConcentrationDistance,
-                        harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-                        backgroundConcentration, windSpeed, mac, locale);
-            }
-        }
-        return null;
+        return isoLineChartService.createIsoLineChart(labData, locale, chartType);
     }
 
     @Override

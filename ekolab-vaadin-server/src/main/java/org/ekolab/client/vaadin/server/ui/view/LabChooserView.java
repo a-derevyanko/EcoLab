@@ -80,6 +80,7 @@ public class LabChooserView extends VerticalLayout implements View {
         lab1VariantChooser.setModal(true);
         lab1VariantChooser.setWidth(500.0F, Unit.PIXELS);
         lab1VariantChooser.setHeight(300.0F, Unit.PIXELS);
+        lab1VariantChooser.setCaption(i18N.get("lab1.choose.title"));
         lab1VariantChooserContent.setSizeFull();
         lab1VariantChooserContent.setRowExpandRatio(0, 10.0F);
         lab1VariantChooserContent.setRowExpandRatio(1, 1.0F);

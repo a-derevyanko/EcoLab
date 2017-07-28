@@ -33,14 +33,15 @@ public class Lab1ExperimentStep2 extends HorizontalLayout implements LabWizardSt
         setMargin(true);
         addComponent(firstFormLayout);
         setComponentAlignment(firstFormLayout, Alignment.MIDDLE_CENTER);
-        firstFormLayout.setCaption(i18N.get("lab1.step2.processing-experiment-results"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "excessAirRatio"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasNOxConcentrationNC"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "excessOfNorms"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "validBarometricPressure"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "validAbsolutePressure"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "correctionFactor"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "fuelConsumerCorrection"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "fuelConsumerNC"));
+        firstFormLayout.setCaption(i18N.get("lab1.step2.max-concentration-calculation"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasesRate"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "dryGasesFlowRate"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "massEmissions"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasesSpeed"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "f"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "m"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "u"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "n"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "d"));
     }
 }
