@@ -2,18 +2,26 @@ package org.ekolab.client.vaadin.server.ui.view.content.lab_1.experiment;
 
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
+import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1PresentationStep;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1View;
+import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.ekolab.server.service.api.content.lab1.Lab1Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by Андрей on 02.04.2017.
  */
 @SpringView(name = Lab1ExperimentView.NAME)
+@Profile(Profiles.MODE.PROD)
 public class Lab1ExperimentView extends Lab1View {
     public static final String NAME = "lab1experiment";
 
@@ -51,6 +59,16 @@ public class Lab1ExperimentView extends Lab1View {
         initialDataButton.setVisible(steps.indexOf(currentStep) > 1);
     }
 
+    /**
+     * Перед уходом с первой страницы необходимо проверить заполнение данных лабораторной
+     */
+    @Override
+    public void next() {
+        if (checkJournalFilled()) {
+            super.next();
+        }
+    }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         Lab1Data uncompletedLabData = labService.getLastUncompletedLabByUser(currentUser.getName());
@@ -62,5 +80,20 @@ public class Lab1ExperimentView extends Lab1View {
             binder.setBean(uncompletedLabData);
             variantBinder.setBean(uncompletedLabData.getVariant());
         }
+    }
+
+    protected boolean checkJournalFilled() {
+        if (Page.getCurrent() != null && steps.indexOf(currentStep) == 1) {
+            Lab1Variant variant = binder.getBean().getVariant();
+            for (Field field : variant.getClass().getDeclaredFields()) {
+                ReflectionUtils.makeAccessible(field);
+                Object value = ReflectionUtils.getField(field, variant);
+                if (value == null) {
+                    ComponentErrorNotification.show(i18N.get("savable.save-exception"), i18N.get("lab1.step1.fill-variant"));
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

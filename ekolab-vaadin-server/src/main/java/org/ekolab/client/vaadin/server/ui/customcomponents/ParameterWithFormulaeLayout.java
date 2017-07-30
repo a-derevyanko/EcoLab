@@ -8,6 +8,7 @@ import org.ekolab.client.vaadin.server.service.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.service.api.content.LabService;
+import org.jfree.chart.encoders.ImageFormat;
 
 import java.lang.reflect.Field;
 
@@ -20,14 +21,13 @@ public class ParameterWithFormulaeLayout<BEAN extends LabData> extends Parameter
     public ParameterWithFormulaeLayout(String parametersPath, Binder<BEAN> dataBinder, LabService<BEAN> labService, I18N i18N,
                                        ResourceService res, ParameterCustomizer parameterCustomizer) {
         super(parametersPath, dataBinder, labService, i18N, res, parameterCustomizer);
-        this.formulaePath = parametersPath + "formulaePath/";
+        this.formulaePath = parametersPath + "formulae/";
     }
 
     @Override
     protected void addSign(String fieldName, int row) {
-        String resKey = fieldName + "-sign";
-        String signLabel = i18N.get(resKey);
-        if (signLabel.isEmpty() && res.isResourceExists(formulaePath, resKey)) {
+        String resKey = fieldName + '.' + ImageFormat.PNG;
+        if (res.isResourceExists(formulaePath, resKey)) {
             Component signLabelComponent = res.getImage(formulaePath, resKey);
             super.addComponent(signLabelComponent, 2, row);
         } else {

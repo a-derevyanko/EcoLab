@@ -37,7 +37,7 @@ public class Lab1UIConfig {
             I18N i18N,
             ResourceService resourceService,
             ParameterCustomizer parameterCustomizer) {
-        return new ParameterLayout<>("content/lab2/", lab1Binder(), labService,
+        return new ParameterLayout<>("content/lab1/", lab1Binder(), labService,
                 i18N, resourceService, parameterCustomizer);
     }
 
@@ -48,7 +48,7 @@ public class Lab1UIConfig {
             I18N i18N,
             ResourceService resourceService,
             ParameterCustomizer parameterCustomizer) {
-        return new ParameterWithFormulaeLayout<>("content/lab2/", lab1Binder(), labService,
+        return new ParameterWithFormulaeLayout<>("content/lab1/", lab1Binder(), labService,
                 i18N, resourceService, parameterCustomizer);
     }
 }
