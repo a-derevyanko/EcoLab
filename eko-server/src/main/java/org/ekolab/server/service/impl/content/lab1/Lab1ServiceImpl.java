@@ -1,5 +1,6 @@
 package org.ekolab.server.service.impl.content.lab1;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.dao.api.content.lab1.Lab1Dao;
 import org.ekolab.server.model.content.LabVariant;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -59,6 +61,17 @@ public class Lab1ServiceImpl extends LabServiceImpl<Lab1Data, Lab1Variant> imple
     protected Lab1Variant generateNewLabVariant() {
         Lab1Variant variant = new Lab1Variant();
         //todo
+
+        //Все закомментированные переменные должны быть Int в соответствии с файлом Вариант расчета 1 ЛР
+        //variant.setOutsideAirTemperature(-25 + RandomUtils.nextInt(11) * 5);
+        //variant.setSteamProductionCapacity(30 + RandomUtils.nextInt(5)*5);
+
+        variant.setOxygenConcentrationPoint(5.0 + RandomUtils.nextInt(21) * 0.1);
+
+        //variant.setFuelConsumerNormalized(variant.getSteamProductionCapacity() * 80 + 100);
+        //variant.setStackExitTemperature(120 + RandomUtils.nextInt(26));
+
+        variant.setFlueGasNOxConcentration(120 + RandomUtils.nextInt(17) * 5);
         return variant;
     }
 
