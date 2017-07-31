@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 @SpringComponent
 @ViewScope
-public class Lab1ExperimentStep2 extends HorizontalLayout implements LabWizardStep {
+public class Lab1ExperimentStep3 extends HorizontalLayout implements LabWizardStep {
     // ----------------------------- Графические компоненты --------------------------------
     @Autowired
     private I18N i18N;
@@ -34,12 +34,12 @@ public class Lab1ExperimentStep2 extends HorizontalLayout implements LabWizardSt
         addComponent(firstFormLayout);
         setComponentAlignment(firstFormLayout, Alignment.MIDDLE_CENTER);
         firstFormLayout.setCaption(i18N.get("lab1.step2.max-concentration-calculation"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasesRate"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "dryGasesFlowRate"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "massEmissions"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasesSpeed"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "f"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "m"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "u"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "n"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "d"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "harmfulSubstancesDepositionCoefficient"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "terrainCoefficient"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "temperatureCoefficient"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "distanceFromEmissionSource"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "maximumSurfaceConcentration"));
     }
 }
