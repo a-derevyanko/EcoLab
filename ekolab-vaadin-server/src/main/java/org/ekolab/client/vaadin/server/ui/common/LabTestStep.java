@@ -2,8 +2,6 @@ package org.ekolab.client.vaadin.server.ui.common;
 
 import com.github.lotsabackscatter.blueimp.gallery.Gallery;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.*;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -13,7 +11,6 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestQuestion;
 import org.ekolab.server.service.api.content.LabService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 
