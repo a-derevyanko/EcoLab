@@ -3,9 +3,13 @@ package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.SpringView;
 import org.ekolab.client.vaadin.server.ui.common.LabWizard;
+import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by Андрей on 02.04.2017.
@@ -33,22 +37,14 @@ public class Lab3View extends LabWizard<Lab3Data> {
     private Lab3Step6 step6;
 
     @Autowired
-    public Lab3View(Lab3Service lab3Service, Binder<Lab3Data> binder, Lab3PresentationStep presentationStep) {
-        super(lab3Service, binder, presentationStep);
+    public Lab3View(Lab3Service lab3Service, Binder<Lab3Data> binder, Lab3PresentationStep presentationStep, Lab3TestStep testStep) {
+        super(lab3Service, binder, presentationStep, testStep);
     }
 
     // ----------------------------- Графические компоненты --------------------------------
 
     @Override
-    public void init() throws Exception {
-        super.init();
-        addStep(step1);
-        addStep(step2);
-        addStep(step3);
-        addStep(step4);
-        addStep(step5);
-        addStep(step6);
-
-        //todo binder.readBean(/*Загрузить данные*/);
+    protected Collection<LabWizardStep> getLabSteps() {
+        return Arrays.asList(step1, step2, step3, step4, step5, step6);
     }
 }

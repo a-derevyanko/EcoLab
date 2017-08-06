@@ -25,6 +25,7 @@ import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by Андрей on 19.03.2017.
@@ -35,6 +36,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     protected final Binder<BEAN> binder;
 
     private final LabPresentationStep presentationStep;
+    private final LabTestStep testStep;
 
     // ---------------------------- Графические компоненты --------------------
     protected final GridLayout buttons = new GridLayout(3, 1);
@@ -54,10 +56,11 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     @Autowired
     protected InitialDataWindow initialDataWindow;
 
-    protected LabWizard(LabService<BEAN> labService, Binder<BEAN> binder, LabPresentationStep presentationStep) {
+    protected LabWizard(LabService<BEAN> labService, Binder<BEAN> binder, LabPresentationStep presentationStep, LabTestStep testStep) {
         this.labService = labService;
         this.binder = binder;
         this.presentationStep = presentationStep;
+        this.testStep = testStep;
     }
 
     @Override
@@ -128,7 +131,15 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
         initialDataButton.addClickListener(event -> showInitialData());
 
         addStep(presentationStep);
+        getLabSteps().forEach(this::addStep);
+        addStep(testStep);
     }
+
+    /**
+     * Возвращает список шагов лабораторной.
+     * @return список шагов лабораторной.
+     */
+    protected abstract Collection<LabWizardStep> getLabSteps();
 
     @Override
     @Scheduled(fixedRateString = "${lab.autoSaveRate:#{60000}}", initialDelayString = "${lab.autoSaveRate:#{60000}}")

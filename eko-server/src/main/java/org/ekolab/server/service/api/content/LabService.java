@@ -1,6 +1,8 @@
 package org.ekolab.server.service.api.content;
 
 import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.LabTest;
+import org.ekolab.server.model.content.LabTestQuestion;
 import org.ekolab.server.model.content.LabVariant;
 import org.jfree.chart.JFreeChart;
 import org.springframework.mail.MailException;
@@ -9,6 +11,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -85,4 +88,10 @@ public interface LabService<T extends LabData> {
     void sendReportToEmail(T labData, Locale locale, String email);
 
     JFreeChart createChart(T labData, Locale locale, LabChartType chartType);
+
+    LabTest getLabTest(Locale locale);
+
+    boolean checkLabTest(Map<LabTestQuestion.LabTestQuestionVariant, String> answers);
+
+    int getLabNumber();
 }

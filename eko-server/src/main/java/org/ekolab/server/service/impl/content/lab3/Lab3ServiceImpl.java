@@ -6,14 +6,7 @@ import net.sf.dynamicreports.report.constant.ImageScale;
 import net.sf.dynamicreports.report.constant.PageType;
 import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
-import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.lab3.City;
-import org.ekolab.server.model.content.lab3.FuelType;
-import org.ekolab.server.model.content.lab3.Lab3Data;
-import org.ekolab.server.model.content.lab3.Lab3Variant;
-import org.ekolab.server.model.content.lab3.NumberOfStacks;
-import org.ekolab.server.model.content.lab3.NumberOfUnits;
-import org.ekolab.server.model.content.lab3.UnitOutput;
+import org.ekolab.server.model.content.lab3.*;
 import org.ekolab.server.service.api.content.LabChartType;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
@@ -52,7 +45,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
      */
     @Override
     public byte[] createReport(Lab3Data labData, Locale locale) {
-        return ReportTemplates.printReport(super.createBaseLabReport(labData, 3, locale)
+        return ReportTemplates.printReport(super.createBaseLabReport(labData, locale)
                 .summary(cmp.image(ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ISOLINE).
                         createBufferedImage(PageType.A4.getWidth(), PageType.A4.getHeight()), ImageUtil.ROTATE_90_CW))
                         .setMinDimension(Math.round(PageType.A4.getWidth() * 0.95f), Math.round(PageType.A4.getHeight() * 0.95f))
@@ -245,13 +238,13 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     }
 
     @Override
-    public byte[] printInitialData(LabVariant variant, Locale locale) {
-        return printInitialData(variant, 3, locale);
+    public JFreeChart createChart(Lab3Data labData, Locale locale, LabChartType chartType) {
+        return isoLineChartService.createIsoLineChart(labData, locale, chartType);
     }
 
     @Override
-    public JFreeChart createChart(Lab3Data labData, Locale locale, LabChartType chartType) {
-        return isoLineChartService.createIsoLineChart(labData, locale, chartType);
+    public int getLabNumber() {
+        return 3;
     }
 
     @Override

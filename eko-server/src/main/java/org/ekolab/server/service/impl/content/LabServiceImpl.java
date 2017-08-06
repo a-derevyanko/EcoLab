@@ -10,14 +10,12 @@ import org.ekolab.server.dao.api.content.LabDao;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.DomainModel;
 import org.ekolab.server.model.UserInfo;
-import org.ekolab.server.model.content.Calculated;
-import org.ekolab.server.model.content.LabData;
-import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.Validated;
+import org.ekolab.server.model.content.*;
 import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.impl.ReportTemplates;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
@@ -28,17 +26,20 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
+import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.col;
-import static net.sf.dynamicreports.report.builder.DynamicReports.report;
-import static net.sf.dynamicreports.report.builder.DynamicReports.type;
+import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -157,8 +158,72 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
 
     }
 
+    /**
+     * Возвращает тестовые вопросы.
+     * Ищем их в файлах ресурсов по маске: "lab-<lab-number>-test-question-<question-variant>-<question-number>"
+     * Варианты ответа по: "lab-<lab-number>-test-question-<question-variant>-<question-number>-variant-<variant-number>"
+     * Правильным вариантом является: "lab-<lab-number>-test-question-<question-variant>-<question-number>-variant-<variant-number>-right"
+     * @return тестовые вопросы
+     */
+    @Override
+    @Cacheable("LAB_TEST")
+    //todo возможно стоит хранить тестовые вопросы в базе
+    public LabTest getLabTest(Locale locale) {
+        List<LabTestQuestion> questions = new ArrayList<>();
+        for (int v = 0; v < 100; v++) {
+            List<LabTestQuestion.LabTestQuestionVariant> variants = new ArrayList<>();
+            for (int i = 0; i < 100; i++) {
+                String key = "lab-" + getLabNumber() + "-test-question-" + v + '-' + i;
+                String question = messageSource.getMessage(key, null, "", locale);
+                if (question.isEmpty()) {
+                    break;
+                } else {
+                    List<String> wrongVariants = new ArrayList<>();
+                    List<String> rightVariants = new ArrayList<>();
+                    for (int j = 0; j < 100; j++) {
+                        String variantKey = key + "-variant-" + j;
+                        String variant = messageSource.getMessage(variantKey, null, "", locale);
+                        if (variant.isEmpty()) {
+                            String rightVariantKey = key + "-variant-" + j + "-right";
+                            String rightVariant = messageSource.getMessage(rightVariantKey, null, "", locale);
+                            if (rightVariant.isEmpty()) {
+                                break;
+                            } else {
+                                rightVariants.add(rightVariant);
+                            }
+                        } else {
+                            wrongVariants.add(variant);
+                        }
+                    }
+
+                    try (InputStream is = LabServiceImpl.class.getResourceAsStream("test/" + i + ".png")) {
+                        variants.add(new LabTestQuestion.LabTestQuestionVariant(question, is == null ? null : ImageIO.read(is), wrongVariants, rightVariants));
+                    } catch (IOException ex) {
+                        throw new IllegalStateException(ex);
+                    }
+                }
+            }
+            if (!variants.isEmpty()) {
+                questions.add(new LabTestQuestion(variants));
+            }
+        }
+
+        return new LabTest(questions);
+    }
+
+    @Override
+    public boolean checkLabTest(Map<LabTestQuestion.LabTestQuestionVariant, String> answers) {
+        for (Map.Entry<LabTestQuestion.LabTestQuestionVariant, String> entry : answers.entrySet()) {
+            if (!entry.getKey().getRightAnswers().contains(entry.getValue())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @LogExecutionTime(500)
-    protected byte[] printInitialData(LabVariant variant, int labNumber, Locale locale) {
+    @Override
+    public byte[] printInitialData(LabVariant variant, Locale locale) {
         TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.
                 getMessage("report.lab-data.parameter-name", null, locale), "parameterName", type.stringType());
         TextColumnBuilder<String> parameterValueColumn = col.column(messageSource.
@@ -166,7 +231,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
         return ReportTemplates.printReport(report()
                 .setTemplate(ReportTemplates.reportTemplate(locale))
-                .title(ReportTemplates.createTitleComponent(messageSource.getMessage("report.initial-data.title", new Object[]{labNumber}, locale)))
+                .title(ReportTemplates.createTitleComponent(messageSource.getMessage("report.initial-data.title", new Object[]{getLabNumber()}, locale)))
                 .columns(parameterNameColumn, parameterValueColumn)
                 .setDataSource(createDataSourceFromModel(variant, locale)));
     }
@@ -187,7 +252,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         return dataSource;
     }
 
-    protected JasperReportBuilder createBaseLabReport(LabData<?> labData, int labNumber, Locale locale) {
+    protected JasperReportBuilder createBaseLabReport(LabData<?> labData, Locale locale) {
         UserInfo userInfo = userInfoService.getUserInfo(labData.getUserLogin());
 
         TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.getMessage("report.lab-data.parameter-name", null, locale), "parameterName", type.stringType());
@@ -196,7 +261,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         return report()
                 .setTemplate(ReportTemplates.reportTemplate(locale))
                 .title(ReportTemplates.createTitleComponent(messageSource.
-                        getMessage("report.lab-data.title", new Object[]{labNumber, UserInfoUtils.getShortInitials(userInfo)}, locale)))
+                        getMessage("report.lab-data.title", new Object[]{getLabNumber(), UserInfoUtils.getShortInitials(userInfo)}, locale)))
                 .columns(parameterNameColumn, parameterValueColumn)
                 .setDataSource(createDataSourceFromModel(labData, locale));
     }

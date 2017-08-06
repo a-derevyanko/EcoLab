@@ -4,8 +4,10 @@ import com.vaadin.data.Binder;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
+import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1PresentationStep;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1TestStep;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1View;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.lab1.Lab1Data;
@@ -16,6 +18,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by Андрей on 02.04.2017.
@@ -41,17 +45,14 @@ public class Lab1ExperimentView extends Lab1View {
     private Lab1Service lab1Service;
 
     @Autowired
-    public Lab1ExperimentView(Lab1Service lab1Service, Binder<Lab1Data> binder, Lab1PresentationStep presentationStep) {
-        super(lab1Service, binder, presentationStep);
+    public Lab1ExperimentView(Lab1Service lab1Service, Binder<Lab1Data> binder, Lab1PresentationStep presentationStep, Lab1TestStep testStep) {
+        super(lab1Service, binder, presentationStep, testStep);
     }
 
     @Override
     public void init() throws Exception {
         super.init();
         initialDataButton.setCaption(i18N.get("lab1.random-data.view.experiment-journal"));
-        addStep(step1);
-        addStep(step2);
-        addStep(step3);
     }
 
     /**
@@ -71,6 +72,11 @@ public class Lab1ExperimentView extends Lab1View {
         if (checkJournalFilled()) {
             super.next();
         }
+    }
+
+    @Override
+    protected Collection<LabWizardStep> getLabSteps() {
+        return Arrays.asList(step1, step2, step3);
     }
 
     @Override

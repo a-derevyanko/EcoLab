@@ -2,7 +2,6 @@ package org.ekolab.server.service.impl.content.lab1;
 
 import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.dao.api.content.lab1.Lab1Dao;
-import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.ekolab.server.service.api.content.LabChartType;
@@ -46,13 +45,13 @@ public class Lab1ServiceImpl extends LabServiceImpl<Lab1Data, Lab1Variant> imple
     }
 
     @Override
-    public byte[] printInitialData(LabVariant variant, Locale locale) {
-        return new byte[0];
+    public JFreeChart createChart(Lab1Data labData, Locale locale, LabChartType chartType) {
+        return null;
     }
 
     @Override
-    public JFreeChart createChart(Lab1Data labData, Locale locale, LabChartType chartType) {
-        return null;
+    public int getLabNumber() {
+        return 1;
     }
 
     @Override
