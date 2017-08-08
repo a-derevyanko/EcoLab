@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
-import java.util.Random;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -60,16 +59,14 @@ public class Lab1ServiceImpl extends LabServiceImpl<Lab1Data, Lab1Variant> imple
     @Override
     protected Lab1Variant generateNewLabVariant() {
         Lab1Variant variant = new Lab1Variant();
-        //todo
 
-        //Все закомментированные переменные должны быть Int в соответствии с файлом Вариант расчета 1 ЛР
-        //variant.setOutsideAirTemperature(-25 + RandomUtils.nextInt(11) * 5);
-        //variant.setSteamProductionCapacity(30 + RandomUtils.nextInt(5)*5);
+        variant.setOutsideAirTemperature(-25 + RandomUtils.nextInt(11) * 5);
+        variant.setSteamProductionCapacity(30 + RandomUtils.nextInt(5)*5);
 
         variant.setOxygenConcentrationPoint(5.0 + RandomUtils.nextInt(21) * 0.1);
 
-        //variant.setFuelConsumerNormalized(variant.getSteamProductionCapacity() * 80 + 100);
-        //variant.setStackExitTemperature(120 + RandomUtils.nextInt(26));
+        variant.setFuelConsumerNormalized(variant.getSteamProductionCapacity() * 80 + 100);
+        variant.setStackExitTemperature(120 + RandomUtils.nextInt(26));
 
         variant.setFlueGasNOxConcentration(120 + RandomUtils.nextInt(17) * 5);
         return variant;
@@ -90,9 +87,9 @@ public class Lab1ServiceImpl extends LabServiceImpl<Lab1Data, Lab1Variant> imple
                         21.0 / (21.0 - labData.getVariant().getOxygenConcentrationPoint()));
             }
             case "flueGasNOxConcentrationNC": {
-                return labData.getFlueGasNOxConcentration() == null || labData.getExcessAirRatio() == null ||
+                return labData.getVariant().getFlueGasNOxConcentration() == null || labData.getExcessAirRatio() == null ||
                         MathUtils.checkEquals((Double) value,
-                                labData.getFlueGasNOxConcentration() * labData.getExcessAirRatio() / 1.4);
+                                labData.getVariant().getFlueGasNOxConcentration() * labData.getExcessAirRatio() / 1.4);
             }
             case "excessOfNorms": {
                 return labData.getFlueGasNOxConcentrationNC() == null || (Boolean) value == MathUtils.checkEquals(125.0,
@@ -100,9 +97,9 @@ public class Lab1ServiceImpl extends LabServiceImpl<Lab1Data, Lab1Variant> imple
             }
             case "flueGasesRate": {
                 return labData.getVariant().getFuelConsumerNormalized() == null ||
-                        labData.getStackExitTemperature() == null ||
+                        labData.getVariant().getStackExitTemperature() == null ||
                         MathUtils.checkEquals((Double) value, labData.getVariant().getFuelConsumerNormalized() *
-                                (V0g + 1.016 * (Ayx - 1) * V0) * (273 + labData.getStackExitTemperature()) / 273.0);
+                                (V0g + 1.016 * (Ayx - 1) * V0) * (273 + labData.getVariant().getStackExitTemperature()) / 273.0);
             }
             case "dryGasesFlowRate": {
                 return labData.getVariant().getFuelConsumerNormalized() == null ||
@@ -111,68 +108,68 @@ public class Lab1ServiceImpl extends LabServiceImpl<Lab1Data, Lab1Variant> imple
                                 (V0g + (labData.getExcessAirRatio() - 1) * V0 - V_H2O));
             }
             case "massEmissions": {
-                return labData.getFlueGasNOxConcentration() == null || labData.getDryGasesFlowRate() == null ||
+                return labData.getVariant().getFlueGasNOxConcentration() == null || labData.getDryGasesFlowRate() == null ||
                         MathUtils.checkEquals((Double) value,
-                                labData.getFlueGasNOxConcentration() * labData.getDryGasesFlowRate());
+                                labData.getVariant().getFlueGasNOxConcentration() * labData.getDryGasesFlowRate());
             }
             case "flueGasesSpeed": {
-                return labData.getFlueGasesRate() == null || labData.getStacksDiameter() == null ||
+                return labData.getFlueGasesRate() == null || labData.getVariant().getStacksDiameter() == null ||
                         MathUtils.checkEquals((Double) value, 4 *
-                                labData.getFlueGasesRate() / (Math.PI * labData.getStacksDiameter()));
+                                labData.getFlueGasesRate() / (Math.PI * labData.getVariant().getStacksDiameter()));
             }
-            case "F": {
-                if (labData.getStackExitTemperature() == null || labData.getOutsideAirTemperature() == null ||
-                        labData.getFlueGasesSpeed() == null || labData.getStacksDiameter() == null ||
-                        labData.getStacksHeight() == null) {
+            case "f": {
+                if (labData.getVariant().getStackExitTemperature() == null || labData.getVariant().getOutsideAirTemperature() == null ||
+                        labData.getFlueGasesSpeed() == null || labData.getVariant().getStacksDiameter() == null ||
+                        labData.getVariant().getStacksHeight() == null) {
                     return true;
                 }
 
-                double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
-                return MathUtils.checkEquals((Double) value, 1000 * labData.getFlueGasesSpeed() * labData.getStacksDiameter() /
-                        (Math.pow(labData.getStacksHeight(), 2) * dT));
+                double dT = labData.getVariant().getStackExitTemperature() - labData.getVariant().getOutsideAirTemperature();
+                return MathUtils.checkEquals((Double) value, 1000 * labData.getFlueGasesSpeed() * labData.getVariant().getStacksDiameter() /
+                        (Math.pow(labData.getVariant().getStacksHeight(), 2) * dT));
             }
-            case "M": {
+            case "m": {
                 return labData.getF() == null ||
                         MathUtils.checkEquals((Double) value, 1.0 /
                                 (0.67 + 0.1 * Math.sqrt(labData.getF()) + 0.34 * Math.cbrt(labData.getF())));
             }
-            case "U": {
-                if (labData.getStackExitTemperature() == null || labData.getOutsideAirTemperature() == null ||
-                        labData.getFlueGasesRate() == null || labData.getStacksHeight() == null) {
+            case "u": {
+                if (labData.getVariant().getStackExitTemperature() == null || labData.getVariant().getOutsideAirTemperature() == null ||
+                        labData.getFlueGasesRate() == null || labData.getVariant().getStacksHeight() == null) {
                     return true;
                 }
-                double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
+                double dT = labData.getVariant().getStackExitTemperature() - labData.getVariant().getOutsideAirTemperature();
                 return MathUtils.checkEquals((Double) value, 0.65 *
-                        Math.cbrt(labData.getFlueGasesRate() * dT / labData.getStacksHeight()));
+                        Math.cbrt(labData.getFlueGasesRate() * dT / labData.getVariant().getStacksHeight()));
             }
-            case "N": {
+            case "n": {
                 return labData.getU() == null || MathUtils.checkEquals((Double) value,
                         labData.getU() >= 2.0 ?
                                 1.0 : labData.getU() > 0.5 ? 0.532 * Math.pow(labData.getU(), 2) - 2.13 * labData.getU() + 3.13 :
                                 4.4 * labData.getU());
             }
-            case "D": {
+            case "d": {
                 return labData.getU() == null || labData.getF() == null || MathUtils.checkEquals((Double) value,
                         7 * labData.getU() * (1.0 + 0.28 * Math.sqrt(labData.getF())));
             }
             case "distanceFromEmissionSource": {
-                return labData.getStacksHeight() == null || labData.getD() == null || labData.getF() == null ||
+                return labData.getVariant().getStacksHeight() == null || labData.getD() == null || labData.getF() == null ||
                         MathUtils.checkEquals((Double) value,
-                                (5 - labData.getF()) / 4.0 * labData.getStacksHeight() * labData.getD());
+                                (5 - labData.getF()) / 4.0 * labData.getVariant().getStacksHeight() * labData.getD());
             }
             case "maximumSurfaceConcentration": {
-                if (labData.getStackExitTemperature() == null || labData.getOutsideAirTemperature() == null ||
+                if (labData.getVariant().getStackExitTemperature() == null || labData.getVariant().getOutsideAirTemperature() == null ||
                         labData.getTemperatureCoefficient() == null || labData.getMassEmissions() == null ||
                         labData.getHarmfulSubstancesDepositionCoefficient() == null || labData.getM() == null || labData.getN() == null ||
-                        labData.getTerrainCoefficient() == null || labData.getStacksHeight() == null ||
+                        labData.getTerrainCoefficient() == null || labData.getVariant().getStacksHeight() == null ||
                         labData.getFlueGasesRate() == null) {
                     return true;
                 }
-                double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
+                double dT = labData.getVariant().getStackExitTemperature() - labData.getVariant().getOutsideAirTemperature();
                 return MathUtils.checkEquals((Double) value,
                         labData.getTemperatureCoefficient() * labData.getMassEmissions() *
                                 labData.getHarmfulSubstancesDepositionCoefficient() * labData.getM() * labData.getN() *
-                                labData.getTerrainCoefficient() / Math.pow(labData.getStacksHeight(), 2) *
+                                labData.getTerrainCoefficient() / Math.pow(labData.getVariant().getStacksHeight(), 2) *
                                 Math.cbrt(1.0 / (labData.getFlueGasesRate() * dT)));
             }
             default:

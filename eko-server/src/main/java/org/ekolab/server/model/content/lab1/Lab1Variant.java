@@ -19,8 +19,7 @@ public class Lab1Variant extends LabVariant {
     /**
      * Температура наружного воздуха
      */
-
-    private Double outsideAirTemperature;
+    private Integer outsideAirTemperature;
 
     /**
      * Высота дымовой трубы
@@ -40,7 +39,7 @@ public class Lab1Variant extends LabVariant {
     /**
      * Паровая нагрузка котла
      */
-    private Double steamProductionCapacity;
+    private Integer steamProductionCapacity;
 
     /**
      * Содержание кислорода в сечении газохода, где проводились измерения
@@ -51,12 +50,12 @@ public class Lab1Variant extends LabVariant {
     /**
      * Расход природного газа на котел, приведенный к нормальным условиям
      */
-    private Double fuelConsumerNormalized;
+    private Integer fuelConsumerNormalized;
 
     /**
      * Температура уходящих дымовых газов
      */
-    private Double stackExitTemperature;
+    private Integer stackExitTemperature;
 
     /**
      * Концентрация оксидов азота в дымовых газах по результатам измерений
@@ -72,11 +71,11 @@ public class Lab1Variant extends LabVariant {
         this.name = name;
     }
 
-    public Double getOutsideAirTemperature() {
+    public Integer getOutsideAirTemperature() {
         return outsideAirTemperature;
     }
 
-    public void setOutsideAirTemperature(Double outsideAirTemperature) {
+    public void setOutsideAirTemperature(Integer outsideAirTemperature) {
         this.outsideAirTemperature = outsideAirTemperature;
     }
 
@@ -104,11 +103,11 @@ public class Lab1Variant extends LabVariant {
         this.time = time;
     }
 
-    public Double getSteamProductionCapacity() {
+    public Integer getSteamProductionCapacity() {
         return steamProductionCapacity;
     }
 
-    public void setSteamProductionCapacity(Double steamProductionCapacity) {
+    public void setSteamProductionCapacity(Integer steamProductionCapacity) {
         this.steamProductionCapacity = steamProductionCapacity;
     }
 
@@ -120,19 +119,19 @@ public class Lab1Variant extends LabVariant {
         this.oxygenConcentrationPoint = oxygenConcentrationPoint;
     }
 
-    public Double getFuelConsumerNormalized() {
+    public Integer getFuelConsumerNormalized() {
         return fuelConsumerNormalized;
     }
 
-    public void setFuelConsumerNormalized(Double fuelConsumerNormalized) {
+    public void setFuelConsumerNormalized(Integer fuelConsumerNormalized) {
         this.fuelConsumerNormalized = fuelConsumerNormalized;
     }
 
-    public Double getStackExitTemperature() {
+    public Integer getStackExitTemperature() {
         return stackExitTemperature;
     }
 
-    public void setStackExitTemperature(Double stackExitTemperature) {
+    public void setStackExitTemperature(Integer stackExitTemperature) {
         this.stackExitTemperature = stackExitTemperature;
     }
 
