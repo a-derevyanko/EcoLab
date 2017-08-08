@@ -17,42 +17,6 @@ public class Lab1Data extends LabData<Lab1Variant> {
     private String name;
 
     /**
-     * Температура наружного воздуха
-     */
-
-    private Double outsideAirTemperature;
-
-    /**
-     * Высота дымовой трубы
-     */
-    private Double stacksHeight;
-
-    /**
-     * Диаметр дымовой трубы
-     */
-    private Double stacksDiameter;
-
-    /**
-     * Паровая нагрузка котла
-     */
-    private Double steamProductionCapacity;
-
-    /**
-     * Содержание кислорода в сечении газохода, где проводились измерения
-     */
-    private Double oxygenConcentrationPoint;
-
-    /**
-     * Температура уходящих дымовых газов
-     */
-    private Double stackExitTemperature;
-
-    /**
-     * Концентрация оксидов азота в дымовых газах по результатам измерений
-     */
-    private Integer flueGasNOxConcentration;
-
-    /**
      * Коэффициент избытка воздуха в точке измерения
      */
     @Validated
@@ -158,62 +122,6 @@ public class Lab1Data extends LabData<Lab1Variant> {
 
     public void setName(@Nullable String name) {
         this.name = name;
-    }
-
-    public Double getOutsideAirTemperature() {
-        return outsideAirTemperature;
-    }
-
-    public void setOutsideAirTemperature(Double outsideAirTemperature) {
-        this.outsideAirTemperature = outsideAirTemperature;
-    }
-
-    public Double getStacksHeight() {
-        return stacksHeight;
-    }
-
-    public void setStacksHeight(Double stacksHeight) {
-        this.stacksHeight = stacksHeight;
-    }
-
-    public Double getStacksDiameter() {
-        return stacksDiameter;
-    }
-
-    public void setStacksDiameter(Double stacksDiameter) {
-        this.stacksDiameter = stacksDiameter;
-    }
-
-    public Double getSteamProductionCapacity() {
-        return steamProductionCapacity;
-    }
-
-    public void setSteamProductionCapacity(Double steamProductionCapacity) {
-        this.steamProductionCapacity = steamProductionCapacity;
-    }
-
-    public Double getOxygenConcentrationPoint() {
-        return oxygenConcentrationPoint;
-    }
-
-    public void setOxygenConcentrationPoint(Double oxygenConcentrationPoint) {
-        this.oxygenConcentrationPoint = oxygenConcentrationPoint;
-    }
-
-    public Double getStackExitTemperature() {
-        return stackExitTemperature;
-    }
-
-    public void setStackExitTemperature(Double stackExitTemperature) {
-        this.stackExitTemperature = stackExitTemperature;
-    }
-
-    public Integer getFlueGasNOxConcentration() {
-        return flueGasNOxConcentration;
-    }
-
-    public void setFlueGasNOxConcentration(Integer flueGasNOxConcentration) {
-        this.flueGasNOxConcentration = flueGasNOxConcentration;
     }
 
     public Double getExcessAirRatio() {
@@ -359,13 +267,6 @@ public class Lab1Data extends LabData<Lab1Variant> {
         if (!super.equals(o)) return false;
         Lab1Data lab1Data = (Lab1Data) o;
         return Objects.equals(name, lab1Data.name) &&
-                Objects.equals(outsideAirTemperature, lab1Data.outsideAirTemperature) &&
-                Objects.equals(stacksHeight, lab1Data.stacksHeight) &&
-                Objects.equals(stacksDiameter, lab1Data.stacksDiameter) &&
-                Objects.equals(steamProductionCapacity, lab1Data.steamProductionCapacity) &&
-                Objects.equals(oxygenConcentrationPoint, lab1Data.oxygenConcentrationPoint) &&
-                Objects.equals(stackExitTemperature, lab1Data.stackExitTemperature) &&
-                Objects.equals(flueGasNOxConcentration, lab1Data.flueGasNOxConcentration) &&
                 Objects.equals(excessAirRatio, lab1Data.excessAirRatio) &&
                 Objects.equals(flueGasNOxConcentrationNC, lab1Data.flueGasNOxConcentrationNC) &&
                 Objects.equals(excessOfNorms, lab1Data.excessOfNorms) &&
@@ -387,10 +288,7 @@ public class Lab1Data extends LabData<Lab1Variant> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, outsideAirTemperature,
-                stacksHeight, stacksDiameter, steamProductionCapacity,
-                oxygenConcentrationPoint, stackExitTemperature,
-                flueGasNOxConcentration, excessAirRatio, flueGasNOxConcentrationNC, excessOfNorms, flueGasesRate,
+        return Objects.hash(super.hashCode(), name, excessAirRatio, flueGasNOxConcentrationNC, excessOfNorms, flueGasesRate,
                 dryGasesFlowRate, massEmissions, flueGasesSpeed, f, m, u, n, d, harmfulSubstancesDepositionCoefficient,
                 terrainCoefficient, temperatureCoefficient, distanceFromEmissionSource, maximumSurfaceConcentration);
     }

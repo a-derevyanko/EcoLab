@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
@@ -28,13 +29,6 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
         data.setSaveDate(record.get(LAB1DATA.SAVE_DATE));
         data.setCompleted(record.get(LAB1DATA.COMPLETED));
         data.setName(record.get(LAB1DATA.NAME));
-        data.setOutsideAirTemperature(record.get(LAB1DATA.OUTSIDE_AIR_TEMPERATURE));
-        data.setStacksHeight(record.get(LAB1DATA.STACKS_HEIGHT));
-        data.setStacksDiameter(record.get(LAB1DATA.STACKS_DIAMETER));
-        data.setSteamProductionCapacity(record.get(LAB1DATA.STEAM_PRODUCTION_CAPACITY));
-        data.setOxygenConcentrationPoint(record.get(LAB1DATA.OXYGEN_CONCENTRATION_POINT));
-        data.setStackExitTemperature(record.get(LAB1DATA.STACK_EXIT_TEMPERATURE));
-        data.setFlueGasNOxConcentration(record.get(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION));
         data.setExcessAirRatio(record.get(LAB1DATA.EXCESS_AIR_RATIO));
         data.setFlueGasNOxConcentrationNC(record.get(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC));
         data.setExcessOfNorms(record.get(LAB1DATA.EXCESS_OF_NORMS));
@@ -90,13 +84,6 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
                 LAB1DATA.SAVE_DATE,
                 LAB1DATA.COMPLETED,
                 LAB1DATA.NAME,
-                LAB1DATA.OUTSIDE_AIR_TEMPERATURE,
-                LAB1DATA.STACKS_HEIGHT,
-                LAB1DATA.STACKS_DIAMETER,
-                LAB1DATA.STEAM_PRODUCTION_CAPACITY,
-                LAB1DATA.OXYGEN_CONCENTRATION_POINT,
-                LAB1DATA.STACK_EXIT_TEMPERATURE,
-                LAB1DATA.FLUE_GAS_NOX_CONCENTRATION,
                 LAB1DATA.EXCESS_AIR_RATIO,
                 LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC,
                 LAB1DATA.EXCESS_OF_NORMS,
@@ -115,35 +102,28 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
                 LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE,
                 LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION).
                 values(
-                        getFindUserIdSelect(data.getUserLogin()),
-                        data.getStartDate(),
-                        data.getSaveDate(),
-                        data.isCompleted(),
-                        data.getName(),
-                        data.getOutsideAirTemperature(),
-                        data.getStacksHeight(),
-                        data.getStacksDiameter(),
-                        data.getSteamProductionCapacity(),
-                        data.getOxygenConcentrationPoint(),
-                        data.getStackExitTemperature(),
-                        data.getFlueGasNOxConcentration(),
-                        data.getExcessAirRatio(),
-                        data.getFlueGasNOxConcentrationNC(),
-                        data.getExcessOfNorms(),
-                        data.getFlueGasesRate(),
-                        data.getDryGasesFlowRate(),
-                        data.getMassEmissions(),
-                        data.getFlueGasesSpeed(),
-                        data.getF(),
-                        data.getM(),
-                        data.getU(),
-                        data.getN(),
-                        data.getD(),
-                        data.getHarmfulSubstancesDepositionCoefficient(),
-                        data.getTerrainCoefficient(),
-                        data.getTemperatureCoefficient(),
-                        data.getDistanceFromEmissionSource(),
-                        data.getMaximumSurfaceConcentration()
+                        Arrays.asList(getFindUserIdSelect(data.getUserLogin()),
+                                data.getStartDate(),
+                                data.getSaveDate(),
+                                data.isCompleted(),
+                                data.getName(),
+                                data.getExcessAirRatio(),
+                                data.getFlueGasNOxConcentrationNC(),
+                                data.getExcessOfNorms(),
+                                data.getFlueGasesRate(),
+                                data.getDryGasesFlowRate(),
+                                data.getMassEmissions(),
+                                data.getFlueGasesSpeed(),
+                                data.getF(),
+                                data.getM(),
+                                data.getU(),
+                                data.getN(),
+                                data.getD(),
+                                data.getHarmfulSubstancesDepositionCoefficient(),
+                                data.getTerrainCoefficient(),
+                                data.getTemperatureCoefficient(),
+                                data.getDistanceFromEmissionSource(),
+                                data.getMaximumSurfaceConcentration())
                 ).returning(LAB1DATA.ID).fetchOne().getId();
 
         Lab1Variant variant = data.getVariant();
@@ -179,13 +159,6 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
                 .set(LAB1DATA.START_DATE, data.getStartDate())
                 .set(LAB1DATA.SAVE_DATE, data.getSaveDate())
                 .set(LAB1DATA.NAME, data.getName())
-                .set(LAB1DATA.OUTSIDE_AIR_TEMPERATURE, data.getOutsideAirTemperature())
-                .set(LAB1DATA.STACKS_HEIGHT, data.getStacksHeight())
-                .set(LAB1DATA.STACKS_DIAMETER, data.getStacksDiameter())
-                .set(LAB1DATA.STEAM_PRODUCTION_CAPACITY, data.getSteamProductionCapacity())
-                .set(LAB1DATA.OXYGEN_CONCENTRATION_POINT, data.getOxygenConcentrationPoint())
-                .set(LAB1DATA.STACK_EXIT_TEMPERATURE, data.getStackExitTemperature())
-                .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION, data.getFlueGasNOxConcentration())
                 .set(LAB1DATA.EXCESS_AIR_RATIO, data.getExcessAirRatio())
                 .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC, data.getFlueGasNOxConcentrationNC())
                 .set(LAB1DATA.EXCESS_OF_NORMS, data.getExcessOfNorms())

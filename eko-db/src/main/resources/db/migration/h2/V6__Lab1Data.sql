@@ -13,13 +13,6 @@ CREATE TABLE lab1data (
   *Блок свойств лабы
   */
   name                                      VARCHAR(256),
-  outside_Air_Temperature                   DOUBLE,
-  stacks_Height                             DOUBLE,
-  stacks_Diameter                           DOUBLE,
-  steam_Production_Capacity                 DOUBLE,
-  oxygen_Concentration_Point                DOUBLE,
-  stack_Exit_Temperature                    DOUBLE,
-  flue_Gas_NOx_Concentration                INT,
   excess_Air_Ratio                          DOUBLE,
   flue_Gas_NOx_Concentration_NC             DOUBLE,
   excess_Of_Norms                           BOOLEAN,
@@ -64,18 +57,11 @@ COMMENT ON COLUMN LAB1DATA.save_date IS 'Дата и время последне
 COMMENT ON COLUMN LAB1DATA.version IS 'Версия изменений(контроль одновременного доступа)';
 COMMENT ON COLUMN LAB1DATA.completed IS 'Признак завершенности лабораторной работы';
 
-COMMENT ON COLUMN LAB1DATA.stacks_height IS 'Высота дымовой трубы';
-COMMENT ON COLUMN LAB1DATA.stacks_diameter IS 'Диаметр устья дымовой трубы';
-COMMENT ON COLUMN LAB1DATA.flue_gas_nox_concentration IS 'Концентрация оксидов азота в сухих газах';
-COMMENT ON COLUMN LAB1DATA.stack_exit_temperature IS 'Температура газов на выходе из дымовой трубы';
-COMMENT ON COLUMN LAB1DATA.outside_air_temperature IS 'Температура наружного воздуха';
 COMMENT ON COLUMN LAB1DATA.excess_air_ratio IS 'Коэффициент избытка воздуха в уходящих газах';
 COMMENT ON COLUMN LAB1DATA.temperature_coefficient IS 'Коэффициент, характеризующий температурную стратификацию атмосферы';
 COMMENT ON COLUMN LAB1DATA.terrain_coefficient IS 'Коэффициент, учитывающий влияние рельефа местности';
 COMMENT ON COLUMN LAB1DATA.harmful_substances_deposition_coefficient IS 'Безразмерный коэффициент, учитывающий скорость оседания вредных веществ в атмосферном воздухе';
 COMMENT ON COLUMN LAB1DATA.name IS 'Название объекта';
-COMMENT ON COLUMN LAB1DATA.steam_Production_Capacity IS 'Паровая нагрузка котла';
-COMMENT ON COLUMN LAB1DATA.oxygen_Concentration_Point IS 'Содержание кислорода в сечении газохода, где проводились измерения';
 COMMENT ON COLUMN LAB1DATA.flue_Gas_NOx_Concentration_NC IS 'Концентрация оксидов азота, приведенная к стандартному коэффициенту избытка воздуха α=1,4';
 COMMENT ON COLUMN LAB1DATA.excess_Of_Norms IS 'Превышение допустимых норм';
 COMMENT ON COLUMN LAB1DATA.flue_Gases_Rate IS 'Расход дымовых газов, выбрасываемых в атмосферу';
@@ -97,14 +83,14 @@ CREATE TABLE lab1variant (
   *Блок свойств лабы
   */
   name                                      VARCHAR(256),
-  outside_Air_Temperature                   DOUBLE,
+  outside_Air_Temperature                   INT,
   stacks_Height                             DOUBLE,
   stacks_Diameter                           DOUBLE,
   time                                      TIMESTAMP,
-  steam_Production_Capacity                 DOUBLE,
+  steam_Production_Capacity                 INT,
   oxygen_Concentration_Point                DOUBLE,
-  fuel_Consumer                             DOUBLE,
-  stack_Exit_Temperature                    DOUBLE,
+  fuel_Consumer                             INT,
+  stack_Exit_Temperature                    INT,
   flue_Gas_NOx_Concentration                INT
 );
 
