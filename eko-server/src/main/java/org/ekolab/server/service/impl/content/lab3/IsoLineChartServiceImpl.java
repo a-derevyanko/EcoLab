@@ -20,6 +20,8 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.block.BlockContainer;
 import org.jfree.chart.block.GridArrangement;
 import org.jfree.chart.block.LineBorder;
+import org.jfree.chart.encoders.EncoderUtil;
+import org.jfree.chart.encoders.ImageFormat;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -42,10 +44,16 @@ import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.WeakHashMap;
 
 import static java.lang.Math.pow;
 
@@ -72,10 +80,24 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
             WIND_ROSE_CACHE.put(city, ImageUtil.createScaled(i, 200, 200, Image.SCALE_FAST));
 
             // todo должны быть разные картинки для городов
-            Image background = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/moscow-min1.png"));
+            Image background = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/moscow.svg"));
+            Image arrow = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/compass-arrow.svg"));
 
             for (WindDirection direction : WindDirection.values()) {
-                BACKGROUND_CACHE.put(direction, ImageUtil.createRotated(background, direction.ordinal() * (Math.PI / 0.25)));
+                double angle = Math.PI + direction.ordinal() * (Math.PI / 4.0);
+                BufferedImage rotatedBackground = ImageUtil.createRotated(background, angle);
+                rotatedBackground = rotatedBackground.getSubimage(rotatedBackground.getWidth() / 2 - 400,
+                        rotatedBackground.getHeight() / 2 - 400, 800,
+                        800);
+                BufferedImage rotatedArrow = ImageUtil.createRotated(arrow, angle);
+                Graphics2D g2d = rotatedBackground.createGraphics();
+                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+                g2d.drawImage(rotatedArrow, 0, 0, null);
+                g2d.dispose();
+
+                try (InputStream is = new ByteArrayInputStream(EncoderUtil.encode(rotatedBackground, ImageFormat.PNG, 0.2f, true))) {
+                    BACKGROUND_CACHE.put(direction, ImageIO.read(is));
+                }
             }
         }
     }
@@ -254,7 +276,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         plot.setAxisOffset(new RectangleInsets(4, 4, 4, 4));
 
         // Create chart
-        JFreeChart chart = new JFreeChart(messageSource.getMessage("lab3.isoline-chart-title" + ' ' + substance, null, locale),
+        JFreeChart chart = new JFreeChart(messageSource.getMessage("lab3.isoline-chart-title", null, locale) + ' ' + substance,
                 JFreeChart.DEFAULT_TITLE_FONT, plot, false);
         ImageTitle imageTitle = new ImageTitle(WIND_ROSE_CACHE.get(city));
         imageTitle.setPosition(RectangleEdge.LEFT);
