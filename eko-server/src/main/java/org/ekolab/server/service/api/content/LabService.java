@@ -2,7 +2,7 @@ package org.ekolab.server.service.api.content;
 
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
-import org.ekolab.server.model.content.LabTestQuestion;
+import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabVariant;
 import org.jfree.chart.JFreeChart;
 import org.springframework.mail.MailException;
@@ -91,7 +91,7 @@ public interface LabService<T extends LabData> {
 
     LabTest getLabTest(Locale locale);
 
-    boolean checkLabTest(Map<LabTestQuestion.LabTestQuestionVariant, String> answers);
+    boolean checkLabTest(Map<LabTestQuestionVariant, String> answers);
 
     int getLabNumber();
 }

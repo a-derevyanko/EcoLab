@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 public class Lab2View extends LabWizard implements AutoSavableView {
     public Lab2View() {
-        super(null, null, null, null);
+        super(null, null, null);
     }
 
     @Override

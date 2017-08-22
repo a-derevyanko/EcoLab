@@ -1,21 +1,27 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
-import com.github.lotsabackscatter.blueimp.gallery.Gallery;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.ui.*;
-import org.apache.commons.collections.ListUtils;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.RadioButtonGroup;
+import com.vaadin.ui.UI;
 import org.apache.commons.lang3.RandomUtils;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
+import org.ekolab.client.vaadin.server.ui.view.api.View;
+import org.ekolab.server.common.Authorize;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestQuestion;
+import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.service.api.content.LabService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -24,48 +30,59 @@ import java.util.stream.Collectors;
 /**
  * Created by 777Al on 03.04.2017.
  */
-public abstract class LabTestStep extends Wizard implements LabWizardStep {
+@PreAuthorize(Authorize.HasAuthorities.STUDENT)
+public abstract class LabTestWizard extends Wizard implements View {
     protected final I18N i18N;
     protected final LabService<?> labService;
 
     // ---------------------------- Графические компоненты --------------------
-    private final Gallery gallery = new Gallery();
-    private final Button showGallery = new Button("Show presentation", VaadinIcons.PRESENTATION);
 
-    protected LabTestStep(I18N i18N, LabService<?> labService) {
+    protected LabTestWizard(I18N i18N, LabService<?> labService) {
         this.i18N = i18N;
         this.labService = labService;
     }
 
-    @Override
     @PostConstruct
     public void init() throws IOException {
-        LabWizardStep.super.init();
         setSizeFull();
-        addStyleName(EkoLabTheme.PANEL_WIZARD_PRESENTATION);
+        mainLayout.setSizeFull();
+        getHeader().setVisible(false);
+        getCancelButton().setVisible(false);
+        getFinishButton().setVisible(false);
+
+        addStyleName(EkoLabTheme.PANEL_WIZARD);
+        getFinishButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        getFinishButton().addStyleName(EkoLabTheme.BUTTON_TINY);
+        getNextButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        getNextButton().addStyleName(EkoLabTheme.BUTTON_TINY);
+        getBackButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        getBackButton().addStyleName(EkoLabTheme.BUTTON_TINY);
+
+        getBackButton().setCaption(i18N.get("labwizard.back"));
+        getNextButton().setCaption(i18N.get("labwizard.next"));
+        getFinishButton().setCaption(i18N.get("labwizard.finish"));
+
+        getFinishButton().setIcon(VaadinIcons.FLAG_CHECKERED, i18N.get("labwizard.finish"));
+        getNextButton().setIcon(VaadinIcons.ARROW_FORWARD, i18N.get("labwizard.next"));
+        getBackButton().setIcon(VaadinIcons.ARROW_BACKWARD, i18N.get("labwizard.back"));
+
+        footer.removeComponent(getCancelButton());
+        footer.removeComponent(getBackButton());
 
         LabTest test = labService.getLabTest(UI.getCurrent().getLocale());
 
         for (LabTestQuestion question : test.getQuestions()) {
-            LabTestQuestion.LabTestQuestionVariant questionVariant = question.getVariants().get(RandomUtils.nextInt(0, question.getVariants().size()));
+            LabTestQuestionVariant questionVariant = question.getVariants().get(RandomUtils.nextInt(0, question.getVariants().size()));
             addStep(new LabTestQuestionView(i18N, questionVariant));
         }
     }
 
     /**
      * Проверка результатов теста
-     * @return признак того, что тест пройден удачно
-     */
-    @Override
-    public boolean onAdvance() {
-        return false;
-    }
-    /**
-     * Проверка результатов теста
      */
     @Override
     public void finish() {
-        Map<LabTestQuestion.LabTestQuestionVariant, String> answers = getSteps().stream().
+        Map<LabTestQuestionVariant, String> answers = getSteps().stream().
                 filter(s -> s instanceof LabTestQuestionView).
                 map(LabTestQuestionView.class::cast).collect(Collectors.toMap(step ->
                 step.questionVariant, LabTestQuestionView::getAnswer, (a, b) -> b));
@@ -77,18 +94,18 @@ public abstract class LabTestStep extends Wizard implements LabWizardStep {
     }
 
     private static class LabTestQuestionView extends GridLayout implements WizardStep {
-        private final LabTestQuestion.LabTestQuestionVariant questionVariant;
+        private final LabTestQuestionVariant questionVariant;
         private final I18N i18N;
 
         // ---------------------------- Графические компоненты --------------------
         private final RadioButtonGroup<String> answersGroup = new RadioButtonGroup<>();
 
-        public LabTestQuestionView(I18N i18N, LabTestQuestion.LabTestQuestionVariant questionVariant) {
+        public LabTestQuestionView(I18N i18N, LabTestQuestionVariant questionVariant) {
             super(3, 6);
             this.questionVariant = questionVariant;
             this.i18N = i18N;
 
-            List<String> answers = ListUtils.union(questionVariant.getWrongAnswers(), questionVariant.getRightAnswers());
+            List<String> answers = new ArrayList<>(questionVariant.getAnswers());
             Collections.shuffle(answers);
 
             answersGroup.setItems(answers);

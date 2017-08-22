@@ -300,6 +300,12 @@ public class Lab3Data extends LabData<Lab3Variant> {
     private Double bwdNo2GroundLevelConcentration;
 
     /**
+     * Максимальное значение приземной концентрации NOx при опасной скорости ветра
+     */
+    @Calculated
+    private Double bwdNoxGroundLevelConcentration;
+
+    /**
      * Максимальное значение приземной концентрации NO при опасной скорости ветра
      */
     @Calculated
@@ -749,6 +755,14 @@ public class Lab3Data extends LabData<Lab3Variant> {
         this.bwdNo2GroundLevelConcentration = bwdNo2GroundLevelConcentration;
     }
 
+    public Double getBwdNoxGroundLevelConcentration() {
+        return bwdNoxGroundLevelConcentration;
+    }
+
+    public void setBwdNoxGroundLevelConcentration(Double bwdNoxGroundLevelConcentration) {
+        this.bwdNoxGroundLevelConcentration = bwdNoxGroundLevelConcentration;
+    }
+
     public Double getBwdNoGroundLevelConcentration() {
         return bwdNoGroundLevelConcentration;
     }
@@ -929,6 +943,8 @@ public class Lab3Data extends LabData<Lab3Variant> {
             return false;
         if (bwdNo2GroundLevelConcentration != null ? !bwdNo2GroundLevelConcentration.equals(lab3Data.bwdNo2GroundLevelConcentration) : lab3Data.bwdNo2GroundLevelConcentration != null)
             return false;
+        if (bwdNoxGroundLevelConcentration != null ? !bwdNoxGroundLevelConcentration.equals(lab3Data.bwdNoxGroundLevelConcentration) : lab3Data.bwdNoxGroundLevelConcentration != null)
+            return false;
         if (bwdNoGroundLevelConcentration != null ? !bwdNoGroundLevelConcentration.equals(lab3Data.bwdNoGroundLevelConcentration) : lab3Data.bwdNoGroundLevelConcentration != null)
             return false;
         if (bwdSo2GroundLevelConcentration != null ? !bwdSo2GroundLevelConcentration.equals(lab3Data.bwdSo2GroundLevelConcentration) : lab3Data.bwdSo2GroundLevelConcentration != null)
@@ -1002,7 +1018,7 @@ public class Lab3Data extends LabData<Lab3Variant> {
         result = 31 * result + (so2MAC != null ? so2MAC.hashCode() : 0);
         result = 31 * result + (ashMAC != null ? ashMAC.hashCode() : 0);
         result = 31 * result + (breakdownWindSpeed != null ? breakdownWindSpeed.hashCode() : 0);
-        result = 31 * result + (bwdNo2GroundLevelConcentration != null ? bwdNo2GroundLevelConcentration.hashCode() : 0);
+        result = 31 * result + (bwdNoxGroundLevelConcentration != null ? bwdNoxGroundLevelConcentration.hashCode() : 0);
         result = 31 * result + (bwdNoGroundLevelConcentration != null ? bwdNoGroundLevelConcentration.hashCode() : 0);
         result = 31 * result + (bwdSo2GroundLevelConcentration != null ? bwdSo2GroundLevelConcentration.hashCode() : 0);
         result = 31 * result + (bwdAshGroundLevelConcentration != null ? bwdAshGroundLevelConcentration.hashCode() : 0);

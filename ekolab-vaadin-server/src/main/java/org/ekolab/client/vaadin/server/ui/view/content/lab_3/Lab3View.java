@@ -37,8 +37,8 @@ public class Lab3View extends LabWizard<Lab3Data> {
     private Lab3Step6 step6;
 
     @Autowired
-    public Lab3View(Lab3Service lab3Service, Binder<Lab3Data> binder, Lab3PresentationStep presentationStep, Lab3TestStep testStep) {
-        super(lab3Service, binder, presentationStep, testStep);
+    public Lab3View(Lab3Service lab3Service, Binder<Lab3Data> binder, Lab3PresentationStep presentationStep) {
+        super(lab3Service, binder, presentationStep);
     }
 
     // ----------------------------- Графические компоненты --------------------------------

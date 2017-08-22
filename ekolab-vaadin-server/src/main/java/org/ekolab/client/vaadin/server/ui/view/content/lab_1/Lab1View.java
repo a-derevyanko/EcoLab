@@ -9,8 +9,8 @@ import org.ekolab.server.service.api.content.lab1.Lab1Service;
  * Created by Андрей on 02.04.2017.
  */
 public abstract class Lab1View extends LabWizard<Lab1Data> {
-    public Lab1View(Lab1Service lab1Service, Binder<Lab1Data> binder, Lab1PresentationStep presentationStep, Lab1TestStep testStep) {
-        super(lab1Service, binder, presentationStep, testStep);
+    public Lab1View(Lab1Service lab1Service, Binder<Lab1Data> binder, Lab1PresentationStep presentationStep) {
+        super(lab1Service, binder, presentationStep);
     }
 
     @Override

@@ -329,4 +329,9 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     public int removeOldLabs(LocalDateTime lastSaveDate) {
         return dsl.deleteFrom(LAB3DATA).where(LAB3DATA.SAVE_DATE.greaterThan(lastSaveDate)).execute();
     }
+
+    @Override
+    protected int getLabNumber() {
+        return 3;
+    }
 }

@@ -36,7 +36,6 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     protected final Binder<BEAN> binder;
 
     private final LabPresentationStep presentationStep;
-    private final LabTestStep testStep;
 
     // ---------------------------- Графические компоненты --------------------
     protected final GridLayout buttons = new GridLayout(3, 1);
@@ -56,11 +55,10 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     @Autowired
     protected InitialDataWindow initialDataWindow;
 
-    protected LabWizard(LabService<BEAN> labService, Binder<BEAN> binder, LabPresentationStep presentationStep, LabTestStep testStep) {
+    protected LabWizard(LabService<BEAN> labService, Binder<BEAN> binder, LabPresentationStep presentationStep) {
         this.labService = labService;
         this.binder = binder;
         this.presentationStep = presentationStep;
-        this.testStep = testStep;
     }
 
     @Override
@@ -132,7 +130,6 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
 
         addStep(presentationStep);
         getLabSteps().forEach(this::addStep);
-        addStep(testStep);
     }
 
     /**

@@ -115,7 +115,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
             Double mac;
             String substance;
             if (chartType == Lab3ChartType.ISOLINE) {
-                groundLevelConcentration = labData.getBwdNo2GroundLevelConcentration();
+                groundLevelConcentration = labData.getNoxMassiveInjection();
                 backgroundConcentration = labData.getNo2BackgroundConcentration();
                 mac = labData.getNo2MAC();
                 substance = "NOx";

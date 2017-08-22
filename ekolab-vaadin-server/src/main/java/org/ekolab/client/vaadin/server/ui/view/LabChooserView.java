@@ -9,8 +9,10 @@ import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.experiment.Lab1ExperimentView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.random.Lab1RandomDataView;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,8 +40,13 @@ public class LabChooserView extends VerticalLayout implements View {
     private final NativeButton labDefenceButton = new NativeButton("Defence of laboratory works");
     private final Button lab1RandomDataButton = new NativeButton("Random data");
     private final Button lab1ExperimentButton = new NativeButton("Experiment data");
+    private final Button lab1TestButton = new NativeButton("Lab 1 test");
+    private final Button lab2TestButton = new NativeButton("Lab 2 test");
+    private final Button lab3TestButton = new NativeButton("Lab 3 test");
     private final GridLayout lab1VariantChooserContent = new GridLayout(2, 2);
+    private final GridLayout labTestChooserContent = new GridLayout(1, 3);
     private final Window lab1VariantChooser = new Window("Choose lab 1 variant", lab1VariantChooserContent);
+    private final Window labTestChooser = new Window("Choose lab for test", labTestChooserContent);
     private final Label  labLabel = new Label("Environmental technologies at TPPs", ContentMode.HTML);
 
     @Override
@@ -92,8 +99,34 @@ public class LabChooserView extends VerticalLayout implements View {
         lab3Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
         lab3Button.addClickListener(event -> navigator.navigateTo(Lab3View.NAME));
 
+        lab1TestButton.setCaption(i18N.get("lab1.test.title"));
+        lab1TestButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
+        lab1TestButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
+        lab1TestButton.addClickListener(event -> {navigator.navigateTo(Lab1TestView.NAME); labTestChooser.close();});
+
+        /*lab2TestButton.setCaption(i18N.get("lab2.test.title"));
+        lab2TestButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
+        lab2TestButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
+        lab2TestButton.addClickListener(event -> {navigator.navigateTo(Lab2TestView.NAME); labTestChooser.close();});*/
+
+        lab3TestButton.setCaption(i18N.get("lab3.test.title"));
+        lab3TestButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
+        lab3TestButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
+        lab3TestButton.addClickListener(event -> {navigator.navigateTo(Lab3TestView.NAME); labTestChooser.close();});
+
+        labTestChooser.setModal(true);
+        labTestChooser.setWidth(300.0F, Unit.PIXELS);
+        labTestChooser.setHeight(200.0F, Unit.PIXELS);
+        labTestChooser.setCaption(i18N.get("labchooser.defence.choose.title"));
+        labTestChooserContent.setSizeFull();
+        labTestChooserContent.addComponent(lab1TestButton, 0, 0);
+        labTestChooserContent.addComponent(lab2TestButton, 0, 1);
+        labTestChooserContent.addComponent(lab3TestButton, 0, 2);
+
+        labDefenceButton.setCaption(i18N.get("labchooser.defence"));
         labDefenceButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         labDefenceButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
+        labDefenceButton.addClickListener(event ->  UI.getCurrent().addWindow(labTestChooser));
 
         labLabel.setValue(i18N.get("labchooser.title"));
         labLabel.setStyleName(EkoLabTheme.LABEL_HUGE);
