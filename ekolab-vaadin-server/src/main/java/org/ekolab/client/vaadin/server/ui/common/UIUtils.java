@@ -14,8 +14,12 @@ import java.lang.reflect.Field;
 public abstract class UIUtils {
     public static Converter<String, ?> getStringConverter(Field field, I18N i18N) {
         Class<?> propClass = ReflectTools.convertPrimitiveType(field.getType());
+        return getStringConverter(propClass, field.getName(), i18N);
+    }
+
+    public static Converter<String, ?> getStringConverter(Class<?> propClass, String fieldName, I18N i18N) {
         String validatorPrefix = i18N.get("validator.value-of-field") + " '"
-                + i18N.get(field.getName()) + "' ";
+                + i18N.get(fieldName) + "' ";
         if (propClass == Integer.class) {
             return new StringToIntegerConverter(validatorPrefix + i18N.get("validator.must-be-number"));
         } else if (propClass == Double.class) {

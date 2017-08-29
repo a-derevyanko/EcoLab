@@ -3,15 +3,29 @@ package org.ekolab.server.model.content;
 import org.ekolab.server.model.DomainModel;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class LabTest implements DomainModel {
-    private final Collection<LabTestQuestion> questions;
+    private Collection<LabTestQuestionVariants> questions;
 
-    public LabTest(Collection<LabTestQuestion> questions) {
+    public Collection<LabTestQuestionVariants> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Collection<LabTestQuestionVariants> questions) {
         this.questions = questions;
     }
 
-    public Collection<LabTestQuestion> getQuestions() {
-        return questions;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LabTest)) return false;
+        LabTest test = (LabTest) o;
+        return Objects.equals(questions, test.questions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(questions);
     }
 }

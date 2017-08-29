@@ -2,26 +2,39 @@ package org.ekolab.server.model.content;
 
 import org.ekolab.server.model.DomainModel;
 
-import java.util.List;
+import java.util.Objects;
 
-public class LabTestQuestion implements DomainModel {
-    private List<LabTestQuestionVariant> variants;
+public abstract class LabTestQuestion implements DomainModel {
+    private String question;
+    private String image;
 
-    private String title;
-
-    public List<LabTestQuestionVariant> getVariants() {
-        return variants;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setVariants(List<LabTestQuestionVariant> variants) {
-        this.variants = variants;
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
-    public String getTitle() {
-        return title;
+    public String getImage() {
+        return image;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LabTestQuestion)) return false;
+        LabTestQuestion question1 = (LabTestQuestion) o;
+        return Objects.equals(question, question1.question) &&
+                Objects.equals(image, question1.image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(question, image);
     }
 }

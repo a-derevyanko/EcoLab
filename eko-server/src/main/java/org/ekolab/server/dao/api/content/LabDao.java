@@ -2,6 +2,7 @@ package org.ekolab.server.dao.api.content;
 
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTestQuestion;
+import org.ekolab.server.model.content.LabTestQuestionVariants;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -24,5 +25,5 @@ public interface LabDao<T extends LabData> {
 
     int removeOldLabs(LocalDateTime lastSaveDate);
 
-    Collection<LabTestQuestion> getTestQuestions(Locale locale);
+    Collection<LabTestQuestionVariants> getTestQuestions(Locale locale);
 }

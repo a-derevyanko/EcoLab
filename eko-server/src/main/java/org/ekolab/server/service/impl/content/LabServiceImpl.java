@@ -165,14 +165,21 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
     @Override
     @Cacheable("LAB_TEST")
     public LabTest getLabTest(Locale locale) {
-        return new LabTest(labDao.getTestQuestions(locale));
+        LabTest test = new LabTest();
+        test.setQuestions(labDao.getTestQuestions(locale));
+        return test;
     }
 
     @Override
-    public boolean checkLabTest(Map<LabTestQuestionVariant, String> answers) {
-        for (Map.Entry<LabTestQuestionVariant, String> entry : answers.entrySet()) {
-            if (!entry.getKey().getAnswers().get(entry.getKey().getRightAnswer()).equals(entry.getValue())) {
-                return false;
+    public boolean checkLabTest(Map<LabTestQuestion, Object> answers) {
+        for (Map.Entry<LabTestQuestion, Object> entry : answers.entrySet()) {
+            if (entry.getKey() instanceof LabTestQuestionVariant) {
+                LabTestQuestionVariant variant = (LabTestQuestionVariant) entry.getKey();
+                if (!variant.getAnswers().get(variant.getRightAnswer()).equals(entry.getValue())) {
+                    return false;
+                } else {
+                    //todo проверка ДЗ
+                }
             }
         }
         return true;
