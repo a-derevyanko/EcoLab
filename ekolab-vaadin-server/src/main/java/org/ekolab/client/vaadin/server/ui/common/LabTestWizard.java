@@ -19,7 +19,7 @@ import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
-import org.ekolab.server.common.Authorize;
+import org.ekolab.server.common.Role;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
 import org.ekolab.server.model.content.LabTestQuestion;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 /**
  * Created by 777Al on 03.04.2017.
  */
-@RolesAllowed(Authorize.Authorities.STUDENT)
+@RolesAllowed(Role.STUDENT)
 public abstract class LabTestWizard extends Wizard implements View {
     @Autowired
     private Authentication currentUser;
@@ -177,9 +177,9 @@ public abstract class LabTestWizard extends Wizard implements View {
             this.i18N = i18N;
             this.component = component;
             questionText.setValue(question.getQuestion());
-            addComponent(questionText);
             setSizeFull();
             setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            addComponent(questionText);
         }
 
         public Object getAnswer() {

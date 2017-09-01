@@ -25,7 +25,7 @@ import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
  */
 @SpringBootConfiguration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, proxyTargetClass = true)
+@EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true, proxyTargetClass = true)
 @EnableVaadinSharedSecurity
 @Import(VaadinSharedSecurityConfiguration.class)
 public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {

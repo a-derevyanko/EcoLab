@@ -14,23 +14,23 @@ import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
-import org.ekolab.server.common.Authorize;
+import org.ekolab.server.common.Role;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  * Created by Андрей on 19.03.2017.
  */
-@PreAuthorize(Authorize.HasAuthorities.STUDENT) //todo @RolesAllowed
+@RolesAllowed(Role.STUDENT)
 public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implements AutoSavableView {
     protected final LabService<BEAN> labService;
     protected final Binder<BEAN> binder;
