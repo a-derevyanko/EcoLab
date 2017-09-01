@@ -1,9 +1,17 @@
 package org.ekolab.client.vaadin.server.ui.view;
 
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Responsive;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.service.ResourceService;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
@@ -12,14 +20,25 @@ import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.experiment.Lab1ExperimentView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.random.Lab1RandomDataView;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_2.Lab2TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
+import org.ekolab.server.common.Profiles;
+import org.ekolab.server.model.content.lab1.Lab1Data;
+import org.ekolab.server.model.content.lab2.Lab2Data;
+import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.ekolab.server.service.api.content.lab1.Lab1Service;
+import org.ekolab.server.service.api.content.lab2.Lab2Service;
+import org.ekolab.server.service.api.content.lab3.Lab3Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.core.Authentication;
 
 /**
  * Created by 777Al on 03.04.2017.
  */
 @SpringView(name = LabChooserView.NAME)
+@Profile(Profiles.MODE.PROD)
 public class LabChooserView extends VerticalLayout implements View {
     public static final String NAME = "labchooser";
 
@@ -30,6 +49,18 @@ public class LabChooserView extends VerticalLayout implements View {
     private ResourceService resourceService;
 
     @Autowired
+    private Authentication currentUser;
+
+    @Autowired
+    private Lab1Service lab1Service;
+
+    @Autowired
+    private Lab2Service lab2Service;
+
+    @Autowired
+    private Lab3Service lab3Service;
+
+    @Autowired
     private I18N i18N;
 
     // ---------------------------- Графические компоненты --------------------
@@ -38,13 +69,13 @@ public class LabChooserView extends VerticalLayout implements View {
     private final NativeButton lab2Button = new NativeButton("Laboratory work №2");
     private final NativeButton lab3Button = new NativeButton("Laboratory work №3");
     private final NativeButton labDefenceButton = new NativeButton("Defence of laboratory works");
-    private final Button lab1RandomDataButton = new NativeButton("Random data");
-    private final Button lab1ExperimentButton = new NativeButton("Experiment data");
-    private final Button lab1TestButton = new NativeButton("Lab 1 test");
-    private final Button lab2TestButton = new NativeButton("Lab 2 test");
-    private final Button lab3TestButton = new NativeButton("Lab 3 test");
+    private final NativeButton lab1RandomDataButton = new NativeButton("Random data");
+    private final NativeButton lab1ExperimentButton = new NativeButton("Experiment data");
+    private final NativeButton lab1TestButton = new NativeButton("Lab 1 test");
+    private final NativeButton lab2TestButton = new NativeButton("Lab 2 test");
+    private final NativeButton lab3TestButton = new NativeButton("Lab 3 test");
     private final GridLayout lab1VariantChooserContent = new GridLayout(2, 2);
-    private final GridLayout labTestChooserContent = new GridLayout(1, 3);
+    private final VerticalLayout labTestChooserContent = new VerticalLayout();
     private final Window lab1VariantChooser = new Window("Choose lab 1 variant", lab1VariantChooserContent);
     private final Window labTestChooser = new Window("Choose lab for test", labTestChooserContent);
     private final Label  labLabel = new Label("Environmental technologies at TPPs", ContentMode.HTML);
@@ -104,10 +135,10 @@ public class LabChooserView extends VerticalLayout implements View {
         lab1TestButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
         lab1TestButton.addClickListener(event -> {navigator.navigateTo(Lab1TestView.NAME); labTestChooser.close();});
 
-        /*lab2TestButton.setCaption(i18N.get("lab2.test.title"));
+        lab2TestButton.setCaption(i18N.get("lab2.test.title"));
         lab2TestButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         lab2TestButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
-        lab2TestButton.addClickListener(event -> {navigator.navigateTo(Lab2TestView.NAME); labTestChooser.close();});*/
+        lab2TestButton.addClickListener(event -> {navigator.navigateTo(Lab2TestView.NAME); labTestChooser.close();});
 
         lab3TestButton.setCaption(i18N.get("lab3.test.title"));
         lab3TestButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
@@ -115,13 +146,14 @@ public class LabChooserView extends VerticalLayout implements View {
         lab3TestButton.addClickListener(event -> {navigator.navigateTo(Lab3TestView.NAME); labTestChooser.close();});
 
         labTestChooser.setModal(true);
+        labTestChooser.setResizable(false);
         labTestChooser.setWidth(300.0F, Unit.PIXELS);
         labTestChooser.setHeight(200.0F, Unit.PIXELS);
         labTestChooser.setCaption(i18N.get("labchooser.defence.choose.title"));
         labTestChooserContent.setSizeFull();
-        labTestChooserContent.addComponent(lab1TestButton, 0, 0);
-        labTestChooserContent.addComponent(lab2TestButton, 0, 1);
-        labTestChooserContent.addComponent(lab3TestButton, 0, 2);
+        labTestChooserContent.addComponent(lab1TestButton);
+        labTestChooserContent.addComponent(lab2TestButton);
+        labTestChooserContent.addComponent(lab3TestButton);
 
         labDefenceButton.setCaption(i18N.get("labchooser.defence"));
         labDefenceButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
@@ -142,5 +174,28 @@ public class LabChooserView extends VerticalLayout implements View {
         content.setComponentAlignment(labLabel, Alignment.MIDDLE_CENTER);
 
         addComponent(content);
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        Lab1Data lab1Data = lab1Service.getCompletedLabByUser(currentUser.getName());
+        Lab2Data lab2Data = lab2Service.getCompletedLabByUser(currentUser.getName());
+        Lab3Data lab3Data = lab3Service.getCompletedLabByUser(currentUser.getName());
+        setButtonSate(lab1Button, lab1Data == null);
+        setButtonSate(lab2Button, lab2Data == null);
+        setButtonSate(lab3Button, lab3Data == null);
+        setButtonSate(lab1TestButton, lab1Data != null);
+        setButtonSate(lab2TestButton, lab2Data != null);
+        setButtonSate(lab3TestButton, lab3Data != null);
+    }
+
+    protected void setButtonSate(NativeButton button, boolean enabled) {
+        if (enabled) {
+            button.setEnabled(true);
+            button.removeStyleName(EkoLabTheme.BUTTON_DISABLED);
+        } else {
+            button.setEnabled(false);
+            button.addStyleName(EkoLabTheme.BUTTON_DISABLED);
+        }
     }
 }

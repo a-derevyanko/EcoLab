@@ -6,13 +6,13 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class LabTest implements DomainModel {
-    private Collection<LabTestQuestionVariants> questions;
+    private Collection<LabTestQuestion> questions;
 
-    public Collection<LabTestQuestionVariants> getQuestions() {
+    public Collection<LabTestQuestion> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(Collection<LabTestQuestionVariants> questions) {
+    public void setQuestions(Collection<LabTestQuestion> questions) {
         this.questions = questions;
     }
 

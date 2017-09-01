@@ -3,7 +3,7 @@ package org.ekolab.server.model.content.lab3;
 /**
  * Created by 777Al on 11.04.2017.
  */
-public enum NumberOfStacks {
+public enum NumberOfStacks implements Valued<Integer> {
     ONE(1),
     TWO(2),
     THREE(3),
@@ -14,7 +14,8 @@ public enum NumberOfStacks {
         this.numberOfStacks = numberOfStacks;
     }
 
-    public int value() {
+    @Override
+    public Integer value() {
         return numberOfStacks;
     }
 

@@ -2,7 +2,6 @@ package org.ekolab.server.dao.api.content;
 
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTestQuestion;
-import org.ekolab.server.model.content.LabTestQuestionVariants;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -13,7 +12,7 @@ import java.util.Locale;
  * Created by 777Al on 19.04.2017.
  */
 public interface LabDao<T extends LabData> {
-    T getLastUncompletedLabByUser(String userName);
+    T getLastLabByUser(String userName, boolean completed);
 
     List<T> getAllLabsByUser(String userName);
 
@@ -25,5 +24,5 @@ public interface LabDao<T extends LabData> {
 
     int removeOldLabs(LocalDateTime lastSaveDate);
 
-    Collection<LabTestQuestionVariants> getTestQuestions(Locale locale);
+    Collection<LabTestQuestion> getTestQuestions(Locale locale);
 }

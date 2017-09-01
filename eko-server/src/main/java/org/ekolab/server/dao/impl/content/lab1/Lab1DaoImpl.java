@@ -64,9 +64,9 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
     };
 
     @Override
-    public Lab1Data getLastUncompletedLabByUser(String userName) {
+    public Lab1Data getLastLabByUser(String userName, boolean completed) {
         return dsl.select().from(LAB1DATA).join(LAB1VARIANT).on(LAB1VARIANT.ID.eq(LAB1DATA.ID)).
-                where(LAB1DATA.USER_ID.eq(getFindUserIdSelect(userName))).and(LAB1DATA.COMPLETED.isFalse()).
+                where(LAB1DATA.USER_ID.eq(getFindUserIdSelect(userName))).and(LAB1DATA.COMPLETED.eq(completed)).
                 orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB1DATA_MAPPER);
     }
 

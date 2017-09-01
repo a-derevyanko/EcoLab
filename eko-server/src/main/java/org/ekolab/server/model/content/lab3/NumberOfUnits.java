@@ -8,10 +8,10 @@ import java.util.List;
 /**
  * Created by 777Al on 11.04.2017.
  */
-public enum NumberOfUnits {
+public enum NumberOfUnits implements Valued<Integer> {
     TWO {
         @Override
-        public int value() {
+        public Integer value() {
             return 2;
         }
 
@@ -22,7 +22,7 @@ public enum NumberOfUnits {
     },
     FOUR {
         @Override
-        public int value() {
+        public Integer value() {
             return 4;
         }
 
@@ -33,7 +33,7 @@ public enum NumberOfUnits {
     },
     SIX {
         @Override
-        public int value() {
+        public Integer value() {
             return 6;
         }
 
@@ -44,7 +44,7 @@ public enum NumberOfUnits {
     },
     EIGHT {
         @Override
-        public int value() {
+        public Integer value() {
             return 8;
         }
 
@@ -53,8 +53,6 @@ public enum NumberOfUnits {
             return Arrays.asList(NumberOfStacks.TWO, NumberOfStacks.FOUR);
         }
     };
-
-    public abstract int value();
 
     public abstract List<NumberOfStacks> getStacksCounts();
 

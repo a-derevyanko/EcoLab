@@ -38,6 +38,8 @@ public class EkoLabTheme extends ValoTheme {
     public static final String BUTTON_VARIANT_CHOOSER = "variant-chooser";
     public static final String BUTTON_CHOOSER = "chooser";
 
+    public static final String BUTTON_DISABLED = "disabled";
+
     //public static final String BUTTON_LABWIZARD_BACK = "labwizard-button-back";
 
 

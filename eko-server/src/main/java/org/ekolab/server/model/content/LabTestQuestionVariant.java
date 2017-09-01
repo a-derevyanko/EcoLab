@@ -1,39 +1,40 @@
 package org.ekolab.server.model.content;
 
-import java.util.List;
+import org.ekolab.server.model.DomainModel;
+
 import java.util.Objects;
 
-public class LabTestQuestionVariant extends LabTestQuestion {
-    private List<String> answers;
-    private int rightAnswer;
+public abstract class LabTestQuestionVariant implements DomainModel {
+    private String question;
+    private String image;
 
-    public List<String> getAnswers() {
-        return answers;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setAnswers(List<String> answers) {
-        this.answers = answers;
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
-    public int getRightAnswer() {
-        return rightAnswer;
+    public String getImage() {
+        return image;
     }
 
-    public void setRightAnswer(int rightAnswer) {
-        this.rightAnswer = rightAnswer;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof LabTestQuestionVariant)) return false;
-        LabTestQuestionVariant that = (LabTestQuestionVariant) o;
-        return rightAnswer == that.rightAnswer &&
-                Objects.equals(answers, that.answers);
+        LabTestQuestionVariant question1 = (LabTestQuestionVariant) o;
+        return Objects.equals(question, question1.question) &&
+                Objects.equals(image, question1.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(answers, rightAnswer);
+        return Objects.hash(question, image);
     }
 }

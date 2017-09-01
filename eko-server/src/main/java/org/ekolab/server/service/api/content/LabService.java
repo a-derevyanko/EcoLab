@@ -25,6 +25,8 @@ public interface LabService<T extends LabData> {
 
     T getLastUncompletedLabByUser(String userName);
 
+    T getCompletedLabByUser(String userName);
+
     List<T> getAllLabsByUser(String userName);
 
     T startNewLab(String userName);
@@ -88,7 +90,13 @@ public interface LabService<T extends LabData> {
 
     LabTest getLabTest(Locale locale);
 
-    boolean checkLabTest(Map<LabTestQuestion, Object> answers);
+    /**
+     * Проверяет результаты теста.
+     * @param data данные лабораторной
+     * @param answers ответы
+     * @return количество ошибок
+     */
+    int checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers);
 
     int getLabNumber();
 }

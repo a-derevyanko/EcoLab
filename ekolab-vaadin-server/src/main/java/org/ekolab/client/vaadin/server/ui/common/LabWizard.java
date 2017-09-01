@@ -30,7 +30,7 @@ import java.util.Collection;
 /**
  * Created by Андрей on 19.03.2017.
  */
-@PreAuthorize(Authorize.HasAuthorities.STUDENT)
+@PreAuthorize(Authorize.HasAuthorities.STUDENT) //todo @RolesAllowed
 public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implements AutoSavableView {
     protected final LabService<BEAN> labService;
     protected final Binder<BEAN> binder;
