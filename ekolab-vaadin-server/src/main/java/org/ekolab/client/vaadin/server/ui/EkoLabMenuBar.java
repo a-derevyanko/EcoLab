@@ -11,6 +11,7 @@ import org.ekolab.client.vaadin.server.ui.common.UserDataWindow;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
+import org.ekolab.server.common.Role;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,6 @@ import org.vaadin.spring.security.VaadinSecurity;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
-
-import static org.ekolab.server.common.Authorize.Authorities.ADMIN;
-import static org.ekolab.server.common.Authorize.Authorities.STUDENT;
-import static org.ekolab.server.common.Authorize.Authorities.TEACHER;
 
 /**
  * При изменении VIEW меняются кнопки в тулбаре.
@@ -95,13 +92,13 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
                 Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
                 for (GrantedAuthority authority : authorities) {
                     switch (authority.getAuthority()) {
-                        case ADMIN:
+                        case Role.ADMIN:
                             adminManagingItem.setVisible(true);
                             break;
-                        case TEACHER:
+                        case Role.TEACHER:
                             teacherManagingItem.setVisible(true);
                             break;
-                        case STUDENT:
+                        case Role.STUDENT:
                             labChooserItem.setVisible(true);
                             break;
                     }

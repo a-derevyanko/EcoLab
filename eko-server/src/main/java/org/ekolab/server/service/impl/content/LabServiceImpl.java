@@ -256,7 +256,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
             Object value = ReflectionUtils.getField(field, data);
             if (value instanceof Valued) {
                 values.put(field.getName(), ((Valued) value).value());
-            } else if (value.getClass().isEnum()) {
+            } else if (value == null || value.getClass().isEnum()) {
                 values.put(field.getName(), value);
             } else {
                 values.put(field.getName(), ReflectionUtils.getField(field, data));

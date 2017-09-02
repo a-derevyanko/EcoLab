@@ -2,6 +2,7 @@ package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
+import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ContentMode;
@@ -155,7 +156,18 @@ public abstract class LabTestWizard extends Wizard implements View {
                 return answersGroup;
             } else if (questionVariant.getValueType() == String.class || Number.class.isAssignableFrom(questionVariant.getValueType())) {
                 TextField field = new TextField();
-                new Binder<String>().forField(field).withConverter(UIUtils.getStringConverter(questionVariant.getValueType(), null, i18N));
+                /*new Binder<String>().forField(field).
+                        withConverter(UIUtils.getStringConverter(questionVariant.getValueType(), null, i18N))
+                        //.withValidator()
+                        .bind(new ValueProvider<String, Object>() {
+                            @Override
+                            public Object apply(String s) {
+                                return null;
+                            }
+                        }, null);*/
+                new Binder<String>().forField(field).
+                        withConverter(new StringToIntegerConverter(""))
+                        .bind(Integer::valueOf, null);
                 field.addStyleName(EkoLabTheme.TEXTFIELD_TINY);
                 return field;
             } else {

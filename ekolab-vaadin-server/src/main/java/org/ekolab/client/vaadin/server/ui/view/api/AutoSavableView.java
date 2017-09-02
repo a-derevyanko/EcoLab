@@ -1,14 +1,15 @@
 package org.ekolab.client.vaadin.server.ui.view.api;
 
-import org.ekolab.server.common.Authorize;
+import org.ekolab.server.common.Role;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.access.prepost.PreAuthorize;
+
+import javax.annotation.security.RolesAllowed;
 
 /**
  * Created by 777Al on 05.04.2017.
  */
 public interface AutoSavableView extends SavableView {
     @Scheduled
-    @PreAuthorize(Authorize.HasAuthorities.STUDENT)
+    @RolesAllowed(Role.STUDENT)
     void autoSave();
 }
