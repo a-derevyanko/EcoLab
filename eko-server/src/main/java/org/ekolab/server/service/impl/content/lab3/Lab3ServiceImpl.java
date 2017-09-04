@@ -175,7 +175,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                         n * m * labData.getTerrainCoefficient()
                         / (Math.pow(labData.getStacksHeight(), 2) * Math.cbrt(((V1 * dT))));
                 if (labData.getNoxMassiveInjection() != null) {
-                    labData.setBwdNo2GroundLevelConcentration(labData.getNo2BackgroundConcentration() + k *
+                    labData.setBwdNoxGroundLevelConcentration(labData.getNo2BackgroundConcentration() + k *
                             labData.getNoxMassiveInjection());
                 }
                 if (labData.getNo2MassiveInjection() != null) {

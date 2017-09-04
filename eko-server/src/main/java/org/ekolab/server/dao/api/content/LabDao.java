@@ -25,4 +25,17 @@ public interface LabDao<T extends LabData> {
     int removeOldLabs(LocalDateTime lastSaveDate);
 
     Collection<LabTestQuestion> getTestQuestions(Locale locale);
+
+    /**
+     * Устанавливает признак пройденного теста для лабораторной
+     * @param userName имя пользователя, прошедшего тест
+     */
+    void setTestCompleted(String userName);
+
+    /**
+     * Проверяет, что тест пройден пользователем
+     * @param userName имя пользователя
+     * @return тест пройден пользователем
+     */
+    boolean isTestCompleted(String userName);
 }

@@ -257,5 +257,6 @@ VALUES
   'Ответ округлить до целых.<br>' ||
   '<i>Пример: 422 г/с</i>', 1,
   'int', 'г/с',
-  'flueGasNOxConcentration*(numberOfUnits-1)* V * B * 0.000278')
+  'flueGasNOxConcentration*(numberOfUnits-1)* (combustionProductsVolume - waterVaporVolume +
+(excessAirRatio - 1) * airVolume) * ((1 - carbonInFlyAsh / 100.0) * fuelConsumer) * 0.000278')
 ;

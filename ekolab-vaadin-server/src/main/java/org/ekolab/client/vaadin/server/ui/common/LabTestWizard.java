@@ -1,31 +1,23 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
-import com.vaadin.data.Binder;
-import com.vaadin.data.HasValue;
+import com.vaadin.data.*;
+import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.RadioButtonGroup;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import javafx.beans.binding.DoubleExpression;
+import javafx.beans.binding.IntegerExpression;
+import javafx.beans.property.*;
+import javafx.beans.value.WritableValue;
 import org.apache.commons.lang3.RandomUtils;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.common.Role;
-import org.ekolab.server.model.content.LabTest;
-import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
-import org.ekolab.server.model.content.LabTestQuestion;
-import org.ekolab.server.model.content.LabTestQuestionVariant;
-import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
+import org.ekolab.server.model.content.*;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -35,11 +27,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -108,6 +96,7 @@ public abstract class LabTestWizard extends Wizard implements View {
                 toMap(BaseLabTestQuestionView::getQuestion, BaseLabTestQuestionView::getAnswer, (a, b) -> b));
         int errors = labService.checkLabTest(labService.getLastUncompletedLabByUser(currentUser.getName()), answers);
         if (errors == 0) {
+            labService.setTestCompleted(currentUser.getName());
             super.finish();
         } else {
             ComponentErrorNotification.show(i18N.get("test.not-right", errors));
@@ -128,12 +117,15 @@ public abstract class LabTestWizard extends Wizard implements View {
             if (questionVariant.getImage() != null) {
                 Image image = new Image(null, new ThemeResource(questionVariant.getImage()));
                 addComponent(image);
+                setExpandRatio(image, 1.0F);
             }
             addComponent(component);
         }
     }
 
     private static class LabHomeWorkTestQuestionView extends BaseLabTestQuestionView<HasValue<?>> {
+        private final Property<?> answer;
+
         // ---------------------------- Графические компоненты --------------------
 
         public LabHomeWorkTestQuestionView(I18N i18N, LabTestHomeWorkQuestion questionVariant) {
@@ -144,9 +136,40 @@ public abstract class LabTestWizard extends Wizard implements View {
                         new Label(i18N.get("test.solution")),
                         (Component) component,
                         new Label(questionVariant.getDimension(), ContentMode.HTML)));
+
+                if (Integer.class.isAssignableFrom(questionVariant.getValueType())) {
+                    Binder<SimpleIntegerProperty> binder = new Binder<>();
+                    binder.forField((TextField) component).withConverter(new StringToIntegerConverter(""))
+                    .bind(IntegerExpression::getValue, WritableValue::setValue);
+                    binder.setBean(new SimpleIntegerProperty());
+                    answer = binder.getBean();
+                } else if (Double.class.isAssignableFrom(questionVariant.getValueType())) {
+                    Binder<SimpleDoubleProperty> binder = new Binder<>();
+                    binder.forField((TextField) component).withConverter(new StringToDoubleConverter(""))
+                            .bind(DoubleExpression::getValue, WritableValue::setValue);
+                    binder.setBean(new SimpleDoubleProperty());
+                    answer = binder.getBean();
+                }else if (String.class.isAssignableFrom(questionVariant.getValueType())) {
+                    Binder<SimpleStringProperty> binder = new Binder<>();
+                    binder.forField((TextField) component)
+                            .bind(WritableValue::getValue, WritableValue::setValue);
+                    binder.setBean(new SimpleStringProperty());
+                    answer = binder.getBean();
+                } else {
+                    throw new IllegalArgumentException();
+                }
             } else {
                 addComponent((Component) component);
+                Binder<SimpleBooleanProperty> binder = new Binder<>();
+                binder.forField((RadioButtonGroup<Boolean>) component).bind(WritableValue::getValue, WritableValue::setValue);
+                binder.setBean(new SimpleBooleanProperty());
+                answer = binder.getBean();
             }
+        }
+
+        @Override
+        public Object getAnswer() {
+            return answer.getValue();
         }
 
         private static HasValue<?> getComponent(LabTestHomeWorkQuestion questionVariant, I18N i18N) {
@@ -156,18 +179,6 @@ public abstract class LabTestWizard extends Wizard implements View {
                 return answersGroup;
             } else if (questionVariant.getValueType() == String.class || Number.class.isAssignableFrom(questionVariant.getValueType())) {
                 TextField field = new TextField();
-                /*new Binder<String>().forField(field).
-                        withConverter(UIUtils.getStringConverter(questionVariant.getValueType(), null, i18N))
-                        //.withValidator()
-                        .bind(new ValueProvider<String, Object>() {
-                            @Override
-                            public Object apply(String s) {
-                                return null;
-                            }
-                        }, null);*/
-                new Binder<String>().forField(field).
-                        withConverter(new StringToIntegerConverter(""))
-                        .bind(Integer::valueOf, null);
                 field.addStyleName(EkoLabTheme.TEXTFIELD_TINY);
                 return field;
             } else {

@@ -6,24 +6,19 @@ import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.constant.Language;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
 import net.sf.jasperreports.engine.JRDataSource;
+import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.common.UserInfoUtils;
 import org.ekolab.server.dao.api.content.LabDao;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.DomainModel;
 import org.ekolab.server.model.UserInfo;
-import org.ekolab.server.model.content.Calculated;
-import org.ekolab.server.model.content.LabData;
-import org.ekolab.server.model.content.LabTest;
-import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
-import org.ekolab.server.model.content.LabTestQuestionVariant;
-import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
-import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.Validated;
+import org.ekolab.server.model.content.*;
 import org.ekolab.server.model.content.lab3.Valued;
 import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.impl.ReportTemplates;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -38,11 +33,7 @@ import org.springframework.util.ReflectionUtils;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
+import javax.script.*;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -50,9 +41,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.col;
-import static net.sf.dynamicreports.report.builder.DynamicReports.report;
-import static net.sf.dynamicreports.report.builder.DynamicReports.type;
+import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -210,8 +199,14 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
                 ScriptEngine engine = mgr.getEngineByName(Language.JAVA_SCRIPT);
                 try {
                     Object value = engine.eval(question.getFormulae(), values);
-                    if (!entry.getValue().equals(value)) {
-                        errors++;
+                    if (Number.class.isAssignableFrom(question.getValueType())) {
+                        if (!MathUtils.checkEquals(((Number) entry.getValue()).doubleValue(), ((Number) value).doubleValue())) {
+                            errors++;
+                        }
+                    } else if (question.getValueType() == Boolean.class) {
+                        if (!entry.getValue().equals(value)) {
+                            errors++;
+                        }
                     }
                 } catch (ScriptException e) {
                     throw new IllegalArgumentException(e);
@@ -219,6 +214,18 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
             }
         }
         return errors;
+    }
+
+    @Override
+    @Cacheable("COMPLETED_TEST")
+    public boolean isTestCompleted(String userName) {
+        return labDao.isTestCompleted(userName);
+    }
+
+    @Override
+    @CachePut("COMPLETED_TEST")
+    public void setTestCompleted(String userName) {
+        labDao.setTestCompleted(userName);
     }
 
     @LogExecutionTime(500)

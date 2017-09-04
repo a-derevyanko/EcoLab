@@ -22,10 +22,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import static org.ekolab.server.db.h2.public_.Tables.LAB_TEST_HOME_WORK_QUESTION;
-import static org.ekolab.server.db.h2.public_.Tables.LAB_TEST_QUESTION;
-import static org.ekolab.server.db.h2.public_.Tables.LAB_TEST_QUESTION_VARIANT;
-import static org.ekolab.server.db.h2.public_.Tables.USERS;
+import static org.ekolab.server.db.h2.public_.Tables.*;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -70,7 +67,7 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
             LabTestHomeWorkQuestion homeWorkQuestion = new LabTestHomeWorkQuestion();
             homeWorkQuestion.setQuestion(record.get(LAB_TEST_HOME_WORK_QUESTION.QUESTION_TEXT));
             homeWorkQuestion.setImage(record.get(LAB_TEST_HOME_WORK_QUESTION.IMAGE));
-            homeWorkQuestion.setFormulae(record.get(LAB_TEST_HOME_WORK_QUESTION.IMAGE));
+            homeWorkQuestion.setFormulae(record.get(LAB_TEST_HOME_WORK_QUESTION.FORMULAE));
             homeWorkQuestion.setDimension(record.get(LAB_TEST_HOME_WORK_QUESTION.DIMENSION));
             try {
                 homeWorkQuestion.setValueType(
@@ -86,5 +83,19 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
         return questions.values();
     }
 
+    @Override
+    public void setTestCompleted(String userName) {
+        dsl.insertInto(USER_TEST_HISTORY, USER_TEST_HISTORY.LAB_NUMBER, USER_TEST_HISTORY.USER_ID).values(Arrays.asList(getLabNumber(), getFindUserIdSelect(userName)));
+    }
+
+    @Override
+    public boolean isTestCompleted(String userName) {
+        return dsl.fetchExists(dsl.selectFrom(USER_TEST_HISTORY).where(USER_TEST_HISTORY.LAB_NUMBER.eq(getLabNumber())));
+    }
+
+    /**
+     * Возвращает номер лабораторной
+     * @return номер лабораторной
+     */
     protected abstract int getLabNumber();
 }

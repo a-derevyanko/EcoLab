@@ -184,9 +184,9 @@ public class LabChooserView extends VerticalLayout implements View {
         setButtonSate(lab1Button, lab1Data == null);
         setButtonSate(lab2Button, lab2Data == null);
         setButtonSate(lab3Button, lab3Data == null);
-        setButtonSate(lab1TestButton, lab1Data != null);
-        setButtonSate(lab2TestButton, lab2Data != null);
-        setButtonSate(lab3TestButton, lab3Data != null);
+        setButtonSate(lab1TestButton, lab1Data != null && !lab1Service.isTestCompleted(currentUser.getName()));
+        setButtonSate(lab2TestButton, lab2Data != null && !lab2Service.isTestCompleted(currentUser.getName()));
+        setButtonSate(lab3TestButton, lab3Data != null && !lab3Service.isTestCompleted(currentUser.getName()));
     }
 
     protected void setButtonSate(NativeButton button, boolean enabled) {

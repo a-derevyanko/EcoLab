@@ -98,5 +98,18 @@ public interface LabService<T extends LabData> {
      */
     int checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers);
 
+    /**
+     * Проверяет, что тест пройден пользователем
+     * @param userName имя пользователя
+     * @return тест пройден пользователем
+     */
+    boolean isTestCompleted(String userName);
+
+    /**
+     * Устанавливает признак пройденного теста для лабораторной
+     * @param userName имя пользователя, прошедшего тест
+     */
+    void setTestCompleted(String userName);
+
     int getLabNumber();
 }
