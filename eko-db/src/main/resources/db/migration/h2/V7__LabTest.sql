@@ -23,7 +23,7 @@ CREATE TABLE lab_test_question_variant (
   version                INT,
   question_id            BIGINT       NOT NULL REFERENCES lab_test_question (id) ON DELETE CASCADE,
   image                  VARCHAR(256),
-  question_text          VARCHAR(256) NOT NULL,
+  question_text          VARCHAR(1024) NOT NULL,
   question_variant       INT          NOT NULL,
   answers                ARRAY        NOT NULL,
   question_answer_number INT          NOT NULL
@@ -43,7 +43,7 @@ CREATE TABLE lab_test_home_work_question (
   version          INT,
   question_id      BIGINT       NOT NULL REFERENCES lab_test_question (id) ON DELETE CASCADE,
   image            VARCHAR(256),
-  question_text    VARCHAR(256) NOT NULL,
+  question_text    VARCHAR(1024) NOT NULL,
   question_variant INT          NOT NULL,
   value_type       VARCHAR(32)  NOT NULL,
   dimension        VARCHAR(8),

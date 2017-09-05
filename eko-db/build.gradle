@@ -95,3 +95,7 @@ flyway {
 flywayMigratePostgres.dependsOn(compileJava)*/
 generateH2JooqSchemaSource.dependsOn(flywayMigrate)
 //generatePostgresJooqSchemaSource.dependsOn(flywayMigratePostgres)
+
+clean {
+    delete "$project.rootProject.projectDir/${h2File}.mv.db"
+}

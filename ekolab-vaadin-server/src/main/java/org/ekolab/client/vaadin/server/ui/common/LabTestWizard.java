@@ -117,7 +117,6 @@ public abstract class LabTestWizard extends Wizard implements View {
             if (questionVariant.getImage() != null) {
                 Image image = new Image(null, new ThemeResource(questionVariant.getImage()));
                 addComponent(image);
-                setExpandRatio(image, 1.0F);
             }
             addComponent(component);
         }
