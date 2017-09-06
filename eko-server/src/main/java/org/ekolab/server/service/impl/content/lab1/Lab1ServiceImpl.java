@@ -59,6 +59,7 @@ public class Lab1ServiceImpl extends LabServiceImpl<Lab1Data, Lab1Variant> imple
     protected Lab1Variant generateNewLabVariant() {
         Lab1Variant variant = new Lab1Variant();
 
+        variant.setName("");
         variant.setOutsideAirTemperature(-25 + RandomUtils.nextInt(11) * 5);
         variant.setSteamProductionCapacity(30 + RandomUtils.nextInt(5)*5);
 

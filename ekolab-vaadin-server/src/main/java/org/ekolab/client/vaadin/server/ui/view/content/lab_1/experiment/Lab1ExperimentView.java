@@ -32,6 +32,9 @@ public class Lab1ExperimentView extends Lab1View {
     private Binder<Lab1Variant> variantBinder;
 
     @Autowired
+    private Lab1PresentationStep presentationStep;
+
+    @Autowired
     private Lab1ExperimentStep1 step1;
 
     @Autowired
@@ -42,11 +45,6 @@ public class Lab1ExperimentView extends Lab1View {
 
     @Autowired
     private Lab1Service lab1Service;
-
-    @Autowired
-    public Lab1ExperimentView(Lab1Service lab1Service, Binder<Lab1Data> binder, Lab1PresentationStep presentationStep) {
-        super(lab1Service, binder, presentationStep);
-    }
 
     @Override
     public void init() throws Exception {
@@ -75,7 +73,7 @@ public class Lab1ExperimentView extends Lab1View {
 
     @Override
     protected Collection<LabWizardStep> getLabSteps() {
-        return Arrays.asList(step1, step2, step3);
+        return Arrays.asList(presentationStep, step1, step2, step3);
     }
 
     @Override

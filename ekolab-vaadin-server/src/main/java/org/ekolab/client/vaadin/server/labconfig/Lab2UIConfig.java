@@ -32,7 +32,7 @@ public class Lab2UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterLayout<Lab2Data> parameterLayout(
+    public ParameterLayout<Lab2Data> parameterLayout2(
             Lab2Service labService,
             I18N i18N,
             ResourceService resourceService,
@@ -43,7 +43,7 @@ public class Lab2UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterWithFormulaeLayout<Lab2Data> parameterWithFormulaeLayout(
+    public ParameterWithFormulaeLayout<Lab2Data> parameterWithFormulaeLayout2(
             Lab2Service labService,
             I18N i18N,
             ResourceService resourceService,

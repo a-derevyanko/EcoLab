@@ -25,7 +25,7 @@ public class Lab3UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterLayout<Lab3Data> parameterLayout(Binder<Lab3Data> binder,
+    public ParameterLayout<Lab3Data> parameterLayout3(Binder<Lab3Data> binder,
                                                      Lab3Service labService,
                                                      I18N i18N,
                                                      ResourceService resourceService,

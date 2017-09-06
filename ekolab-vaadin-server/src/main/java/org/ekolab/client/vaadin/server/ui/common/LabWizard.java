@@ -32,11 +32,6 @@ import java.util.Collection;
  */
 @RolesAllowed(Role.STUDENT)
 public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implements AutoSavableView {
-    protected final LabService<BEAN> labService;
-    protected final Binder<BEAN> binder;
-
-    private final LabPresentationStep presentationStep;
-
     // ---------------------------- Графические компоненты --------------------
     protected final GridLayout buttons = new GridLayout(3, 1);
     protected final Button saveButton = new Button("Save", VaadinIcons.CLOUD_DOWNLOAD_O);
@@ -55,11 +50,14 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     @Autowired
     protected InitialDataWindow initialDataWindow;
 
-    protected LabWizard(LabService<BEAN> labService, Binder<BEAN> binder, LabPresentationStep presentationStep) {
-        this.labService = labService;
-        this.binder = binder;
-        this.presentationStep = presentationStep;
-    }
+    @Autowired
+    protected LabService<BEAN> labService;
+
+    @Autowired
+    protected Binder<BEAN> binder;
+
+    @Autowired
+    private LabFinishedWindow<BEAN> labFinishedWindow;
 
     @Override
     public void init() throws Exception {
@@ -128,7 +126,6 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
         saveButton.addClickListener(event -> saveData());
         initialDataButton.addClickListener(event -> showInitialData());
 
-        addStep(presentationStep);
         getLabSteps().forEach(this::addStep);
     }
 
@@ -208,6 +205,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
             removeAllWindows();
             super.finish();
         }
+        labFinishedWindow.show(binder.getBean(), labService);
     }
 
     @Override
