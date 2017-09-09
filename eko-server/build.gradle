@@ -57,6 +57,7 @@ dependencies {
     compile group: 'org.apache.xmlgraphics',        name: 'batik-transcoder',                   version: '1.8'
     compile group: 'org.apache.xmlgraphics',        name: 'batik-codec',                        version: '1.7'
     compile group: 'org.apache.xmlgraphics',        name: 'xmlgraphics-commons',                version: '1.5'
+    compile group: 'org.apache.commons',            name: 'commons-math3',                      version: '3.6.1'
 
     compile group: 'com.github.aleksandy',          name: 'petrovich',                          version: '1.0.0'
 

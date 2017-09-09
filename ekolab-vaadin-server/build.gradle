@@ -45,6 +45,7 @@ dependencies {
     runtime group: 'net.sf.jasperreports',      name: 'jasperreports-fonts',                    version: '6.0.0'
 
     runtime group: 'com.github.aleksandy',      name: 'petrovich',                              version: '1.0.0'
+    runtime group: 'org.apache.commons',        name: 'commons-math3',                          version: '3.6.1'
 }
 
 war {
