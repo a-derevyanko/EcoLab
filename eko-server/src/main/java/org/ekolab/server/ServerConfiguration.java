@@ -1,20 +1,20 @@
-package org.ekolab.server.service.impl.content;
+package org.ekolab.server;
 
-import org.ekolab.server.service.api.content.ChartService;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.StandardChartTheme;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 
-import javax.annotation.PostConstruct;
 import java.awt.*;
 
 /**
  * Created by 777Al on 24.04.2017.
  */
-@Service
-public class ChartServiceImpl implements ChartService {
-    @PostConstruct
-    private void createDefaultTheme() {
+@SpringBootConfiguration
+public class ServerConfiguration {
+    @EventListener(ApplicationReadyEvent.class)
+    private void createDefaultChartTheme() {
         StandardChartTheme chartTheme = new StandardChartTheme("EkoLab");
 
         chartTheme.setChartBackgroundPaint(Color.WHITE);

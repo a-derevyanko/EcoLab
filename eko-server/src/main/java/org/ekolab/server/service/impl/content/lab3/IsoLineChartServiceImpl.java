@@ -109,22 +109,22 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
             Double groundLevelConcentration;
             Double backgroundConcentration;
             Double mac;
-            String substance;
+            String chartTitle;
             if (chartType == Lab3ChartType.ISOLINE) {
                 groundLevelConcentration = labData.getBwdNoxGroundLevelConcentration();
                 backgroundConcentration = labData.getNo2BackgroundConcentration();
                 mac = labData.getNo2MAC();
-                substance = "NOx";
+                chartTitle = messageSource.getMessage("lab3.isoline-chart-title-nox", null, locale);
             } else if (chartType == Lab3ChartType.SO2) {
                 groundLevelConcentration = labData.getBwdSo2GroundLevelConcentration();
                 backgroundConcentration = labData.getSo2BackgroundConcentration();
                 mac = labData.getSo2MAC();
-                substance = "SO2";
+                chartTitle = messageSource.getMessage("lab3.isoline-chart-title-so2", null, locale);
             } else if (chartType == Lab3ChartType.ASH) {
                 groundLevelConcentration = labData.getBwdAshGroundLevelConcentration();
                 backgroundConcentration = labData.getAshBackgroundConcentration();
                 mac = labData.getAshMAC();
-                substance = "Золы"; //todo
+                chartTitle = messageSource.getMessage("lab3.isoline-chart-title-ash", null, locale);
             } else {
                 throw new IllegalArgumentException("Unknown chart type");
             }
@@ -134,9 +134,9 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
                 return null;
             }
             if (groundLevelConcentration != null && backgroundConcentration != null && mac != null) {
-                return createSplineChart(labData, substance, getDataSet(windSpeedMaxGroundLevelConcentrationDistance,
+                return createSplineChart(labData, chartTitle, getDataSet(windSpeedMaxGroundLevelConcentrationDistance,
                         harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-                        backgroundConcentration, windSpeed, mac), windSpeedMaxGroundLevelConcentrationDistance, groundLevelConcentration, locale);
+                        backgroundConcentration, windSpeed, mac, locale), windSpeedMaxGroundLevelConcentrationDistance, groundLevelConcentration, locale);
             }
         }
         return null;
@@ -144,7 +144,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
 
     private XYSeriesCollection getDataSet(double windSpeedMaxGroundLevelConcentrationDistance,
                                  double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration,
-                                 double no2BackgroundConcentration, double windSpeed, double mac) {
+                                 double no2BackgroundConcentration, double windSpeed, double mac, Locale locale) {
 
         Double[] key = new Double[]{windSpeedMaxGroundLevelConcentrationDistance,
                 harmfulSubstancesDepositionCoefficient, windSpeed,
@@ -152,12 +152,12 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
 
         return DATASET_CACHE.computeIfAbsent(key, k -> createDataset(
                 windSpeedMaxGroundLevelConcentrationDistance,
-                harmfulSubstancesDepositionCoefficient, groundLevelConcentration, no2BackgroundConcentration, windSpeed, mac));
+                harmfulSubstancesDepositionCoefficient, groundLevelConcentration, no2BackgroundConcentration, windSpeed, mac, locale));
     }
 
     private XYSeriesCollection createDataset(double windSpeedMaxGroundLevelConcentrationDistance,
                                     double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration,
-                                    double backgroundConcentration, double windSpeed, double mac) {
+                                    double backgroundConcentration, double windSpeed, double mac, Locale locale) {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
         int Xm = Math.toIntExact(Math.round(windSpeedMaxGroundLevelConcentrationDistance));
@@ -174,14 +174,15 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
             }
         }
 
-        XYSeries macSeries = new XYSeries("ПДК = " + mac + " мг/м3", false);
+        XYSeries macSeries = new XYSeries(messageSource.getMessage("lab3.isoline-mac-name", new Object[] {mac}, locale), false);
         dataset.addSeries(macSeries);
         double macCyCoefficient = mac / groundLevelConcentration;
         fillIsoLineSeries(macSeries, macCyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
                 windSpeed);
 
-        XYSeries borderSeries = new XYSeries("С = Сф", false);
-        borderSeries.setDescription("Сф");
+        String backgroundName = messageSource.getMessage("lab3.isoline-background-name", null, locale);
+        XYSeries borderSeries = new XYSeries("C = " + backgroundName, false);
+        borderSeries.setDescription(backgroundName);
         dataset.addSeries(borderSeries);
         double borderCyCoefficient = backgroundConcentration / groundLevelConcentration;
         fillIsoLineSeries(borderSeries, borderCyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
@@ -249,7 +250,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
     }
 
     private JFreeChart createSplineChart(Lab3Data labData,
-                                         String substance,
+                                         String chartName,
                                          XYSeriesCollection dataSet,
                                          double Xm,
                                          double Cm,
@@ -283,7 +284,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         plot.setAxisOffset(new RectangleInsets(4, 4, 4, 4));
 
         // Create chart
-        JFreeChart chart = new JFreeChart(messageSource.getMessage("lab3.isoline-chart-title", null, locale) + ' ' + substance,
+        JFreeChart chart = new JFreeChart(messageSource.getMessage("lab3.isoline-chart-title", null, locale) + ' ' + chartName,
                 JFreeChart.DEFAULT_TITLE_FONT, plot, false);
         ImageTitle windRoseTitle = new ImageTitle(WIND_ROSE_CACHE.get(labData.getCity()));
         windRoseTitle.setPosition(RectangleEdge.LEFT);
