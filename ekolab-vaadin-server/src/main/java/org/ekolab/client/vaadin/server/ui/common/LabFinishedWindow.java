@@ -76,7 +76,7 @@ public class LabFinishedWindow<T extends LabData<?>> extends Window {
 
         fileDownloader.extend(saveReportButton);
 
-        toMainMenuButton.addClickListener(event -> navigator.navigateTo(LabChooserView.NAME));
+        toMainMenuButton.addClickListener(event -> close());
         center();
     }
 
