@@ -11,9 +11,8 @@ import org.ekolab.client.vaadin.server.ui.common.LabPresentationStep;
 @ViewScope
 public class Lab1PresentationStep extends LabPresentationStep {
     // ---------------------------- Графические компоненты --------------------
-
     @Override
-    protected String getLabContentFolder() {
-        return "content/lab1/presentation";
+    protected int getLabNumber() {
+        return 1;
     }
 }

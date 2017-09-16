@@ -1,15 +1,13 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
 import com.github.lotsabackscatter.blueimp.gallery.Gallery;
-import com.github.lotsabackscatter.blueimp.gallery.Image;
-import com.github.lotsabackscatter.blueimp.gallery.Options;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.service.ResourceService;
+import org.ekolab.client.vaadin.server.service.PresentationService;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -27,7 +24,7 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
     protected I18N i18N;
 
     @Autowired
-    protected ResourceService resourceService;
+    protected PresentationService presentationService;
 
     // ---------------------------- Графические компоненты --------------------
     private final Gallery gallery = new Gallery();
@@ -40,33 +37,15 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
         setSizeFull();
         addStyleName(EkoLabTheme.PANEL_WIZARD_PRESENTATION);
         addComponent(gallery);
-        //addComponent(showGallery);
-        //setComponentAlignment(showGallery, Alignment.BOTTOM_CENTER);
         showGallery.setCaption(i18N.get("lab.presentation.show-presentation"));
         showGallery.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         showGallery.addStyleName(EkoLabTheme.BUTTON_TINY);
-        showGallery.addClickListener(event -> gallery.showGallery(getPresentationSlides(), getPresentationOptions()));
-    }
-
-    protected Options getPresentationOptions() {
-        Options options = new Options();
-        options.unloadElements = false;
-        options.preloadRange = 2;
-        options.closeOnSlideClick = false;
-        options.closeOnSwipeUpOrDown = false;
-        options.carousel = false;
-        return options;
+        showGallery.addClickListener(event -> gallery.showGallery(presentationService.getPresentationSlides(getLabNumber()), presentationService.getPresentationOptions()));
     }
 
     @NotEmpty
     @NotNull
-    protected List<Image> getPresentationSlides() {
-        return resourceService.getGalleryImages(getLabContentFolder());
-    }
-
-    @NotEmpty
-    @NotNull
-    protected abstract String getLabContentFolder();
+    protected abstract int getLabNumber();
 
     @Override
     public boolean onBack() {

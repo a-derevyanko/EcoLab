@@ -11,7 +11,9 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
+import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,9 @@ public class LabFinishedWindow<T extends LabData<?>> extends Window {
 
     // ---------------------------- Графические компоненты --------------------
     private final VerticalLayout content = new VerticalLayout();
+    private final VerticalLayout buttons = new VerticalLayout();
     private final Button saveReportButton = new Button("Save report", VaadinIcons.DOWNLOAD);
+    private final Button toMainMenuButton = new Button("Exit to main menu", VaadinIcons.EXIT);
 
     private T labData;
 
@@ -37,27 +41,42 @@ public class LabFinishedWindow<T extends LabData<?>> extends Window {
     @Autowired
     private I18N i18N;
 
+    @Autowired
+    private EkoLabNavigator navigator;
+
     @PostConstruct
     public void init() {
-        setCaption(i18N.get("labwizard.initial-data"));
+        setCaption(i18N.get("labwizard.lab-finished"));
         setContent(content);
-        setHeight(50.0F, Unit.PERCENTAGE);
-        setWidth(50.0F, Unit.PERCENTAGE);
-        setSizeFull();
+        setHeight(80.0F, Unit.PERCENTAGE);
+        setWidth(80.0F, Unit.PERCENTAGE);
+        setModal(true);
+        content.setStyleName(EkoLabTheme.PANEL_LAB_FINISHED);
+        content.setSizeFull();
         content.setMargin(true);
-        content.addComponent(saveReportButton);
-        content.setComponentAlignment(saveReportButton, Alignment.MIDDLE_CENTER);
+        content.addComponent(buttons);
+        content.setComponentAlignment(buttons, Alignment.BOTTOM_RIGHT);
+        buttons.setDefaultComponentAlignment(Alignment.BOTTOM_RIGHT);
+        buttons.addComponent(saveReportButton);
+        buttons.addComponent(toMainMenuButton);
 
-        saveReportButton.setCaption(i18N.get("labwizard.save-report"));
+        saveReportButton.setCaption(i18N.get("labwizard.report.save-report"));
 
         saveReportButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         saveReportButton.addStyleName(EkoLabTheme.BUTTON_TINY);
+
+        toMainMenuButton.setCaption(i18N.get("labwizard.lab-finished.go-to-main-menu"));
+
+        toMainMenuButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        toMainMenuButton.addStyleName(EkoLabTheme.BUTTON_TINY);
 
         FileDownloader fileDownloader = new FileDownloader(new StreamResource(() ->
                 new ByteArrayInputStream(labService.createReport(labData, UI.getCurrent().getLocale())),
                 "report.pdf"));
 
         fileDownloader.extend(saveReportButton);
+
+        toMainMenuButton.addClickListener(event -> navigator.navigateTo(LabChooserView.NAME));
         center();
     }
 
@@ -67,5 +86,11 @@ public class LabFinishedWindow<T extends LabData<?>> extends Window {
         if (!UI.getCurrent().getWindows().contains(this)) {
             UI.getCurrent().addWindow(this);
         }
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        navigator.redirectToView(LabChooserView.NAME);
     }
 }

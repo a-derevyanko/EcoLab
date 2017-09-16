@@ -24,6 +24,12 @@ public class EkoLabTheme extends ValoTheme {
 
     public static final String PANEL_WIZARD_PRESENTATION = "wizard-presentation-panel";
 
+    public static final String PANEL_LAB_FINISHED = "wizard-lab-finished";
+
+    public static final String PANEL_TEST_PRESENTATION = "test-presentation-panel";
+
+    // ---------------------- Окна -------------------------
+
     // ---------------------- Компоновщики  -------------------------
     public static final String LAYOUT_LAB = "lab-form-layout";
 
@@ -49,4 +55,8 @@ public class EkoLabTheme extends ValoTheme {
     public static final String IMAGE_LOGO = "logo.svg";
 
     public static final String IMAGE_LOGO_CROP = "logoCrop.svg";
+
+    public static String toCssPosition(int left, int top) {
+        return String.format("left: %spx; top: %spx;", left, top);
+    }
 }

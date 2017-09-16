@@ -276,6 +276,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         return dsl.update(LAB3DATA)
                 .set(LAB3DATA.START_DATE, data.getStartDate())
                 .set(LAB3DATA.SAVE_DATE, data.getSaveDate())
+                .set(LAB3DATA.COMPLETED, data.isCompleted())
                 .set(LAB3DATA.TPP_OUTPUT, data.getTppOutput())
                 .set(LAB3DATA.NUMBER_OF_UNITS, data.getNumberOfUnits() == null ? null : data.getNumberOfUnits().value())
                 .set(LAB3DATA.CITY, data.getCity() == null ? null : data.getCity().name())

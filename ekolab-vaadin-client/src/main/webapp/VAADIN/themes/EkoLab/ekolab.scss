@@ -4,6 +4,7 @@
 @import "views/labchooser";
 @import "views/labwizard";
 @import "views/labview";
+@import "views/labtest";
 
 @mixin ekolab {
   @include valo;
@@ -12,6 +13,7 @@
   @include ekolab-labchooser-view;
   @include ekolab-labwizard-view;
   @include ekolab-lab-view;
+  @include ekolab-labtest-view;
 
   /* Add your theme selectors here */
 }

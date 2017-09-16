@@ -159,6 +159,7 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
                 .set(LAB1DATA.START_DATE, data.getStartDate())
                 .set(LAB1DATA.SAVE_DATE, data.getSaveDate())
                 .set(LAB1DATA.NAME, data.getName())
+                .set(LAB1DATA.COMPLETED, data.isCompleted())
                 .set(LAB1DATA.EXCESS_AIR_RATIO, data.getExcessAirRatio())
                 .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC, data.getFlueGasNOxConcentrationNC())
                 .set(LAB1DATA.EXCESS_OF_NORMS, data.getExcessOfNorms())

@@ -57,8 +57,8 @@ public class InitialDataWindow extends Window {
     public void init() {
         setCaption(i18N.get("labwizard.initial-data"));
         setContent(content);
-        setHeight(50.0F, Unit.PERCENTAGE);
-        setWidth(50.0F, Unit.PERCENTAGE);
+        setHeight(80.0F, Unit.PERCENTAGE);
+        setWidth(80.0F, Unit.PERCENTAGE);
         content.setSizeFull();
         content.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         content.addComponent(topLayout);
@@ -106,7 +106,8 @@ public class InitialDataWindow extends Window {
 
                 Object value = ReflectionUtils.getField(field, variant);
                 String name = i18N.get(field.getName());
-                values.put(name, value.getClass().isEnum() ? i18N.get(value.getClass().getSimpleName()
+                // Т. к. Grid до сих пор не поддерживает ячейки из нескольких строк, заменяем на пробелы все переходы на новую строку
+                values.put(name.replaceAll("<br>", " "), value.getClass().isEnum() ? i18N.get(value.getClass().getSimpleName()
                         + '.' + ((Enum<?>) value).name()) : String.valueOf(ReflectionUtils.getField(field, variant)));
             }
             valuesGrid.setItems(values.entrySet());

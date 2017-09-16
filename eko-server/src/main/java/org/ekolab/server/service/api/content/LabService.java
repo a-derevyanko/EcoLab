@@ -1,5 +1,6 @@
 package org.ekolab.server.service.api.content;
 
+import org.ekolab.server.model.DomainModel;
 import org.ekolab.server.model.content.*;
 import org.jfree.chart.JFreeChart;
 import org.springframework.mail.MailException;
@@ -110,6 +111,8 @@ public interface LabService<T extends LabData> {
      * @param userName имя пользователя, прошедшего тест
      */
     void setTestCompleted(String userName);
+
+    Map<String, String> getPrintData(DomainModel data, Locale locale);
 
     int getLabNumber();
 }

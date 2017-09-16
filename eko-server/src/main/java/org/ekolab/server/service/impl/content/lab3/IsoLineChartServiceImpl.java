@@ -1,6 +1,7 @@
 package org.ekolab.server.service.impl.content.lab3;
 
 import com.twelvemonkeys.image.ImageUtil;
+import com.twelvemonkeys.image.ResampleOp;
 import org.apache.commons.math3.util.Precision;
 import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.dev.LogExecutionTime;
@@ -30,9 +31,13 @@ import org.jfree.chart.title.CompositeTitle;
 import org.jfree.chart.title.ImageTitle;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.title.TextTitle;
+import org.jfree.chart.title.Title;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.*;
+import org.jfree.ui.HorizontalAlignment;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.TextAnchor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +51,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.WeakHashMap;
 
 import static java.lang.Math.pow;
 
@@ -71,8 +81,9 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
     @PostConstruct
     private void fillWindRoseCache() throws IOException {
         for (City city : City.values()) {
-            Image i = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("wind/" + city.name() + ".svg"));
-            WIND_ROSE_CACHE.put(city, i.getScaledInstance(i.getWidth(null) / 2, i.getHeight(null) / 2, Image.SCALE_AREA_AVERAGING));
+            BufferedImage i = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("wind/" + city.name() + ".svg"));
+
+            WIND_ROSE_CACHE.put(city, new ResampleOp(150, 150, ResampleOp.FILTER_LANCZOS).filter(i, null));
 
             // todo должны быть разные картинки для городов
             Image background = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/moscow.svg"));
@@ -147,8 +158,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
                                  double no2BackgroundConcentration, double windSpeed, double mac, Locale locale) {
 
         Double[] key = new Double[]{windSpeedMaxGroundLevelConcentrationDistance,
-                harmfulSubstancesDepositionCoefficient, windSpeed,
-                groundLevelConcentration, no2BackgroundConcentration, mac};
+                harmfulSubstancesDepositionCoefficient, groundLevelConcentration, no2BackgroundConcentration, windSpeed, mac};
 
         return DATASET_CACHE.computeIfAbsent(key, k -> createDataset(
                 windSpeedMaxGroundLevelConcentrationDistance,
@@ -174,12 +184,6 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
             }
         }
 
-        XYSeries macSeries = new XYSeries(messageSource.getMessage("lab3.isoline-mac-name", new Object[] {mac}, locale), false);
-        dataset.addSeries(macSeries);
-        double macCyCoefficient = mac / groundLevelConcentration;
-        fillIsoLineSeries(macSeries, macCyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-                windSpeed);
-
         String backgroundName = messageSource.getMessage("lab3.isoline-background-name", null, locale);
         XYSeries borderSeries = new XYSeries("C = " + backgroundName, false);
         borderSeries.setDescription(backgroundName);
@@ -187,6 +191,14 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         double borderCyCoefficient = backgroundConcentration / groundLevelConcentration;
         fillIsoLineSeries(borderSeries, borderCyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
                 windSpeed);
+
+        if (backgroundConcentration + groundLevelConcentration > mac) {
+            XYSeries macSeries = new XYSeries(messageSource.getMessage("lab3.isoline-mac-name", new Object[]{mac}, locale), false);
+            dataset.addSeries(macSeries);
+            double macCyCoefficient = mac / groundLevelConcentration;
+            fillIsoLineSeries(macSeries, macCyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+                    windSpeed);
+        }
 
         return dataset;
     }
@@ -271,7 +283,9 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         plot.addAnnotation(xMMarker);
 
         List<XYSeries> seriesWithLabels = new ArrayList<>(dataSet.getSeries());
-        seriesWithLabels.remove(seriesWithLabels.size() - 2);
+
+        boolean macSeriesExists = seriesWithLabels.removeIf(xySeries -> xySeries.getDescription() == null);
+
         for (XYSeries series : seriesWithLabels) {
             final XYTextAnnotation seriesNameMarker = new XYTextAnnotation(series.getDescription(), series.getX(0).doubleValue(), 0.0);
             seriesNameMarker.setBackgroundPaint(Color.WHITE);
@@ -284,9 +298,11 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         plot.setAxisOffset(new RectangleInsets(4, 4, 4, 4));
 
         // Create chart
-        JFreeChart chart = new JFreeChart(messageSource.getMessage("lab3.isoline-chart-title", null, locale) + ' ' + chartName,
+        JFreeChart chart = new JFreeChart(chartName,
                 JFreeChart.DEFAULT_TITLE_FONT, plot, false);
-        ImageTitle windRoseTitle = new ImageTitle(WIND_ROSE_CACHE.get(labData.getCity()));
+        ImageTitle windRoseTitle = new ImageTitle(WIND_ROSE_CACHE.get(labData.getCity()), 150, 150,
+                Title.DEFAULT_POSITION, Title.DEFAULT_HORIZONTAL_ALIGNMENT,
+                Title.DEFAULT_VERTICAL_ALIGNMENT, Title.DEFAULT_PADDING);
         windRoseTitle.setPosition(RectangleEdge.LEFT);
         windRoseTitle.setPadding(10.0, 0.0, 20.0, 0.0);
 
@@ -314,14 +330,16 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         chart.addSubtitle(title);
         ChartUtilities.applyCurrentTheme(chart);
 
-        // Все линни, кроме граничной и ПДК делаем серго цвета
-        for (int i = 0; i < plot.getSeriesCount() - 2; i++) {
+        // Все линии, кроме граничной и ПДК делаем серого цвета
+        for (int i = 0; i < seriesWithLabels.size() - 1; i++) {
             renderer.setSeriesPaint(i, Color.BLACK);
         }
 
-        renderer.setSeriesStroke(dataSet.getSeriesCount() - 2, new BasicStroke(2.0f));
-        renderer.setSeriesPaint(dataSet.getSeriesCount() - 1, EKO_LAB_COLOR);
-        renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f));
+        renderer.setSeriesStroke(seriesWithLabels.size() - 1, new BasicStroke(2.0f));
+        renderer.setSeriesPaint(seriesWithLabels.size() - 1, EKO_LAB_COLOR);
+        if (macSeriesExists) {
+            renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f));
+        }
 
         return chart;
 

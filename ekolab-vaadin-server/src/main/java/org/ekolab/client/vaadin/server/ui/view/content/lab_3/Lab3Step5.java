@@ -49,7 +49,7 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
 
         chartTypeLayout.setComponentAlignment(chartTypeLabel, Alignment.MIDDLE_RIGHT);
 
-        chartTypeLabel.setStyleName(EkoLabTheme.LABEL_TINY);
+        chartTypeLabel.setStyleName(EkoLabTheme.LABEL_BOLD);
         chartTypeLabel.setValue(i18N.get("lab3.step5.chart-type"));
 
         chartType.setItemCaptionGenerator((ItemCaptionGenerator<Lab3ChartType>) item -> i18N.get("lab3.step5." + item.name().toLowerCase()));

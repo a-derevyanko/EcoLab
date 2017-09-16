@@ -1,15 +1,28 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
-import com.vaadin.data.*;
+import com.vaadin.data.Binder;
+import com.vaadin.data.HasValue;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.RadioButtonGroup;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.binding.IntegerExpression;
-import javafx.beans.property.*;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.WritableValue;
 import org.apache.commons.lang3.RandomUtils;
 import org.ekolab.client.vaadin.server.service.I18N;
@@ -17,17 +30,23 @@ import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotific
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.common.Role;
-import org.ekolab.server.model.content.*;
+import org.ekolab.server.model.content.LabTest;
+import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
+import org.ekolab.server.model.content.LabTestQuestion;
+import org.ekolab.server.model.content.LabTestQuestionVariant;
+import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -49,29 +68,11 @@ public abstract class LabTestWizard extends Wizard implements View {
     }
 
     @PostConstruct
-    public void init() throws IOException {
-        setSizeFull();
-        mainLayout.setSizeFull();
-        getHeader().setVisible(false);
-        getCancelButton().setVisible(false);
+    public void init() throws Exception {
+        super.init();
+        getFinishButton().setCaption(i18N.get("test.check"));
 
-        addStyleName(EkoLabTheme.PANEL_WIZARD);
-        getFinishButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        getFinishButton().addStyleName(EkoLabTheme.BUTTON_TINY);
-        getNextButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        getNextButton().addStyleName(EkoLabTheme.BUTTON_TINY);
-        getBackButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        getBackButton().addStyleName(EkoLabTheme.BUTTON_TINY);
-
-        getBackButton().setCaption(i18N.get("labwizard.back"));
-        getNextButton().setCaption(i18N.get("labwizard.next"));
-        getFinishButton().setCaption(i18N.get("labwizard.finish"));
-
-        getFinishButton().setIcon(VaadinIcons.FLAG_CHECKERED, i18N.get("labwizard.finish"));
-        getNextButton().setIcon(VaadinIcons.ARROW_FORWARD, i18N.get("labwizard.next"));
-        getBackButton().setIcon(VaadinIcons.ARROW_BACKWARD, i18N.get("labwizard.back"));
-
-        footer.removeComponent(getCancelButton());
+        getFinishButton().setIcon(VaadinIcons.FLAG_CHECKERED, i18N.get("test.check"));
 
         LabTest test = labService.getLabTest(UI.getCurrent().getLocale());
 
@@ -94,7 +95,7 @@ public abstract class LabTestWizard extends Wizard implements View {
                 filter(s -> s instanceof BaseLabTestQuestionView<?>).
                 map(BaseLabTestQuestionView.class::cast).collect(Collectors.
                 toMap(BaseLabTestQuestionView::getQuestion, BaseLabTestQuestionView::getAnswer, (a, b) -> b));
-        int errors = labService.checkLabTest(labService.getLastUncompletedLabByUser(currentUser.getName()), answers);
+        int errors = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers);
         if (errors == 0) {
             labService.setTestCompleted(currentUser.getName());
             super.finish();
@@ -105,7 +106,6 @@ public abstract class LabTestWizard extends Wizard implements View {
 
     private static class LabTestQuestionView extends BaseLabTestQuestionView<RadioButtonGroup<String>> {
         // ---------------------------- Графические компоненты --------------------
-
         public LabTestQuestionView(I18N i18N, LabTestQuestionVariantWithAnswers questionVariant) {
             super(new RadioButtonGroup<>(), i18N, questionVariant);
 
@@ -114,11 +114,16 @@ public abstract class LabTestWizard extends Wizard implements View {
 
             component.setHtmlContentAllowed(true);
             component.setItems(answers);
-            if (questionVariant.getImage() != null) {
+            if (questionVariant.getImage() == null) {
+                setAnswerComponent(component);
+            } else {
+                HorizontalLayout imageAndAnswer = new HorizontalLayout();
+                imageAndAnswer.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
                 Image image = new Image(null, new ThemeResource(questionVariant.getImage()));
-                addComponent(image);
+                imageAndAnswer.addComponent(image);
+                imageAndAnswer.addComponent(component);
+                setAnswerComponent(imageAndAnswer);
             }
-            addComponent(component);
         }
     }
 
@@ -131,7 +136,7 @@ public abstract class LabTestWizard extends Wizard implements View {
             super(getComponent(questionVariant, i18N), i18N, questionVariant);
 
             if (component instanceof TextField) {
-                addComponent(new HorizontalLayout(
+                setAnswerComponent(new HorizontalLayout(
                         new Label(i18N.get("test.solution")),
                         (Component) component,
                         new Label(questionVariant.getDimension(), ContentMode.HTML)));
@@ -158,10 +163,11 @@ public abstract class LabTestWizard extends Wizard implements View {
                     throw new IllegalArgumentException();
                 }
             } else {
-                addComponent((Component) component);
-                Binder<SimpleBooleanProperty> binder = new Binder<>();
+                setAnswerComponent((Component) component);
+                Binder<SimpleObjectProperty<Boolean>> binder = new Binder<>();
                 binder.forField((RadioButtonGroup<Boolean>) component).bind(WritableValue::getValue, WritableValue::setValue);
-                binder.setBean(new SimpleBooleanProperty());
+                binder.setBean(new SimpleObjectProperty<>());
+                binder.getBean().setValue(null);
                 answer = binder.getBean();
             }
         }
@@ -202,6 +208,7 @@ public abstract class LabTestWizard extends Wizard implements View {
             setSizeFull();
             setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
             addComponent(questionText);
+            setExpandRatio(questionText, 0.1F);
         }
 
         public Object getAnswer() {
@@ -214,7 +221,7 @@ public abstract class LabTestWizard extends Wizard implements View {
 
         @Override
         public String getCaption() {
-            return question.getQuestion();
+            return "";
         }
 
         @Override
@@ -224,17 +231,24 @@ public abstract class LabTestWizard extends Wizard implements View {
 
         @Override
         public boolean onAdvance() {
-            if (component.isEmpty()) {
+            //todo
+            /*if (component.isEmpty()) {
                 ComponentErrorNotification.show(i18N.get("test.not-selected"));
                 return false;
             } else {
                 return true;
-            }
+            }*/
+            return true;
         }
 
         @Override
         public boolean onBack() {
             return true;
+        }
+
+        protected void setAnswerComponent(Component component) {
+            addComponent(component);
+            setExpandRatio(component, 1.0F);
         }
     }
 }

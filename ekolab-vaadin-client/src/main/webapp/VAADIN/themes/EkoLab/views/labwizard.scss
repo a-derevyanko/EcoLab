@@ -4,6 +4,11 @@
   }
   .wizard-presentation-panel {
     background: url("../content/presentationStep.svg") no-repeat center;
+    background-size: auto 100%;
+  }
+  .wizard-lab-finished {
+    background: url("../content/labFinished.svg") no-repeat center;
+    background-size: auto 100%;
   }
   .wizard-step-panel {
     background-color: rgba(205, 255, 171, 0.13);

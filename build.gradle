@@ -31,7 +31,7 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_1_8
 
     dependencies {
-        testCompile group: 'org.springframework.boot',  name: 'spring-boot-starter-test',           version: '+'
+        testCompile group: 'org.springframework.boot',  name: 'spring-boot-starter-test',           version: '1.5.6.RELEASE'
 
         testCompile group: 'org.testng',                name: 'testng',                             version: '+'
     }

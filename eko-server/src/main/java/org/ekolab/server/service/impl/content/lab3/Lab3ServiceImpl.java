@@ -255,6 +255,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     public Lab3Variant generateNewLabVariant() {
         Lab3Variant variant = new Lab3Variant();
 
+        WindDirection randomDirection = WindDirection.values()[RandomUtils.nextInt(WindDirection.values().length)];
+        variant.setWindDirection(randomDirection);
+
         //Получим случайный город, скорость ветра в нем
         City randomCity = City.values()[RandomUtils.nextInt(City.values().length)];
         variant.setCity(randomCity);

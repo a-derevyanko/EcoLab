@@ -9,7 +9,6 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
@@ -20,11 +19,9 @@ import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
-import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -40,6 +37,8 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     protected final HorizontalLayout firstColumnLayout = new HorizontalLayout();
     protected final HorizontalLayout secondColumnLayout = new HorizontalLayout();
     protected final HorizontalLayout thirdComponentsLayout = new HorizontalLayout();
+
+    protected boolean hasChanges;
 
     @Autowired
     protected I18N i18N;
@@ -61,40 +60,21 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
 
     @Override
     public void init() throws Exception {
-        AutoSavableView.super.init();
-        mainLayout.setSizeFull();
+        super.init();
+        getHeader().setVisible(false);
         buttons.setSizeFull();
         buttons.setHeightUndefined();
         buttons.setSpacing(true);
-        getHeader().setVisible(false);
         saveButton.setVisible(false);
-        getCancelButton().setVisible(false);
-        getFinishButton().setVisible(false);
 
-        addStyleName(EkoLabTheme.PANEL_WIZARD);
         saveButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         saveButton.addStyleName(EkoLabTheme.BUTTON_TINY);
         initialDataButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         initialDataButton.addStyleName(EkoLabTheme.BUTTON_TINY);
-        getFinishButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        getFinishButton().addStyleName(EkoLabTheme.BUTTON_TINY);
-        getNextButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        getNextButton().addStyleName(EkoLabTheme.BUTTON_TINY);
-        getBackButton().addStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        getBackButton().addStyleName(EkoLabTheme.BUTTON_TINY);
 
         saveButton.setCaption(i18N.get("savable.save"));
         initialDataButton.setCaption(i18N.get("labwizard.initial-data"));
-        getBackButton().setCaption(i18N.get("labwizard.back"));
-        getNextButton().setCaption(i18N.get("labwizard.next"));
-        getFinishButton().setCaption(i18N.get("labwizard.finish"));
 
-        getFinishButton().setIcon(VaadinIcons.FLAG_CHECKERED, i18N.get("labwizard.finish"));
-        getNextButton().setIcon(VaadinIcons.ARROW_FORWARD, i18N.get("labwizard.next"));
-        getBackButton().setIcon(VaadinIcons.ARROW_BACKWARD, i18N.get("labwizard.back"));
-
-        footer.removeComponent(getCancelButton());
-        footer.removeComponent(getBackButton());
         mainLayout.removeComponent(footer);
 
         footer.addComponent(initialDataButton, 0);
@@ -121,7 +101,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
 
         firstColumnLayout.setComponentAlignment(leftButtonsLayout, Alignment.MIDDLE_LEFT);
 
-        binder.addValueChangeListener(event -> saveButton.setVisible(true));
+        binder.addValueChangeListener(event -> {saveButton.setVisible(true); hasChanges = true;});
 
         saveButton.addClickListener(event -> saveData());
         initialDataButton.addClickListener(event -> showInitialData());
@@ -147,6 +127,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
             BinderValidationStatus<BEAN> validationStatus = binder.validate();
             if (validationStatus.isOk()) {
                 binder.readBean(labService.updateLab(binder.getBean()));
+                hasChanges = binder.hasChanges();
                 saveButton.setVisible(false);
             } else {
                 if (Page.getCurrent() != null) {
@@ -160,7 +141,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
 
     @Override
     public boolean hasUnsavedData() {
-        return saveButton.isVisible();
+        return hasChanges;
     }
 
     @Override
@@ -175,32 +156,16 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     }
 
     @Override
-    public void addStep(WizardStep step, String id) {
-        if (step instanceof LabWizardStep) {
-            super.addStep(step, id);
-            updateButtons();
-        } else {
-            throw new IllegalArgumentException("Wizard step should be instance of LabWizardStep!");
-        }
-    }
-
-    @Override
     protected void activateStep(WizardStep step) {
         super.activateStep(step);
         secondColumnLayout.removeAllComponents();
         ((LabWizardStep) step).placeAdditionalComponents(secondColumnLayout);
-        updateButtons();
-    }
-
-    @Override
-    public void cancel() {
-        removeAllWindows();
-        super.cancel();
     }
 
     @Override
     public void finish() {
         binder.getBean().setCompleted(true);
+        hasChanges = true;
         if (saveData()) {
             removeAllWindows();
             super.finish();
@@ -226,16 +191,5 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
 
     private void showInitialData() {
         initialDataWindow.show(binder.getBean().getVariant(), labService);
-    }
-
-    protected void updateButtons() {
-        boolean lastStep = isLastStep(currentStep);
-        getFinishButton().setVisible(lastStep);
-        getNextButton().setVisible(!lastStep);
-        getBackButton().setVisible(!isFirstStep(currentStep));
-    }
-
-    private void removeAllWindows() {
-        new ArrayList<>(UI.getCurrent().getWindows()).forEach(UI.getCurrent()::removeWindow);
     }
 }

@@ -9,7 +9,7 @@
   .v-loading-indicator-delay,
   .v-loading-indicator-wait {
     width: 50px;
-    height: 50px;
+    height: 35px;
   }
 
   .valo-menu {
@@ -216,12 +216,12 @@
 
   .v-nativebutton-multiline {
     @include valo-button-style($background-color: $v-selection-color);
-    $padding-width: round($v-unit-size/2);
-    padding: 0 $padding-width;
+    //$padding-width: round($v-unit-size/2);
+    //padding: 0 $padding-width;
     font-weight: bold;
-    $min-width: round($v-unit-size * 1.8);
-    min-width: $min-width;
-    white-space: pre;
+    //$min-width: round($v-unit-size * 1.8);
+    min-width: 200px;
+    //white-space: pre;
     text-align: center;
   }
 
@@ -328,5 +328,18 @@
 
   .label-bold-italic {
     font: bold italic 110% serif;
+  }
+
+  .wizard-progress-bar .v-progressbar-indicator {
+    height: 100%;
+    background: #8fb82b;
+    background: -webkit-linear-gradient(#8fb82b, #8fb82b);
+    background: linear-gradient(#8fb82b, #8fb82b);
+    -webkit-transition: width 0.5s ease-out 0s;
+    transition: width 0.5s ease-out 0s;
+  }
+
+  .v-label-step-caption {
+    text-align: center;
   }
 }

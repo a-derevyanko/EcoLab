@@ -15,8 +15,8 @@ public class ResourceWindow extends Window {
         super(fieldName);
         setCaptionAsHtml(true);
         setContent(content);
-        setHeight(70.0F, Unit.PERCENTAGE);
-        setWidth(50.0F, Unit.PERCENTAGE);
+        setHeight(85.0F, Unit.PERCENTAGE);
+        setWidth(65.0F, Unit.PERCENTAGE);
         content.setSizeFull();
         content.addComponent(infoResource);
         infoResource.setSizeFull();

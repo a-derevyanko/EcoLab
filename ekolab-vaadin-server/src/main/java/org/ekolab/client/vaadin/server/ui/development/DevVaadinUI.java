@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
  * Created by Андрей on 04.09.2016.
  */
 @SpringUI
-@Profile(Profiles.MODE.DEV)
+@Profile({Profiles.MODE.DEV})
 public class DevVaadinUI extends VaadinUI {
     @Override
     protected void init(VaadinRequest request) {

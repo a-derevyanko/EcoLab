@@ -13,7 +13,7 @@ public class Lab3PresentationStep extends LabPresentationStep {
     // ---------------------------- Графические компоненты --------------------
 
     @Override
-    protected String getLabContentFolder() {
-        return "content/lab3/presentation";
+    protected int getLabNumber() {
+        return 3;
     }
 }

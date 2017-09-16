@@ -37,9 +37,9 @@ dependencies {
     compile group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-security',         version: '+'
     compile group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-boot',             version: '+'
 
-    compile group: 'org.springframework.boot',  name: 'spring-boot-configuration-processor',    version: '+'
+    compile group: 'org.springframework.boot',  name: 'spring-boot-configuration-processor',    version: '1.5.6.RELEASE'
 
-    runtime group: 'org.springframework.boot',  name: 'spring-boot-starter-aop',                version: '1.5.3.RELEASE'
+    runtime group: 'org.springframework.boot',  name: 'spring-boot-starter-aop',                version: '1.5.6.RELEASE'
     runtime group: 'de.codecentric',            name: 'spring-boot-admin-starter-client',       version: '1.5.4'
 
     runtime group: 'net.sf.jasperreports',      name: 'jasperreports-fonts',                    version: '6.0.0'
@@ -77,7 +77,7 @@ bootRun {
         classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
     }
     systemProperties(System.properties)
-    jvmArgs = ["-Dspring.profiles.active=demo,h2", "-Dorg.jooq.no-logo=true"]
+    jvmArgs = ["-Dspring.profiles.active=dev,h2", "-Dorg.jooq.no-logo=true"]
     addResources = true
 }
 

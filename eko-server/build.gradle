@@ -30,7 +30,7 @@ dependencies {
     compile project (':eko-db')
     compile group: 'javax.servlet',             name: 'javax.servlet-api',                          version: '+'
 
-    compile group: 'org.springframework',       name: 'spring-context-support',                      version: '+'
+    compile group: 'org.springframework',       name: 'spring-context-support',                     version: '4.3.11.RELEASE'
     compile group: 'org.springframework.boot',  name: 'spring-boot-starter-aop',                    version: '1.5.6.RELEASE'
 
     compile group: 'org.springframework.boot',  name: 'spring-boot-starter-jetty',                  version: '1.5.6.RELEASE'
@@ -68,7 +68,7 @@ dependencies {
     runtime     group: 'com.h2database',            name: 'h2',                                 version: '+'
     runtime     group: 'org.postgresql',            name: 'postgresql',                         version: '+'
 
-    providedRuntime group: 'org.springframework.boot',  name: 'spring-boot-starter-jetty',      version: '+'
+    providedRuntime group: 'org.springframework.boot',  name: 'spring-boot-starter-jetty',      version: '1.5.6.RELEASE'
 
     testCompile group: 'com.h2database',            name: 'h2',                                 version: '+'
 }

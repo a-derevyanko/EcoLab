@@ -190,7 +190,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         for (Map.Entry<LabTestQuestionVariant, Object> entry : answers.entrySet()) {
             if (entry.getKey() instanceof LabTestQuestionVariantWithAnswers) {
                 LabTestQuestionVariantWithAnswers variant = (LabTestQuestionVariantWithAnswers) entry.getKey();
-                if (!variant.getAnswers().get(variant.getRightAnswer()).equals(entry.getValue())) {
+                if (!variant.getAnswers().get(variant.getRightAnswer() - 1).equals(entry.getValue())) {
                     errors++;
                 }
             } else {
@@ -243,16 +243,23 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
                 .setDataSource(createDataSourceFromModel(variant, locale)));
     }
 
-    protected JRDataSource createDataSourceFromModel(DomainModel data, Locale locale) {
-        DRDataSource dataSource = new DRDataSource("parameterName", "parameterValue");
-
+    @Override
+    public Map<String, String> getPrintData(DomainModel data, Locale locale) {
+        Map<String, String> printData = new HashMap<>();
         for (Map.Entry<String, Object> entry : getValuesFromModel(data).entrySet()) {
             String name = messageSource.getMessage(entry.getKey(), null, locale);
             String value = entry.getValue().getClass().isEnum() ?
                     messageSource.getMessage(entry.getValue().getClass().getSimpleName()
                             + '.' + ((Enum<?>) entry.getValue()).name(), null, locale) : String.valueOf(entry.getValue());
-            dataSource.add(name, value);
+            printData.put(name, value);
         }
+        return printData;
+    }
+
+    protected JRDataSource createDataSourceFromModel(DomainModel data, Locale locale) {
+        DRDataSource dataSource = new DRDataSource("parameterName", "parameterValue");
+        getPrintData(data, locale).forEach((key, value) -> dataSource.add(key, value));
+
         return dataSource;
     }
 
