@@ -86,20 +86,19 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
             WIND_ROSE_CACHE.put(city, new ResampleOp(150, 150, ResampleOp.FILTER_LANCZOS).filter(i, null));
 
             // todo должны быть разные картинки для городов
-            Image background = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/moscow.svg"));
+            Image background = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/moscow.jpg"));
             i = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/compass-arrow.svg"));
             Image arrow = i.getScaledInstance(i.getWidth(null) / 2, i.getHeight(null) / 2, Image.SCALE_DEFAULT);
 
             for (WindDirection direction : WindDirection.values()) {
                 double angle = Math.PI + direction.ordinal() * (Math.PI / 4.0);
                 BufferedImage rotatedBackground = ImageUtil.createRotated(background, angle);
-                rotatedBackground = rotatedBackground.getSubimage(rotatedBackground.getWidth() / 2 - 400,
-                        rotatedBackground.getHeight() / 2 - 400, 800,
-                        800);
+                rotatedBackground = rotatedBackground.getSubimage(rotatedBackground.getWidth() / 2, rotatedBackground.getHeight() / 2 - rotatedBackground.getWidth() / 8,
+                        rotatedBackground.getWidth() / 4, rotatedBackground.getWidth() / 4);
                 BufferedImage rotatedArrow = ImageUtil.createRotated(arrow, angle);
                 Graphics2D g2d = rotatedBackground.createGraphics();
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-                g2d.drawImage(rotatedArrow, 0, 0, null);
+                g2d.drawImage(rotatedArrow, 0,  0, null);
                 g2d.dispose();
 
                 try (InputStream is = new ByteArrayInputStream(EncoderUtil.encode(rotatedBackground, ImageFormat.PNG, 0.2f, true))) {

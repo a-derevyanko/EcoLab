@@ -7,22 +7,10 @@ import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.RadioButtonGroup;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.binding.IntegerExpression;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.WritableValue;
 import org.apache.commons.lang3.RandomUtils;
 import org.ekolab.client.vaadin.server.service.I18N;
@@ -30,11 +18,7 @@ import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotific
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.common.Role;
-import org.ekolab.server.model.content.LabTest;
-import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
-import org.ekolab.server.model.content.LabTestQuestion;
-import org.ekolab.server.model.content.LabTestQuestionVariant;
-import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
+import org.ekolab.server.model.content.*;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -42,12 +26,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -91,10 +70,19 @@ public abstract class LabTestWizard extends Wizard implements View {
      */
     @Override
     public void finish() {
-        Map<LabTestQuestionVariant, Object> answers = getSteps().stream().
-                filter(s -> s instanceof BaseLabTestQuestionView<?>).
-                map(BaseLabTestQuestionView.class::cast).collect(Collectors.
-                toMap(BaseLabTestQuestionView::getQuestion, BaseLabTestQuestionView::getAnswer, (a, b) -> b));
+        Map<LabTestQuestionVariant, Object> answers = new HashMap<>();
+        List<WizardStep> steps = getSteps();
+        for (int i = 0; i < steps.size(); i++) {
+            BaseLabTestQuestionView step = (BaseLabTestQuestionView) steps.get(i);
+            Object answer = step.getAnswer();
+            if (answer == null) {
+                ComponentErrorNotification.show(i18N.get("test.not-selected", i));
+                return;
+            } else {
+                answers.put(step.getQuestion(), answer);
+            }
+        }
+
         int errors = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers);
         if (errors == 0) {
             labService.setTestCompleted(currentUser.getName());
@@ -231,13 +219,6 @@ public abstract class LabTestWizard extends Wizard implements View {
 
         @Override
         public boolean onAdvance() {
-            //todo
-            /*if (component.isEmpty()) {
-                ComponentErrorNotification.show(i18N.get("test.not-selected"));
-                return false;
-            } else {
-                return true;
-            }*/
             return true;
         }
 
