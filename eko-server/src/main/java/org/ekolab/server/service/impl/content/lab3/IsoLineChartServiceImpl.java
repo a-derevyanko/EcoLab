@@ -1,16 +1,14 @@
 package org.ekolab.server.service.impl.content.lab3;
 
-import com.twelvemonkeys.image.ImageUtil;
-import com.twelvemonkeys.image.ResampleOp;
 import org.apache.commons.math3.util.Precision;
 import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.content.lab3.City;
 import org.ekolab.server.model.content.lab3.FuelType;
 import org.ekolab.server.model.content.lab3.Lab3Data;
-import org.ekolab.server.model.content.lab3.WindDirection;
 import org.ekolab.server.service.api.content.LabChartType;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
+import org.ekolab.server.service.api.content.lab3.IsoLineResourceService;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
 import org.ekolab.server.service.impl.content.equations.ferrari.EquationFunction;
 import org.ekolab.server.service.impl.content.equations.ferrari.QuarticFunction;
@@ -22,8 +20,6 @@ import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.block.BlockContainer;
 import org.jfree.chart.block.LineBorder;
-import org.jfree.chart.encoders.EncoderUtil;
-import org.jfree.chart.encoders.ImageFormat;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -44,15 +40,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -72,41 +61,12 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
     private static final Color EKO_LAB_COLOR = new Color(143, 184, 43);
     private static final Logger LOGGER = LoggerFactory.getLogger(IsoLineChartServiceImpl.class);
     private static final Map<Double[], XYSeriesCollection> DATASET_CACHE = new WeakHashMap<>();
-    private static final Map<City, Image> WIND_ROSE_CACHE = new HashMap<>(City.values().length);
-    private static final Map<WindDirection, Image> BACKGROUND_CACHE = new HashMap<>(WindDirection.values().length * City.values().length);
 
     @Autowired
     private MessageSource messageSource;
 
-    @PostConstruct
-    private void fillWindRoseCache() throws IOException {
-        for (City city : City.values()) {
-            BufferedImage i = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("wind/" + city.name() + ".svg"));
-
-            WIND_ROSE_CACHE.put(city, new ResampleOp(150, 150, ResampleOp.FILTER_LANCZOS).filter(i, null));
-
-            // todo должны быть разные картинки для городов
-            Image background = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/moscow.jpg"));
-            i = ImageIO.read(IsoLineChartServiceImpl.class.getResourceAsStream("map/compass-arrow.svg"));
-            Image arrow = i.getScaledInstance(i.getWidth(null) / 2, i.getHeight(null) / 2, Image.SCALE_DEFAULT);
-
-            for (WindDirection direction : WindDirection.values()) {
-                double angle = Math.PI + direction.ordinal() * (Math.PI / 4.0);
-                BufferedImage rotatedBackground = ImageUtil.createRotated(background, angle);
-                rotatedBackground = rotatedBackground.getSubimage(rotatedBackground.getWidth() / 2, rotatedBackground.getHeight() / 2 - rotatedBackground.getWidth() / 8,
-                        rotatedBackground.getWidth() / 4, rotatedBackground.getWidth() / 4);
-                BufferedImage rotatedArrow = ImageUtil.createRotated(arrow, angle);
-                Graphics2D g2d = rotatedBackground.createGraphics();
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-                g2d.drawImage(rotatedArrow, 0,  0, null);
-                g2d.dispose();
-
-                try (InputStream is = new ByteArrayInputStream(EncoderUtil.encode(rotatedBackground, ImageFormat.PNG, 0.2f, true))) {
-                    BACKGROUND_CACHE.put(direction, ImageIO.read(is));
-                }
-            }
-        }
-    }
+    @Autowired
+    private IsoLineResourceService resourceService;
 
     @Override
     @LogExecutionTime(500)
@@ -293,13 +253,13 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
             seriesNameMarker.setTextAnchor(TextAnchor.HALF_ASCENT_CENTER);
             plot.addAnnotation(seriesNameMarker);
         }
-        plot.setBackgroundImage(BACKGROUND_CACHE.get(labData.getWindDirection()));
+        plot.setBackgroundImage(resourceService.getBackground(labData.getCity(), labData.getWindDirection()));
         plot.setAxisOffset(new RectangleInsets(4, 4, 4, 4));
 
         // Create chart
         JFreeChart chart = new JFreeChart(chartName,
                 JFreeChart.DEFAULT_TITLE_FONT, plot, false);
-        ImageTitle windRoseTitle = new ImageTitle(WIND_ROSE_CACHE.get(labData.getCity()), 150, 150,
+        ImageTitle windRoseTitle = new ImageTitle(resourceService.getWindRose(labData.getCity()), 150, 150,
                 Title.DEFAULT_POSITION, Title.DEFAULT_HORIZONTAL_ALIGNMENT,
                 Title.DEFAULT_VERTICAL_ALIGNMENT, Title.DEFAULT_PADDING);
         windRoseTitle.setPosition(RectangleEdge.LEFT);
