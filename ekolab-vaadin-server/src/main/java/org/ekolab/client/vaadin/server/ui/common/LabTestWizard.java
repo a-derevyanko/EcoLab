@@ -76,7 +76,7 @@ public abstract class LabTestWizard extends Wizard implements View {
             BaseLabTestQuestionView step = (BaseLabTestQuestionView) steps.get(i);
             Object answer = step.getAnswer();
             if (answer == null) {
-                ComponentErrorNotification.show(i18N.get("test.not-selected", i));
+                ComponentErrorNotification.show(i18N.get("test.not-selected", i + 1));
                 return;
             } else {
                 answers.put(step.getQuestion(), answer);
