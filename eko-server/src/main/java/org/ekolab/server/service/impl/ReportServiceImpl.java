@@ -11,17 +11,25 @@ import net.sf.dynamicreports.report.constant.Rotation;
 import net.sf.dynamicreports.report.constant.VerticalTextAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperReport;
+import org.apache.commons.lang.UnhandledException;
+import org.ekolab.server.service.api.ReportService;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Locale;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
-import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
-import static net.sf.dynamicreports.report.builder.DynamicReports.tableOfContentsCustomizer;
-import static net.sf.dynamicreports.report.builder.DynamicReports.template;
+import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
-public class ReportTemplates {
+@Service
+public class ReportServiceImpl implements ReportService {
     public static final StyleBuilder ROOT_STYLE = stl.style().setFontName("DejaVu Serif").setPadding(2);
     public static final StyleBuilder BOLD_STYLE = stl.style(ROOT_STYLE).bold();
     public static final StyleBuilder ITALIC_STYLE = stl.style(ROOT_STYLE).italic();
@@ -51,7 +59,8 @@ public class ReportTemplates {
     public static final TableOfContentsCustomizerBuilder TABLE_OF_CONTENTS_CUSTOMIZER = tableOfContentsCustomizer()
             .setHeadingStyle(0, stl.style(ROOT_STYLE).bold());
 
-    public static ReportTemplateBuilder reportTemplate(Locale locale) {
+    @Override
+    public ReportTemplateBuilder getReportTemplate(Locale locale) {
         return template()
                 .setLocale(locale)
                 .setColumnStyle(COLUMN_STYLE)
@@ -68,7 +77,8 @@ public class ReportTemplates {
                 .setTableOfContentsCustomizer(TABLE_OF_CONTENTS_CUSTOMIZER);
     }
 
-    public static ComponentBuilder<?, ?> createTitleComponent(String label) {
+    @Override
+    public ComponentBuilder<?, ?> createTitleComponent(String label) {
         return cmp.horizontalList()
                 .add(cmp.text(label).setStyle(BOLD_18_CENTERED_STYLE).setHorizontalTextAlignment(HorizontalTextAlignment.RIGHT))
                 .newRow()
@@ -82,11 +92,27 @@ public class ReportTemplates {
      * @param reportBuilder принтформа отчёта.
      * @return отчёт в PDF формате.
      */
-    public static byte[] printReport(JasperReportBuilder reportBuilder) {
+    @Override
+    public byte[] printReport(JasperReportBuilder reportBuilder) {
         try {
             return JasperExportManager.exportReportToPdf(reportBuilder.toJasperPrint());
         } catch (DRException | JRException e) {
             throw new IllegalArgumentException(e);
+        }
+    }
+
+    /**
+     * Возвращает скомпилированный отчёт без подстановки параметров
+     * @param templateUrl путь к шаблону
+     * @return скомпилированный отчёт
+     */
+    @Override
+    @Cacheable("COMPILED_REPORTS")
+    public JasperReport getCompiledReport(@NotNull URL templateUrl) {
+        try (InputStream is = templateUrl.openStream()) {
+            return JasperCompileManager.compileReport(is);
+        } catch (JRException | IOException e) {
+            throw new UnhandledException(e);
         }
     }
 }

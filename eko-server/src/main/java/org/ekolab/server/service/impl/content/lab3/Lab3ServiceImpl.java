@@ -1,17 +1,13 @@
 package org.ekolab.server.service.impl.content.lab3;
 
-import com.twelvemonkeys.image.ImageUtil;
-import net.sf.dynamicreports.report.constant.ComponentPositionType;
-import net.sf.dynamicreports.report.constant.ImageScale;
-import net.sf.dynamicreports.report.constant.PageType;
+import net.sf.jasperreports.engine.*;
+import org.apache.commons.lang.UnhandledException;
 import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ekolab.server.model.content.lab3.*;
 import org.ekolab.server.service.api.content.LabChartType;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
-import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
-import org.ekolab.server.service.impl.ReportTemplates;
 import org.ekolab.server.service.impl.content.LabServiceImpl;
 import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
-
-import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -33,24 +27,6 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     @Autowired
     public Lab3ServiceImpl(Lab3Dao lab3Dao) {
         super(lab3Dao);
-    }
-
-    /**
-     * Возвращает печатный вариант отчёта в PDF формате.
-     * На второй странице отчёта печатается график изолиний в вертикальной ориентации.
-     *
-     * @param labData данные лабораторной работы.
-     * @param locale  язык.
-     * @return печатный вариант данных в PDF формате.
-     */
-    @Override
-    public byte[] createReport(Lab3Data labData, Locale locale) {
-        return ReportTemplates.printReport(super.createBaseLabReport(labData, locale)
-                .summary(cmp.image(ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ISOLINE).
-                        createBufferedImage(PageType.A4.getWidth(), PageType.A4.getHeight()), ImageUtil.ROTATE_90_CW))
-                        .setMinDimension(Math.round(PageType.A4.getWidth() * 0.95f), Math.round(PageType.A4.getHeight() * 0.95f))
-                        .setImageScale(ImageScale.FILL_FRAME).setPositionType(ComponentPositionType.FIX_RELATIVE_TO_BOTTOM)
-                        .setStyle(ReportTemplates.ROTATED_CENTERED_STYLE)));
     }
 
     @Override

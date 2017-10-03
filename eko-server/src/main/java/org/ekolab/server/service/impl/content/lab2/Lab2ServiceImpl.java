@@ -24,11 +24,6 @@ public class Lab2ServiceImpl extends LabServiceImpl<Lab2Data, Lab2Variant> imple
     }
 
     @Override
-    public byte[] createReport(Lab2Data labData, Locale locale) {
-        return new byte[0];
-    }
-
-    @Override
     public Lab2Data updateCalculatedFields(Lab2Data labData) {
         //todo correctionFactor!!!!
         return null;

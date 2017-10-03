@@ -5,7 +5,8 @@ import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.constant.Language;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
-import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.*;
+import org.apache.commons.lang.UnhandledException;
 import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.common.UserInfoUtils;
 import org.ekolab.server.dao.api.content.LabDao;
@@ -14,9 +15,9 @@ import org.ekolab.server.model.DomainModel;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.content.*;
 import org.ekolab.server.model.content.lab3.Valued;
+import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.LabService;
-import org.ekolab.server.service.impl.ReportTemplates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -52,6 +53,9 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
 
     @Autowired
     protected JavaMailSender mailSender;
+
+    @Autowired
+    protected ReportService reportService;
 
     @Autowired
     protected MessageSource messageSource;
@@ -236,9 +240,9 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         TextColumnBuilder<String> parameterValueColumn = col.column(messageSource.
                 getMessage("report.lab-data.parameter-value", null, locale), "parameterValue", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
-        return ReportTemplates.printReport(report()
-                .setTemplate(ReportTemplates.reportTemplate(locale))
-                .title(ReportTemplates.createTitleComponent(messageSource.getMessage("report.initial-data.title", new Object[]{getLabNumber()}, locale)))
+        return reportService.printReport(report()
+                .setTemplate(reportService.getReportTemplate(locale))
+                .title(reportService.createTitleComponent(messageSource.getMessage("report.initial-data.title", new Object[]{getLabNumber()}, locale)))
                 .columns(parameterNameColumn, parameterValueColumn)
                 .setDataSource(createDataSourceFromModel(variant, locale)));
     }
@@ -279,6 +283,28 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         return values;
     }
 
+
+    /**
+     * Возвращает печатный вариант отчёта в PDF формате.
+     * todo На второй странице отчёта печатается график изолиний в вертикальной ориентации.
+     *
+     * @param labData данные лабораторной работы.
+     * @param locale  язык.
+     * @return печатный вариант данных в PDF формате.
+     */
+    @Override
+    public byte[] createReport(T labData, Locale locale) {
+        try {
+            JasperReport report = reportService.getCompiledReport(this.getClass().getResource("report/report.jrxml"));
+            JRDataSource dataSource = new JREmptyDataSource();
+            JasperPrint print = JasperFillManager.fillReport(report, getValuesFromModel(labData), dataSource);
+            return JasperExportManager.exportReportToPdf(print);
+        } catch (JRException e) {
+            throw new UnhandledException(e);
+        }
+    }
+
+    @Deprecated
     protected JasperReportBuilder createBaseLabReport(LabData<?> labData, Locale locale) {
         UserInfo userInfo = userInfoService.getUserInfo(labData.getUserLogin());
 
@@ -286,8 +312,8 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         TextColumnBuilder<String> parameterValueColumn = col.column(messageSource.getMessage("report.lab-data.parameter-value", null, locale), "parameterValue", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
         return report()
-                .setTemplate(ReportTemplates.reportTemplate(locale))
-                .title(ReportTemplates.createTitleComponent(messageSource.
+                .setTemplate(reportService.getReportTemplate(locale))
+                .title(reportService.createTitleComponent(messageSource.
                         getMessage("report.lab-data.title", new Object[]{getLabNumber(), UserInfoUtils.getShortInitials(userInfo)}, locale)))
                 .columns(parameterNameColumn, parameterValueColumn)
                 .setDataSource(createDataSourceFromModel(labData, locale));
