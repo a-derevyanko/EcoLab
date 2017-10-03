@@ -4,7 +4,7 @@ import com.vaadin.data.Converter;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.util.ReflectTools;
-import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 
 import java.lang.reflect.Field;
 

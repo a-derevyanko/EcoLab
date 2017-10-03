@@ -2,7 +2,7 @@ package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.UI;
-import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.springframework.beans.factory.annotation.Autowired;

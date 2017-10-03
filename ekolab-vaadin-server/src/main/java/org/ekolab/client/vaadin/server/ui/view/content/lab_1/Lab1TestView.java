@@ -1,7 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_1;
 
 import com.vaadin.spring.annotation.SpringView;
-import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabTestWizard;
 import org.ekolab.server.service.api.content.lab1.Lab1Service;
 

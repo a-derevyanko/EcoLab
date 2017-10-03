@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.service;
+package org.ekolab.client.vaadin.server.service.impl;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.UIScope;

@@ -3,7 +3,7 @@ package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.HorizontalLayout;
-import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.server.model.content.lab3.Lab3Data;

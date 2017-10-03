@@ -3,6 +3,8 @@ package org.ekolab.client.vaadin.server.ui.view;
 import com.github.lotsabackscatter.blueimp.gallery.Gallery;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FileDownloader;
+import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Alignment;
@@ -14,9 +16,10 @@ import com.vaadin.ui.PopupView;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.service.PresentationService;
-import org.ekolab.client.vaadin.server.service.ResourceService;
+import org.ekolab.client.vaadin.server.service.api.PresentationService;
+import org.ekolab.client.vaadin.server.service.api.ResourceService;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.service.impl.OneFolderSelector;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
@@ -36,6 +39,8 @@ import org.ekolab.server.service.api.content.lab3.Lab3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
+
+import java.io.ByteArrayInputStream;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -85,6 +90,7 @@ public class LabChooserView extends VerticalLayout implements View {
     private final Button lab1PresentationButton = new Button(VaadinIcons.PRESENTATION);
     private final Button lab2PresentationButton = new Button(VaadinIcons.PRESENTATION);
     private final Button lab3PresentationButton = new Button(VaadinIcons.PRESENTATION);
+    private final Button downloadPresentationButton = new Button(VaadinIcons.DOWNLOAD);
     private final GridLayout lab1VariantChooserContent = new GridLayout(2, 2);
     private final AbsoluteLayout labTestChooserContent = new AbsoluteLayout();
     private final VerticalLayout labTestChooserButtons = new VerticalLayout();
@@ -114,15 +120,17 @@ public class LabChooserView extends VerticalLayout implements View {
         lab1Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
         lab1Button.addClickListener(event ->  UI.getCurrent().addWindow(lab1VariantChooser));
 
+        lab2Button.setCaption(i18N.get("lab2.title"));
         lab2Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         lab2Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
+        lab1Button.addClickListener(event ->  UI.getCurrent().addWindow(lab1VariantChooser));
 
-        lab1RandomDataButton.setCaption(i18N.get("lab1.random-data.title"));
+        lab1RandomDataButton.setCaption(i18N.get("lab.random-data.title"));
         lab1RandomDataButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         lab1RandomDataButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
         lab1RandomDataButton.addClickListener(event -> {navigator.navigateTo(Lab1RandomDataView.NAME); lab1VariantChooser.close();});
 
-        lab1ExperimentButton.setCaption(i18N.get("lab1.experiment.title"));
+        lab1ExperimentButton.setCaption(i18N.get("lab.experiment.title"));
         lab1ExperimentButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         lab1ExperimentButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
         lab1ExperimentButton.addClickListener(event -> {navigator.navigateTo(Lab1ExperimentView.NAME); lab1VariantChooser.close();});
@@ -130,7 +138,7 @@ public class LabChooserView extends VerticalLayout implements View {
         lab1VariantChooser.setModal(true);
         lab1VariantChooser.setWidth(500.0F, Unit.PIXELS);
         lab1VariantChooser.setHeight(300.0F, Unit.PIXELS);
-        lab1VariantChooser.setCaption(i18N.get("lab1.choose.title"));
+        lab1VariantChooser.setCaption(i18N.get("lab.choose.title"));
         lab1VariantChooserContent.setSizeFull();
         lab1VariantChooserContent.setRowExpandRatio(0, 10.0F);
         lab1VariantChooserContent.setRowExpandRatio(1, 1.0F);
@@ -160,22 +168,33 @@ public class LabChooserView extends VerticalLayout implements View {
         lab1PresentationButton.setCaption(i18N.get("labchooser.lab-content-1"));
         lab2PresentationButton.setCaption(i18N.get("labchooser.lab-content-2"));
         lab3PresentationButton.setCaption(i18N.get("labchooser.lab-content-3"));
+        downloadPresentationButton.setCaption(i18N.get("labchooser.lab-content-download"));
         lab1PresentationButton.setHeight(45.0F, Unit.PIXELS);
         lab2PresentationButton.setHeight(45.0F, Unit.PIXELS);
         lab3PresentationButton.setHeight(45.0F, Unit.PIXELS);
+        downloadPresentationButton.setHeight(45.0F, Unit.PIXELS);
         lab1PresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         lab2PresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         lab3PresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        downloadPresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         lab1PresentationButton.setSizeFull();
         lab2PresentationButton.setSizeFull();
         lab3PresentationButton.setSizeFull();
+        downloadPresentationButton.setSizeFull();
         lab1PresentationButton.addClickListener(event -> gallery.showGallery(presentationService.getPresentationSlides(1), presentationService.getPresentationOptions()));
         lab2PresentationButton.addClickListener(event -> gallery.showGallery(presentationService.getPresentationSlides(2), presentationService.getPresentationOptions()));
         lab3PresentationButton.addClickListener(event -> gallery.showGallery(presentationService.getPresentationSlides(3), presentationService.getPresentationOptions()));
 
+        FileDownloader fileDownloader = new FileDownloader(new StreamResource(() ->
+                new ByteArrayInputStream(resourceService.getZipFolder(new OneFolderSelector("content/lab3/presentation"))),
+                "presentations.zip"));
+
+        fileDownloader.extend(downloadPresentationButton);
+
         labPresentationSelectContent.addComponent(lab1PresentationButton);
         labPresentationSelectContent.addComponent(lab2PresentationButton);
         labPresentationSelectContent.addComponent(lab3PresentationButton);
+        labPresentationSelectContent.addComponent(downloadPresentationButton);
         labPresentationSelectView.setHideOnMouseOut(true);
 
         labTestChooser.setModal(true);

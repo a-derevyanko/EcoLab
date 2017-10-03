@@ -13,7 +13,7 @@ import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.*;
 import javafx.beans.value.WritableValue;
 import org.apache.commons.lang3.RandomUtils;
-import org.ekolab.client.vaadin.server.service.I18N;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;

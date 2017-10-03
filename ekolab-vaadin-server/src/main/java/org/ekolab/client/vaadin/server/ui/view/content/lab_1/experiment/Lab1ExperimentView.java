@@ -49,7 +49,7 @@ public class Lab1ExperimentView extends Lab1View {
     @Override
     public void init() throws Exception {
         super.init();
-        initialDataButton.setCaption(i18N.get("lab1.random-data.view.experiment-journal"));
+        initialDataButton.setCaption(i18N.get("lab.random-data.view.experiment-journal"));
     }
 
     /**

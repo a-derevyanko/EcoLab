@@ -53,7 +53,7 @@ public class IsoLineChartResourcesServiceImpl implements IsoLineResourceService 
         StopWatch watch = new StopWatch();
         watch.start();
         try {
-            Image background = BACKGROUND_CACHE.computeIfAbsent(city, cityName -> loadImage("map/moscow-big2.png", -1.0));
+            Image background = BACKGROUND_CACHE.computeIfAbsent(city, cityName -> loadImage("map/moscow-big3.png", -1.0));
 
             double angle = Math.PI + windDirection.ordinal() * (Math.PI / 4.0);
             BufferedImage rotatedBackground = ImageUtil.createRotated(background, angle);

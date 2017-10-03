@@ -5,7 +5,13 @@ import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.constant.Language;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import org.apache.commons.lang.UnhandledException;
 import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.common.UserInfoUtils;
@@ -13,13 +19,20 @@ import org.ekolab.server.dao.api.content.LabDao;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.DomainModel;
 import org.ekolab.server.model.UserInfo;
-import org.ekolab.server.model.content.*;
+import org.ekolab.server.model.content.Calculated;
+import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.LabTest;
+import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
+import org.ekolab.server.model.content.LabTestQuestionVariant;
+import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
+import org.ekolab.server.model.content.LabVariant;
+import org.ekolab.server.model.content.Validated;
 import org.ekolab.server.model.content.lab3.Valued;
 import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -34,7 +47,11 @@ import org.springframework.util.ReflectionUtils;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
-import javax.script.*;
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -42,7 +59,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.*;
+import static net.sf.dynamicreports.report.builder.DynamicReports.col;
+import static net.sf.dynamicreports.report.builder.DynamicReports.report;
+import static net.sf.dynamicreports.report.builder.DynamicReports.type;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -227,7 +246,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
     }
 
     @Override
-    @CachePut("COMPLETED_TEST")
+    @CacheEvict("COMPLETED_TEST")
     public void setTestCompleted(String userName) {
         labDao.setTestCompleted(userName);
     }

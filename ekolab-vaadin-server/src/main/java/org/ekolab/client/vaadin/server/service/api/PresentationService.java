@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.service;
+package org.ekolab.client.vaadin.server.service.api;
 
 import com.github.lotsabackscatter.blueimp.gallery.Image;
 import com.github.lotsabackscatter.blueimp.gallery.Options;

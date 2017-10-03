@@ -2,9 +2,9 @@ package org.ekolab.client.vaadin.server.labconfig;
 
 import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.ViewScope;
-import org.ekolab.client.vaadin.server.service.I18N;
-import org.ekolab.client.vaadin.server.service.ParameterCustomizer;
-import org.ekolab.client.vaadin.server.service.ResourceService;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
+import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;

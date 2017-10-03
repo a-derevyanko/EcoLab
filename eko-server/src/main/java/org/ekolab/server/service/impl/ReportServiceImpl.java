@@ -26,37 +26,40 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Locale;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.*;
+import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
+import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
+import static net.sf.dynamicreports.report.builder.DynamicReports.tableOfContentsCustomizer;
+import static net.sf.dynamicreports.report.builder.DynamicReports.template;
 
 @Service
 public class ReportServiceImpl implements ReportService {
-    public static final StyleBuilder ROOT_STYLE = stl.style().setFontName("DejaVu Serif").setPadding(2);
-    public static final StyleBuilder BOLD_STYLE = stl.style(ROOT_STYLE).bold();
-    public static final StyleBuilder ITALIC_STYLE = stl.style(ROOT_STYLE).italic();
-    public static final StyleBuilder BOLD_CENTERED_STYLE = stl.style(BOLD_STYLE).setTextAlignment(HorizontalTextAlignment.CENTER, VerticalTextAlignment.MIDDLE);
-    public static final StyleBuilder BOLD_12_CENTERED_STYLE = stl.style(BOLD_CENTERED_STYLE).setFontSize(12);
-    public static final StyleBuilder BOLD_18_CENTERED_STYLE = stl.style(BOLD_CENTERED_STYLE).setFontSize(18);
-    public static final StyleBuilder BOLD_22_CENTERED_STYLE = stl.style(BOLD_CENTERED_STYLE).setFontSize(22);
-    public static final StyleBuilder COLUMN_STYLE = stl.style(ROOT_STYLE).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE).setMarkup(Markup.HTML);
-    public static final StyleBuilder COLUMN_TITLE_STYLE = stl.style(COLUMN_STYLE)
+    private static final StyleBuilder ROOT_STYLE = stl.style().setFontName("DejaVu Serif").setPadding(2);
+    private static final StyleBuilder BOLD_STYLE = stl.style(ROOT_STYLE).bold();
+    private static final StyleBuilder ITALIC_STYLE = stl.style(ROOT_STYLE).italic();
+    private static final StyleBuilder BOLD_CENTERED_STYLE = stl.style(BOLD_STYLE).setTextAlignment(HorizontalTextAlignment.CENTER, VerticalTextAlignment.MIDDLE);
+    private static final StyleBuilder BOLD_12_CENTERED_STYLE = stl.style(BOLD_CENTERED_STYLE).setFontSize(12);
+    private static final StyleBuilder BOLD_18_CENTERED_STYLE = stl.style(BOLD_CENTERED_STYLE).setFontSize(18);
+    private static final StyleBuilder BOLD_22_CENTERED_STYLE = stl.style(BOLD_CENTERED_STYLE).setFontSize(22);
+    private static final StyleBuilder COLUMN_STYLE = stl.style(ROOT_STYLE).setVerticalTextAlignment(VerticalTextAlignment.MIDDLE).setMarkup(Markup.HTML);
+    private static final StyleBuilder COLUMN_TITLE_STYLE = stl.style(COLUMN_STYLE)
             .setBorder(stl.pen1Point())
             .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)
             .setBackgroundColor(Color.LIGHT_GRAY)
             .bold();
-    public static final StyleBuilder GROUP_STYLE = stl.style(BOLD_STYLE).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT);
-    public static final StyleBuilder SUBTOTAL_STYLE = stl.style(BOLD_STYLE).setTopBorder(stl.pen1Point());
+    private static final StyleBuilder GROUP_STYLE = stl.style(BOLD_STYLE).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT);
+    private static final StyleBuilder SUBTOTAL_STYLE = stl.style(BOLD_STYLE).setTopBorder(stl.pen1Point());
 
-    public static final StyleBuilder CROSSTAB_GROUP_STYLE = stl.style(COLUMN_TITLE_STYLE);
-    public static final StyleBuilder CROSSTAB_GROUP_TOTAL_STYLE = stl.style(COLUMN_TITLE_STYLE)
+    private static final StyleBuilder CROSSTAB_GROUP_STYLE = stl.style(COLUMN_TITLE_STYLE);
+    private static final StyleBuilder CROSSTAB_GROUP_TOTAL_STYLE = stl.style(COLUMN_TITLE_STYLE)
             .setBackgroundColor(new Color(170, 170, 170));
-    public static final StyleBuilder CROSSTAB_GRAND_TOTAL_STYLE = stl.style(COLUMN_TITLE_STYLE)
+    private static final StyleBuilder CROSSTAB_GRAND_TOTAL_STYLE = stl.style(COLUMN_TITLE_STYLE)
             .setBackgroundColor(new Color(140, 140, 140));
-    public static final StyleBuilder CROSSTAB_CELL_STYLE = stl.style(COLUMN_STYLE)
+    private static final StyleBuilder CROSSTAB_CELL_STYLE = stl.style(COLUMN_STYLE)
             .setBorder(stl.pen1Point());
-    public static final StyleBuilder ROTATED_CENTERED_STYLE = stl.style(BOLD_22_CENTERED_STYLE)
+    private static final StyleBuilder ROTATED_CENTERED_STYLE = stl.style(BOLD_22_CENTERED_STYLE)
             .setBorder(stl.pen1Point()).setRotation(Rotation.RIGHT);
 
-    public static final TableOfContentsCustomizerBuilder TABLE_OF_CONTENTS_CUSTOMIZER = tableOfContentsCustomizer()
+    private static final TableOfContentsCustomizerBuilder TABLE_OF_CONTENTS_CUSTOMIZER = tableOfContentsCustomizer()
             .setHeadingStyle(0, stl.style(ROOT_STYLE).bold());
 
     @Override

@@ -1,5 +1,6 @@
-package org.ekolab.client.vaadin.server.service;
+package org.ekolab.client.vaadin.server.service.impl;
 
+import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.server.common.Profiles;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
