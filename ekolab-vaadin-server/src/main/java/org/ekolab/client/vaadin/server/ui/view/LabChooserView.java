@@ -19,7 +19,7 @@ import com.vaadin.ui.Window;
 import org.ekolab.client.vaadin.server.service.api.PresentationService;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
-import org.ekolab.client.vaadin.server.service.impl.OneFolderSelector;
+import org.ekolab.client.vaadin.server.service.impl.OneFolderIterator;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
@@ -186,8 +186,8 @@ public class LabChooserView extends VerticalLayout implements View {
         lab3PresentationButton.addClickListener(event -> gallery.showGallery(presentationService.getPresentationSlides(3), presentationService.getPresentationOptions()));
 
         FileDownloader fileDownloader = new FileDownloader(new StreamResource(() ->
-                new ByteArrayInputStream(resourceService.getZipFolder(new OneFolderSelector("content/lab3/presentation"))),
-                "presentations.zip"));
+                new ByteArrayInputStream(resourceService.getZipFolder(new OneFolderIterator("content/lab3/presentation"))),
+                "materials.zip"));
 
         fileDownloader.extend(downloadPresentationButton);
 

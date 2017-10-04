@@ -8,6 +8,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.BrowserFrame;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.UI;
+import org.ekolab.client.vaadin.server.service.api.FolderIterator;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,15 +92,21 @@ public class ResourceServiceImpl implements ResourceService {
         }
     }
 
+    /**
+     * Собирает архив с файлами
+     * Архивы больше 100 мб не кэшируются
+     * @param folderIterator селектор для папок, айлы из которых будут добавлены в архив
+     * @return zip - архив
+     */
     @Override
-    @Cacheable(value = "FILES_ARCHIVE", unless = "#result.length > 102400")
-    public byte[] getZipFolder(FolderSelector folderSelector) {
+    @Cacheable(value = "FILES_ARCHIVE", unless = "#result.length > 104857600")
+    public byte[] getZipFolder(FolderIterator folderIterator) {
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             try (ZipOutputStream zos = new ZipOutputStream(bos)) {
-                for (String path : folderSelector) {
+                for (String path : folderIterator) {
                     try (Stream<Path> paths = Files.walk(getFile(path).toPath())) {
                         paths.filter(p -> Files.isRegularFile(p))
-                                .forEach(p -> addFileToZip(folderSelector.getFolderName(),
+                                .forEach(p -> addFileToZip(folderIterator.getFolderName(),
                                         p.toFile(), zos, false));
                     }
                 }

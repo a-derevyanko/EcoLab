@@ -26,9 +26,5 @@ public interface ResourceService extends Serializable {
 
     boolean isResourceExists(String path, String resourceName);
 
-    byte[] getZipFolder(FolderSelector folderSelector);
-
-    interface FolderSelector extends Iterable<String> {
-        String getFolderName();
-    }
+    byte[] getZipFolder(FolderIterator folderIterator);
 }
