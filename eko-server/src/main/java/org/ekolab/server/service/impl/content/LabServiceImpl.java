@@ -36,17 +36,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.http.MediaType;
-import org.springframework.mail.MailException;
-import org.springframework.mail.MailPreparationException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.mail.util.ByteArrayDataSource;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -69,9 +61,6 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.type;
 public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant> implements LabService<T> {
     @Autowired
     protected UserInfoService userInfoService;
-
-    @Autowired
-    protected JavaMailSender mailSender;
 
     @Autowired
     protected ReportService reportService;
@@ -165,30 +154,6 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         return labDao.removeOldLabs(lastSaveDate);
     }
 
-    @Override
-    public void sentInitialDataToEmail(LabVariant variant, Locale locale, String email) throws MailException {
-        byte[] data = printInitialData(variant, locale);
-
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        try {
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
-            mimeMessageHelper.setFrom("ekolabserver@gmail.com");
-            mimeMessageHelper.setTo(email);
-            mimeMessageHelper.setText(messageSource.getMessage("report.initial-data.email-data-in-attach", null, locale));
-            mimeMessageHelper.setSubject(messageSource.getMessage("report.initial-data.email-subject", null, locale));
-            mimeMessageHelper.addAttachment("initialData.pdf", new ByteArrayDataSource(data, MediaType.APPLICATION_PDF_VALUE));
-
-        } catch (MessagingException e) {
-            throw new MailPreparationException(e.getLocalizedMessage(), e);
-        }
-        mailSender.send(mimeMessage);
-    }
-
-    @Override
-    public void sendReportToEmail(T labData, Locale locale, String email) {
-
-    }
-
     /**
      * Возвращает тестовые вопросы.
      * Ищем их в файлах ресурсов по маске: "lab-<lab-number>-test-question-<question-variant>-<question-number>"
@@ -271,12 +236,16 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         Map<String, String> printData = new HashMap<>();
         for (Map.Entry<String, Object> entry : getValuesFromModel(data).entrySet()) {
             String name = messageSource.getMessage(entry.getKey(), null, locale);
-            String value = entry.getValue().getClass().isEnum() ?
-                    messageSource.getMessage(entry.getValue().getClass().getSimpleName()
-                            + '.' + ((Enum<?>) entry.getValue()).name(), null, locale) : String.valueOf(entry.getValue());
+            String value = getLocalizedFieldValue(entry.getValue(), locale);
             printData.put(name, value);
         }
         return printData;
+    }
+
+    protected String getLocalizedFieldValue(Object value, Locale locale) {
+        return value.getClass().isEnum() ?
+                messageSource.getMessage(value.getClass().getSimpleName()
+                        + '.' + ((Enum<?>) value).name(), null, locale) : String.valueOf(value);
     }
 
     protected JRDataSource createDataSourceFromModel(DomainModel data, Locale locale) {
@@ -284,6 +253,14 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         getPrintData(data, locale).forEach((key, value) -> dataSource.add(key, value));
 
         return dataSource;
+    }
+
+    protected Map<String, Object> getValuesForReport(T data, Locale locale) {
+        Map<String, Object> values = new HashMap<>();
+        getValuesFromModel(data).forEach((key, value) -> values.put(key,
+                value.getClass().isEnum() || String.class.isAssignableFrom(value.getClass()) ?
+                        getLocalizedFieldValue(value, locale) : value));
+        return values;
     }
 
     protected Map<String, Object> getValuesFromModel(DomainModel data) {
@@ -316,7 +293,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         try {
             JasperReport report = reportService.getCompiledReport(this.getClass().getResource("report/report.jrxml"));
             JRDataSource dataSource = new JREmptyDataSource();
-            JasperPrint print = JasperFillManager.fillReport(report, getValuesFromModel(labData), dataSource);
+            JasperPrint print = JasperFillManager.fillReport(report, getValuesForReport(labData, locale), dataSource);
             return JasperExportManager.exportReportToPdf(print);
         } catch (JRException e) {
             throw new UnhandledException(e);

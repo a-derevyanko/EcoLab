@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.WebApplicationInitializer;
 
@@ -14,6 +15,7 @@ import java.util.Arrays;
 
 @SpringBootApplication
 @EnableAdminServer
+@EnableConfigurationProperties(EkoLabVaadinProperties.class)
 public class VaadinApplication extends ServerApplication implements WebApplicationInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(VaadinApplication.class);
 

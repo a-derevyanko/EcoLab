@@ -24,6 +24,8 @@ public class EkoLabTheme extends ValoTheme {
 
     public static final String PANEL_WIZARD_PRESENTATION = "wizard-presentation-panel";
 
+    public static final String PANEL_WIZARD_EXPERIMENT_PRESENTATION = "wizard-experiment-presentation-panel";
+
     public static final String PANEL_LAB_FINISHED = "wizard-lab-finished";
 
     public static final String PANEL_TEST_PRESENTATION = "test-presentation-panel";

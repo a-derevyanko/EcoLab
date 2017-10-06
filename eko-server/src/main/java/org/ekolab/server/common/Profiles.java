@@ -14,4 +14,8 @@ public class Profiles {
         public static final String DEMO = "demo";
         public static final String PROD = "production";
     }
+    public class ADDITIONS {
+        public static final String EMAIL = "email";
+        public static final String EMAIL_NOT_ACTIVE = "!email";
+    }
 }

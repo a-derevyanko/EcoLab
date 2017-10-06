@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StopWatch;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,11 +38,10 @@ public class IsoLineChartResourcesServiceImpl implements IsoLineResourceService 
     @Cacheable("WIND_ROSE_CACHE")
     @LogExecutionTime(200)
     public Image getWindRose(City city) {
-        try {
-            BufferedImage i = ImageIO.read(IsoLineChartResourcesServiceImpl.class.getResourceAsStream("wind/" + city.name() + ".svg"));
-            return new ResampleOp(150, 150, ResampleOp.FILTER_LANCZOS).filter(i, null);
+        try (InputStream is = IsoLineChartResourcesServiceImpl.class.getResourceAsStream("wind/" + city.name() + ".svg")){
+            return new ResampleOp(150, 150, ResampleOp.FILTER_LANCZOS).filter(ImageIO.read(is), null);
         } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -50,32 +49,25 @@ public class IsoLineChartResourcesServiceImpl implements IsoLineResourceService 
     @Cacheable("BACKGROUND_CACHE")
     @LogExecutionTime(200)
     public Image getBackground(City city, WindDirection windDirection) {
-        StopWatch watch = new StopWatch();
-        watch.start();
-        try {
-            Image background = BACKGROUND_CACHE.computeIfAbsent(city, cityName -> loadImage("map/moscow-big3.png", -1.0));
+        Image background = BACKGROUND_CACHE.computeIfAbsent(city, cityName -> loadImage("map/" + city.name() + ".png", -1.0));
 
-            double angle = Math.PI + windDirection.ordinal() * (Math.PI / 4.0);
-            BufferedImage rotatedBackground = ImageUtil.createRotated(background, angle);
-            rotatedBackground = rotatedBackground.getSubimage(rotatedBackground.getWidth() / 2, rotatedBackground.getHeight() / 2 - rotatedBackground.getWidth() / 8,
-                    rotatedBackground.getWidth() / 4, rotatedBackground.getWidth() / 4);
-            BufferedImage copyOfImage = new BufferedImage(rotatedBackground.getWidth(), rotatedBackground.getHeight(), BufferedImage.TYPE_INT_RGB);
-            Graphics g = copyOfImage.createGraphics();
-            g.drawImage(rotatedBackground, 0, 0, null);
-            BufferedImage rotatedArrow = ImageUtil.createRotated(COMPASS_ARROW, angle);
-            Graphics2D g2d = copyOfImage.createGraphics();
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-            g2d.drawImage(rotatedArrow, 0, 0, null);
-            g2d.dispose();
+        double angle = Math.PI + windDirection.ordinal() * (Math.PI / 4.0);
+        BufferedImage rotatedBackground = ImageUtil.createRotated(background, angle);
+        rotatedBackground = rotatedBackground.getSubimage(rotatedBackground.getWidth() / 2, rotatedBackground.getHeight() / 2 - rotatedBackground.getWidth() / 8,
+                rotatedBackground.getWidth() / 4, rotatedBackground.getWidth() / 4);
+        BufferedImage copyOfImage = new BufferedImage(rotatedBackground.getWidth(), rotatedBackground.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics g = copyOfImage.createGraphics();
+        g.drawImage(rotatedBackground, 0, 0, null);
+        BufferedImage rotatedArrow = ImageUtil.createRotated(COMPASS_ARROW, angle);
+        Graphics2D g2d = copyOfImage.createGraphics();
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+        g2d.drawImage(rotatedArrow, 0, 0, null);
+        g2d.dispose();
 
-            try (InputStream is = new ByteArrayInputStream(EncoderUtil.encode(rotatedBackground, ImageFormat.PNG, 0.2f, true))) {
-                return ImageIO.read(is);
-            }
+        try (InputStream is = new ByteArrayInputStream(EncoderUtil.encode(rotatedBackground, ImageFormat.PNG, 0.2f, true))) {
+            return ImageIO.read(is);
         } catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        } finally {
-            watch.stop();
-            LOGGER.debug("Background for city {} and wind direction {} loaded in {} seconds", city, windDirection, watch.getTotalTimeSeconds());
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -84,7 +76,7 @@ public class IsoLineChartResourcesServiceImpl implements IsoLineResourceService 
             Image i = ImageIO.read(is);
             return scale == -1.0 ? i : i.getScaledInstance((int) Math.round(i.getWidth(null) * scale), (int) Math.round(i.getHeight(null) * scale), Image.SCALE_DEFAULT);
         } catch (IOException ex) {
-            throw new IllegalArgumentException(ex);
+            throw new UncheckedIOException(ex);
         }
     }
 }

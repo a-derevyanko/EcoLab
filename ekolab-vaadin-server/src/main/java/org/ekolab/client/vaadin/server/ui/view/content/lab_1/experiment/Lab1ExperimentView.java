@@ -6,7 +6,7 @@ import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
-import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1PresentationStep;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1ExperimentPresentationStep;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1View;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.lab1.Lab1Data;
@@ -32,7 +32,7 @@ public class Lab1ExperimentView extends Lab1View {
     private Binder<Lab1Variant> variantBinder;
 
     @Autowired
-    private Lab1PresentationStep presentationStep;
+    private Lab1ExperimentPresentationStep presentationStep;
 
     @Autowired
     private Lab1ExperimentStep1 step1;

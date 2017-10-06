@@ -197,25 +197,29 @@
 	<parameter name="teacherName">
 		<parameterDescription><![CDATA[Имя преподавателя]]></parameterDescription>
 	</parameter>
-	<parameter name="brigadaNumber">
+	<parameter name="teamNumber">
 		<parameterDescription><![CDATA[номер бригады]]></parameterDescription>
 	</parameter>
 	<parameter name="sudentsList">
 		<parameterDescription><![CDATA[список студентов, членов бригады]]></parameterDescription>
 	</parameter>
+	<parameter name="mapImageIsoline" class="java.awt.Image">
+		<parameterDescription><![CDATA[картинка с картой]]></parameterDescription>
+	</parameter>
+	<parameter name="mapImageSo2" class="java.awt.Image">
+		<parameterDescription><![CDATA[картинка с картой]]></parameterDescription>
+	</parameter>
+	<parameter name="mapImageAsh" class="java.awt.Image">
+		<parameterDescription><![CDATA[картинка с картой]]></parameterDescription>
+	</parameter>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<detail>
-		<band height="751">
-			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
+		<band height="758">
 			<break>
 				<reportElement x="0" y="750" width="99" height="1" uuid="a2155e00-28b0-4c70-94b8-bf3f01409ee0"/>
 			</break>
-			<!--<image>-->
-				<!--<reportElement x="-30" y="-30" width="570" height="580" uuid="bf944a06-dddc-4d2a-b651-0a4d612a51da"/>-->
-				<!--<imageExpression><![CDATA["main.png"]]></imageExpression>-->
-			<!--</image>-->
 			<textField pattern="yyyy">
 				<reportElement x="250" y="725" width="100" height="20" uuid="9575fcbb-3daf-4419-8ab1-3bfa67c43085"/>
 				<textElement verticalAlignment="Middle">
@@ -230,10 +234,6 @@
 				</textElement>
 				<text><![CDATA[Москва]]></text>
 			</staticText>
-			<!--<image>-->
-				<!--<reportElement x="-30" y="695" width="570" height="20" uuid="5bd385ff-bb50-45b2-8080-8b573b6c13d3"/>-->
-				<!--<imageExpression><![CDATA["line.png"]]></imageExpression>-->
-			<!--</image>-->
 			<staticText>
 				<reportElement x="340" y="560" width="48" height="20" uuid="746ab856-d83d-48ce-9421-e35a474935b6"/>
 				<textElement verticalAlignment="Middle">
@@ -263,7 +263,7 @@
 				<text><![CDATA[Студенты:]]></text>
 			</staticText>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="388" y="560" width="152" height="20" uuid="6b6fc859-a003-44c3-8d3f-367fbaaac608"/>
+				<reportElement key="" style="StyleFortableCells" x="388" y="560" width="109" height="20" uuid="6b6fc859-a003-44c3-8d3f-367fbaaac608"/>
 				<box>
 					<pen lineWidth="0.0"/>
 				</box>
@@ -273,7 +273,7 @@
 				<textFieldExpression><![CDATA[$P{groupNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="388" y="580" width="152" height="20" uuid="008e5689-1988-4d8a-aaad-84d4086d5845"/>
+				<reportElement key="" style="StyleFortableCells" x="388" y="580" width="109" height="20" uuid="008e5689-1988-4d8a-aaad-84d4086d5845"/>
 				<box>
 					<pen lineWidth="0.0"/>
 				</box>
@@ -283,17 +283,17 @@
 				<textFieldExpression><![CDATA[$P{teacherName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="388" y="600" width="152" height="20" uuid="607cf708-5c57-4836-ab49-03e102de4fc8"/>
+				<reportElement key="" style="StyleFortableCells" x="388" y="600" width="109" height="20" uuid="607cf708-5c57-4836-ab49-03e102de4fc8"/>
 				<box>
 					<pen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Left">
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{groupNumber}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{teamNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="388" y="620" width="152" height="70" uuid="c73906e1-0c74-4d3f-a031-d4f803e3e8f9"/>
+				<reportElement key="" style="StyleFortableCells" x="388" y="620" width="109" height="70" uuid="c73906e1-0c74-4d3f-a031-d4f803e3e8f9"/>
 				<box>
 					<pen lineWidth="0.0"/>
 				</box>
@@ -302,6 +302,93 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{sudentsList}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement x="0" y="0" width="497" height="70" uuid="08b4a56d-5f77-45cb-8ed4-d81fc8507067"/>
+				<imageExpression><![CDATA["mainbuilding.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="Style1" x="0" y="70" width="497" height="20" uuid="775a5057-d5c6-44f5-af61-99f70d3e49c8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Министерство образования и науки Российской Федерации]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Style1" x="0" y="90" width="497" height="20" uuid="458df60b-e7b3-4665-b3ca-9d685cc1f658"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Федеральное Государственное Бюджетное Образовательное Учреждение Высшего Образования]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Style1" x="0" y="110" width="497" height="40" uuid="fb9c575d-7456-4ea0-8563-63c8f6c1c89f"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isItalic="false"/>
+				</textElement>
+				<text><![CDATA[НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ УНИВЕРСИТЕТ
+«МОСКОВСКИЙ ЭНЕРГЕТИЧЕСКИЙ ИНСТИТУТ»]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="205" y="210" width="87" height="20" uuid="7a810cf7-8db3-418f-8b57-b8bd8011eb84"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Кафедра ТЭС]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="153" y="300" width="190" height="20" uuid="331be5d2-2439-4a57-973c-af0b0fcf9edb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Лабораторная работа №3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="204" y="330" width="87" height="20" uuid="74c289bd-427c-46f3-b17c-7f33abd53eb2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[По курсу]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="119" y="360" width="258" height="20" uuid="7fde5b44-2136-4f8d-b0bb-f002c304f7de"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Природоохранные технологии на ТЭС]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="430" width="496" height="40" uuid="e5139c53-d43e-465c-af14-ee06c4d88501"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[«Расчет выбросов и приземных концентраций вредных веществ от тепловых электростанций»]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Style1" x="0" y="510" width="497" height="40" uuid="99f37dea-a46a-46bf-a0c8-e7fce11bae69"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isItalic="false"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
 		</band>
 		<band height="758" splitType="Stretch">
 			<staticText>
@@ -2302,7 +2389,7 @@
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
-				<text><![CDATA[Суммарное количество поступающего в атмосферу загрязняющего вещества ]]></text>
+				<text><![CDATA[Предельно допустимые концентрации вредных веществ]]></text>
 			</staticText>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" x="382" y="420" width="115" height="20" uuid="c8b39eed-fa23-4515-b64a-4f42a6285e94"/>
@@ -2521,14 +2608,14 @@
 				<text><![CDATA[ПДК SO2]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="StyleFortableCaption" x="0" y="500" width="497" height="20" uuid="ee15ee1b-7c65-4b82-a43e-e8f39644f219"/>
+				<reportElement style="StyleFortableCaption" x="0" y="500" width="497" height="33" uuid="ee15ee1b-7c65-4b82-a43e-e8f39644f219"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
-				<text><![CDATA[Суммарное количество поступающего в атмосферу загрязняющего вещества ]]></text>
+				<text><![CDATA[Максимальные значения приземной концентрации загрязняющих веществ при опасной скорости ветра u<sub>м</sub>]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="0" y="520" width="30" height="50" uuid="8b00e36d-8b9e-466f-88d9-03602e9a46b8"/>
+				<reportElement key="" style="StyleFortableCells" x="0" y="533" width="30" height="50" uuid="8b00e36d-8b9e-466f-88d9-03602e9a46b8"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2539,7 +2626,7 @@
 				<text><![CDATA[12]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="30" y="520" width="172" height="50" uuid="9c66db52-a4ab-43b9-b623-dc7eab5d2a42"/>
+				<reportElement key="" style="StyleFortableCells" x="30" y="533" width="172" height="50" uuid="9c66db52-a4ab-43b9-b623-dc7eab5d2a42"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2550,7 +2637,7 @@
 				<text><![CDATA[Максимальное значение приземной концентрации NO2 при опасной скорости ветра]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="202" y="520" width="90" height="50" uuid="d8e8fa89-f475-4af2-ac42-e01e2fc368c4"/>
+				<reportElement key="" style="StyleFortableCells" x="202" y="533" width="90" height="50" uuid="d8e8fa89-f475-4af2-ac42-e01e2fc368c4"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2561,7 +2648,7 @@
 				<text><![CDATA[Cm.<sub>NO2</sub>]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="292" y="520" width="90" height="50" uuid="7d92148d-e29e-4413-9cee-eb22128b2aed"/>
+				<reportElement key="" style="StyleFortableCells" x="292" y="533" width="90" height="50" uuid="7d92148d-e29e-4413-9cee-eb22128b2aed"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2572,14 +2659,14 @@
 				<text><![CDATA[мг/м<sup>3</sup>]]></text>
 			</staticText>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="382" y="520" width="115" height="50" uuid="1d8fc4fc-1d36-42e9-a8cb-e63852f4312a"/>
+				<reportElement key="" style="StyleFortableCells" x="382" y="533" width="115" height="50" uuid="1d8fc4fc-1d36-42e9-a8cb-e63852f4312a"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textFieldExpression><![CDATA[$P{bwdNo2GroundLevelConcentration}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="0" y="570" width="30" height="50" uuid="965b7277-b5f5-4ec8-9824-860b29d3524e"/>
+				<reportElement key="" style="StyleFortableCells" x="0" y="583" width="30" height="50" uuid="965b7277-b5f5-4ec8-9824-860b29d3524e"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2590,14 +2677,14 @@
 				<text><![CDATA[13]]></text>
 			</staticText>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="382" y="570" width="115" height="50" uuid="26da1e33-adc1-4e92-a7cc-934cec68538a"/>
+				<reportElement key="" style="StyleFortableCells" x="382" y="583" width="115" height="50" uuid="26da1e33-adc1-4e92-a7cc-934cec68538a"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textFieldExpression><![CDATA[$P{bwdNoGroundLevelConcentration}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="202" y="570" width="90" height="50" uuid="a83c48cd-25fd-4a2f-bf62-f61d73626e49"/>
+				<reportElement key="" style="StyleFortableCells" x="202" y="583" width="90" height="50" uuid="a83c48cd-25fd-4a2f-bf62-f61d73626e49"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2608,7 +2695,7 @@
 				<text><![CDATA[Cm.<sub>NO</sub>]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="30" y="570" width="172" height="50" uuid="27253852-72ae-4c7b-8f3b-85392cddca4a"/>
+				<reportElement key="" style="StyleFortableCells" x="30" y="583" width="172" height="50" uuid="27253852-72ae-4c7b-8f3b-85392cddca4a"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2619,7 +2706,7 @@
 				<text><![CDATA[Максимальное значение приземной концентрации NO при опасной скорости ветра]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="292" y="570" width="90" height="50" uuid="c95c2d4a-1901-458d-bb1c-7524f0f601f6"/>
+				<reportElement key="" style="StyleFortableCells" x="292" y="583" width="90" height="50" uuid="c95c2d4a-1901-458d-bb1c-7524f0f601f6"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2630,7 +2717,7 @@
 				<text><![CDATA[мг/м<sup>3</sup>]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="0" y="620" width="30" height="50" uuid="cd50c181-e412-42d6-aea2-66552f977eb1"/>
+				<reportElement key="" style="StyleFortableCells" x="0" y="633" width="30" height="50" uuid="cd50c181-e412-42d6-aea2-66552f977eb1"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2641,7 +2728,7 @@
 				<text><![CDATA[14]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="292" y="620" width="90" height="50" uuid="45a7ae4e-11d0-402e-8b46-65d39f8878a2"/>
+				<reportElement key="" style="StyleFortableCells" x="292" y="633" width="90" height="50" uuid="45a7ae4e-11d0-402e-8b46-65d39f8878a2"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2652,7 +2739,7 @@
 				<text><![CDATA[мг/м<sup>3</sup>]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="202" y="620" width="90" height="50" uuid="ccdf4654-bdc1-4853-a410-29174e70e6b5"/>
+				<reportElement key="" style="StyleFortableCells" x="202" y="633" width="90" height="50" uuid="ccdf4654-bdc1-4853-a410-29174e70e6b5"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2663,14 +2750,14 @@
 				<text><![CDATA[Cm.<sub>SO2</sub>]]></text>
 			</staticText>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="382" y="620" width="115" height="50" uuid="2340e46d-cb0d-4da8-8946-8f18a813cbf1"/>
+				<reportElement key="" style="StyleFortableCells" x="382" y="633" width="115" height="50" uuid="2340e46d-cb0d-4da8-8946-8f18a813cbf1"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textFieldExpression><![CDATA[$P{bwdSo2GroundLevelConcentration}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="30" y="620" width="172" height="50" uuid="c430837c-4309-44e5-86cd-57c2cdaa9b7f"/>
+				<reportElement key="" style="StyleFortableCells" x="30" y="633" width="172" height="50" uuid="c430837c-4309-44e5-86cd-57c2cdaa9b7f"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2681,7 +2768,7 @@
 				<text><![CDATA[Максимальное значение приземной концентрации SO2 при опасной скорости ветра]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="292" y="670" width="90" height="50" uuid="36406d1b-af6c-4de9-91e0-20cbe8a00812"/>
+				<reportElement key="" style="StyleFortableCells" x="292" y="683" width="90" height="50" uuid="36406d1b-af6c-4de9-91e0-20cbe8a00812"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2692,7 +2779,7 @@
 				<text><![CDATA[мг/м<sup>3</sup>]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="0" y="670" width="30" height="50" uuid="c706cb7b-badd-4213-9fb2-d7b9877c618a"/>
+				<reportElement key="" style="StyleFortableCells" x="0" y="683" width="30" height="50" uuid="c706cb7b-badd-4213-9fb2-d7b9877c618a"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2703,14 +2790,14 @@
 				<text><![CDATA[15]]></text>
 			</staticText>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="382" y="670" width="115" height="50" uuid="c644b0ed-55fb-4422-b09f-acf6ed12337c"/>
+				<reportElement key="" style="StyleFortableCells" x="382" y="683" width="115" height="50" uuid="c644b0ed-55fb-4422-b09f-acf6ed12337c"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textFieldExpression><![CDATA[$P{bwdAshGroundLevelConcentration}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="202" y="670" width="90" height="50" uuid="7813042d-1c52-473c-9a31-ed99034a291d"/>
+				<reportElement key="" style="StyleFortableCells" x="202" y="683" width="90" height="50" uuid="7813042d-1c52-473c-9a31-ed99034a291d"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2721,7 +2808,7 @@
 				<text><![CDATA[Cm.<sub>зол</sub>]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" x="30" y="670" width="172" height="50" uuid="01271d13-6ec9-4f24-a541-06b6ba0a0f93"/>
+				<reportElement key="" style="StyleFortableCells" x="30" y="683" width="172" height="50" uuid="01271d13-6ec9-4f24-a541-06b6ba0a0f93"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -3289,7 +3376,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
 					<font fontName="DejaVu Sans" size="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Параметр \u03C5<sub>м</sub>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Параметр \u03C5<sub>м</sub>"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" x="382" y="690" width="115" height="30" uuid="075803c9-0c81-4750-afa5-6e0e8895f307"/>
@@ -3461,8 +3548,59 @@
 		</band>
 		<band height="758">
 			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
+			<textField>
+				<reportElement key="" x="510" y="740" width="30" height="18" uuid="835cd11a-4fe2-46d7-be98-c1d5d9249a7e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="734" width="100" height="1" uuid="d59d65e4-e9b1-487c-a202-fd1012cc3ecc"/>
+			</break>
+			<image>
+				<reportElement x="-1" y="10" width="498" height="720" uuid="8c88f184-996b-4b85-a488-8a8b41da4d30"/>
+				<imageExpression><![CDATA[$P{mapImageIsoline}]]></imageExpression>
+			</image>
+		</band>
+		<band height="758">
+			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
+			<break>
+				<reportElement x="0" y="734" width="100" height="1" uuid="5f094c12-45c0-4296-b7f9-97230b7f0b3a"/>
+			</break>
+			<image>
+				<reportElement x="0" y="0" width="497" height="730" uuid="61be44eb-d61b-4727-b9ec-4a802b56d86e"/>
+				<imageExpression><![CDATA[$P{mapImageSo2}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement key="" x="510" y="740" width="30" height="18" uuid="f2e7a1ed-460d-4e57-a062-2d0e5cce4137"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="758">
+			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
+			<break>
+				<reportElement x="0" y="734" width="100" height="1" uuid="1cbaf73a-ade1-4406-94b7-5b86f4abf9df"/>
+			</break>
+			<image>
+				<reportElement x="-1" y="10" width="497" height="720" uuid="ed3bcd2f-c073-4e0a-9e28-edf5a1908c27"/>
+				<imageExpression><![CDATA[$P{mapImageAsh}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement key="" x="510" y="740" width="30" height="18" uuid="68dc9345-6535-43d7-bf0d-86fb135a3c8e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="758">
+			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
 			<staticText>
-				<reportElement style="Style1" x="0" y="28" width="497" height="442" uuid="cccb2c29-ab3a-462d-bd23-589ff831c143"/>
+				<reportElement style="Style1" x="0" y="60" width="497" height="442" uuid="cccb2c29-ab3a-462d-bd23-589ff831c143"/>
 				<textElement markup="html"/>
 				<text><![CDATA[<b>Задание 1.</b> По результатам лабораторной работы необходимо сделать заключение, в котором следует отразить, превышают ли максимальные значения приземных концентраций загрязняющих веществ предельно допустимые (ПДК).<br>
 <b>Задание 2.</b> В случае, если максимальные значения приземных концентраций загрязняющих веществ превышают предельно допустимые, предложить методы их снижения. <br>
@@ -3477,11 +3615,208 @@
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="Style1Bold" x="182" y="0" width="147" height="20" uuid="7f2d382f-58cd-4556-aaad-92f4826e9221"/>
+				<reportElement key="" style="Style1Bold" x="175" y="30" width="147" height="20" uuid="7f2d382f-58cd-4556-aaad-92f4826e9221"/>
 				<text><![CDATA[Домашнее задание]]></text>
 			</staticText>
 			<textField>
 				<reportElement key="" x="510" y="740" width="30" height="18" uuid="c0fe7552-1f1e-4f70-b27e-65efab7aa7f1"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="734" width="100" height="1" uuid="d3ba41ea-a5f9-4263-a507-9d9c5392eace"/>
+			</break>
+		</band>
+		<band height="758">
+			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
+			<textField>
+				<reportElement key="" x="510" y="740" width="30" height="18" uuid="82e3295f-a3b3-4ef0-bd62-e29215be4f86"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="" style="Style1Bold" mode="Opaque" x="0" y="70" width="497" height="30" backcolor="#CFE3FC" uuid="25a6640a-cee8-4786-b36a-eb6dffe335b2"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Задание 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" style="StyleFortableCells" x="0" y="100" width="497" height="200" uuid="7ac917fd-8a98-494d-ab38-b55da5164dad"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" style="Style1Bold" x="0" y="30" width="495" height="20" uuid="3e00270f-1721-484e-a216-192389cf06b8"/>
+				<text><![CDATA[Бланк выполнения домашнего задания]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" style="Style1Bold" mode="Opaque" x="0" y="300" width="497" height="30" backcolor="#CFE3FC" uuid="ef25214b-e31b-4137-b895-5ed293239509"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Задание 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" style="StyleFortableCells" x="0" y="330" width="497" height="410" uuid="78543dd8-2d86-4d89-a2de-dfc7fe47d039"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<break>
+				<reportElement x="0" y="750" width="99" height="1" uuid="a190e95d-e9b6-41ac-b304-447d528b37c9"/>
+			</break>
+		</band>
+		<band height="758">
+			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
+			<staticText>
+				<reportElement key="" style="StyleFortableCells" x="-1" y="40" width="497" height="699" uuid="e33bdc78-2923-4213-aad4-8c5927523f26"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" style="Style1Bold" mode="Opaque" x="-1" y="10" width="497" height="30" backcolor="#CFE3FC" uuid="be696a5e-f2ba-4d79-8341-0256b850c93e"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Задание 3]]></text>
+			</staticText>
+			<textField>
+				<reportElement key="" x="510" y="740" width="30" height="18" uuid="6e2f4768-2af0-4d5b-b103-fe49a5cf3adf"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="92" y="41" width="310" height="689" uuid="70f68850-9935-4632-b0fb-f7c8477d653e"/>
+				<imageExpression><![CDATA["zadanie3.png"]]></imageExpression>
+			</image>
+			<break>
+				<reportElement x="0" y="750" width="99" height="1" uuid="3926ae04-852b-42e6-8a86-6b454e12a11d"/>
+			</break>
+		</band>
+		<band height="758">
+			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
+			<staticText>
+				<reportElement key="" style="Style1Bold" mode="Opaque" x="-1" y="30" width="497" height="30" backcolor="#CFE3FC" uuid="1d5bf78e-13dc-4c10-a6c2-ec2b89cb89b5"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Задание 4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" style="StyleFortableCells" x="0" y="60" width="497" height="329" uuid="4fe05218-4d03-4820-b429-e9bf71ab9095"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" style="Style1Bold" mode="Opaque" x="0" y="389" width="497" height="31" backcolor="#CFE3FC" uuid="37354b0e-5eae-4a59-8a41-af96e29004e2"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Задание 5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" style="StyleFortableCells" x="0" y="420" width="497" height="319" uuid="24d58c27-fb1e-43e8-a9bb-f310ecfd839c"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement key="" x="510" y="740" width="30" height="18" uuid="77c201f9-cd82-4c02-a582-84fe97e94c45"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="750" width="99" height="1" uuid="8079ff09-862e-4181-954b-d5eb0f1e7865"/>
+			</break>
+		</band>
+		<band height="758">
+			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
+			<staticText>
+				<reportElement key="" style="Style1Bold" x="0" y="30" width="495" height="20" uuid="e6cbf679-ec42-4409-a0ee-08ef2c2e30d5"/>
+				<text><![CDATA[Приложение 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" style="Style1Bold" x="0" y="50" width="495" height="20" uuid="481de6ac-d4c3-4f3a-9856-ef20d0fba03f"/>
+				<text><![CDATA[Расчетные формулы]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="70" width="497" height="688" uuid="ea731797-ec3a-4368-a991-77eb60eeb2af"/>
+				<imageExpression><![CDATA["formula.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement key="" x="510" y="740" width="30" height="18" uuid="34d735e3-af7e-4f0e-9186-b083753a4e93"/>
 				<textElement>
 					<font fontName="Times New Roman" size="10"/>
 				</textElement>

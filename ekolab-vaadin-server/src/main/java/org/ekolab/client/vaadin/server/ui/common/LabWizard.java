@@ -56,7 +56,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     protected Binder<BEAN> binder;
 
     @Autowired
-    private LabFinishedWindow<BEAN> labFinishedWindow;
+    protected LabFinishedWindow<BEAN> labFinishedWindow;
 
     @Override
     public void init() throws Exception {
@@ -116,7 +116,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     protected abstract Collection<LabWizardStep> getLabSteps();
 
     @Override
-    @Scheduled(fixedRateString = "${lab.autoSaveRate:#{60000}}", initialDelayString = "${lab.autoSaveRate:#{60000}}")
+    @Scheduled(fixedRateString = "${ekolab.lab.autoSaveRate:#{60000}}", initialDelayString = "${ekolab.lab.autoSaveRate:#{60000}}")
     public void autoSave() {
         saveData();
     }

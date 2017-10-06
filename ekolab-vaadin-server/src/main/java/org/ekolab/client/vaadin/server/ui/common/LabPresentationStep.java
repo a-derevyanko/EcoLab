@@ -35,7 +35,7 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
     public void init() throws IOException {
         LabWizardStep.super.init();
         setSizeFull();
-        addStyleName(EkoLabTheme.PANEL_WIZARD_PRESENTATION);
+        addStyleName(getPanelStyleName());
         addComponent(gallery);
         showGallery.setCaption(i18N.get("lab.presentation.show-presentation"));
         showGallery.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
@@ -46,6 +46,12 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
     @NotEmpty
     @NotNull
     protected abstract int getLabNumber();
+
+    @NotEmpty
+    @NotNull
+    protected String getPanelStyleName() {
+        return EkoLabTheme.PANEL_WIZARD_PRESENTATION;
+    }
 
     @Override
     public boolean onBack() {
