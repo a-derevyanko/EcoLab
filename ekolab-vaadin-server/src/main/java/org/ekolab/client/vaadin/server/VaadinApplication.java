@@ -8,10 +8,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.web.WebApplicationInitializer;
-
-import java.util.Arrays;
 
 @SpringBootApplication
 @EnableAdminServer
@@ -20,25 +17,7 @@ public class VaadinApplication extends ServerApplication implements WebApplicati
     private static final Logger LOGGER = LoggerFactory.getLogger(VaadinApplication.class);
 
     public static void main(String... args) {
-        ApplicationContext ctx = run(args);
-        LOGGER.info("-------------------------------------------------------");
-        LOGGER.info("|              Vaadin Server metrics                  |");
-        LOGGER.info("|                  Beans count: {}                   |", ctx.getBeanDefinitionCount());
-        LOGGER.info("-------------------------------------------------------");
-    }
-
-    protected static ApplicationContext run(String... args) {
-        VaadinApplication vaadinApplication = new VaadinApplication();
-        ApplicationContext ctx = vaadinApplication.configure(new SpringApplicationBuilder()).run(args);
-
-        LOGGER.info("Let's inspect the beans provided by Spring Boot for Vaadin Server:");
-
-        String[] beanNames = ctx.getBeanDefinitionNames();
-        Arrays.sort(beanNames);
-        for (String beanName : beanNames) {
-            LOGGER.info(beanName);
-        }
-        return ctx;
+        run(new VaadinApplication(), args);
     }
 
     /**

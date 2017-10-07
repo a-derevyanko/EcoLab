@@ -6,16 +6,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.AbsoluteLayout;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.NativeButton;
-import com.vaadin.ui.PopupView;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.*;
 import org.ekolab.client.vaadin.server.service.api.PresentationService;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
@@ -27,6 +18,8 @@ import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.experiment.Lab1ExperimentView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.random.Lab1RandomDataView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_2.Lab2TestView;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_2.experiment.Lab2ExperimentView;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_2.random.Lab2RandomDataView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
 import org.ekolab.server.common.Profiles;
@@ -74,6 +67,9 @@ public class LabChooserView extends VerticalLayout implements View {
     @Autowired
     private I18N i18N;
 
+    @Autowired
+    private LabTypeSelectorWindow labTypeSelectorWindow;
+
     // ---------------------------- Графические компоненты --------------------
     private final Gallery gallery = new Gallery();
     private final GridLayout content = new GridLayout(2, 5);
@@ -82,8 +78,6 @@ public class LabChooserView extends VerticalLayout implements View {
     private final NativeButton lab3Button = new NativeButton("Laboratory work №3");
     private final NativeButton labDefenceButton = new NativeButton("Defence of laboratory works");
     private final Button labContentButton = new Button("Content of laboratory works");
-    private final NativeButton lab1RandomDataButton = new NativeButton("Random data");
-    private final NativeButton lab1ExperimentButton = new NativeButton("Experiment data");
     private final NativeButton lab1TestButton = new NativeButton("Lab 1 test");
     private final NativeButton lab2TestButton = new NativeButton("Lab 2 test");
     private final NativeButton lab3TestButton = new NativeButton("Lab 3 test");
@@ -91,10 +85,8 @@ public class LabChooserView extends VerticalLayout implements View {
     private final Button lab2PresentationButton = new Button(VaadinIcons.PRESENTATION);
     private final Button lab3PresentationButton = new Button(VaadinIcons.PRESENTATION);
     private final Button downloadPresentationButton = new Button(VaadinIcons.DOWNLOAD);
-    private final GridLayout lab1VariantChooserContent = new GridLayout(2, 2);
     private final AbsoluteLayout labTestChooserContent = new AbsoluteLayout();
     private final VerticalLayout labTestChooserButtons = new VerticalLayout();
-    private final Window lab1VariantChooser = new Window("Choose lab 1 variant", lab1VariantChooserContent);
     private final Window labTestChooser = new Window("Choose lab for test", labTestChooserContent);
     private final VerticalLayout labPresentationSelectContent = new VerticalLayout();
     private final PopupView labPresentationSelectView = new PopupView(null, labPresentationSelectContent);
@@ -115,75 +107,29 @@ public class LabChooserView extends VerticalLayout implements View {
         logo.setSizeFull();
         logo.setWidth(400.0F, Unit.PIXELS);
 
-        lab1Button.setCaption(i18N.get("lab1.title"));
-        lab1Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        lab1Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
-        lab1Button.addClickListener(event ->  UI.getCurrent().addWindow(lab1VariantChooser));
+        createLabButton(lab1Button, i18N.get("lab1.title"), event ->  labTypeSelectorWindow.show(
+                new LabTypeSelectorWindow.LabTypeSelectorWindowSettings(Lab1RandomDataView.NAME, Lab1ExperimentView.NAME)));
 
-        lab2Button.setCaption(i18N.get("lab2.title"));
-        lab2Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        lab2Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
-        lab1Button.addClickListener(event ->  UI.getCurrent().addWindow(lab1VariantChooser));
+        createLabButton(lab2Button, i18N.get("lab2.title"), event ->  labTypeSelectorWindow.show(
+                new LabTypeSelectorWindow.LabTypeSelectorWindowSettings(Lab2RandomDataView.NAME, Lab2ExperimentView.NAME)));
 
-        lab1RandomDataButton.setCaption(i18N.get("lab.random-data.title"));
-        lab1RandomDataButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        lab1RandomDataButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
-        lab1RandomDataButton.addClickListener(event -> {navigator.navigateTo(Lab1RandomDataView.NAME); lab1VariantChooser.close();});
+        createLabButton(lab3Button, i18N.get("lab3.title"), event ->  navigator.navigateTo(Lab3View.NAME));
 
-        lab1ExperimentButton.setCaption(i18N.get("lab.experiment.title"));
-        lab1ExperimentButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        lab1ExperimentButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
-        lab1ExperimentButton.addClickListener(event -> {navigator.navigateTo(Lab1ExperimentView.NAME); lab1VariantChooser.close();});
+        createLabButton(lab1TestButton, i18N.get("lab1.test.title"), event -> {navigator.navigateTo(Lab1TestView.NAME); labTestChooser.close();});
 
-        lab1VariantChooser.setModal(true);
-        lab1VariantChooser.setWidth(500.0F, Unit.PIXELS);
-        lab1VariantChooser.setHeight(300.0F, Unit.PIXELS);
-        lab1VariantChooser.setCaption(i18N.get("lab.choose.title"));
-        lab1VariantChooserContent.setSizeFull();
-        lab1VariantChooserContent.setRowExpandRatio(0, 10.0F);
-        lab1VariantChooserContent.setRowExpandRatio(1, 1.0F);
-        lab1VariantChooserContent.addComponent(lab1RandomDataButton, 0, 1, 0, 1);
-        lab1VariantChooserContent.addComponent(lab1ExperimentButton, 1, 1, 1, 1);
+        createLabButton(lab2TestButton, i18N.get("lab2.test.title"), event -> {navigator.navigateTo(Lab2TestView.NAME); labTestChooser.close();});
 
-        lab3Button.setCaption(i18N.get("lab3.title"));
-        lab3Button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        lab3Button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
-        lab3Button.addClickListener(event -> navigator.navigateTo(Lab3View.NAME));
+        createLabButton(lab3TestButton, i18N.get("lab3.test.title"), event -> {navigator.navigateTo(Lab3TestView.NAME); labTestChooser.close();});
 
-        lab1TestButton.setCaption(i18N.get("lab1.test.title"));
-        lab1TestButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        lab1TestButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
-        lab1TestButton.addClickListener(event -> {navigator.navigateTo(Lab1TestView.NAME); labTestChooser.close();});
+        createLabButton(labDefenceButton, i18N.get("labchooser.defence"), event ->  UI.getCurrent().addWindow(labTestChooser));
 
-        lab2TestButton.setCaption(i18N.get("lab2.test.title"));
-        lab2TestButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        lab2TestButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
-        lab2TestButton.addClickListener(event -> {navigator.navigateTo(Lab2TestView.NAME); labTestChooser.close();});
-
-        lab3TestButton.setCaption(i18N.get("lab3.test.title"));
-        lab3TestButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        lab3TestButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
-        lab3TestButton.addClickListener(event -> {navigator.navigateTo(Lab3TestView.NAME); labTestChooser.close();});
-
-        lab1PresentationButton.setCaption(i18N.get("labchooser.lab-content-1"));
-        lab2PresentationButton.setCaption(i18N.get("labchooser.lab-content-2"));
-        lab3PresentationButton.setCaption(i18N.get("labchooser.lab-content-3"));
+        createPresentationButton(lab1PresentationButton, i18N.get("labchooser.lab-content-1"), 1);
+        createPresentationButton(lab2PresentationButton, i18N.get("labchooser.lab-content-2"), 2);
+        createPresentationButton(lab3PresentationButton, i18N.get("labchooser.lab-content-3"), 3);
         downloadPresentationButton.setCaption(i18N.get("labchooser.lab-content-download"));
-        lab1PresentationButton.setHeight(45.0F, Unit.PIXELS);
-        lab2PresentationButton.setHeight(45.0F, Unit.PIXELS);
-        lab3PresentationButton.setHeight(45.0F, Unit.PIXELS);
         downloadPresentationButton.setHeight(45.0F, Unit.PIXELS);
-        lab1PresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        lab2PresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        lab3PresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         downloadPresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        lab1PresentationButton.setSizeFull();
-        lab2PresentationButton.setSizeFull();
-        lab3PresentationButton.setSizeFull();
         downloadPresentationButton.setSizeFull();
-        lab1PresentationButton.addClickListener(event -> gallery.showGallery(presentationService.getPresentationSlides(1), presentationService.getPresentationOptions()));
-        lab2PresentationButton.addClickListener(event -> gallery.showGallery(presentationService.getPresentationSlides(2), presentationService.getPresentationOptions()));
-        lab3PresentationButton.addClickListener(event -> gallery.showGallery(presentationService.getPresentationSlides(3), presentationService.getPresentationOptions()));
 
         FileDownloader fileDownloader = new FileDownloader(new StreamResource(() ->
                 new ByteArrayInputStream(resourceService.getZipFolder(new OneFolderIterator("content/lab3/presentation"))),
@@ -209,11 +155,6 @@ public class LabChooserView extends VerticalLayout implements View {
         labTestChooserButtons.addComponent(lab1TestButton);
         labTestChooserButtons.addComponent(lab2TestButton);
         labTestChooserButtons.addComponent(lab3TestButton);
-
-        labDefenceButton.setCaption(i18N.get("labchooser.defence"));
-        labDefenceButton.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
-        labDefenceButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
-        labDefenceButton.addClickListener(event ->  UI.getCurrent().addWindow(labTestChooser));
 
         labContentButton.setCaption(i18N.get("labchooser.lab-content"));
         //labContentButton.setSizeFull();
@@ -277,5 +218,20 @@ public class LabChooserView extends VerticalLayout implements View {
     private void setTestButtonSate(NativeButton button, boolean enabled) {
         setButtonSate(button, enabled);
         button.setDescription(enabled ? "" : i18N.get("test.lab-not-completed"));
+    }
+
+    private void createLabButton(Button button, String title, Button.ClickListener listener) {
+        button.setCaption(title);
+        button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
+        button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
+        button.addClickListener(listener);
+    }
+
+    private void createPresentationButton(Button button, String title, int labNumber) {
+        button.setCaption(title);
+        button.setHeight(45.0F, Unit.PIXELS);
+        button.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        button.setSizeFull();
+        button.addClickListener(event -> gallery.showGallery(presentationService.getPresentationSlides(labNumber), presentationService.getPresentationOptions()));
     }
 }

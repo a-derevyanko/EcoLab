@@ -1,10 +1,6 @@
 package org.ekolab.client.vaadin.server;
 
-import com.vaadin.server.CustomizedSystemMessages;
-import com.vaadin.server.DeploymentConfiguration;
-import com.vaadin.server.ServiceException;
-import com.vaadin.server.SystemMessagesProvider;
-import com.vaadin.server.VaadinServletService;
+import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

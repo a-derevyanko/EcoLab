@@ -1,5 +1,6 @@
 package org.ekolab.server;
 
+import org.ekolab.server.service.api.ConfigurationCommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
@@ -7,14 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import java.util.Arrays;
 
 @SpringBootApplication
 @ComponentScan(basePackageClasses = {ServerApplication.class})
@@ -29,16 +27,13 @@ public class ServerApplication extends SpringBootServletInitializer implements W
      * @param args аргументы запуска
      */
     public static void main(String... args) {
-        ServerApplication serverApplication = new ServerApplication();
-        ApplicationContext ctx = serverApplication.configure(new SpringApplicationBuilder()).run(args);
+        run(new ServerApplication(), args);
+    }
 
-        LOGGER.info("Let's inspect the beans provided by Spring Boot:");
-
-        String[] beanNames = ctx.getBeanDefinitionNames();
-        Arrays.sort(beanNames);
-        for (String beanName : beanNames) {
-            System.out.println(beanName);
-        }
+    protected static void run(ServerApplication application, String... args) {
+        application.configure(new SpringApplicationBuilder()). // Конфигурация
+                run(args). // Запуск приложения
+                getBean(ConfigurationCommonService.class).printApplicationBeanNames(); // Печать имён бинов
     }
 
     /**

@@ -190,6 +190,6 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     }
 
     private void showInitialData() {
-        initialDataWindow.show(binder.getBean().getVariant(), labService);
+        initialDataWindow.show(new InitialDataWindow.InitialDataWindowSettings(binder.getBean().getVariant(), labService));
     }
 }

@@ -5,13 +5,7 @@ import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
@@ -34,7 +28,7 @@ import java.util.Map;
 @SpringComponent
 @UIScope
 @Profile(Profiles.ADDITIONS.EMAIL_NOT_ACTIVE)
-public class InitialDataWindow extends Window {
+public class InitialDataWindow extends BaseEkoLabWindow<InitialDataWindow.InitialDataWindowSettings> {
 
     // ---------------------------- Графические компоненты --------------------
     protected final VerticalLayout content = new VerticalLayout();
@@ -42,15 +36,11 @@ public class InitialDataWindow extends Window {
     protected final Button printDataButton = new Button("Print initial data", VaadinIcons.PRINT);
     protected final Grid<Map.Entry<String, String>> valuesGrid = new Grid<>();
 
-    protected LabVariant variant;
-
-    protected LabService<?> labService;
-
     @Autowired
     protected I18N i18N;
 
     @PostConstruct
-    public void init() {
+    protected void init() {
         setCaption(i18N.get("labwizard.initial-data"));
         setContent(content);
         setHeight(80.0F, Unit.PERCENTAGE);
@@ -69,27 +59,43 @@ public class InitialDataWindow extends Window {
         valuesGrid.addColumn(Map.Entry::getValue).setCaption(i18N.get("labwizard.initial-data-value"));
 
         new BrowserWindowOpener(new StreamResource(() ->
-                new ByteArrayInputStream(labService.printInitialData(variant, UI.getCurrent().getLocale())),
+                new ByteArrayInputStream(settings.labService.printInitialData(settings.variant, UI.getCurrent().getLocale())),
                 "initialData.pdf")).extend(printDataButton);
         center();
     }
 
-    public void show(LabVariant variant, LabService<?> labService) {
-        this.variant = variant;
-        this.labService = labService;
-        if (!UI.getCurrent().getWindows().contains(this)) {
-            Map<String, String> values = new HashMap<>();
-            for (Field field : variant.getClass().getDeclaredFields()) {
-                ReflectionUtils.makeAccessible(field);
+    @Override
+    protected void beforeShow() {
+        Map<String, String> values = new HashMap<>();
+        for (Field field : settings.variant.getClass().getDeclaredFields()) {
+            ReflectionUtils.makeAccessible(field);
 
-                Object value = ReflectionUtils.getField(field, variant);
-                String name = i18N.get(field.getName());
-                // Т. к. Grid до сих пор не поддерживает ячейки из нескольких строк, заменяем на пробелы все переходы на новую строку
-                values.put(name.replaceAll("<br>", " "), value.getClass().isEnum() ? i18N.get(value.getClass().getSimpleName()
-                        + '.' + ((Enum<?>) value).name()) : String.valueOf(ReflectionUtils.getField(field, variant)));
-            }
-            valuesGrid.setItems(values.entrySet());
-            UI.getCurrent().addWindow(this);
+            Object value = ReflectionUtils.getField(field, settings.variant);
+            String name = i18N.get(field.getName());
+            // Т. к. Grid до сих пор не поддерживает ячейки из нескольких строк, заменяем на пробелы все переходы на новую строку
+            values.put(name.replaceAll("<br>", " "), value.getClass().isEnum() ? i18N.get(value.getClass().getSimpleName()
+                    + '.' + ((Enum<?>) value).name()) : String.valueOf(ReflectionUtils.getField(field, settings.variant)));
+        }
+        valuesGrid.setItems(values.entrySet());
+
+    }
+
+    public static class InitialDataWindowSettings implements EkoLabWindow.WindowSettings {
+        private final LabVariant variant;
+
+        private final LabService<?> labService;
+
+        public InitialDataWindowSettings(LabVariant variant, LabService<?> labService) {
+            this.variant = variant;
+            this.labService = labService;
+        }
+
+        public LabVariant getVariant() {
+            return variant;
+        }
+
+        public LabService<?> getLabService() {
+            return labService;
         }
     }
 }
