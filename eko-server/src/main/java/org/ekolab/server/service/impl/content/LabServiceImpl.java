@@ -180,7 +180,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
      * @return тестовые вопросы
      */
     @Override
-    @Cacheable("LAB_TEST")
+    @Cacheable(value = "LAB_TEST", key = "#root.targetClass.simpleName")
     public LabTest getLabTest(Locale locale) {
         LabTest test = new LabTest();
         test.setQuestions(labDao.getTestQuestions(locale));
@@ -222,13 +222,13 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
     }
 
     @Override
-    @Cacheable("COMPLETED_TEST")
+    @Cacheable(value = "COMPLETED_TEST", key = "#root.targetClass.simpleName.concat(#userName)")
     public boolean isTestCompleted(String userName) {
         return labDao.isTestCompleted(userName);
     }
 
     @Override
-    @CacheEvict("COMPLETED_TEST")
+    @CacheEvict(value = "COMPLETED_TEST", key = "#root.targetClass.simpleName.concat(#userName)")
     public void setTestCompleted(String userName) {
         labDao.setTestCompleted(userName);
     }
