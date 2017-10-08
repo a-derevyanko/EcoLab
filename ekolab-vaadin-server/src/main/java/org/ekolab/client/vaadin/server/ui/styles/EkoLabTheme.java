@@ -44,6 +44,9 @@ public class EkoLabTheme extends ValoTheme {
     public static final String BUTTON_MULTILINE = "multiline";
 
     public static final String BUTTON_VARIANT_CHOOSER = "variant-chooser";
+
+    public static final String BUTTON_TEST_VARIANT_CHOOSER = "test-variant-chooser";
+
     public static final String BUTTON_CHOOSER = "chooser";
 
     public static final String BUTTON_DISABLED = "disabled";
@@ -51,10 +54,14 @@ public class EkoLabTheme extends ValoTheme {
     //public static final String BUTTON_LABWIZARD_BACK = "labwizard-button-back";
 
 
-    // ---------------------- Изобржения -------------------------
+    // ---------------------- Изображения -------------------------
     public static final String IMAGE_TEXT_LOGO = "textLogo.svg";
 
     public static final String IMAGE_LOGO = "logo.svg";
+
+    public static final String EXPERIMENT_TYPE = "experimentType.svg";
+
+    public static final String RANDOM_DATA_TYPE = "randomDataType.svg";
 
     public static final String IMAGE_LOGO_CROP = "logoCrop.svg";
 

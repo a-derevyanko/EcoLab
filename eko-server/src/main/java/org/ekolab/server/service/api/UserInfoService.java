@@ -19,11 +19,11 @@ public interface UserInfoService extends UserDetailsManager, GroupManager, UserD
      * Изменяет данные пользователя
      * @param userInfo данные пользователя
      */
-    void updateUserInfo(UserInfo userInfo);
+    UserInfo updateUserInfo(UserInfo userInfo);
 
     /**
      * Создаёт данные пользователя
      * @param userInfo данные пользователя
      */
-    void createUserInfo(UserInfo userInfo);
+    UserInfo createUserInfo(UserInfo userInfo);
 }

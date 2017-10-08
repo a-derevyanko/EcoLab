@@ -115,11 +115,11 @@ public class LabChooserView extends VerticalLayout implements View {
 
         createLabButton(lab3Button, i18N.get("lab3.title"), event ->  navigator.navigateTo(Lab3View.NAME));
 
-        createLabButton(lab1TestButton, i18N.get("lab1.test.title"), event -> {navigator.navigateTo(Lab1TestView.NAME); labTestChooser.close();});
+        createLabTestButton(lab1TestButton, i18N.get("lab1.test.title"), event -> {navigator.navigateTo(Lab1TestView.NAME); labTestChooser.close();});
 
-        createLabButton(lab2TestButton, i18N.get("lab2.test.title"), event -> {navigator.navigateTo(Lab2TestView.NAME); labTestChooser.close();});
+        createLabTestButton(lab2TestButton, i18N.get("lab2.test.title"), event -> {navigator.navigateTo(Lab2TestView.NAME); labTestChooser.close();});
 
-        createLabButton(lab3TestButton, i18N.get("lab3.test.title"), event -> {navigator.navigateTo(Lab3TestView.NAME); labTestChooser.close();});
+        createLabTestButton(lab3TestButton, i18N.get("lab3.test.title"), event -> {navigator.navigateTo(Lab3TestView.NAME); labTestChooser.close();});
 
         createLabButton(labDefenceButton, i18N.get("labchooser.defence"), event ->  UI.getCurrent().addWindow(labTestChooser));
 
@@ -224,6 +224,13 @@ public class LabChooserView extends VerticalLayout implements View {
         button.setCaption(title);
         button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
         button.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
+        button.addClickListener(listener);
+    }
+
+    private void createLabTestButton(Button button, String title, Button.ClickListener listener) {
+        button.setCaption(title);
+        button.setStyleName(EkoLabTheme.BUTTON_MULTILINE);
+        button.addStyleName(EkoLabTheme.BUTTON_TEST_VARIANT_CHOOSER);
         button.addClickListener(listener);
     }
 

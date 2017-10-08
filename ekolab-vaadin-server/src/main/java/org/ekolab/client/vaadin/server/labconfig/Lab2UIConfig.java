@@ -2,9 +2,9 @@ package org.ekolab.client.vaadin.server.labconfig;
 
 import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.ViewScope;
-import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
 import org.ekolab.server.model.content.lab2.Lab2Data;
@@ -32,7 +32,7 @@ public class Lab2UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterLayout<Lab2Data> parameterLayout2(
+    public ParameterLayout<Lab2Data, Lab2Variant> parameterLayout2(
             Lab2Service labService,
             I18N i18N,
             ResourceService resourceService,
@@ -43,7 +43,7 @@ public class Lab2UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterWithFormulaeLayout<Lab2Data> parameterWithFormulaeLayout2(
+    public ParameterWithFormulaeLayout<Lab2Data, Lab2Variant> parameterWithFormulaeLayout2(
             Lab2Service labService,
             I18N i18N,
             ResourceService resourceService,

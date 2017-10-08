@@ -1,6 +1,9 @@
 package org.ekolab.server.dao.api.content;
 
+import org.ekolab.server.model.StudentTeam;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by 777Al on 22.05.2017.
@@ -8,11 +11,17 @@ import java.io.Serializable;
 public interface StudentInfoDao extends Serializable {
     String getStudentGroup(String userName);
 
-    String getStudentTeam(String userName);
+    StudentTeam getStudentTeam(String userName);
+
+    List<String> getTeamMembers(Integer teamNumber);
 
     void updateStudentGroup(String userName, String group);
 
-    void updateStudentTeam(String userName, String team);
+    void updateStudentTeam(String userName, Integer number);
+
+    void addTeacherToStudent(String studentLogin, String teacherLogin);
+
+    String getStudentTeacher(String studentLogin);
 
     /**
      * Создаёт студенческую группу
@@ -22,9 +31,9 @@ public interface StudentInfoDao extends Serializable {
 
     /**
      * Создаёт студенческую бригаду
-     * @param name название
+     * @param number номер
      */
-    void createStudentTeam(String name);
+    void createStudentTeam(Integer number);
 
     /**
      * Переименовывает студенческую группу
@@ -32,11 +41,4 @@ public interface StudentInfoDao extends Serializable {
      * @param newName новое название
      */
     void renameStudentGroup(String name, String newName);
-
-    /**
-     * Переименовывает студенческую бригаду
-     * @param name название
-     * @param newName новое название
-     */
-    void renameStudentTeam(String name, String newName);
 }

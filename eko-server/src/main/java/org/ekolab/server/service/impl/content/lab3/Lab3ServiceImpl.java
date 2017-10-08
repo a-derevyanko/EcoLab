@@ -14,6 +14,7 @@ import org.ekolab.server.model.content.lab3.UnitOutput;
 import org.ekolab.server.model.content.lab3.WindDirection;
 import org.ekolab.server.service.api.content.LabChartType;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
+import org.ekolab.server.service.api.content.lab3.Lab3ResourceService;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
 import org.ekolab.server.service.impl.content.LabServiceImpl;
@@ -33,11 +34,24 @@ import java.util.Map;
 @Service
 public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> implements Lab3Service {
     @Autowired
-    private IsoLineChartService isoLineChartService;
+    private final IsoLineChartService isoLineChartService;
 
     @Autowired
-    public Lab3ServiceImpl(Lab3Dao lab3Dao) {
+    private final Lab3ResourceService lab3ResourceService;
+
+    @Autowired
+    public Lab3ServiceImpl(Lab3Dao lab3Dao, IsoLineChartService isoLineChartService, Lab3ResourceService lab3ResourceService) {
         super(lab3Dao);
+        this.isoLineChartService = isoLineChartService;
+        this.lab3ResourceService = lab3ResourceService;
+    }
+
+    @Override
+    protected Map<String, Object> getInitialDataWithLocalizedValues(Lab3Variant data, Locale locale) {
+        Map<String, Object> map = super.getInitialDataWithLocalizedValues(data, locale);
+        map.put("windDirection", lab3ResourceService.getWindRose(data.getCity()));
+
+        return map;
     }
 
     @Override
@@ -45,16 +59,16 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         Map<String, Object> values = new HashMap<>(super.getValuesForReport(labData, locale));
 
         Image isoLineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ISOLINE).
-                createBufferedImage(PageType.A4.getWidth(), PageType.A4.getHeight()), ImageUtil.ROTATE_90_CW);
+                createBufferedImage(PageType.A4.getHeight(), PageType.A4.getWidth()), ImageUtil.ROTATE_90_CW);
 
         Image so2LineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.SO2).
-                createBufferedImage(PageType.A4.getWidth(), PageType.A4.getHeight()), ImageUtil.ROTATE_90_CW);
+                createBufferedImage(PageType.A4.getHeight(), PageType.A4.getWidth()), ImageUtil.ROTATE_90_CW);
 
         Image ashLineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ASH).
-                createBufferedImage(PageType.A4.getWidth(), PageType.A4.getHeight()), ImageUtil.ROTATE_90_CW);
-        values.put("mapImage-isoline", isoLineImage);
-        values.put("mapImage-So2", so2LineImage);
-        values.put("mapImage-Ash", ashLineImage);
+                createBufferedImage(PageType.A4.getHeight(), PageType.A4.getWidth()), ImageUtil.ROTATE_90_CW);
+        values.put("mapImageIsoline", isoLineImage);
+        values.put("mapImageSo2", so2LineImage);
+        values.put("mapImageAsh", ashLineImage);
         return values;
     }
 
@@ -119,16 +133,21 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
             double vm = 0.65 * Math.cbrt(V1 * dT / labData.getStacksHeight());
             double vM = 1.3 * labData.getStackAverageGasesSpeed() * labData.getStacksDiameter() / labData.getStacksHeight();
 
+            labData.setVM(vm);
+
             double fe = 800 * Math.pow(vM, 3);
 
             if (f < 100 && fe < f) {
                 f = fe;
             }
 
+            labData.setF(f);
+
             double m = f < 100 ?
                     1.0 / (0.67 + 0.1 * Math.sqrt(f) + 0.34 * Math.cbrt(f)) :
                     1.47 / Math.cbrt(f);
 
+            labData.setM(m);
             double n;
             double d;
             if (f >= 100 || dT < 0.1) {
@@ -165,6 +184,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                                 4.95 * vm * (1 + 0.28 * Math.cbrt(f)) :
                                 7 * Math.sqrt(vm) * (1 + 0.28 * Math.cbrt(f));
             }
+
+            labData.setN(n);
+            labData.setD(d);
 
             if (labData.getTemperatureCoefficient() != null &&
                     labData.getHarmfulSubstancesDepositionCoefficient() != null &&

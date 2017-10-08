@@ -5,6 +5,7 @@ import org.ekolab.client.vaadin.server.ui.common.LabWizard;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 
@@ -16,7 +17,7 @@ import java.util.Collection;
  */
 @SpringView(name = Lab3View.NAME)
 @Profile(Profiles.MODE.PROD)
-public class Lab3View extends LabWizard<Lab3Data> {
+public class Lab3View extends LabWizard<Lab3Data, Lab3Variant> {
     public static final String NAME = "lab3view";
 
     @Autowired

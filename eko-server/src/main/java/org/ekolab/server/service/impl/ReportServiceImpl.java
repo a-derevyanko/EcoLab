@@ -3,8 +3,10 @@ package org.ekolab.server.service.impl;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.ReportTemplateBuilder;
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
+import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.builder.tableofcontents.TableOfContentsCustomizerBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalImageAlignment;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.constant.Markup;
 import net.sf.dynamicreports.report.constant.Rotation;
@@ -20,7 +22,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -61,6 +64,11 @@ public class ReportServiceImpl implements ReportService {
 
     private static final TableOfContentsCustomizerBuilder TABLE_OF_CONTENTS_CUSTOMIZER = tableOfContentsCustomizer()
             .setHeadingStyle(0, stl.style(ROOT_STYLE).bold());
+
+    @Override
+    public VerticalListBuilder createImageWithTitle(Image image, String title) {
+        return cmp.verticalList(cmp.text(title).setStyle(BOLD_12_CENTERED_STYLE), cmp.image(image).setStyle(stl.style().setHorizontalImageAlignment(HorizontalImageAlignment.CENTER)));
+    }
 
     @Override
     public ReportTemplateBuilder getReportTemplate(Locale locale) {

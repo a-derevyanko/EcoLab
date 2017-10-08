@@ -11,9 +11,4 @@ import org.springframework.context.annotation.Profile;
 @SpringView(name = DemoLab1ExperimentView.NAME)
 @Profile(value = {Profiles.MODE.DEMO, Profiles.MODE.DEV})
 public class DemoLab1ExperimentView extends Lab1ExperimentView {
-    @Override
-    protected boolean checkJournalFilled() {
-        super.checkJournalFilled();
-        return true;
-    }
 }

@@ -8,7 +8,7 @@ import org.ekolab.server.model.content.lab3.FuelType;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.LabChartType;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
-import org.ekolab.server.service.api.content.lab3.IsoLineResourceService;
+import org.ekolab.server.service.api.content.lab3.Lab3ResourceService;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
 import org.ekolab.server.service.impl.content.equations.ferrari.EquationFunction;
 import org.ekolab.server.service.impl.content.equations.ferrari.QuarticFunction;
@@ -66,7 +66,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
     private MessageSource messageSource;
 
     @Autowired
-    private IsoLineResourceService resourceService;
+    private Lab3ResourceService resourceService;
 
     @Override
     @LogExecutionTime(500)
@@ -253,13 +253,13 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
             seriesNameMarker.setTextAnchor(TextAnchor.HALF_ASCENT_CENTER);
             plot.addAnnotation(seriesNameMarker);
         }
-        plot.setBackgroundImage(resourceService.getBackground(labData.getCity(), labData.getWindDirection()));
+        plot.setBackgroundImage(resourceService.getBackgroundImage(labData.getCity(), labData.getWindDirection()));
         plot.setAxisOffset(new RectangleInsets(4, 4, 4, 4));
 
         // Create chart
         JFreeChart chart = new JFreeChart(chartName,
                 JFreeChart.DEFAULT_TITLE_FONT, plot, false);
-        ImageTitle windRoseTitle = new ImageTitle(resourceService.getWindRose(labData.getCity()), 150, 150,
+        ImageTitle windRoseTitle = new ImageTitle(resourceService.getWindRoseImage(labData.getCity()), 150, 150,
                 Title.DEFAULT_POSITION, Title.DEFAULT_HORIZONTAL_ALIGNMENT,
                 Title.DEFAULT_VERTICAL_ALIGNMENT, Title.DEFAULT_PADDING);
         windRoseTitle.setPosition(RectangleEdge.LEFT);

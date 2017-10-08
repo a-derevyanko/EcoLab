@@ -21,6 +21,7 @@ import org.ekolab.client.vaadin.server.ui.common.UIUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
 import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 
@@ -32,14 +33,14 @@ import static org.ekolab.client.vaadin.server.ui.common.ResourceWindow.show;
 /**
  * Created by 777Al on 08.04.2017.
  */
-public class ParameterLayout<BEAN extends LabData> extends GridLayout implements UIComponent {
+public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> extends GridLayout implements UIComponent {
     protected final String parametersPath;
 
     protected final String additionsPath;
 
     protected final Binder<BEAN> dataBinder;
 
-    protected final LabService<BEAN> labService;
+    protected final LabService<BEAN, V> labService;
 
     protected final I18N i18N;
 
@@ -47,7 +48,7 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
 
     protected final ParameterCustomizer parameterCustomizer;
 
-    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService<BEAN> labService, I18N i18N,
+    public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService<BEAN, V> labService, I18N i18N,
                            ResourceService res, ParameterCustomizer parameterCustomizer) {
         this.parametersPath = parametersPath;
         this.additionsPath = parametersPath + "additions/";
@@ -103,7 +104,7 @@ public class ParameterLayout<BEAN extends LabData> extends GridLayout implements
         Class<?> propClass = ReflectTools.convertPrimitiveType(propertyField.getType());
         boolean readOnly = labService.isFieldCalculated(propertyField);
         AbstractComponent component;
-        if (propClass.isEnum()) {
+        if (Enum.class.isAssignableFrom(propClass)) {
             ComboBox<Enum<?>> comboBox = new ComboBox<>(null, Arrays.asList((Enum<?>[]) propClass.getEnumConstants()));
             comboBox.setItemCaptionGenerator((elem) -> i18N.get(elem.getDeclaringClass().getSimpleName() + '.' + elem.name()));
             comboBox.setTextInputAllowed(false);

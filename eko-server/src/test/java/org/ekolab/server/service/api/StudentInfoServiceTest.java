@@ -1,6 +1,7 @@
 package org.ekolab.server.service.api;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.AbstractTestWithUser;
 import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.UserGroup;
@@ -18,7 +19,7 @@ import org.testng.annotations.Test;
 @EnableAutoConfiguration(exclude = {ManagementWebSecurityAutoConfiguration.class})
 public class StudentInfoServiceTest extends AbstractTestWithUser {
     private final String GROUPNAME = "testGroup_" + RandomStringUtils.randomAlphabetic(5);
-    private final String TEAMNAME = "testTeam_" + RandomStringUtils.randomAlphabetic(5);
+    private final int TEAMNUMBER = RandomUtils.nextInt();
 
     @Autowired
     private StudentInfoService studentInfoService;
@@ -26,31 +27,31 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
     @BeforeClass
     @Override
     public void generateInitialData() {
-        studentInfoService.createStudentTeam(TEAMNAME);
+        studentInfoService.createStudentTeam(TEAMNUMBER);
         studentInfoService.createStudentGroup(GROUPNAME);
         UserInfo userDetails = new UserInfo();
         userDetails.setLogin(USERNAME);
         userDetails.setGroup(UserGroup.STUDENT);
-        studentInfoService.createStudentInfo(userDetails, GROUPNAME, TEAMNAME);
+        studentInfoService.createStudentInfo(userDetails, GROUPNAME, TEAMNUMBER, "");
     }
 
     @Test
     public void testGetStudentInfo() throws Exception {
         StudentInfo studentInfo = studentInfoService.getStudentInfo(USERNAME);
         Assert.assertEquals(studentInfo.getGroup(), GROUPNAME);
-        Assert.assertEquals(studentInfo.getTeam(), TEAMNAME);
+        Assert.assertEquals(studentInfo.getTeam().getNumber(), TEAMNUMBER);
     }
 
     @Test
     public void testSaveStudentInfo() throws Exception {
         String newGroupName = GROUPNAME + RandomStringUtils.randomAlphabetic(5);
-        String newTeamName = TEAMNAME + RandomStringUtils.randomAlphabetic(5);
+        int newTeamNumber = TEAMNUMBER + 1;
+        studentInfoService.createStudentTeam(newTeamNumber);
         studentInfoService.renameStudentGroup(GROUPNAME, newGroupName);
-        studentInfoService.renameStudentTeam(TEAMNAME, newTeamName);
-        studentInfoService.updateStudentInfo(userInfoService.getUserInfo(USERNAME), newGroupName, newTeamName);
+        studentInfoService.updateStudentInfo(userInfoService.getUserInfo(USERNAME), newGroupName, newTeamNumber);
         StudentInfo studentInfo = studentInfoService.getStudentInfo(USERNAME);
         Assert.assertEquals(studentInfo.getGroup(), newGroupName);
-        Assert.assertEquals(studentInfo.getTeam(), newTeamName);
+        Assert.assertEquals(studentInfo.getTeam().getNumber(), newTeamNumber);
     }
 
 }

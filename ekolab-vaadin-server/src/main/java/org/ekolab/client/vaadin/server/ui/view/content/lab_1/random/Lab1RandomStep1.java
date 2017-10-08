@@ -18,6 +18,7 @@ import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.common.UIUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
+import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.util.FieldUtils;
@@ -32,7 +33,7 @@ import java.lang.reflect.Field;
 @ViewScope
 public class Lab1RandomStep1 extends VerticalLayout implements LabWizardStep {
     @Autowired
-    private Binder<Lab1Variant> binder;
+    private Binder<Lab1Data> binder;
 
     @Autowired
     private I18N i18N;
@@ -100,7 +101,7 @@ public class Lab1RandomStep1 extends VerticalLayout implements LabWizardStep {
         layout.addComponent(signLabel, 4, row);
         component.setWidth(250.0F, Unit.PIXELS);
         if (component instanceof TextField) {
-            Binder.BindingBuilder<Lab1Variant, String> bindingBuilder = binder.forField((TextField)component).withNullRepresentation("");
+            Binder.BindingBuilder<Lab1Data, String> bindingBuilder = binder.forField((TextField)component).withNullRepresentation("");
             Converter<String, ?> converter = UIUtils.getStringConverter(field, i18N);
             if (converter != null) {
                 bindingBuilder.withConverter(converter).bind(field.getName());

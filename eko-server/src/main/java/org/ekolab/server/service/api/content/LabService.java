@@ -1,10 +1,10 @@
 package org.ekolab.server.service.api.content;
 
-import org.ekolab.server.model.DomainModel;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabVariant;
+import org.ekolab.server.service.impl.content.DataValue;
 import org.jfree.chart.JFreeChart;
 
 import java.lang.reflect.Field;
@@ -12,11 +12,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by 777Al on 26.04.2017.
  */
-public interface LabService<T extends LabData> {
+public interface LabService<T extends LabData<V>, V extends LabVariant> {
     /**
      * Возвращает признак того, что значение поля может быть проверено программой
      * @param field поле
@@ -70,7 +71,9 @@ public interface LabService<T extends LabData> {
      * @param locale язык
      * @return печатный вариант исходных данных в PDF формате
      */
-    byte[] printInitialData(LabVariant variant, Locale locale);
+    byte[] printInitialData(V variant, Locale locale);
+
+    Set<DataValue> getInitialDataValues(V data, Locale locale);
 
     JFreeChart createChart(T labData, Locale locale, LabChartType chartType);
 
@@ -96,8 +99,6 @@ public interface LabService<T extends LabData> {
      * @param userName имя пользователя, прошедшего тест
      */
     void setTestCompleted(String userName);
-
-    Map<String, String> getPrintData(DomainModel data, Locale locale);
 
     int getLabNumber();
 }

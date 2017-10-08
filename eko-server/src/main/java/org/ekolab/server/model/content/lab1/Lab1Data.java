@@ -4,6 +4,7 @@ import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.Validated;
 
 import javax.annotation.Nullable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -15,6 +16,52 @@ public class Lab1Data extends LabData<Lab1Variant> {
      */
     @Nullable
     private String name;
+
+    /**
+     * Температура наружного воздуха
+     */
+    private Integer outsideAirTemperature;
+
+    /**
+     * Высота дымовой трубы
+     */
+    private Double stacksHeight;
+
+    /**
+     * Диаметр дымовой трубы
+     */
+    private Double stacksDiameter;
+
+    /**
+     * Время проведения измерений
+     */
+    private LocalDateTime time;
+
+    /**
+     * Паровая нагрузка котла
+     */
+    private Integer steamProductionCapacity;
+
+    /**
+     * Содержание кислорода в сечении газохода, где проводились измерения
+     */
+    private Double oxygenConcentrationPoint;
+
+
+    /**
+     * Расход природного газа на котел, приведенный к нормальным условиям
+     */
+    private Integer fuelConsumerNormalized;
+
+    /**
+     * Температура уходящих дымовых газов
+     */
+    private Integer stackExitTemperature;
+
+    /**
+     * Концентрация оксидов азота в дымовых газах по результатам измерений
+     */
+    private Integer flueGasNOxConcentration;
 
     /**
      * Коэффициент избытка воздуха в точке измерения
@@ -260,6 +307,78 @@ public class Lab1Data extends LabData<Lab1Variant> {
         this.maximumSurfaceConcentration = maximumSurfaceConcentration;
     }
 
+    public Integer getOutsideAirTemperature() {
+        return outsideAirTemperature;
+    }
+
+    public void setOutsideAirTemperature(Integer outsideAirTemperature) {
+        this.outsideAirTemperature = outsideAirTemperature;
+    }
+
+    public Double getStacksHeight() {
+        return stacksHeight;
+    }
+
+    public void setStacksHeight(Double stacksHeight) {
+        this.stacksHeight = stacksHeight;
+    }
+
+    public Double getStacksDiameter() {
+        return stacksDiameter;
+    }
+
+    public void setStacksDiameter(Double stacksDiameter) {
+        this.stacksDiameter = stacksDiameter;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
+    }
+
+    public Integer getSteamProductionCapacity() {
+        return steamProductionCapacity;
+    }
+
+    public void setSteamProductionCapacity(Integer steamProductionCapacity) {
+        this.steamProductionCapacity = steamProductionCapacity;
+    }
+
+    public Double getOxygenConcentrationPoint() {
+        return oxygenConcentrationPoint;
+    }
+
+    public void setOxygenConcentrationPoint(Double oxygenConcentrationPoint) {
+        this.oxygenConcentrationPoint = oxygenConcentrationPoint;
+    }
+
+    public Integer getFuelConsumerNormalized() {
+        return fuelConsumerNormalized;
+    }
+
+    public void setFuelConsumerNormalized(Integer fuelConsumerNormalized) {
+        this.fuelConsumerNormalized = fuelConsumerNormalized;
+    }
+
+    public Integer getStackExitTemperature() {
+        return stackExitTemperature;
+    }
+
+    public void setStackExitTemperature(Integer stackExitTemperature) {
+        this.stackExitTemperature = stackExitTemperature;
+    }
+
+    public Integer getFlueGasNOxConcentration() {
+        return flueGasNOxConcentration;
+    }
+
+    public void setFlueGasNOxConcentration(Integer flueGasNOxConcentration) {
+        this.flueGasNOxConcentration = flueGasNOxConcentration;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -267,6 +386,15 @@ public class Lab1Data extends LabData<Lab1Variant> {
         if (!super.equals(o)) return false;
         Lab1Data lab1Data = (Lab1Data) o;
         return Objects.equals(name, lab1Data.name) &&
+                Objects.equals(outsideAirTemperature, lab1Data.outsideAirTemperature) &&
+                Objects.equals(stacksHeight, lab1Data.stacksHeight) &&
+                Objects.equals(stacksDiameter, lab1Data.stacksDiameter) &&
+                Objects.equals(time, lab1Data.time) &&
+                Objects.equals(steamProductionCapacity, lab1Data.steamProductionCapacity) &&
+                Objects.equals(oxygenConcentrationPoint, lab1Data.oxygenConcentrationPoint) &&
+                Objects.equals(fuelConsumerNormalized, lab1Data.fuelConsumerNormalized) &&
+                Objects.equals(stackExitTemperature, lab1Data.stackExitTemperature) &&
+                Objects.equals(flueGasNOxConcentration, lab1Data.flueGasNOxConcentration) &&
                 Objects.equals(excessAirRatio, lab1Data.excessAirRatio) &&
                 Objects.equals(flueGasNOxConcentrationNC, lab1Data.flueGasNOxConcentrationNC) &&
                 Objects.equals(excessOfNorms, lab1Data.excessOfNorms) &&
@@ -288,8 +416,6 @@ public class Lab1Data extends LabData<Lab1Variant> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, excessAirRatio, flueGasNOxConcentrationNC, excessOfNorms, flueGasesRate,
-                dryGasesFlowRate, massEmissions, flueGasesSpeed, f, m, u, n, d, harmfulSubstancesDepositionCoefficient,
-                terrainCoefficient, temperatureCoefficient, distanceFromEmissionSource, maximumSurfaceConcentration);
+        return Objects.hash(super.hashCode(), name, outsideAirTemperature, stacksHeight, stacksDiameter, time, steamProductionCapacity, oxygenConcentrationPoint, fuelConsumerNormalized, stackExitTemperature, flueGasNOxConcentration, excessAirRatio, flueGasNOxConcentrationNC, excessOfNorms, flueGasesRate, dryGasesFlowRate, massEmissions, flueGasesSpeed, f, m, u, n, d, harmfulSubstancesDepositionCoefficient, terrainCoefficient, temperatureCoefficient, distanceFromEmissionSource, maximumSurfaceConcentration);
     }
 }

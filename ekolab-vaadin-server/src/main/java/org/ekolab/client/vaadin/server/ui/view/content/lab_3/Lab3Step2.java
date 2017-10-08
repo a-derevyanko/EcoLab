@@ -7,6 +7,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.util.FieldUtils;
 
@@ -23,10 +24,10 @@ public class Lab3Step2 extends HorizontalLayout implements LabWizardStep {
     private I18N i18N;
 
     @Autowired
-    private ParameterLayout<Lab3Data> firstFormLayout;
+    private ParameterLayout<Lab3Data, Lab3Variant> firstFormLayout;
 
     @Autowired
-    private ParameterLayout<Lab3Data> secondFormLayout;
+    private ParameterLayout<Lab3Data, Lab3Variant> secondFormLayout;
 
     @Override
     public void init() throws IOException {

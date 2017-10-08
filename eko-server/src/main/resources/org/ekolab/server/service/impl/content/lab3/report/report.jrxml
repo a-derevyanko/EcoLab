@@ -11,7 +11,7 @@
 	<parameter name="tppOutput" class="java.lang.Integer">
 		<parameterDescription><![CDATA[Мощность ГРЭС]]></parameterDescription>
 	</parameter>
-	<parameter name="numberOfUnits">
+	<parameter name="numberOfUnits" class="java.lang.Integer">
 		<parameterDescription><![CDATA[Число блоков]]></parameterDescription>
 	</parameter>
 	<parameter name="city">
@@ -20,7 +20,7 @@
 	<parameter name="steamProductionCapacity" class="java.lang.Integer">
 		<parameterDescription><![CDATA[Номинальная паропроизводительность одного котла]]></parameterDescription>
 	</parameter>
-	<parameter name="numberOfStacks">
+	<parameter name="numberOfStacks" class="java.lang.Integer">
 		<parameterDescription><![CDATA[Число дымовых труб]]></parameterDescription>
 	</parameter>
 	<parameter name="stacksHeight" class="java.lang.Integer">
@@ -131,8 +131,23 @@
 	<parameter name="terrainCoefficient" class="java.lang.Double">
 		<parameterDescription><![CDATA[Коэффициент η, учитывающий влияние рельефа местности]]></parameterDescription>
 	</parameter>
-	<parameter name="harmfulSubstancesDepositionCoefficient" isForPrompting="false">
+	<parameter name="harmfulSubstancesDepositionCoefficient" isForPrompting="false" class="java.lang.Double">
 		<parameterDescription><![CDATA[Безразмерный коэффициент, учитывающий скорость оседания вредных веществ в атмосферном воздухе]]></parameterDescription>
+	</parameter>
+	<parameter name="f" isForPrompting="false" class="java.lang.Double">
+		<parameterDescription><![CDATA[Параметр f]]></parameterDescription>
+	</parameter>
+	<parameter name="m" isForPrompting="false" class="java.lang.Double">
+		<parameterDescription><![CDATA[Коэффициент m, учитывающий условия выхода газов из дымовой трубы]]></parameterDescription>
+	</parameter>
+	<parameter name="d" isForPrompting="false" class="java.lang.Double">
+		<parameterDescription><![CDATA[Безразмерный коэффициент d]]></parameterDescription>
+	</parameter>
+	<parameter name="VM" isForPrompting="false" class="java.lang.Double">
+		<parameterDescription><![CDATA[Параметр υ_м]]></parameterDescription>
+	</parameter>
+	<parameter name="n" isForPrompting="false" class="java.lang.Double">
+		<parameterDescription><![CDATA[Коэффициент n,учитывающий условия выхода газов из дымовой трубы]]></parameterDescription>
 	</parameter>
 	<parameter name="no2MAC" class="java.lang.Double">
 		<parameterDescription><![CDATA[ПДК NO2]]></parameterDescription>
@@ -197,10 +212,10 @@
 	<parameter name="teacherName">
 		<parameterDescription><![CDATA[Имя преподавателя]]></parameterDescription>
 	</parameter>
-	<parameter name="teamNumber">
+	<parameter name="teamNumber" class="java.lang.Integer">
 		<parameterDescription><![CDATA[номер бригады]]></parameterDescription>
 	</parameter>
-	<parameter name="sudentsList">
+	<parameter name="studentsList">
 		<parameterDescription><![CDATA[список студентов, членов бригады]]></parameterDescription>
 	</parameter>
 	<parameter name="mapImageIsoline" class="java.awt.Image">
@@ -235,7 +250,9 @@
 				<text><![CDATA[Москва]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="340" y="560" width="48" height="20" uuid="746ab856-d83d-48ce-9421-e35a474935b6"/>
+				<reportElement x="340" y="560" width="48" height="20" uuid="746ab856-d83d-48ce-9421-e35a474935b6">
+					<printWhenExpression><![CDATA[$P{groupNumber}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
@@ -249,21 +266,27 @@
 				<text><![CDATA[Преподаватель:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="334" y="600" width="54" height="20" uuid="203c0770-6e51-4572-b834-13e1d74f82ba"/>
+				<reportElement x="334" y="600" width="54" height="20" uuid="203c0770-6e51-4572-b834-13e1d74f82ba">
+					<printWhenExpression><![CDATA[$P{teamNumber}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14"/>
 				</textElement>
 				<text><![CDATA[Бригада:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="323" y="620" width="65" height="20" uuid="f80a9665-7e0b-4715-a81f-1250ed357374"/>
+				<reportElement x="323" y="620" width="65" height="20" uuid="f80a9665-7e0b-4715-a81f-1250ed357374">
+					<printWhenExpression><![CDATA[$P{studentsList}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[Студенты:]]></text>
 			</staticText>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="388" y="560" width="109" height="20" uuid="6b6fc859-a003-44c3-8d3f-367fbaaac608"/>
+				<reportElement key="" style="StyleFortableCells" x="388" y="560" width="109" height="20" uuid="6b6fc859-a003-44c3-8d3f-367fbaaac608">
+					<printWhenExpression><![CDATA[$P{groupNumber}!=null]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineWidth="0.0"/>
 				</box>
@@ -283,7 +306,9 @@
 				<textFieldExpression><![CDATA[$P{teacherName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="388" y="600" width="109" height="20" uuid="607cf708-5c57-4836-ab49-03e102de4fc8"/>
+				<reportElement key="" style="StyleFortableCells" x="388" y="600" width="109" height="20" uuid="607cf708-5c57-4836-ab49-03e102de4fc8">
+					<printWhenExpression><![CDATA[$P{teamNumber}!=null]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineWidth="0.0"/>
 				</box>
@@ -293,18 +318,20 @@
 				<textFieldExpression><![CDATA[$P{teamNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="388" y="620" width="109" height="70" uuid="c73906e1-0c74-4d3f-a031-d4f803e3e8f9"/>
+				<reportElement key="" style="StyleFortableCells" x="388" y="620" width="109" height="70" uuid="c73906e1-0c74-4d3f-a031-d4f803e3e8f9">
+					<printWhenExpression><![CDATA[$P{studentsList}!=null]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Left">
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{sudentsList}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{studentsList}]]></textFieldExpression>
 			</textField>
 			<image>
 				<reportElement x="0" y="0" width="497" height="70" uuid="08b4a56d-5f77-45cb-8ed4-d81fc8507067"/>
-				<imageExpression><![CDATA["mainbuilding.png"]]></imageExpression>
+				<imageExpression><![CDATA["org/ekolab/server/service/impl/content/lab3/report/mainbuilding.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement style="Style1" x="0" y="70" width="497" height="20" uuid="775a5057-d5c6-44f5-af61-99f70d3e49c8"/>
@@ -3258,12 +3285,14 @@
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
+				<textFieldExpression><![CDATA[$P{f}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" x="382" y="660" width="115" height="30" uuid="969ea08a-cd11-4ac9-9d53-37acd4038702"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
+				<textFieldExpression><![CDATA[$P{m}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" style="StyleFortableCaption" mode="Opaque" x="382" y="610" width="115" height="30" backcolor="#CFE3FC" uuid="ed1eecc5-0bfa-4561-8b0e-666a3f8cd961"/>
@@ -3383,6 +3412,8 @@
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
+
+				<textFieldExpression><![CDATA[$P{n}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" x="30" y="690" width="352" height="30" uuid="cf4cc673-cca2-4485-a0dc-b904c7c0593a"/>
@@ -3400,6 +3431,7 @@
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
+				<textFieldExpression><![CDATA[$P{VM}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" x="0" y="690" width="30" height="30" uuid="20f0e70e-4a9a-44bd-b5b0-3de3d791ce3b"/>
@@ -3456,6 +3488,7 @@
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
+				<textFieldExpression><![CDATA[$P{d}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" x="0" y="60" width="30" height="20" uuid="6ef51303-91a5-45fd-84f2-aacd3f58c300"/>
@@ -3498,6 +3531,7 @@
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
+				<textFieldExpression><![CDATA[$P{harmfulSubstancesDepositionCoefficient}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" x="0" y="80" width="30" height="30" uuid="37499eac-b364-41f7-ae18-e00ff41c2c2c"/>
@@ -3732,7 +3766,7 @@
 			</textField>
 			<image>
 				<reportElement x="92" y="41" width="310" height="689" uuid="70f68850-9935-4632-b0fb-f7c8477d653e"/>
-				<imageExpression><![CDATA["zadanie3.png"]]></imageExpression>
+				<imageExpression><![CDATA["org/ekolab/server/service/impl/content/lab3/report/task3.png"]]></imageExpression>
 			</image>
 			<break>
 				<reportElement x="0" y="750" width="99" height="1" uuid="3926ae04-852b-42e6-8a86-6b454e12a11d"/>
@@ -3813,7 +3847,7 @@
 			</staticText>
 			<image>
 				<reportElement x="0" y="70" width="497" height="688" uuid="ea731797-ec3a-4368-a991-77eb60eeb2af"/>
-				<imageExpression><![CDATA["formula.png"]]></imageExpression>
+				<imageExpression><![CDATA["org/ekolab/server/service/impl/content/lab3/report/formulae.png"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement key="" x="510" y="740" width="30" height="18" uuid="34d735e3-af7e-4f0e-9186-b083753a4e93"/>

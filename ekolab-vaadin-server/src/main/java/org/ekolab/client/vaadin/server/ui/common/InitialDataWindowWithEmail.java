@@ -11,6 +11,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.common.Profiles;
+import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -24,7 +26,7 @@ import javax.annotation.PostConstruct;
 @SpringComponent
 @UIScope
 @Profile(Profiles.ADDITIONS.EMAIL)
-public class InitialDataWindowWithEmail extends InitialDataWindow {
+public class InitialDataWindowWithEmail<T extends LabData<V>, V extends LabVariant> extends InitialDataWindow<T, V> {
     private final Button sendDataButton = new Button("Send initial data to email", VaadinIcons.AT);
     private final TextField emailField = new TextField();
 

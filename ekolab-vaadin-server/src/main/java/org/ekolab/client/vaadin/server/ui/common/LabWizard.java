@@ -15,6 +15,7 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
 import org.ekolab.server.common.Role;
 import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,7 +29,7 @@ import java.util.Collection;
  * Created by Андрей on 19.03.2017.
  */
 @RolesAllowed(Role.STUDENT)
-public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implements AutoSavableView {
+public abstract class LabWizard<T extends LabData<V>, V extends LabVariant> extends Wizard implements AutoSavableView {
     // ---------------------------- Графические компоненты --------------------
     protected final GridLayout buttons = new GridLayout(3, 1);
     protected final Button saveButton = new Button("Save", VaadinIcons.CLOUD_DOWNLOAD_O);
@@ -47,16 +48,16 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     protected Authentication currentUser;
 
     @Autowired
-    protected InitialDataWindow initialDataWindow;
+    protected InitialDataWindow<T, V> initialDataWindow;
 
     @Autowired
-    protected LabService<BEAN> labService;
+    protected LabService<T, V> labService;
 
     @Autowired
-    protected Binder<BEAN> binder;
+    protected Binder<T> binder;
 
     @Autowired
-    protected LabFinishedWindow<BEAN> labFinishedWindow;
+    protected LabFinishedWindow<T, V> labFinishedWindow;
 
     @Override
     public void init() throws Exception {
@@ -124,7 +125,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     @Override
     public boolean saveData() {
         if (hasUnsavedData()) {
-            BinderValidationStatus<BEAN> validationStatus = binder.validate();
+            BinderValidationStatus<T> validationStatus = binder.validate();
             if (validationStatus.isOk()) {
                 binder.readBean(labService.updateLab(binder.getBean()));
                 hasChanges = binder.hasChanges();
@@ -146,9 +147,9 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        BEAN uncompletedLabData = labService.getLastUncompletedLabByUser(currentUser.getName());
+        T uncompletedLabData = labService.getLastUncompletedLabByUser(currentUser.getName());
         if (uncompletedLabData == null) {
-            BEAN newLabData = labService.startNewLab(currentUser.getName());
+            T newLabData = labService.startNewLab(currentUser.getName());
             binder.setBean(newLabData);
         } else {
             binder.setBean(uncompletedLabData);
@@ -164,8 +165,7 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
 
     @Override
     public void finish() {
-        binder.getBean().setCompleted(true);
-        hasChanges = true;
+        beforeFinish();
         if (saveData()) {
             removeAllWindows();
             super.finish();
@@ -190,6 +190,11 @@ public abstract class LabWizard<BEAN extends LabData<?>> extends Wizard implemen
     }
 
     private void showInitialData() {
-        initialDataWindow.show(new InitialDataWindow.InitialDataWindowSettings(binder.getBean().getVariant(), labService));
+        initialDataWindow.show(new InitialDataWindow.InitialDataWindowSettings<T, V>(binder.getBean().getVariant(), labService));
+    }
+
+    protected void beforeFinish() {
+        binder.getBean().setCompleted(true);
+        hasChanges = true;
     }
 }

@@ -2,6 +2,7 @@ package org.ekolab.server.service.impl;
 
 import org.ekolab.server.dao.api.content.StudentInfoDao;
 import org.ekolab.server.model.StudentInfo;
+import org.ekolab.server.model.StudentTeam;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.StudentInfoService;
@@ -11,10 +12,13 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.ekolab.server.CacheContext.STUDENT_INFO_CACHE;
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
+import static org.ekolab.server.CacheContext.*;
 
 /**
  * Created by 777Al on 24.05.2017.
@@ -28,42 +32,52 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     private StudentInfoDao studentInfoDao;
 
     @Override
-    public boolean isStudent(UserInfo userInfo) {
-        return userInfo.getGroup() == UserGroup.STUDENT;
-    }
-
-    @Override
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    @Transactional(readOnly = true)
     @Cacheable(cacheNames = STUDENT_INFO_CACHE, key = "#userName")
+    @Nullable
     public StudentInfo getStudentInfo(String userName) {
-        StudentInfo studentInfo = new StudentInfo();
-        studentInfo.setGroup(studentInfoDao.getStudentGroup(userName));
-        studentInfo.setTeam(studentInfoDao.getStudentTeam(userName));
-        return studentInfo;
+        String group = studentInfoDao.getStudentGroup(userName);
+        if (group == null) {
+            return null;
+        } else {
+            StudentInfo studentInfo = new StudentInfo();
+            studentInfo.setGroup(group);
+            studentInfo.setTeam(studentInfoDao.getStudentTeam(userName));
+            return studentInfo;
+        }
     }
 
     @Override
     @Transactional
     @CachePut(cacheNames = STUDENT_INFO_CACHE, key = "#userInfo.login")
-    public StudentInfo updateStudentInfo(UserInfo userInfo, String group, String team) {
+    @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, allEntries = true)
+    @Deprecated // todo подумать, нужен ли этот метод. кэш для getTeamMembers() плохо будет работаь
+    public StudentInfo updateStudentInfo(UserInfo userInfo, String group, Integer number) {
         userInfoService.updateUserInfo(userInfo);
         studentInfoDao.updateStudentGroup(userInfo.getLogin(), group);
-        studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
+        studentInfoDao.updateStudentTeam(userInfo.getLogin(), number);
         StudentInfo studentInfo = new StudentInfo();
         studentInfo.setGroup(group);
+        StudentTeam team = new StudentTeam();
+        team.setNumber(number);
         studentInfo.setTeam(team);
         return studentInfo;
     }
 
     @Override
     @Transactional
-    @CachePut(cacheNames = STUDENT_INFO_CACHE, key = "#userInfo.login")
-    public StudentInfo createStudentInfo(UserInfo userInfo, String group, String team) {
+    @CachePut(cacheNames = {STUDENT_INFO_CACHE, STUDENT_TEACHERS_CACHE}, key = "#userInfo.login")
+    @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, key = "#number")
+    @NotNull
+    public StudentInfo createStudentInfo(@NotNull UserInfo userInfo, @NotNull String group, @NotNull Integer number, @NotNull String teacherName) {
         userInfoService.createUserInfo(userInfo);
+        studentInfoDao.addTeacherToStudent(userInfo.getLogin(), teacherName);
         studentInfoDao.updateStudentGroup(userInfo.getLogin(), group);
-        studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
+        studentInfoDao.updateStudentTeam(userInfo.getLogin(), number);
         StudentInfo studentInfo = new StudentInfo();
         studentInfo.setGroup(group);
+        StudentTeam team = new StudentTeam();
+        team.setNumber(number);
         studentInfo.setTeam(team);
         return studentInfo;
     }
@@ -76,8 +90,8 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
     @Override
     @Transactional
-    public void createStudentTeam(String name) {
-        studentInfoDao.createStudentTeam(name);
+    public void createStudentTeam(Integer number) {
+        studentInfoDao.createStudentTeam(number);
     }
 
     @Override
@@ -88,9 +102,16 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
-    @Transactional
-    @CacheEvict(cacheNames = STUDENT_INFO_CACHE, allEntries = true)
-    public void renameStudentTeam(String name, String newName) {
-        studentInfoDao.renameStudentTeam(name, newName);
+    @Cacheable(STUDENT_TEACHERS_CACHE)
+    @Transactional(readOnly = true)
+    public String getStudentTeacher(String studentLogin) {
+        return studentInfoDao.getStudentTeacher(studentLogin);
+    }
+
+    @Override
+    @Cacheable(TEAM_MEMBERS_CACHE)
+    @Transactional(readOnly = true)
+    public List<String> getTeamMembers(Integer teamNumber) {
+        return studentInfoDao.getTeamMembers(teamNumber);
     }
 }

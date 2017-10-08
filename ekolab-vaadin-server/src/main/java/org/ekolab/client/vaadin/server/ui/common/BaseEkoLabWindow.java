@@ -17,6 +17,7 @@ public abstract class BaseEkoLabWindow<T extends EkoLabWindow.WindowSettings> ex
     public void show(T settings) {
         if (!UI.getCurrent().getWindows().contains(this)) {
             this.settings = settings;
+            clear();
             beforeShow();
             UI.getCurrent().addWindow(this);
         }
@@ -26,6 +27,13 @@ public abstract class BaseEkoLabWindow<T extends EkoLabWindow.WindowSettings> ex
      * Действия, выполняемые перед отображением окна
      */
     protected void beforeShow() {
+
+    };
+
+    /**
+     * Очистка компонента
+     */
+    protected void clear() {
 
     };
 }

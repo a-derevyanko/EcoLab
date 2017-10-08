@@ -6,6 +6,8 @@ import org.ekolab.server.service.api.UserInfoService;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
@@ -22,12 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-import static org.ekolab.server.db.h2.public_.Tables.AUTHORITIES;
-import static org.ekolab.server.db.h2.public_.Tables.GROUPS;
-import static org.ekolab.server.db.h2.public_.Tables.GROUP_AUTHORITIES;
-import static org.ekolab.server.db.h2.public_.Tables.GROUP_MEMBERS;
-import static org.ekolab.server.db.h2.public_.Tables.USERS;
-import static org.ekolab.server.db.h2.public_.Tables.USER_AUTHORITIES;
+import static org.ekolab.server.db.h2.public_.Tables.*;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -113,6 +110,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    @Cacheable("USER")
     public UserInfo getUserInfo(String userName) {
         return dsl.select(USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
                 .join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID)).join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID))
@@ -148,7 +146,8 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     }
 
     @Override
-    public void updateUserInfo(UserInfo userInfo) {
+    @CachePut(cacheNames = "USER", key = "#userInfo.login")
+    public UserInfo updateUserInfo(UserInfo userInfo) {
         dsl.update(USERS)
                 .set(USERS.FIRST_NAME, userInfo.getFirstName())
                 .set(USERS.MIDDLE_NAME, userInfo.getMiddleName())
@@ -158,10 +157,12 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
         dsl.update(GROUP_MEMBERS).set(GROUP_MEMBERS.GROUP_ID,
                 dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq(userInfo.getGroup().name())))
                 .where(GROUP_MEMBERS.USER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userInfo.getLogin())))).execute();
+        return userInfo;
     }
 
     @Override
-    public void createUserInfo(UserInfo userInfo) {
+    @CachePut(cacheNames = "USER", key = "#userInfo.login")
+    public UserInfo createUserInfo(UserInfo userInfo) {
         Long userID = dsl.insertInto(USERS)
                 .set(USERS.FIRST_NAME, userInfo.getFirstName())
                 .set(USERS.MIDDLE_NAME, userInfo.getMiddleName())
@@ -175,5 +176,6 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
         dsl.insertInto(GROUP_MEMBERS)
                 .set(GROUP_MEMBERS.GROUP_ID, dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq(userInfo.getGroup().name())))
                 .set(GROUP_MEMBERS.USER_ID, userID).execute();
+        return userInfo;
     }
 }

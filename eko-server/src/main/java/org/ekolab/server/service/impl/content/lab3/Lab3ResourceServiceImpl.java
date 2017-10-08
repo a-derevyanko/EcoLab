@@ -5,7 +5,7 @@ import com.twelvemonkeys.image.ResampleOp;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.content.lab3.City;
 import org.ekolab.server.model.content.lab3.WindDirection;
-import org.ekolab.server.service.api.content.lab3.IsoLineResourceService;
+import org.ekolab.server.service.api.content.lab3.Lab3ResourceService;
 import org.jfree.chart.encoders.EncoderUtil;
 import org.jfree.chart.encoders.ImageFormat;
 import org.slf4j.Logger;
@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,18 +28,24 @@ import java.util.Map;
  * Created by 777Al on 24.04.2017.
  */
 @Service
-public class IsoLineChartResourcesServiceImpl implements IsoLineResourceService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(IsoLineChartResourcesServiceImpl.class);
+public class Lab3ResourceServiceImpl implements Lab3ResourceService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Lab3ResourceServiceImpl.class);
 
     private final Image COMPASS_ARROW = loadImage("map/compass-arrow.svg", 0.5);
 
     private final Map<City, Image> BACKGROUND_CACHE = new HashMap<>(City.values().length);
 
     @Override
+    @Cacheable("WIND_ROSE_URL_CACHE")
+    public URL getWindRose(City city) {
+        return Lab3ResourceServiceImpl.class.getResource("wind/" + city.name() + ".svg");
+    }
+
+    @Override
     @Cacheable("WIND_ROSE_CACHE")
     @LogExecutionTime(200)
-    public Image getWindRose(City city) {
-        try (InputStream is = IsoLineChartResourcesServiceImpl.class.getResourceAsStream("wind/" + city.name() + ".svg")){
+    public Image getWindRoseImage(City city) {
+        try (InputStream is = getWindRose(city).openStream()){
             return new ResampleOp(150, 150, ResampleOp.FILTER_LANCZOS).filter(ImageIO.read(is), null);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -48,7 +55,7 @@ public class IsoLineChartResourcesServiceImpl implements IsoLineResourceService 
     @Override
     @Cacheable("BACKGROUND_CACHE")
     @LogExecutionTime(200)
-    public Image getBackground(City city, WindDirection windDirection) {
+    public Image getBackgroundImage(City city, WindDirection windDirection) {
         Image background = BACKGROUND_CACHE.computeIfAbsent(city, cityName -> loadImage("map/" + city.name() + ".png", -1.0));
 
         double angle = Math.PI + windDirection.ordinal() * (Math.PI / 4.0);
@@ -72,7 +79,7 @@ public class IsoLineChartResourcesServiceImpl implements IsoLineResourceService 
     }
 
     private static Image loadImage(String imageName, double scale) {
-        try (InputStream is = IsoLineChartResourcesServiceImpl.class.getResourceAsStream(imageName)) {
+        try (InputStream is = Lab3ResourceServiceImpl.class.getResourceAsStream(imageName)) {
             Image i = ImageIO.read(is);
             return scale == -1.0 ? i : i.getScaledInstance((int) Math.round(i.getWidth(null) * scale), (int) Math.round(i.getHeight(null) * scale), Image.SCALE_DEFAULT);
         } catch (IOException ex) {

@@ -13,10 +13,7 @@ import org.springframework.context.annotation.Profile;
 @Profile(value = {Profiles.MODE.DEMO, Profiles.MODE.DEV})
 public class DemoLab3View extends Lab3View {
     @Override
-    public void finish() {
-        Notification.show("Данная лабораторная работа не будет помечена как \"Выполненная\", т. к. вы находитесь в демо режиме");
-        removeAllWindows();
-        super.finish();
-        labFinishedWindow.show(binder.getBean(), labService);
+    protected void beforeFinish() {
+        Notification.show("Данная лабораторная работа не будет помечена как \"Выполненная\", т. к. вы находитесь в демо режиме", Notification.Type.WARNING_MESSAGE);
     }
 }

@@ -21,6 +21,7 @@ import org.ekolab.server.common.Role;
 import org.ekolab.server.model.content.*;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.vaadin.teemu.wizards.WizardStep;
 
@@ -37,11 +38,11 @@ public abstract class LabTestWizard extends Wizard implements View {
     private Authentication currentUser;
 
     protected final I18N i18N;
-    protected final LabService<?> labService;
+    protected final LabService<?, ?> labService;
 
     // ---------------------------- Графические компоненты --------------------
 
-    protected LabTestWizard(I18N i18N, LabService<?> labService) {
+    protected LabTestWizard(I18N i18N, LabService<?, ?> labService) {
         this.i18N = i18N;
         this.labService = labService;
     }
@@ -90,6 +91,16 @@ public abstract class LabTestWizard extends Wizard implements View {
         } else {
             ComponentErrorNotification.show(i18N.get("test.not-right", errors));
         }
+    }
+
+    /**
+     * Счётчик времени выполнения теста. На тест отводится 25 минут. По истечении времени отображается
+     * специальное сообщение и все вопросы, на которые не был дан ответ засчитываются как неправильные.
+     * todo реализовать метод
+     */
+    @Scheduled(fixedRate = 25 * 60 * 1000)
+    protected void testExecutionCounter() {
+
     }
 
     private static class LabTestQuestionView extends BaseLabTestQuestionView<RadioButtonGroup<String>> {

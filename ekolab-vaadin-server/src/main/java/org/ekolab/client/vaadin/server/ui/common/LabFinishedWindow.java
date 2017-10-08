@@ -2,7 +2,6 @@ package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileDownloader;
-import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
@@ -15,18 +14,18 @@ import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import java.io.ByteArrayInputStream;
 
 /**
  * Created by 777Al on 20.04.2017.
  */
 @SpringComponent
 @UIScope
-public class LabFinishedWindow<T extends LabData<?>> extends Window {
+public class LabFinishedWindow<T extends LabData<V>, V extends LabVariant> extends Window {
 
     // ---------------------------- Графические компоненты --------------------
     private final VerticalLayout content = new VerticalLayout();
@@ -36,7 +35,7 @@ public class LabFinishedWindow<T extends LabData<?>> extends Window {
 
     private T labData;
 
-    private LabService<T> labService;
+    private LabService<T, V> labService;
 
     @Autowired
     private I18N i18N;
@@ -70,17 +69,15 @@ public class LabFinishedWindow<T extends LabData<?>> extends Window {
         toMainMenuButton.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
         toMainMenuButton.addStyleName(EkoLabTheme.BUTTON_TINY);
 
-        FileDownloader fileDownloader = new FileDownloader(new StreamResource(() ->
-                new ByteArrayInputStream(labService.createReport(labData, UI.getCurrent().getLocale())),
-                "report.pdf"));
-
+        FileDownloader fileDownloader = new FileDownloader(
+                new DownloadStreamResource(() -> labService.createReport(labData, UI.getCurrent().getLocale()), "report.pdf"));
         fileDownloader.extend(saveReportButton);
 
         toMainMenuButton.addClickListener(event -> close());
         center();
     }
 
-    public void show(T labData, LabService<T> labService) {
+    public void show(T labData, LabService<T, V> labService) {
         this.labData = labData;
         this.labService = labService;
         if (!UI.getCurrent().getWindows().contains(this)) {

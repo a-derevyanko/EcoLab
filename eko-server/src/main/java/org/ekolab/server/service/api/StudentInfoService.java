@@ -4,18 +4,12 @@ import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.UserInfo;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by 777Al on 22.05.2017.
  */
 public interface StudentInfoService extends Serializable {
-    /**
-     * Возвращает признак того, что аутентифицированный пользователь является студентом
-     * @param userInfo аутентифицированный пользователь
-     * @return признак того, что аутентифицированный пользователь является студентом
-     */
-    boolean isStudent(UserInfo userInfo);
-
     /**
      * Возвращает данные студента
      * @param userName логин студента
@@ -27,19 +21,20 @@ public interface StudentInfoService extends Serializable {
      * Изменяет данные студента
      * @param userInfo данные пользователя
      * @param group группа студента
-     * @param team бригада студента
+     * @param number бригада студента
      * @return изменённые данные студента
      */
-    StudentInfo updateStudentInfo(UserInfo userInfo, String group, String team);
+    StudentInfo updateStudentInfo(UserInfo userInfo, String group, Integer number);
 
     /**
      * Создаёт нового студента
      * @param userInfo данные пользователя
      * @param group группа студента
-     * @param team бригада студента
+     * @param number бригада студента
+     * @param teacherName преподаватель
      * @return данные студента
      */
-    StudentInfo createStudentInfo(UserInfo userInfo, String group, String team);
+    StudentInfo createStudentInfo(UserInfo userInfo, String group, Integer number, String teacherName);
 
     /**
      * Создаёт студенческую группу
@@ -49,9 +44,9 @@ public interface StudentInfoService extends Serializable {
 
     /**
      * Создаёт студенческую бригаду
-     * @param name название
+     * @param number номер
      */
-    void createStudentTeam(String name);
+    void createStudentTeam(Integer number);
 
     /**
      * Переименовывает студенческую группу
@@ -61,9 +56,11 @@ public interface StudentInfoService extends Serializable {
     void renameStudentGroup(String name, String newName);
 
     /**
-     * Переименовывает студенческую бригаду
-     * @param name название
-     * @param newName новое название
+     *
+     * @param studentLogin
+     * @return
      */
-    void renameStudentTeam(String name, String newName);
+    String getStudentTeacher(String studentLogin);
+
+    List<String> getTeamMembers(Integer teamNumber);
 }
