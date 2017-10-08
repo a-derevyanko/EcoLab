@@ -70,10 +70,10 @@ public class LabTypeSelectorWindow extends BaseEkoLabWindow<LabTypeSelectorWindo
         labTypeChooserContent.setMargin(true);
         labTypeChooserContent.setRowExpandRatio(0, 10.0F);
         labTypeChooserContent.setRowExpandRatio(1, 1.0F);
-        labTypeChooserContent.addComponent(randomDataType, 1, 0, 0, 0);
-        labTypeChooserContent.addComponent(randomDataButton, 1, 1, 0, 1);
-        labTypeChooserContent.addComponent(experimentType, 0, 0, 1, 0);
-        labTypeChooserContent.addComponent(experimentButton, 0, 1, 1, 1);
+        labTypeChooserContent.addComponent(randomDataType, 1, 0, 1, 0);
+        labTypeChooserContent.addComponent(randomDataButton, 1, 1, 1, 1);
+        labTypeChooserContent.addComponent(experimentType, 0, 0, 0, 0);
+        labTypeChooserContent.addComponent(experimentButton, 0, 1, 0, 1);
     }
 
     public static class LabTypeSelectorWindowSettings implements EkoLabWindow.WindowSettings {
