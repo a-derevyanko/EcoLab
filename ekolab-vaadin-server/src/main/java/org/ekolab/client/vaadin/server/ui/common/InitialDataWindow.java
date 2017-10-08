@@ -65,6 +65,8 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
         content.addComponent(valuesGrid);
         content.setExpandRatio(valuesGrid, 1.0F);
         topLayout.addComponent(printDataButton);
+        imagesLayout.setSpacing(true);
+        imagesLayout.setWidth(100.0F, Unit.PERCENTAGE);
         imagesLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         printDataButton.setCaption(i18N.get("labwizard.initial-data-print"));
         printDataButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);

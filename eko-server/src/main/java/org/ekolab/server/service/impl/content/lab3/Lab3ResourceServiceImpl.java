@@ -36,6 +36,12 @@ public class Lab3ResourceServiceImpl implements Lab3ResourceService {
     private final Map<City, Image> BACKGROUND_CACHE = new HashMap<>(City.values().length);
 
     @Override
+    @Cacheable("COAT_OF_ARMS_URL_CACHE")
+    public URL getCoatOfArms(City city) {
+        return Lab3ResourceServiceImpl.class.getResource("coatofarms/" + city.name() + ".png");
+    }
+
+    @Override
     @Cacheable("WIND_ROSE_URL_CACHE")
     public URL getWindRose(City city) {
         return Lab3ResourceServiceImpl.class.getResource("wind/" + city.name() + ".svg");

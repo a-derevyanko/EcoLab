@@ -17,6 +17,7 @@ import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
 import org.ekolab.server.service.api.content.lab3.Lab3ResourceService;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
+import org.ekolab.server.service.impl.content.DataValue;
 import org.ekolab.server.service.impl.content.LabServiceImpl;
 import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -47,9 +49,20 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     }
 
     @Override
+    public Set<DataValue> getInitialDataValues(Lab3Variant data, Locale locale) {
+        Set<DataValue> values = super.getInitialDataValues(data, locale);
+        DataValue cityValue = new DataValue();
+        cityValue.setName(messageSource.getMessage("lab3.initial-data.city", null, locale) + ": " + getFieldValueForPrint(data.getCity(), locale));
+        cityValue.setValue(lab3ResourceService.getCoatOfArms(data.getCity()));
+        values.add(cityValue);
+        return values;
+    }
+
+    @Override
     protected Map<String, Object> getInitialDataWithLocalizedValues(Lab3Variant data, Locale locale) {
         Map<String, Object> map = super.getInitialDataWithLocalizedValues(data, locale);
         map.put("windDirection", lab3ResourceService.getWindRose(data.getCity()));
+        map.remove("city");
 
         return map;
     }
@@ -59,13 +72,13 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         Map<String, Object> values = new HashMap<>(super.getValuesForReport(labData, locale));
 
         Image isoLineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ISOLINE).
-                createBufferedImage(PageType.A4.getHeight(), PageType.A4.getWidth()), ImageUtil.ROTATE_90_CW);
+                createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CW);
 
         Image so2LineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.SO2).
-                createBufferedImage(PageType.A4.getHeight(), PageType.A4.getWidth()), ImageUtil.ROTATE_90_CW);
+                createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CW);
 
         Image ashLineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ASH).
-                createBufferedImage(PageType.A4.getHeight(), PageType.A4.getWidth()), ImageUtil.ROTATE_90_CW);
+                createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CW);
         values.put("mapImageIsoline", isoLineImage);
         values.put("mapImageSo2", so2LineImage);
         values.put("mapImageAsh", ashLineImage);

@@ -3592,7 +3592,7 @@
 			<break>
 				<reportElement x="0" y="734" width="100" height="1" uuid="d59d65e4-e9b1-487c-a202-fd1012cc3ecc"/>
 			</break>
-			<image>
+			<image hAlign="Center">
 				<reportElement x="-1" y="10" width="498" height="720" uuid="8c88f184-996b-4b85-a488-8a8b41da4d30"/>
 				<imageExpression><![CDATA[$P{mapImageIsoline}]]></imageExpression>
 			</image>
@@ -3602,7 +3602,7 @@
 			<break>
 				<reportElement x="0" y="734" width="100" height="1" uuid="5f094c12-45c0-4296-b7f9-97230b7f0b3a"/>
 			</break>
-			<image>
+			<image hAlign="Center">
 				<reportElement x="0" y="0" width="497" height="730" uuid="61be44eb-d61b-4727-b9ec-4a802b56d86e"/>
 				<imageExpression><![CDATA[$P{mapImageSo2}]]></imageExpression>
 			</image>
@@ -3619,7 +3619,7 @@
 			<break>
 				<reportElement x="0" y="734" width="100" height="1" uuid="1cbaf73a-ade1-4406-94b7-5b86f4abf9df"/>
 			</break>
-			<image>
+			<image hAlign="Center">
 				<reportElement x="-1" y="10" width="497" height="720" uuid="ed3bcd2f-c073-4e0a-9e28-edf5a1908c27"/>
 				<imageExpression><![CDATA[$P{mapImageAsh}]]></imageExpression>
 			</image>

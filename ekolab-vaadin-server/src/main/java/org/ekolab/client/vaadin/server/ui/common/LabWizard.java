@@ -170,7 +170,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant> exte
             removeAllWindows();
             super.finish();
         }
-        labFinishedWindow.show(binder.getBean(), labService);
+        labFinishedWindow.show(new LabFinishedWindow.LabFinishedWindowSettings<>(binder.getBean(), labService));
     }
 
     @Override

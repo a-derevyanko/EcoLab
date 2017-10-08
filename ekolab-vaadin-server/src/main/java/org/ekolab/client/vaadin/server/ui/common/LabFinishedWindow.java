@@ -8,15 +8,16 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
+import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 
 import javax.annotation.PostConstruct;
 
@@ -25,17 +26,14 @@ import javax.annotation.PostConstruct;
  */
 @SpringComponent
 @UIScope
-public class LabFinishedWindow<T extends LabData<V>, V extends LabVariant> extends Window {
+@Profile(Profiles.MODE.PROD)
+public class LabFinishedWindow<T extends LabData<V>, V extends LabVariant> extends BaseEkoLabWindow<LabFinishedWindow.LabFinishedWindowSettings<T, V>> {
 
     // ---------------------------- Графические компоненты --------------------
     private final VerticalLayout content = new VerticalLayout();
     private final VerticalLayout buttons = new VerticalLayout();
     private final Button saveReportButton = new Button("Save report", VaadinIcons.DOWNLOAD);
     private final Button toMainMenuButton = new Button("Exit to main menu", VaadinIcons.EXIT);
-
-    private T labData;
-
-    private LabService<T, V> labService;
 
     @Autowired
     private I18N i18N;
@@ -70,24 +68,36 @@ public class LabFinishedWindow<T extends LabData<V>, V extends LabVariant> exten
         toMainMenuButton.addStyleName(EkoLabTheme.BUTTON_TINY);
 
         FileDownloader fileDownloader = new FileDownloader(
-                new DownloadStreamResource(() -> labService.createReport(labData, UI.getCurrent().getLocale()), "report.pdf"));
+                new DownloadStreamResource(() -> settings.labService.createReport(settings.labData, UI.getCurrent().getLocale()), "report.pdf"));
         fileDownloader.extend(saveReportButton);
 
         toMainMenuButton.addClickListener(event -> close());
         center();
     }
 
-    public void show(T labData, LabService<T, V> labService) {
-        this.labData = labData;
-        this.labService = labService;
-        if (!UI.getCurrent().getWindows().contains(this)) {
-            UI.getCurrent().addWindow(this);
-        }
-    }
-
     @Override
     public void close() {
         super.close();
         navigator.redirectToView(LabChooserView.NAME);
+    }
+
+    public static class LabFinishedWindowSettings<T extends LabData<V>, V extends LabVariant> implements EkoLabWindow.WindowSettings {
+        private final T labData;
+
+        private final LabService<T, V> labService;
+
+        public LabFinishedWindowSettings(T labData, LabService<T, V> labService) {
+            this.labData = labData;
+            this.labService = labService;
+        }
+
+
+        public T getLabData() {
+            return labData;
+        }
+
+        public LabService<T, V> getLabService() {
+            return labService;
+        }
     }
 }

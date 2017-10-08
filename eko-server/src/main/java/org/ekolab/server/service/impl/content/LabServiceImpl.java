@@ -260,7 +260,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
             for (Map.Entry<String, Image> image : images.entrySet()) {
                 imageListBuilder.add(reportService.createImageWithTitle(image.getValue(), image.getKey()));
             }
-            builder.title(imageListBuilder);
+            builder.title(imageListBuilder, cmp.verticalGap(20));
         }
 
         TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.
@@ -306,14 +306,10 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         if (value instanceof Integer) {
             return value;
         } else if (value instanceof Double) {
-            return Precision.round((double) value, 2);
+            return Precision.round((double) value, (double) value > 2.0 ? 2 : 3);
         } else {
-            if (value instanceof Enum) {
-                return messageSource.getMessage(((Enum<?>) value).getDeclaringClass().getSimpleName()
-                        + '.' + ((Enum<?>) value).name(), null, locale);
-            } else {
-                return String.valueOf(value);
-            }
+            return value instanceof Enum ? messageSource.getMessage(((Enum<?>) value).getDeclaringClass().getSimpleName()
+                    + '.' + ((Enum<?>) value).name(), null, locale) : String.valueOf(value);
         }
     }
 

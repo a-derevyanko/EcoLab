@@ -8,8 +8,8 @@ import org.ekolab.server.model.content.lab3.FuelType;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.LabChartType;
 import org.ekolab.server.service.api.content.lab3.IsoLineChartService;
-import org.ekolab.server.service.api.content.lab3.Lab3ResourceService;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
+import org.ekolab.server.service.api.content.lab3.Lab3ResourceService;
 import org.ekolab.server.service.impl.content.equations.ferrari.EquationFunction;
 import org.ekolab.server.service.impl.content.equations.ferrari.QuarticFunction;
 import org.jfree.chart.ChartUtilities;
@@ -40,7 +40,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -268,13 +270,15 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         LegendTitle legendTitle = new LegendTitle(plot);
         legendTitle.setPosition(RectangleEdge.LEFT);
 
+        ChartUtilities.applyCurrentTheme(chart);
+
         TextTitle textTitle = new TextTitle(messageSource.getMessage("lab3.isoline-text-legend",
                 new Object[]{
                         messageSource.getMessage(City.class.getSimpleName() + '.' + labData.getCity().name(), null, locale),
                         labData.getTppOutput(),
                         messageSource.getMessage(FuelType.class.getSimpleName() + '.' + labData.getVariant().getFuelType(), null, locale),
                         Precision.round(Cm, 1),
-                        Precision.round(Xm, 1)}, locale));
+                        Precision.round(Xm, 1)}, locale), new Font(Font.SANS_SERIF, Font.BOLD, 12));
         textTitle.setTextAlignment(HorizontalAlignment.LEFT);
 
         BlockContainer blockContainer = new BlockContainer();
@@ -287,7 +291,6 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         title.setMargin(new RectangleInsets(1.0, 1.0, 1.0, 1.0));
         title.setFrame(new LineBorder());
         chart.addSubtitle(title);
-        ChartUtilities.applyCurrentTheme(chart);
 
         // Все линии, кроме граничной и ПДК делаем серого цвета
         for (int i = 0; i < seriesWithLabels.size() - 1; i++) {
