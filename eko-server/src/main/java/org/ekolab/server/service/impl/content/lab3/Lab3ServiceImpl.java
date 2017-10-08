@@ -335,7 +335,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         variant.setNo2BackgroundConcentration(0.05 + RandomUtils.nextInt(8) * 0.01);
         variant.setNoBackgroundConcentration(0.008 + RandomUtils.nextInt(5) * 0.01);
         variant.setSo2BackgroundConcentration(0.1 + RandomUtils.nextInt(16) * 0.01);
-        variant.setAshBackgroundConcentration(0.05 + RandomUtils.nextInt(6) * 0.01);
+        variant.setAshBackgroundConcentration(0.005 + RandomUtils.nextInt(6) * 0.001);
         return variant;
     }
 }
