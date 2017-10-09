@@ -145,8 +145,8 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
             }
         }
 
-        String backgroundName = messageSource.getMessage("lab3.isoline-background-name", null, locale);
-        XYSeries borderSeries = new XYSeries("C = " + backgroundName, false);
+        String backgroundName = messageSource.getMessage("lab3.isoline-background-name", new Object[]{backgroundConcentration}, locale);
+        XYSeries borderSeries = new XYSeries(backgroundName, false);
         borderSeries.setDescription(backgroundName);
         dataset.addSeries(borderSeries);
         double borderCyCoefficient = backgroundConcentration / groundLevelConcentration;
@@ -300,7 +300,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
         renderer.setSeriesStroke(seriesWithLabels.size() - 1, new BasicStroke(2.0f));
         renderer.setSeriesPaint(seriesWithLabels.size() - 1, EKO_LAB_COLOR);
         if (macSeriesExists) {
-            renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f));
+            renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2.0f}, 0));
         }
 
         return chart;

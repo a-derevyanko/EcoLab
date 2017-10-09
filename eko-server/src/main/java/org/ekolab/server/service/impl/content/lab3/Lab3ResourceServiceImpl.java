@@ -31,7 +31,7 @@ import java.util.Map;
 public class Lab3ResourceServiceImpl implements Lab3ResourceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(Lab3ResourceServiceImpl.class);
 
-    private final Image COMPASS_ARROW = loadImage("map/compass-arrow.svg", 0.5);
+    private final Image COMPASS_ARROW = loadImage("map/compass-arrow.svg", 0.2);
 
     private final Map<City, Image> BACKGROUND_CACHE = new HashMap<>(City.values().length);
 
@@ -77,7 +77,7 @@ public class Lab3ResourceServiceImpl implements Lab3ResourceService {
         g2d.drawImage(rotatedArrow, 0, 0, null);
         g2d.dispose();
 
-        try (InputStream is = new ByteArrayInputStream(EncoderUtil.encode(rotatedBackground, ImageFormat.PNG, 0.2f, true))) {
+        try (InputStream is = new ByteArrayInputStream(EncoderUtil.encode(copyOfImage, ImageFormat.PNG, 0.2f, true))) {
             return ImageIO.read(is);
         } catch (IOException e) {
             throw new UncheckedIOException(e);

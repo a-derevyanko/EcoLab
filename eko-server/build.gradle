@@ -78,6 +78,15 @@ war {
     version =  '0.0.1'
 }
 
+sourceSets {
+    main {
+        resources {
+            exclude '**/max-quality/*'
+        }
+    }
+}
+
+
 bootRun {
     systemProperties(System.properties)
     jvmArgs = ["-Dspring.profiles.active=dev,h2", "-Dorg.jooq.no-logo=true"]

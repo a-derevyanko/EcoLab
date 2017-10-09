@@ -72,13 +72,13 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         Map<String, Object> values = new HashMap<>(super.getValuesForReport(labData, locale));
 
         Image isoLineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ISOLINE).
-                createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CW);
+                createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CCW);
 
         Image so2LineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.SO2).
-                createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CW);
+                createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CCW);
 
         Image ashLineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ASH).
-                createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CW);
+                createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CCW);
         values.put("mapImageIsoline", isoLineImage);
         values.put("mapImageSo2", so2LineImage);
         values.put("mapImageAsh", ashLineImage);
