@@ -4,6 +4,8 @@ import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.UserInfoService;
 import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.RecordMapper;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
@@ -24,7 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-import static org.ekolab.server.db.h2.public_.Tables.*;
+import static org.ekolab.server.db.h2.public_.Tables.AUTHORITIES;
+import static org.ekolab.server.db.h2.public_.Tables.GROUPS;
+import static org.ekolab.server.db.h2.public_.Tables.GROUP_AUTHORITIES;
+import static org.ekolab.server.db.h2.public_.Tables.GROUP_MEMBERS;
+import static org.ekolab.server.db.h2.public_.Tables.USERS;
+import static org.ekolab.server.db.h2.public_.Tables.USER_AUTHORITIES;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -32,6 +39,17 @@ import static org.ekolab.server.db.h2.public_.Tables.*;
 @Service
 @Transactional
 public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements UserInfoService {
+    private static final RecordMapper<Record, UserInfo> USER_INFO_RECORD_MAPPER = record -> {
+        UserInfo info = new UserInfo();
+        info.setLogin(record.get(USERS.LOGIN));
+        info.setFirstName(record.get(USERS.FIRST_NAME));
+        info.setMiddleName(record.get(USERS.MIDDLE_NAME));
+        info.setLastName(record.get(USERS.LAST_NAME));
+        info.setNote(record.get(USERS.NOTE));
+        info.setGroup(UserGroup.valueOf(record.get(GROUPS.GROUP_NAME)));
+        return info;
+    };
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -112,18 +130,9 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Cacheable("USER")
     public UserInfo getUserInfo(String userName) {
-        return dsl.select(USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
+        return dsl.select(USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
                 .join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID)).join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID))
-        .where(USERS.LOGIN.eq(userName)).fetchOne().map(record -> {
-            UserInfo info = new UserInfo();
-            info.setLogin(userName);
-            info.setFirstName(record.get(USERS.FIRST_NAME));
-            info.setMiddleName(record.get(USERS.MIDDLE_NAME));
-            info.setLastName(record.get(USERS.LAST_NAME));
-            info.setNote(record.get(USERS.NOTE));
-            info.setGroup(UserGroup.valueOf(record.get(GROUPS.GROUP_NAME)));
-            return info;
-        });
+        .where(USERS.LOGIN.eq(userName)).fetchOne().map(USER_INFO_RECORD_MAPPER);
     }
 
     @Override

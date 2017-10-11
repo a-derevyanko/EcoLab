@@ -13,11 +13,6 @@ public enum FuelType {
         }
 
         @Override
-        public double getCarbonInFlyAsh() {
-            return RandomUtils.nextBoolean() ? 1.0 : 1.5;
-        }
-
-        @Override
         public double getSulphurContent() {
             return 3.0;
         }
@@ -65,10 +60,6 @@ public enum FuelType {
     EKIBASTUZ_COAL {
         public double getLowHeatValue() {
             return 16.75;
-        }
-
-        public double getCarbonInFlyAsh() {
-            return RandomUtils.nextBoolean() ? 1.0 : 1.5;
         }
 
         @Override
@@ -121,10 +112,6 @@ public enum FuelType {
             return 22.82;
         }
 
-        public double getCarbonInFlyAsh() {
-            return RandomUtils.nextBoolean() ? 1.0 : 1.5;
-        }
-
         @Override
         public double getSulphurContent() {
             return 0.3;
@@ -173,10 +160,6 @@ public enum FuelType {
     BEREZOVSKY_COAL_TSU {
         public double getLowHeatValue() {
             return 15.66;
-        }
-
-        public double getCarbonInFlyAsh() {
-            return RandomUtils.nextBoolean() ? 1.0 : 0.5;
         }
 
         @Override
@@ -229,10 +212,6 @@ public enum FuelType {
             return 15.66;
         }
 
-        public double getCarbonInFlyAsh() {
-            return 0.5;
-        }
-
         @Override
         public double getSulphurContent() {
             return 0.3;
@@ -282,11 +261,6 @@ public enum FuelType {
         @Override
         public double getLowHeatValue() {
             return 10.93;
-        }
-
-        @Override
-        public double getCarbonInFlyAsh() {
-            return RandomUtils.nextBoolean() ? 1.0 : 0.5;
         }
 
         @Override
@@ -342,11 +316,6 @@ public enum FuelType {
         }
 
         @Override
-        public double getCarbonInFlyAsh() {
-            return RandomUtils.nextBoolean() ? 1.0 : 0.5;
-        }
-
-        @Override
         public double getSulphurContent() {
             return 1.7;
         }
@@ -395,11 +364,6 @@ public enum FuelType {
         @Override
         public double getLowHeatValue() {
             return 39.73;
-        }
-
-        @Override
-        public double getCarbonInFlyAsh() {
-            return 0.0;
         }
 
         @Override
@@ -454,11 +418,6 @@ public enum FuelType {
         }
 
         @Override
-        public double getCarbonInFlyAsh() {
-            return 0.0;
-        }
-
-        @Override
         public double getSulphurContent() {
             return 2.9;
         }
@@ -507,7 +466,6 @@ public enum FuelType {
 
     public abstract double getLowHeatValue();
 
-    public abstract double getCarbonInFlyAsh();
 
     public abstract double getSulphurContent();
 

@@ -147,7 +147,7 @@ public class IsoLineChartServiceImpl implements IsoLineChartService {
 
         String backgroundName = messageSource.getMessage("lab3.isoline-background-name", new Object[]{backgroundConcentration}, locale);
         XYSeries borderSeries = new XYSeries(backgroundName, false);
-        borderSeries.setDescription(backgroundName);
+        borderSeries.setDescription(messageSource.getMessage("lab3.isoline-background-name-description", null, locale));
         dataset.addSeries(borderSeries);
         double borderCyCoefficient = backgroundConcentration / groundLevelConcentration;
         fillIsoLineSeries(borderSeries, borderCyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,

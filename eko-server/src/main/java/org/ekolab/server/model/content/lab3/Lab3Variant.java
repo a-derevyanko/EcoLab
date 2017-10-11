@@ -79,14 +79,6 @@ public class Lab3Variant extends LabVariant {
     private Integer fuelConsumer;
 
     /**
-     * Потери тепла от механической неполноты сгорания топлива
-     */
-    /*@Max(1.5)
-    @Min(0)*/
-    @Digits(integer = 1, fraction = 1)
-    private Double carbonInFlyAsh;
-
-    /**
      * Содержание серы в топливе
      */
     private Double sulphurContent;
@@ -267,14 +259,6 @@ public class Lab3Variant extends LabVariant {
         this.fuelConsumer = fuelConsumer;
     }
 
-    public Double getCarbonInFlyAsh() {
-        return carbonInFlyAsh;
-    }
-
-    public void setCarbonInFlyAsh(Double carbonInFlyAsh) {
-        this.carbonInFlyAsh = carbonInFlyAsh;
-    }
-
     public Double getSulphurContent() {
         return sulphurContent;
     }
@@ -411,7 +395,6 @@ public class Lab3Variant extends LabVariant {
                 Objects.equals(windSpeed, variant.windSpeed) &&
                 Objects.equals(lowHeatValue, variant.lowHeatValue) &&
                 Objects.equals(fuelConsumer, variant.fuelConsumer) &&
-                Objects.equals(carbonInFlyAsh, variant.carbonInFlyAsh) &&
                 Objects.equals(sulphurContent, variant.sulphurContent) &&
                 Objects.equals(ashContent, variant.ashContent) &&
                 Objects.equals(waterContent, variant.waterContent) &&
@@ -431,6 +414,6 @@ public class Lab3Variant extends LabVariant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(tppOutput, numberOfUnits, city, fuelType, steamProductionCapacity, numberOfStacks, stacksHeight, windDirection, windSpeed, lowHeatValue, fuelConsumer, carbonInFlyAsh, sulphurContent, ashContent, waterContent, ashRecyclingFactor, flueGasNOxConcentration, stackExitTemperature, outsideAirTemperature, excessAirRatio, combustionProductsVolume, waterVaporVolume, airVolume, no2BackgroundConcentration, noBackgroundConcentration, so2BackgroundConcentration, ashBackgroundConcentration);
+        return Objects.hash(tppOutput, numberOfUnits, city, fuelType, steamProductionCapacity, numberOfStacks, stacksHeight, windDirection, windSpeed, lowHeatValue, fuelConsumer, sulphurContent, ashContent, waterContent, ashRecyclingFactor, flueGasNOxConcentration, stackExitTemperature, outsideAirTemperature, excessAirRatio, combustionProductsVolume, waterVaporVolume, airVolume, no2BackgroundConcentration, noBackgroundConcentration, so2BackgroundConcentration, ashBackgroundConcentration);
     }
 }

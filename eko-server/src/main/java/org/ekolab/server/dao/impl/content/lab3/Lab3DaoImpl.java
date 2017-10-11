@@ -79,7 +79,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         variant.setWindSpeed(record.get(LAB3VARIANT.WIND_SPEED));
         variant.setLowHeatValue(record.get(LAB3VARIANT.LOW_HEAT_VALUE));
         variant.setFuelConsumer(record.get(LAB3VARIANT.FUEL_CONSUMER));
-        variant.setCarbonInFlyAsh(record.get(LAB3VARIANT.CARBON_IN_FLY_ASH));
         variant.setSulphurContent(record.get(LAB3VARIANT.SULPHUR_CONTENT));
         variant.setAshContent(record.get(LAB3VARIANT.ASH_CONTENT));
         variant.setWaterContent(record.get(LAB3VARIANT.WATER_CONTENT));
@@ -222,7 +221,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3VARIANT.WIND_SPEED,
                 LAB3VARIANT.LOW_HEAT_VALUE,
                 LAB3VARIANT.FUEL_CONSUMER,
-                LAB3VARIANT.CARBON_IN_FLY_ASH,
                 LAB3VARIANT.SULPHUR_CONTENT,
                 LAB3VARIANT.ASH_CONTENT,
                 LAB3VARIANT.WATER_CONTENT,
@@ -251,7 +249,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         variant.getWindSpeed(),
                         variant.getLowHeatValue(),
                         variant.getFuelConsumer(),
-                        variant.getCarbonInFlyAsh(),
                         variant.getSulphurContent(),
                         variant.getAshContent(),
                         variant.getWaterContent(),

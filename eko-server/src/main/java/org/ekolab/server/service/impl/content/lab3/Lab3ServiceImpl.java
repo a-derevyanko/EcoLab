@@ -329,7 +329,6 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         variant.setTppOutput(randomUnitCount.value() * randomUnitOutput.getUnitOutput());
         variant.setFuelConsumer((int) Math.round(randomUnitOutput.getUnitOutput() * 29.3 * randomUnitOutput.getBy(oil) /
                 (randomFuelType.getLowHeatValue() * 1000)));
-        variant.setCarbonInFlyAsh(randomFuelType.getCarbonInFlyAsh());
         variant.setSulphurContent(randomFuelType.getSulphurContent());
         variant.setAshContent(randomFuelType.getAshContent());
         variant.setWaterContent(randomFuelType.getWaterContent());

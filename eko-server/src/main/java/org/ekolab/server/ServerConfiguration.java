@@ -20,8 +20,8 @@ public class ServerConfiguration {
         chartTheme.setChartBackgroundPaint(Color.WHITE);
         chartTheme.setPlotBackgroundPaint(Color.WHITE);
         chartTheme.setPlotOutlinePaint(Color.WHITE);
-        chartTheme.setDomainGridlinePaint(Color.BLACK);
-        chartTheme.setRangeGridlinePaint(Color.BLACK);
+        chartTheme.setDomainGridlinePaint(Color.DARK_GRAY);
+        chartTheme.setRangeGridlinePaint(Color.DARK_GRAY);
 
         ChartFactory.setChartTheme(chartTheme);
     }

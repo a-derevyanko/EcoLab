@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.vaadin.spring.security.VaadinSecurity;
+import org.vaadin.spring.security.shared.VaadinSharedSecurity;
 
 import java.util.Locale;
 
@@ -50,7 +50,7 @@ public class VaadinUI extends UI {
     private ViewContainerPanel viewContainer;
 
     @Autowired
-    protected VaadinSecurity vaadinSecurity;
+    protected VaadinSharedSecurity vaadinSecurity;
 
     @Autowired
     private I18N i18N;

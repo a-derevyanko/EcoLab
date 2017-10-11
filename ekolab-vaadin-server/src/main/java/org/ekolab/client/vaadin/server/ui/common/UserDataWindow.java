@@ -14,11 +14,8 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.Window;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
-import org.ekolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
@@ -35,11 +32,12 @@ import java.util.function.Consumer;
  */
 @SpringComponent
 @UIScope
-public class UserDataWindow extends Window {
+public class UserDataWindow extends BaseEkoLabWindow<UserDataWindow.UserDataWindowSettings> {
     // ---------------------------- Графические компоненты --------------------
     private final FormLayout content = new FormLayout();
     private final Button save = new Button("Save", this::save);
     private final Button cancel = new Button("Cancel", event -> close());
+    private final TextField login = new TextField("Login");
     private final TextField firstName = new TextField("First name");
     private final TextField lastName = new TextField("Last name");
     private final TextField middleName = new TextField("Middle name");
@@ -62,30 +60,26 @@ public class UserDataWindow extends Window {
     @Autowired
     private UserInfoService userInfoService;
 
-    @Autowired
-    private ExceptionNotification exceptionNotification;
-
-    private Consumer<UserInfo> userInfoConsumer;
-
     @PostConstruct
     public void init() {
         setContent(content);
         setCaption(i18N.get("user-data-window.title"));
         save.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        setVisible(false);
         content.setSizeUndefined();
         setResizable(false);
         content.setMargin(true);
 
         actions.setSpacing(true);
 
-        content.addComponents(lastName, firstName, middleName, note, userGroup, changePassword, oldPassword, newPassword, actions);
+        content.addComponents(login, lastName, firstName, middleName, note, userGroup, changePassword, oldPassword, newPassword, actions);
+        userInfoBinder.forField(login).bind(UserInfo::getLogin, UserInfo::setLogin);
         userInfoBinder.forField(lastName).bind(UserInfo::getLastName, UserInfo::setLastName);
         userInfoBinder.forField(firstName).bind(UserInfo::getFirstName, UserInfo::setFirstName);
         userInfoBinder.forField(middleName).bind(UserInfo::getMiddleName, UserInfo::setMiddleName);
         userInfoBinder.forField(note).bind(UserInfo::getNote, UserInfo::setNote);
 
+        login.setCaption(i18N.get("userdata.login"));
         lastName.setCaption(i18N.get("userdata.lastname"));
         firstName.setCaption(i18N.get("userdata.firstname"));
         middleName.setCaption(i18N.get("userdata.middlename"));
@@ -97,6 +91,7 @@ public class UserDataWindow extends Window {
         save.setCaption(i18N.get("savable.save"));
         cancel.setCaption(i18N.get("confirm.cancel"));
 
+        login.setMaxLength(256);
         lastName.setMaxLength(256);
         firstName.setMaxLength(256);
         middleName.setMaxLength(256);
@@ -105,14 +100,14 @@ public class UserDataWindow extends Window {
         note.setMaxLength(256);
 
         userGroup.setItems(UserGroup.values());
-        userGroup.setItemCaptionGenerator((elem) -> i18N.get(elem.getDeclaringClass().getSimpleName().toLowerCase() + '.' + elem.name()));
+        userGroup.setItemCaptionGenerator((elem) -> i18N.get(elem.getDeclaringClass().getSimpleName() + '.' + elem.name()));
         userGroup.setTextInputAllowed(false);
         userGroup.setEmptySelectionAllowed(false);
         userInfoBinder.forField(userGroup).bind(UserInfo::getGroup, UserInfo::setGroup);
         center();
     }
 
-    public void save(Button.ClickEvent event) {
+    private void save(Button.ClickEvent event) {
         try {
             if (StringUtils.hasText(oldPassword.getValue())) {
                 try {
@@ -125,7 +120,7 @@ public class UserDataWindow extends Window {
             UserInfo info = new UserInfo();
             userInfoBinder.writeBean(info);
             userInfoService.updateUserInfo(info);
-            userInfoConsumer.accept(info);
+            settings.consumer.accept(info);
             close();
             Notification.show(i18N.get("user-data-window.saved"), Notification.Type.TRAY_NOTIFICATION);
         } catch (ValidationException e) {
@@ -133,16 +128,35 @@ public class UserDataWindow extends Window {
         }
     }
 
-    public void show(UserInfo userInfo, Consumer<UserInfo> consumer) {
-        if (!UI.getCurrent().getWindows().contains(this)) {
-            oldPassword.clear();
-            newPassword.clear();
+    @Override
+    protected void beforeShow() {
+        super.beforeShow();
 
-            userInfoBinder.readBean(userInfo);
-            userInfoConsumer = consumer;
-            setVisible(true);
-            firstName.focus();
-            UI.getCurrent().addWindow(this);
+        userInfoBinder.readBean(settings.userInfo);
+
+        if (settings.userInfo.getLogin() == null) {
+            userGroup.setEnabled(settings.userInfo.getGroup() == null);
+            login.setEnabled(true);
+        } else {
+            login.setEnabled(false);
+        }
+        firstName.focus();
+    }
+
+    @Override
+    protected void clear() {
+        super.clear();
+        oldPassword.clear();
+        newPassword.clear();
+    }
+
+    public static class UserDataWindowSettings implements EkoLabWindow.WindowSettings {
+        private final UserInfo userInfo;
+        private final Consumer<UserInfo> consumer;
+
+        public UserDataWindowSettings(UserInfo userInfo, Consumer<UserInfo> consumer) {
+            this.userInfo = userInfo;
+            this.consumer = consumer;
         }
     }
 }

@@ -136,7 +136,6 @@ CREATE TABLE lab3variant (
   wind_speed DOUBLE,
   low_heat_value DOUBLE,
   fuel_consumer INT,
-  carbon_in_fly_ash DOUBLE,
   sulphur_content DOUBLE,
   ash_content DOUBLE,
   water_content DOUBLE,
@@ -177,7 +176,6 @@ COMMENT ON COLUMN lab3variant.wind_direction IS 'Расчетное направ
 COMMENT ON COLUMN lab3variant.wind_speed IS 'Расчетная скорость ветра';
 COMMENT ON COLUMN lab3variant.low_heat_value IS 'Низшая теплота сгорания топлива';
 COMMENT ON COLUMN lab3variant.fuel_consumer IS 'Расход топлива на 1 блок';
-COMMENT ON COLUMN lab3variant.carbon_in_fly_ash IS 'Потери тепла от механической неполноты сгорания топлива';
 COMMENT ON COLUMN lab3variant.sulphur_content IS 'Содержание серы в топливе';
 COMMENT ON COLUMN lab3variant.ash_content IS 'Зольность топлива';
 COMMENT ON COLUMN lab3variant.water_content IS 'Влажность топлива';
