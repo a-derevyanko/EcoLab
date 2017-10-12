@@ -51,9 +51,11 @@ public class UserInfoDataProvider extends AbstractBackEndDataProvider<UserInfo, 
      */
     @Override
     protected Stream<UserInfo> fetchFromBackEnd(Query<UserInfo, UserInfo> query) {
-        return dsl.select(USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
+        Stream<UserInfo> stream = dsl.select(USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
                 .join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID)).join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID))
                 .where(getConditions(query)).limit(query.getLimit()).offset(query.getOffset()).fetch().map(USER_INFO_RECORD_MAPPER).stream();
+
+        return query.getInMemorySorting() == null ? stream : stream.sorted(query.getInMemorySorting());
     }
 
     @Override
