@@ -97,3 +97,4 @@ build/
 /ekolab-vaadin-client/src/main/webapp/VAADIN/themes/EkoLab/styles.css
 /eko-server/src/main/resources/application-custom.properties
 /_config.yml
+/ekolab-vaadin-desktop/src/main/webapp/

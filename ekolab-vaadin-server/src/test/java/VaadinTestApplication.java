@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class VaadinTestApplication extends VaadinApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(VaadinTestApplication.class);
 
-    public static void main(String... args) {
-        run(new VaadinTestApplication(), args);
+    public static void main(String... args) throws Exception {
+        new VaadinTestApplication().run(args);
     }
 }

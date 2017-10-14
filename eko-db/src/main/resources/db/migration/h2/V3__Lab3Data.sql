@@ -84,7 +84,7 @@ COMMENT ON COLUMN lab3data.steam_production_capacity IS 'Номинальная 
 COMMENT ON COLUMN lab3data.number_of_stacks IS 'Число дымовых труб';
 COMMENT ON COLUMN lab3data.stacks_height IS 'Высота дымовой трубы';
 COMMENT ON COLUMN lab3data.stacks_diameter IS 'Диаметр устья дымовой трубы';
-COMMENT ON COLUMN lab3data.wind_direction IS 'Расчетное направление ветра';
+COMMENT ON COLUMN lab3data.wind_direction IS 'Господствующее направление ветра';
 COMMENT ON COLUMN lab3data.wind_speed IS 'Расчетная скорость ветра';
 COMMENT ON COLUMN lab3data.low_heat_value IS 'Низшая теплота сгорания топлива';
 COMMENT ON COLUMN lab3data.fuel_consumer IS 'Расход топлива на 1 блок';
@@ -172,7 +172,7 @@ COMMENT ON COLUMN lab3variant.city IS 'Район расположения ГР�
 COMMENT ON COLUMN lab3variant.steam_production_capacity IS 'Номинальная паропроизводительность одного котла';
 COMMENT ON COLUMN lab3variant.number_of_stacks IS 'Число дымовых труб';
 COMMENT ON COLUMN lab3variant.stacks_height IS 'Высота дымовой трубы';
-COMMENT ON COLUMN lab3variant.wind_direction IS 'Расчетное направление ветра';
+COMMENT ON COLUMN lab3variant.wind_direction IS 'Господствующее направление ветра';
 COMMENT ON COLUMN lab3variant.wind_speed IS 'Расчетная скорость ветра';
 COMMENT ON COLUMN lab3variant.low_heat_value IS 'Низшая теплота сгорания топлива';
 COMMENT ON COLUMN lab3variant.fuel_consumer IS 'Расход топлива на 1 блок';

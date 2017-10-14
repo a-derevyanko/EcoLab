@@ -51,8 +51,8 @@ public class Lab3Step1 extends HorizontalLayout implements LabWizardStep {
 
         secondFormLayout.setCaption(i18N.get("lab3.step1.fuel-characteristics"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "lowHeatValue"));
-        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "carbonInFlyAsh"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "fuelConsumer"));
+        secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "carbonInFlyAsh"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "sulphurContent"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "ashContent"));
         secondFormLayout.addField(FieldUtils.getField(Lab3Data.class, "waterContent"));

@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,14 +27,14 @@ public class ServerApplication extends SpringBootServletInitializer implements W
      * Конфигурация, которая будет использоваться при запуске из командной строки в Embedded контейнере
      * @param args аргументы запуска
      */
-    public static void main(String... args) {
-        run(new ServerApplication(), args);
+    public static void main(String... args) throws Exception {
+        new ServerApplication().run(args);
     }
 
-    protected static void run(ServerApplication application, String... args) {
-        application.configure(new SpringApplicationBuilder()). // Конфигурация
-                run(args). // Запуск приложения
-                getBean(ConfigurationCommonService.class).printApplicationBeanNames(); // Печать имён бинов
+    protected ApplicationContext run(String... args) throws Exception {
+        ApplicationContext ctx = configure(createSpringApplicationBuilder()).run(args); // Запуск приложения
+        ctx.getBean(ConfigurationCommonService.class).printApplicationBeanNames(); // Печать имён бинов
+        return ctx;
     }
 
     /**
@@ -46,7 +47,7 @@ public class ServerApplication extends SpringBootServletInitializer implements W
         return builder.sources(ServerApplication.class).initializers(initializers()).bannerMode(Banner.Mode.OFF);
     }
 
-    protected static ApplicationContextInitializer<?>[] initializers() {
+    protected ApplicationContextInitializer<?>[] initializers() {
         return new ApplicationContextInitializer[0];
     }
 }

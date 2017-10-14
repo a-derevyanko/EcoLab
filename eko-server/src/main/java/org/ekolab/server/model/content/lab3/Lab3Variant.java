@@ -56,7 +56,7 @@ public class Lab3Variant extends LabVariant {
     private Integer stacksHeight;
 
     /**
-     * Расчетное направление ветра
+     * Господствующее направление ветра
      */
     private WindDirection windDirection;
 

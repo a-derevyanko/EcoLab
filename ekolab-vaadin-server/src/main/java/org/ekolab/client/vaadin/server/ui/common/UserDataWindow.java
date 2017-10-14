@@ -99,8 +99,10 @@ public class UserDataWindow extends BaseEkoLabWindow<UserDataWindow.UserDataWind
         newPassword.setMaxLength(256);
         note.setMaxLength(256);
 
+        login.setEnabled(false);
+
         userGroup.setItems(UserGroup.values());
-        userGroup.setItemCaptionGenerator((elem) -> i18N.get(elem.getDeclaringClass().getSimpleName() + '.' + elem.name()));
+        userGroup.setItemCaptionGenerator(i18N::get);
         userGroup.setTextInputAllowed(false);
         userGroup.setEmptySelectionAllowed(false);
         userInfoBinder.forField(userGroup).bind(UserInfo::getGroup, UserInfo::setGroup);
@@ -136,11 +138,14 @@ public class UserDataWindow extends BaseEkoLabWindow<UserDataWindow.UserDataWind
 
         if (settings.userInfo.getLogin() == null) {
             userGroup.setEnabled(settings.userInfo.getGroup() == null);
-            login.setEnabled(true);
         } else {
-            login.setEnabled(false);
+            login.setVisible(true);
+            changePassword.setVisible(true);
+            oldPassword.setVisible(true);
+            newPassword.setVisible(true);
+            userGroup.setEnabled(true);
         }
-        firstName.focus();
+        lastName.focus();
     }
 
     @Override
@@ -148,6 +153,11 @@ public class UserDataWindow extends BaseEkoLabWindow<UserDataWindow.UserDataWind
         super.clear();
         oldPassword.clear();
         newPassword.clear();
+        login.setVisible(false);
+        changePassword.setVisible(false);
+        oldPassword.setVisible(false);
+        newPassword.setVisible(false);
+        userGroup.setEnabled(false);
     }
 
     public static class UserDataWindowSettings implements EkoLabWindow.WindowSettings {

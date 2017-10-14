@@ -54,7 +54,7 @@ public class Lab3Data extends LabData<Lab3Variant> {
     private Double stacksDiameter;
 
     /**
-     * Расчетное направление ветра
+     * Господствующее направление ветра
      */
     private WindDirection windDirection;
 

@@ -47,6 +47,7 @@
 
   .v-nativebutton-disabled {
     background: gray;
+    border-style: hidden;
   }
 
   .v-ui[width-range~="0-800px"] .content-panel {

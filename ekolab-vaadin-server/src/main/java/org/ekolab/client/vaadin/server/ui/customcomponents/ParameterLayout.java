@@ -106,7 +106,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
         AbstractComponent component;
         if (Enum.class.isAssignableFrom(propClass)) {
             ComboBox<Enum<?>> comboBox = new ComboBox<>(null, Arrays.asList((Enum<?>[]) propClass.getEnumConstants()));
-            comboBox.setItemCaptionGenerator((elem) -> i18N.get(elem.getDeclaringClass().getSimpleName() + '.' + elem.name()));
+            comboBox.setItemCaptionGenerator(i18N::get);
             comboBox.setTextInputAllowed(false);
             comboBox.setPageLength(15);
             comboBox.setEmptySelectionAllowed(false);

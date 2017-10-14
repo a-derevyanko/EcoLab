@@ -8,16 +8,15 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.web.WebApplicationInitializer;
 
 @SpringBootApplication
 @EnableAdminServer
 @EnableConfigurationProperties(EkoLabVaadinProperties.class)
-public class VaadinApplication extends ServerApplication implements WebApplicationInitializer {
+public class VaadinApplication extends ServerApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(VaadinApplication.class);
 
-    public static void main(String... args) {
-        run(new VaadinApplication(), args);
+    public static void main(String... args) throws Exception {
+        new VaadinApplication().run(args);
     }
 
     /**

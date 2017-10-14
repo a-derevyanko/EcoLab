@@ -15,6 +15,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import org.apache.commons.lang.UnhandledException;
 import org.apache.commons.math3.util.Precision;
+import org.ekolab.server.common.I18NUtils;
 import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.common.UserInfoUtils;
 import org.ekolab.server.dao.api.content.LabDao;
@@ -308,8 +309,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         } else if (value instanceof Double) {
             return Precision.round((double) value, (double) value > 2.0 ? 2 : 3);
         } else {
-            return value instanceof Enum ? messageSource.getMessage(((Enum<?>) value).getDeclaringClass().getSimpleName()
-                    + '.' + ((Enum<?>) value).name(), null, locale) : String.valueOf(value);
+            return value instanceof Enum ? messageSource.getMessage(I18NUtils.getEnumName((Enum<?>) value), null, locale) : String.valueOf(value);
         }
     }
 

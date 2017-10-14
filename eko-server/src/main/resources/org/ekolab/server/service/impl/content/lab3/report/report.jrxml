@@ -30,7 +30,7 @@
 		<parameterDescription><![CDATA[Диаметр устья дымовой трубы]]></parameterDescription>
 	</parameter>
 	<parameter name="windDirection">
-		<parameterDescription><![CDATA[Расчетное направление ветра]]></parameterDescription>
+		<parameterDescription><![CDATA[Господствующее направление ветра]]></parameterDescription>
 	</parameter>
 	<parameter name="windSpeed" class="java.lang.Double">
 		<parameterDescription><![CDATA[Расчетная скорость ветра]]></parameterDescription>
@@ -926,7 +926,7 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<text><![CDATA[Расчетное направление ветра]]></text>
+				<text><![CDATA[Господствующее направление ветра]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" x="30" y="380" width="172" height="20" uuid="b2fb3153-9ba9-4910-ad23-78d43cadb791"/>
