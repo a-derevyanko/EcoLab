@@ -1,5 +1,6 @@
 package org.ekolab.server.service.impl;
 
+import com.ibm.icu.text.Transliterator;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.UserInfoService;
@@ -39,6 +40,10 @@ import static org.ekolab.server.db.h2.public_.Tables.USER_AUTHORITIES;
 @Service
 @Transactional
 public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements UserInfoService {
+    private static final String ANY_LATIN_NFD = "Any-Latin; NFD;";
+
+    private static final Transliterator TRANSLITERATOR = Transliterator.getInstance(ANY_LATIN_NFD);
+
     private static final RecordMapper<Record, UserInfo> USER_INFO_RECORD_MAPPER = record -> {
         UserInfo info = new UserInfo();
         info.setLogin(record.get(USERS.LOGIN));
@@ -169,9 +174,31 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
         return userInfo;
     }
 
+    /**
+     * Создаёт данные пользователя.
+     * Заполнять логин необязательно - логином назначается фамилия пользователя.
+     * При выборе логина выполняется проверка, что такого логине не существует.
+     * @param userInfo данные пользователя
+     */
     @Override
-    @CachePut(cacheNames = "USER", key = "#userInfo.login")
+    @CachePut(cacheNames = "USER", key = "#result.login")
     public UserInfo createUserInfo(UserInfo userInfo) {
+        if (userInfo.getLogin() == null) {
+            String newLogin = TRANSLITERATOR.transform(userInfo.getLastName());
+            List<String> sameUsers = dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.startsWith(newLogin)).fetchInto(String.class);
+
+            if (sameUsers.contains(newLogin)) {
+                for (int i = 1; i < Integer.MAX_VALUE; i++) {
+                    if (!sameUsers.contains(newLogin + i)) {
+                        newLogin = newLogin + i;
+                        break;
+                    }
+                }
+            }
+
+            userInfo.setLogin(newLogin);
+        }
+
         Long userID = dsl.insertInto(USERS)
                 .set(USERS.FIRST_NAME, userInfo.getFirstName())
                 .set(USERS.MIDDLE_NAME, userInfo.getMiddleName())
