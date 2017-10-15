@@ -16,6 +16,8 @@ import org.ekolab.client.vaadin.server.dataprovider.UserInfoDataProvider;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
+import org.ekolab.client.vaadin.server.ui.windows.EditUserWindow;
+import org.ekolab.client.vaadin.server.ui.windows.NewUserWindow;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.UserInfoService;
@@ -27,7 +29,10 @@ import org.vaadin.spring.annotation.PrototypeScope;
 public class UsersPanel extends VerticalLayout implements UIComponent {
 
     @Autowired
-    private final UserDataWindow userDataWindow;
+    private final EditUserWindow editUserWindow;
+
+    @Autowired
+    private final NewUserWindow newUserWindow;
 
     @Autowired
     private final UserInfoService userInfoService;
@@ -56,8 +61,9 @@ public class UsersPanel extends VerticalLayout implements UIComponent {
     protected final HorizontalLayout gridPanel = new HorizontalLayout(buttonsPanel, users);
     protected final HorizontalLayout findPanel = new HorizontalLayout(findLastNameTextField, findNameTextField, findMiddleNameTextField, find, clearFind);
 
-    public UsersPanel(UserDataWindow userDataWindow, UserInfoService userInfoService, UserInfoDataProvider userInfoDataProvider, I18N i18N) {
-        this.userDataWindow = userDataWindow;
+    public UsersPanel(EditUserWindow userDataWindow, UserInfoService userInfoService, NewUserWindow newUserWindow, UserInfoDataProvider userInfoDataProvider, I18N i18N) {
+        this.editUserWindow = userDataWindow;
+        this.newUserWindow = newUserWindow;
         this.userInfoService = userInfoService;
         this.userInfoDataProvider = userInfoDataProvider;
         this.i18N = i18N;
@@ -129,15 +135,15 @@ public class UsersPanel extends VerticalLayout implements UIComponent {
         addUser.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         addUser.setWidth(300.0F, Unit.PIXELS);
         addUser.addClickListener((Button.ClickListener) event -> {
-            userDataWindow.show(new UserDataWindow.UserDataWindowSettings(filter, userInfo -> {
-                UserInfo savedUserInfo = userInfoService.createUserInfo(userInfo);
-                dataProvider.refreshItem(savedUserInfo);
-                users.select(savedUserInfo);
+            newUserWindow.show(new NewUserWindow.UserDataWindowSettings(filter, userInfo -> {
+                dataProvider.refreshAll();
+                users.select(userInfo);
             }));
         });
 
         removeUser.setCaption(i18N.get("admin-manage.users.remove-user"));
         removeUser.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        removeUser.setEnabled(false);
         removeUser.setWidth(300.0F, Unit.PIXELS);
         removeUser.addClickListener((Button.ClickListener) event -> {
             users.getSelectedItems().forEach(userInfo -> userInfoService.deleteUser(userInfo.getLogin()));
@@ -148,11 +154,7 @@ public class UsersPanel extends VerticalLayout implements UIComponent {
         editUser.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         editUser.setEnabled(false);
         editUser.setWidth(300.0F, Unit.PIXELS);
-        editUser.addClickListener((Button.ClickListener) event -> users.getSelectedItems().forEach(userInfo -> userDataWindow.show(new UserDataWindow.UserDataWindowSettings(userInfo, userInfo1 -> {
-            UserInfo updatedUserInfo = userInfoService.updateUserInfo(userInfo1);
-            dataProvider.refreshItem(updatedUserInfo);
-            users.select(updatedUserInfo);
-        }))));
+        editUser.addClickListener((Button.ClickListener) event -> users.getSelectedItems().forEach(userInfo -> editUserWindow.show(new EditUserWindow.UserDataWindowSettings(userInfo, dataProvider::refreshItem))));
 
         dataProvider.setFilter(filter);
     }

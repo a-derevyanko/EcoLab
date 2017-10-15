@@ -22,7 +22,8 @@ public interface UserInfoService extends UserDetailsManager, GroupManager, UserD
     UserInfo updateUserInfo(UserInfo userInfo);
 
     /**
-     * Создаёт данные пользователя
+     * Создаёт данные пользователя.
+     * Заполнять логин необязательно - логином назначается фамилия пользователя.
      * @param userInfo данные пользователя
      */
     UserInfo createUserInfo(UserInfo userInfo);

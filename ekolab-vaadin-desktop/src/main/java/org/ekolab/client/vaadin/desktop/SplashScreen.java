@@ -13,10 +13,10 @@ public class SplashScreen {
     private static final JFrame INSTANCE = new JFrame();
 
     static {
-        try (InputStream logo = SplashScreen.class.getResourceAsStream("logo.svg"); InputStream icon = SplashScreen.class.getResourceAsStream("icon.svg")) {
+        try (InputStream logo = SplashScreen.class.getResourceAsStream("splashscreen.svg"); InputStream icon = SplashScreen.class.getResourceAsStream("icon.svg")) {
             JLabel label = new JLabel();
             label.setIcon(new ImageIcon(ImageIO.read(logo)));
-            INSTANCE.setPreferredSize(new Dimension(650, 570));
+            INSTANCE.setPreferredSize(new Dimension(500, 200));
             INSTANCE.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
             INSTANCE.setUndecorated(true);
             INSTANCE.pack();

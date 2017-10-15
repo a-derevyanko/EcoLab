@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.ui.view;
+package org.ekolab.client.vaadin.server.ui.windows;
 
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -8,8 +8,6 @@ import com.vaadin.ui.NativeButton;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
-import org.ekolab.client.vaadin.server.ui.common.BaseEkoLabWindow;
-import org.ekolab.client.vaadin.server.ui.common.EkoLabWindow;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -76,7 +74,7 @@ public class LabTypeSelectorWindow extends BaseEkoLabWindow<LabTypeSelectorWindo
         labTypeChooserContent.addComponent(experimentButton, 0, 1, 0, 1);
     }
 
-    public static class LabTypeSelectorWindowSettings implements EkoLabWindow.WindowSettings {
+    public static class LabTypeSelectorWindowSettings implements WindowSettings {
         private final String randomDataView;
 
         private final String experimentDataView;

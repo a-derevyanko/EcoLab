@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.ui.common;
+package org.ekolab.client.vaadin.server.ui.windows;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileDownloader;
@@ -10,6 +10,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
+import org.ekolab.client.vaadin.server.ui.common.DownloadStreamResource;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.server.common.Profiles;
@@ -26,7 +27,7 @@ import javax.annotation.PostConstruct;
  */
 @SpringComponent
 @UIScope
-@Profile(Profiles.MODE.PROD)
+@Profile({Profiles.MODE.DEMO, Profiles.MODE.PROD})
 public class LabFinishedWindow<T extends LabData<V>, V extends LabVariant> extends BaseEkoLabWindow<LabFinishedWindow.LabFinishedWindowSettings<T, V>> {
 
     // ---------------------------- Графические компоненты --------------------
@@ -81,7 +82,7 @@ public class LabFinishedWindow<T extends LabData<V>, V extends LabVariant> exten
         navigator.redirectToView(LabChooserView.NAME);
     }
 
-    public static class LabFinishedWindowSettings<T extends LabData<V>, V extends LabVariant> implements EkoLabWindow.WindowSettings {
+    public static class LabFinishedWindowSettings<T extends LabData<V>, V extends LabVariant> implements WindowSettings {
         private final T labData;
 
         private final LabService<T, V> labService;

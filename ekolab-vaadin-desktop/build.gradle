@@ -27,6 +27,7 @@ repositories {
 
 dependencies {
     compile project (':ekolab-vaadin-server')
+    compile group: 'de.huxhorn.lilith',         name: 'de.huxhorn.lilith.3rdparty.junique',     version: '1.0.4'
 }
 
 war {
@@ -59,7 +60,7 @@ bootRun {
         classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
     }
     systemProperties(System.properties)
-    jvmArgs = ["-Dspring.profiles.active=demo,h2", "-Dorg.jooq.no-logo=true"]
+    jvmArgs = ["-Dspring.profiles.active=dev,h2", "-Dorg.jooq.no-logo=true"]
     addResources = true
 }
 

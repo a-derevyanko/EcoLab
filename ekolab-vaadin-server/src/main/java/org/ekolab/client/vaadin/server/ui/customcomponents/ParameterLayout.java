@@ -28,7 +28,7 @@ import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import static org.ekolab.client.vaadin.server.ui.common.ResourceWindow.show;
+import static org.ekolab.client.vaadin.server.ui.windows.ResourceWindow.show;
 
 /**
  * Created by 777Al on 08.04.2017.

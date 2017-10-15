@@ -92,4 +92,9 @@ public class UserInfoDataProvider extends AbstractBackEndDataProvider<UserInfo, 
         }
         return conditions;
     }
+
+    @Override
+    public Object getId(UserInfo item) {
+        return item.getLogin();
+    }
 }

@@ -22,6 +22,7 @@ import org.ekolab.client.vaadin.server.ui.view.content.lab_2.experiment.Lab2Expe
 import org.ekolab.client.vaadin.server.ui.view.content.lab_2.random.Lab2RandomDataView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
+import org.ekolab.client.vaadin.server.ui.windows.LabTypeSelectorWindow;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab2.Lab2Data;

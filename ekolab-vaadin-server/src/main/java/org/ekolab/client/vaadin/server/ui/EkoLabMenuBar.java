@@ -7,12 +7,13 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
-import org.ekolab.client.vaadin.server.ui.common.UserDataWindow;
+import org.ekolab.client.vaadin.server.ui.windows.EditUserWindow;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.AdminManagingView;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.common.Role;
+import org.ekolab.server.common.UserInfoUtils;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,22 +30,21 @@ import java.util.Collection;
 @UIScope
 @SpringComponent
 public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
-    @Autowired
-    private I18N i18N;
-
-    @Autowired
-    private EkoLabNavigator navigator;
-
-    @Autowired
-    private VaadinSecurity vaadinSecurity;
-
-    @Autowired
-    private UserInfoService userDetailsManager;
-
-    @Autowired
-    private UserDataWindow userDataWindow;
-
     // ---------------------- Данные экземпляра ----------------------------------
+    @Autowired
+    private final I18N i18N;
+
+    @Autowired
+    private final EkoLabNavigator navigator;
+
+    @Autowired
+    private final VaadinSecurity vaadinSecurity;
+
+    @Autowired
+    private final UserInfoService userDetailsManager;
+
+    @Autowired
+    private final EditUserWindow userDataWindow;
 
     // ---------------------- Графические компоненты -----------------------------
     private final HorizontalLayout leftButtonPanel = new HorizontalLayout();
@@ -55,6 +55,14 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
     private MenuItem teacherManagingItem;
     private MenuItem labChooserItem;
 
+    public EkoLabMenuBar(I18N i18N, EkoLabNavigator navigator, VaadinSecurity vaadinSecurity, UserInfoService userDetailsManager, EditUserWindow userDataWindow) {
+        this.i18N = i18N;
+        this.navigator = navigator;
+        this.vaadinSecurity = vaadinSecurity;
+        this.userDetailsManager = userDetailsManager;
+        this.userDataWindow = userDataWindow;
+    }
+
     @PostConstruct
     protected void init() {
         setWidth(100.0F, Unit.PERCENTAGE);
@@ -62,7 +70,7 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
         setStyleName(EkoLabTheme.MENUBAR_BORDERLESS);
         exitItem = addItem(i18N.get("menubar.exit"), VaadinIcons.SIGN_OUT, (Command) selectedItem -> vaadinSecurity.logout());
         userInfoItem = addItem("", VaadinIcons.USER, (Command) selectedItem -> {
-            userDataWindow.show(new UserDataWindow.UserDataWindowSettings(getUI().getCurrentUserInfo(), newUserInfo -> {
+            userDataWindow.show(new EditUserWindow.UserDataWindowSettings(getUI().getCurrentUserInfo(), newUserInfo -> {
                 getUI().setCurrentUserInfo(newUserInfo);
                 updateUserInfoItem();
             }));
@@ -120,6 +128,6 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
 
     private void updateUserInfoItem() {
         UserInfo userInfo = getUI().getCurrentUserInfo();
-        userInfoItem.setText(userInfo.getLastName() + ' ' + userInfo.getFirstName() + ' ' + userInfo.getMiddleName());
+        userInfoItem.setText(UserInfoUtils.getShortInitials(userInfo));
     }
 }

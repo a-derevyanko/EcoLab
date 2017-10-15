@@ -13,6 +13,8 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
+import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
+import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.common.Role;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;

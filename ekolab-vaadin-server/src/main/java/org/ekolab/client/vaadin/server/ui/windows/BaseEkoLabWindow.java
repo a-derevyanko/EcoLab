@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.ui.common;
+package org.ekolab.client.vaadin.server.ui.windows;
 
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct;
 /**
  * Created by 777Al on 03.04.2017.
  */
-public abstract class BaseEkoLabWindow<T extends EkoLabWindow.WindowSettings> extends Window implements EkoLabWindow<T> {
+public abstract class BaseEkoLabWindow<T extends WindowSettings> extends Window implements EkoLabWindow<T> {
     protected T settings;
 
     @PostConstruct

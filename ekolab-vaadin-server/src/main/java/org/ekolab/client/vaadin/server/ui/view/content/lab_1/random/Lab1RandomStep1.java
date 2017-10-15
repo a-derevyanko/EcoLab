@@ -74,7 +74,7 @@ public class Lab1RandomStep1 extends VerticalLayout implements LabWizardStep {
         secondLayout.setMargin(true);
         secondLayout.setSpacing(true);
         addField(timeField, FieldUtils.getField(Lab1Variant.class, "time"), firstLayout, 0);
-        addField(objectNameField, FieldUtils.getField(Lab1Variant.class, "name"), firstLayout, 1);
+        addField(objectNameField, FieldUtils.getField(Lab1Variant.class, "ekolab"), firstLayout, 1);
         addField(outsideAirTemperatureField, FieldUtils.getField(Lab1Variant.class, "outsideAirTemperature"), firstLayout, 2);
         addField(stacksHeightField, FieldUtils.getField(Lab1Variant.class, "stacksHeight"), firstLayout, 3);
         addField(stacksDiameterField, FieldUtils.getField(Lab1Variant.class, "stacksDiameter"), firstLayout, 4);

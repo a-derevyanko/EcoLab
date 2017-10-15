@@ -10,6 +10,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
+import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;

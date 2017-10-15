@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.ui.common;
+package org.ekolab.client.vaadin.server.ui.windows;
 
 import com.vaadin.ui.BrowserFrame;
 import com.vaadin.ui.UI;
@@ -8,6 +8,7 @@ import com.vaadin.ui.Window;
 /**
  * Created by 777Al on 20.04.2017.
  */
+@Deprecated //todo переписать на BaseEkolabWindow
 public class ResourceWindow extends Window {
     private final VerticalLayout content = new VerticalLayout();
 

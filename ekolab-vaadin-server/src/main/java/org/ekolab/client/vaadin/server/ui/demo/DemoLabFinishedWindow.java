@@ -2,10 +2,11 @@ package org.ekolab.client.vaadin.server.ui.demo;
 
 import com.vaadin.event.Action;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Notification;
-import org.ekolab.client.vaadin.server.ui.common.LabFinishedWindow;
+import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
@@ -18,7 +19,7 @@ import javax.annotation.PostConstruct;
  */
 @SpringComponent
 @UIScope
-@Profile(value = {Profiles.MODE.DEMO, Profiles.MODE.DEV})
+@Profile(value = {Profiles.MODE.DEV})
 public class DemoLabFinishedWindow<T extends LabData<V>, V extends LabVariant> extends LabFinishedWindow<T, V> implements Action.Handler{
 
     // ---------------------------- Графические компоненты --------------------
@@ -34,8 +35,11 @@ public class DemoLabFinishedWindow<T extends LabData<V>, V extends LabVariant> e
     @Override
     protected void beforeShow() {
         super.beforeShow();
-        Notification.show("Данная лабораторная работа не будет автоматически помечена как \"Выполненная\", т. к. вы находитесь в демо режиме.\n" +
-                "Чтобы отметить работу как \"Выполненную\" нажмите ALT+S", Notification.Type.WARNING_MESSAGE);
+        Notification notification = new Notification("Данная лабораторная работа " +
+                "будет автоматически помечена как \"Выполненная\", т. к. вы закончили её выполнение. В режиме " +
+                "разработчика вы можете сбросить данный признак, для этого нажмите ALT+S", Notification.Type.WARNING_MESSAGE);
+        notification.setDelayMsec(10000);
+        notification.show(Page.getCurrent());
     }
 
     @Override
@@ -46,7 +50,7 @@ public class DemoLabFinishedWindow<T extends LabData<V>, V extends LabVariant> e
     @Override
     public void handleAction(Action action, Object sender, Object target) {
         if (action == saveAction) {
-            settings.getLabData().setCompleted(true);
+            settings.getLabData().setCompleted(false);
             settings.getLabService().updateLab(settings.getLabData());
         }
     }

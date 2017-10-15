@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.ui.common;
+package org.ekolab.client.vaadin.server.ui.windows;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.BrowserWindowOpener;
@@ -15,6 +15,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import org.apache.commons.io.FilenameUtils;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.common.DownloadStreamResource;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.LabData;
@@ -124,7 +125,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
         valuesGrid.setItems(Collections.emptyList());
     }
 
-    public static class InitialDataWindowSettings<T extends LabData<V>, V extends LabVariant> implements EkoLabWindow.WindowSettings {
+    public static class InitialDataWindowSettings<T extends LabData<V>, V extends LabVariant> implements WindowSettings {
         private final V variant;
 
         private final LabService<T, V> labService;

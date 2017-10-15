@@ -2,6 +2,7 @@ package org.ekolab.server.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 /**
  * Created by 777Al on 22.05.2017.
@@ -72,5 +73,21 @@ public class UserInfo implements DomainModel {
         this.group = group;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserInfo)) return false;
+        UserInfo userInfo = (UserInfo) o;
+        return Objects.equals(login, userInfo.login) &&
+                Objects.equals(firstName, userInfo.firstName) &&
+                Objects.equals(middleName, userInfo.middleName) &&
+                Objects.equals(lastName, userInfo.lastName) &&
+                Objects.equals(note, userInfo.note) &&
+                group == userInfo.group;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(login, firstName, middleName, lastName, note, group);
+    }
 }

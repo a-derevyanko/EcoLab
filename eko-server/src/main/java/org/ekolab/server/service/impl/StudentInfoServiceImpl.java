@@ -3,7 +3,6 @@ package org.ekolab.server.service.impl;
 import org.ekolab.server.dao.api.content.StudentInfoDao;
 import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.StudentTeam;
-import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;

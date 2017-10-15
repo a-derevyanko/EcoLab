@@ -1,7 +1,6 @@
 package org.ekolab.server.service.impl.content.lab3;
 
 import com.twelvemonkeys.image.ImageUtil;
-import com.twelvemonkeys.image.ResampleOp;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.content.lab3.City;
 import org.ekolab.server.model.content.lab3.WindDirection;
@@ -14,7 +13,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class Lab3ResourceServiceImpl implements Lab3ResourceService {
     @Override
     @Cacheable("WIND_ROSE_URL_CACHE")
     public URL getWindRose(City city) {
-        return Lab3ResourceServiceImpl.class.getResource("wind/" + city.name() + ".svg");
+        return Lab3ResourceServiceImpl.class.getResource("wind/" + city.name() + ".png");
     }
 
     @Override
@@ -52,7 +54,7 @@ public class Lab3ResourceServiceImpl implements Lab3ResourceService {
     @LogExecutionTime(200)
     public Image getWindRoseImage(City city) {
         try (InputStream is = getWindRose(city).openStream()){
-            return new ResampleOp(150, 150, ResampleOp.FILTER_LANCZOS).filter(ImageIO.read(is), null);
+            return ImageIO.read(is);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
