@@ -83,9 +83,9 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
      * Проверяет результаты теста.
      * @param data данные лабораторной
      * @param answers ответы
-     * @return количество ошибок
+     * @return номера вопросов, на которые был дан неверный ответ
      */
-    int checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers);
+    List<Integer> checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers);
 
     /**
      * Проверяет, что тест пройден пользователем

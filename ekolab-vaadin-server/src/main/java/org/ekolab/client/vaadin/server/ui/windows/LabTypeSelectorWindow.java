@@ -32,6 +32,8 @@ public class LabTypeSelectorWindow extends BaseEkoLabWindow<LabTypeSelectorWindo
     private final NativeButton randomDataButton = new NativeButton("Random data");
     private final NativeButton experimentButton = new NativeButton("Experiment data");
     private final GridLayout labTypeChooserContent = new GridLayout(2, 2);
+    private final Image experimentType = new Image();
+    private final Image randomDataType = new Image();
 
     public LabTypeSelectorWindow(EkoLabNavigator navigator, I18N i18N, ResourceService resourceService) {
         this.navigator = navigator;
@@ -58,9 +60,9 @@ public class LabTypeSelectorWindow extends BaseEkoLabWindow<LabTypeSelectorWindo
         experimentButton.addStyleName(EkoLabTheme.BUTTON_VARIANT_CHOOSER);
         experimentButton.addClickListener(event -> {navigator.navigateTo(settings.experimentDataView); close();});
 
-        Image experimentType = resourceService.getImage(EkoLabTheme.EXPERIMENT_TYPE);
+        experimentType.setSource(resourceService.getImage(EkoLabTheme.EXPERIMENT_TYPE));
         experimentType.setSizeFull();
-        Image randomDataType = resourceService.getImage(EkoLabTheme.RANDOM_DATA_TYPE);
+        randomDataType.setSource(resourceService.getImage(EkoLabTheme.RANDOM_DATA_TYPE));
         randomDataType.setSizeFull();
 
         labTypeChooserContent.setSizeFull();

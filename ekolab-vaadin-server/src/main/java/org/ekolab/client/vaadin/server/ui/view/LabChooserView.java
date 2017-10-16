@@ -74,6 +74,7 @@ public class LabChooserView extends VerticalLayout implements View {
     // ---------------------------- Графические компоненты --------------------
     private final Gallery gallery = new Gallery();
     private final GridLayout content = new GridLayout(2, 5);
+    private final Image logo = new Image();
     private final NativeButton lab1Button = new NativeButton("Laboratory work №1");
     private final NativeButton lab2Button = new NativeButton("Laboratory work №2");
     private final NativeButton lab3Button = new NativeButton("Laboratory work №3");
@@ -104,7 +105,7 @@ public class LabChooserView extends VerticalLayout implements View {
         content.setSizeFull();
         content.setSpacing(true);
 
-        Image logo = resourceService.getImage(EkoLabTheme.IMAGE_LOGO);
+        logo.setSource(resourceService.getImage(EkoLabTheme.IMAGE_LOGO));
         logo.setSizeFull();
         logo.setWidth(400.0F, Unit.PIXELS);
 

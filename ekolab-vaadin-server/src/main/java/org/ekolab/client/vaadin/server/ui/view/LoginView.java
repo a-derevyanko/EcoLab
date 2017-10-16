@@ -39,6 +39,7 @@ public class LoginView extends VerticalLayout implements View {
     // ---------------------------- Графические компоненты --------------------
     protected final HorizontalLayout fields = new HorizontalLayout();
     protected final VerticalLayout loginPanel = new VerticalLayout();
+    protected final Image logo = new Image();
     protected final Label welcome = new Label("Welcome");
     protected final Button signin = new Button("Sign In", (ClickListener) event -> login());
     protected final CheckBox rememberMe = new CheckBox("Remember me");
@@ -86,7 +87,7 @@ public class LoginView extends VerticalLayout implements View {
 
         loginPanel.addStyleName(EkoLabTheme.PANEL_LOGIN);
 
-        Image logo = resourceService.getImage(EkoLabTheme.IMAGE_TEXT_LOGO);
+        logo.setSource(resourceService.getImage(EkoLabTheme.IMAGE_TEXT_LOGO));
         logo.setWidth(30, Unit.EM);
         logo.setHeight(15, Unit.EM);
 

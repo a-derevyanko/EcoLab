@@ -6,7 +6,6 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.BrowserFrame;
-import com.vaadin.ui.Image;
 import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.api.FolderIterator;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
@@ -50,14 +49,13 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Image getImage(String imageName) {
+    public Resource getImage(String imageName) {
         return getImage("img/" , imageName);
     }
 
     @Override
-    public Image getImage(String path, String imageName) {
-        Resource resource = new ThemeResource(path + imageName);
-        return new Image(null, resource);
+    public Resource getImage(String path, String imageName) {
+        return new ThemeResource(path + imageName);
     }
 
     @Override

@@ -5,8 +5,17 @@ import org.ekolab.server.model.DomainModel;
 import java.util.Objects;
 
 public abstract class LabTestQuestionVariant implements DomainModel {
+    private int number;
     private String question;
     private String image;
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
     public String getQuestion() {
         return question;

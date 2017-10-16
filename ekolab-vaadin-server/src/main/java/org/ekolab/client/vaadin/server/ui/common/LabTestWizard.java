@@ -17,6 +17,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
+import org.ekolab.client.vaadin.server.ui.windows.LabTestFinishedWindow;
 import org.ekolab.server.common.Role;
 import org.ekolab.server.model.content.*;
 import org.ekolab.server.service.api.content.LabService;
@@ -36,6 +37,9 @@ import java.util.*;
 public abstract class LabTestWizard extends Wizard implements View {
     @Autowired
     private Authentication currentUser;
+
+    @Autowired
+    private LabTestFinishedWindow labTestFinishedWindow;
 
     protected final I18N i18N;
     protected final LabService<?, ?> labService;
@@ -84,12 +88,15 @@ public abstract class LabTestWizard extends Wizard implements View {
             }
         }
 
-        int errors = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers);
-        if (errors == 0) {
+        List<Integer> errors = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers);
+
+        labTestFinishedWindow.show(new LabTestFinishedWindow.LabFinishedWindowSettings(errors, answers.keySet()));
+
+        if (errors.isEmpty()) {
             labService.setTestCompleted(currentUser.getName());
             super.finish();
         } else {
-            ComponentErrorNotification.show(i18N.get("test.not-right", errors));
+            ComponentErrorNotification.show(i18N.get("test.not-right", errors.size()));
         }
     }
 

@@ -1,7 +1,7 @@
 package org.ekolab.client.vaadin.server.service.api;
 
+import com.vaadin.server.Resource;
 import com.vaadin.ui.BrowserFrame;
-import com.vaadin.ui.Image;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,9 +12,9 @@ import java.util.Set;
  */
 public interface ResourceService extends Serializable {
 
-    Image getImage(String imageName);
+    Resource getImage(String imageName);
 
-    Image getImage(String path, String imageName);
+    Resource getImage(String path, String imageName);
 
     com.github.lotsabackscatter.blueimp.gallery.Image getGalleryImage(String imageName);
 

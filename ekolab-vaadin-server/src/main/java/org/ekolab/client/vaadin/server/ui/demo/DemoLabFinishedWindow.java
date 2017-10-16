@@ -36,7 +36,7 @@ public class DemoLabFinishedWindow<T extends LabData<V>, V extends LabVariant> e
     protected void beforeShow() {
         super.beforeShow();
         Notification notification = new Notification("Данная лабораторная работа " +
-                "будет автоматически помечена как \"Выполненная\", т. к. вы закончили её выполнение. В режиме " +
+                "будет автоматически помечена\nкак \"Выполненная\", т. к. вы закончили её выполнение. В режиме\n" +
                 "разработчика вы можете сбросить данный признак, для этого нажмите ALT+S", Notification.Type.WARNING_MESSAGE);
         notification.setDelayMsec(10000);
         notification.show(Page.getCurrent());

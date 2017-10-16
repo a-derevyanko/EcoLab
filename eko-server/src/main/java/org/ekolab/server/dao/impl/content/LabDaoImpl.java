@@ -55,16 +55,20 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
         }
 
         for (Record record : variantRecords) {
+            int number = record.get(LAB_TEST_QUESTION.QUESTION_NUMBER);
             LabTestQuestionVariantWithAnswers questionVariant = new LabTestQuestionVariantWithAnswers();
+            questionVariant.setNumber(number);
             questionVariant.setQuestion(record.get(LAB_TEST_QUESTION_VARIANT.QUESTION_TEXT));
             questionVariant.setAnswers(Arrays.stream(record.get(LAB_TEST_QUESTION_VARIANT.ANSWERS)).map(Object::toString).collect(Collectors.toList()));
             questionVariant.setRightAnswer(record.get(LAB_TEST_QUESTION_VARIANT.QUESTION_ANSWER_NUMBER));
             questionVariant.setImage(record.get(LAB_TEST_QUESTION_VARIANT.IMAGE));
-            questions.get(record.get(LAB_TEST_QUESTION.QUESTION_NUMBER)).getVariants().add(questionVariant);
+            questions.get(number).getVariants().add(questionVariant);
         }
 
         for (Record record : homeWorkRecords) {
+            int number = record.get(LAB_TEST_QUESTION.QUESTION_NUMBER);
             LabTestHomeWorkQuestion homeWorkQuestion = new LabTestHomeWorkQuestion();
+            homeWorkQuestion.setNumber(number);
             homeWorkQuestion.setQuestion(record.get(LAB_TEST_HOME_WORK_QUESTION.QUESTION_TEXT));
             homeWorkQuestion.setImage(record.get(LAB_TEST_HOME_WORK_QUESTION.IMAGE));
             homeWorkQuestion.setFormulae(record.get(LAB_TEST_HOME_WORK_QUESTION.FORMULAE));
@@ -77,7 +81,7 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
                 throw new IllegalArgumentException(e);
             }
 
-            questions.get(record.get(LAB_TEST_QUESTION.QUESTION_NUMBER)).getVariants().add(homeWorkQuestion);
+            questions.get(number).getVariants().add(homeWorkQuestion);
         }
 
         return questions.values();

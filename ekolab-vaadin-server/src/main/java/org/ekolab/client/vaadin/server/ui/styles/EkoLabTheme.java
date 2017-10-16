@@ -28,6 +28,8 @@ public class EkoLabTheme extends ValoTheme {
 
     public static final String PANEL_LAB_FINISHED = "wizard-lab-finished";
 
+    public static final String PANEL_TEST_FINISHED = "test-finished";
+
     public static final String PANEL_TEST_PRESENTATION = "test-presentation-panel";
 
     // ---------------------- Окна -------------------------
@@ -58,6 +60,10 @@ public class EkoLabTheme extends ValoTheme {
     public static final String IMAGE_TEXT_LOGO = "textLogo.svg";
 
     public static final String IMAGE_LOGO = "logo.svg";
+
+    public static final String TEST_COMPLETED = "testCompleted.svg";
+
+    public static final String TEST_NOT_COMPLETED = "testNotCompleted.svg";
 
     public static final String EXPERIMENT_TYPE = "experimentType.svg";
 

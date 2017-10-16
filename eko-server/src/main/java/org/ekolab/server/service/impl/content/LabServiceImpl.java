@@ -57,6 +57,7 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -189,15 +190,15 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
     }
 
     @Override
-    public int checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers) {
-        int errors = 0;
+    public List<Integer> checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers) {
+        List<Integer> errors = new ArrayList<>();
         Bindings values = new SimpleBindings(getValuesFromModel(data));
 
         for (Map.Entry<LabTestQuestionVariant, Object> entry : answers.entrySet()) {
             if (entry.getKey() instanceof LabTestQuestionVariantWithAnswers) {
                 LabTestQuestionVariantWithAnswers variant = (LabTestQuestionVariantWithAnswers) entry.getKey();
                 if (!variant.getAnswers().get(variant.getRightAnswer() - 1).equals(entry.getValue())) {
-                    errors++;
+                    errors.add(variant.getNumber());
                 }
             } else {
                 LabTestHomeWorkQuestion question = (LabTestHomeWorkQuestion) entry.getKey();
@@ -207,11 +208,11 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
                     Object value = engine.eval(question.getFormulae(), values);
                     if (Number.class.isAssignableFrom(question.getValueType())) {
                         if (!MathUtils.checkEquals(((Number) entry.getValue()).doubleValue(), ((Number) value).doubleValue())) {
-                            errors++;
+                            errors.add(question.getNumber());
                         }
                     } else if (question.getValueType() == Boolean.class) {
                         if (!entry.getValue().equals(value)) {
-                            errors++;
+                            errors.add(question.getNumber());
                         }
                     }
                 } catch (ScriptException e) {

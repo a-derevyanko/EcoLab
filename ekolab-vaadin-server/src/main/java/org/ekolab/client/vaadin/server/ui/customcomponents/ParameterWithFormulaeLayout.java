@@ -3,6 +3,7 @@ package org.ekolab.client.vaadin.server.ui.customcomponents;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Image;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
@@ -29,7 +30,7 @@ public class ParameterWithFormulaeLayout<BEAN extends LabData<V>, V extends LabV
     protected void addSign(String fieldName, int row) {
         String resKey = fieldName + '.' + ImageFormat.PNG;
         if (res.isResourceExists(formulaePath, resKey)) {
-            Component signLabelComponent = res.getImage(formulaePath, resKey);
+            Component signLabelComponent = new Image(null, res.getImage(formulaePath, resKey));
             super.addComponent(signLabelComponent, 2, row);
         } else {
             super.addSign(fieldName, row);
