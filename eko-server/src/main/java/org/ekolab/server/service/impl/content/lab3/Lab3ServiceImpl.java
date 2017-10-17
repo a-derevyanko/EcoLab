@@ -184,7 +184,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                         0.5 :
                         vm <= 2 ?
                                 vm :
-                                vm / (1 + 0.12 * Math.sqrt(f)));
+                                vm * (1 + 0.12 * Math.sqrt(f)));
 
                 n = vm < 0.5 ?
                         4.4 * vm :
@@ -213,7 +213,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
 
                 double k = labData.getTemperatureCoefficient() * labData.getHarmfulSubstancesDepositionCoefficient() *
                         n * m * labData.getTerrainCoefficient()
-                        / (Math.pow(labData.getStacksHeight(), 2) * Math.cbrt(((V1 * dT))));
+                        / (Math.pow(labData.getStacksHeight(), 2)) * Math.cbrt(labData.getNumberOfStacks().value() / (V1 * labData.getNumberOfUnits().value() * dT));
                 if (labData.getNoxMassiveInjection() != null) {
                     labData.setBwdNoxGroundLevelConcentration(labData.getNo2BackgroundConcentration() + k *
                             labData.getNoxMassiveInjection());
@@ -266,7 +266,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 if (labData.getWindSpeed() != null && labData.getBreakdownWindSpeed() != null) {
                     double uUm = labData.getWindSpeed() / labData.getBreakdownWindSpeed();
                     double p = uUm <= 0.25 ? 3 :
-                            uUm <= 1 ? 8.42 * Math.pow((1 - uUm), 3) :
+                            uUm <= 1 ? 8.43 * Math.pow((1 - uUm), 3) + 1:
                                     0.32 * uUm + 0.68;
                     labData.setWindSpeedMaxGroundLevelConcentrationDistance(p * labData.getBwdMaxGroundLevelConcentrationDistance());
                 }

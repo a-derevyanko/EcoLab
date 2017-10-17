@@ -49,11 +49,13 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
+    @Cacheable("RESOURCE")
     public Resource getImage(String imageName) {
         return getImage("img/" , imageName);
     }
 
     @Override
+    @Cacheable("RESOURCE")
     public Resource getImage(String path, String imageName) {
         return new ThemeResource(path + imageName);
     }

@@ -77,7 +77,7 @@ INSERT INTO lab3data (
   0.05,
   0.008,
   0.1,
-  0.2,
+  0.01,
   0.02,
   0,
   0,
@@ -151,5 +151,5 @@ ash_background_concentration,
 0.05,
 0.008,
 0.1,
-0.2
+0.01
 );

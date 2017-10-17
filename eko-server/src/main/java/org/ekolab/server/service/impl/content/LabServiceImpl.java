@@ -207,7 +207,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
                 try {
                     Object value = engine.eval(question.getFormulae(), values);
                     if (Number.class.isAssignableFrom(question.getValueType())) {
-                        if (!MathUtils.checkEquals(((Number) entry.getValue()).doubleValue(), ((Number) value).doubleValue())) {
+                        if (!MathUtils.checkEquals(((Number) entry.getValue()).doubleValue(), ((Number) value).doubleValue(), 1.5)) {
                             errors.add(question.getNumber());
                         }
                     } else if (question.getValueType() == Boolean.class) {

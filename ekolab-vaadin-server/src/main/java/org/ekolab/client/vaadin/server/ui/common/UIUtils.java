@@ -46,4 +46,8 @@ public abstract class UIUtils {
             }
         });
     }
+
+    public static <T> Validator<T> notNullValidator(I18N i18N) {
+        return (value, context) -> value == null ? ValidationResult.error(i18N.get("labwizard.wrong-value")) : ValidationResult.ok();
+    };
 }

@@ -96,7 +96,7 @@ public abstract class LabTestWizard extends Wizard implements View {
             labService.setTestCompleted(currentUser.getName());
             super.finish();
         } else {
-            ComponentErrorNotification.show(i18N.get("test.not-right", errors.size()));
+            Notification.show(i18N.get("test.not-right", errors.size()), Notification.Type.TRAY_NOTIFICATION);
         }
     }
 
@@ -211,6 +211,7 @@ public abstract class LabTestWizard extends Wizard implements View {
             this.i18N = i18N;
             this.component = component;
             questionText.setValue(question.getQuestion());
+            questionText.setWidth(600.0F, Unit.PIXELS);
             setSizeFull();
             setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
             addComponent(questionText);

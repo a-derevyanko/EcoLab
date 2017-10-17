@@ -40,9 +40,7 @@ import static org.ekolab.server.db.h2.public_.Tables.USER_AUTHORITIES;
 @Service
 @Transactional
 public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements UserInfoService {
-    private static final String ANY_LATIN_NFD = "Any-Latin; NFD;";
-
-    private static final Transliterator TRANSLITERATOR = Transliterator.getInstance(ANY_LATIN_NFD);
+    private static final Transliterator TRANSLITERATOR = Transliterator.getInstance("Any-Latin; Lower; Latin-ASCII");
 
     private static final RecordMapper<Record, UserInfo> USER_INFO_RECORD_MAPPER = record -> {
         UserInfo info = new UserInfo();

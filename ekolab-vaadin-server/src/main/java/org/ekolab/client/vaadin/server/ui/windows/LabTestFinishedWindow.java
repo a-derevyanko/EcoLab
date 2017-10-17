@@ -17,6 +17,7 @@ import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
+import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Created by 777Al on 20.04.2017.
@@ -57,15 +59,13 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
         setHeight(80.0F, Unit.PERCENTAGE);
         setWidth(80.0F, Unit.PERCENTAGE);
         setModal(true);
-        testCompleted.setWidth(300.0F, Unit.PIXELS);
-        testNotCompleted.setWidth(300.0F, Unit.PIXELS);
         testNotCompleted.setSource(resourceService.getImage("content/", EkoLabTheme.TEST_NOT_COMPLETED));
 
         result.setSizeFull();
 
-        result.setComponentAlignment(testCompleted, Alignment.MIDDLE_CENTER);
-        result.setComponentAlignment(testNotCompleted, Alignment.MIDDLE_CENTER);
-        testResultAccordion.setWidth(600.0F, Unit.PIXELS);
+        result.setComponentAlignment(testCompleted, Alignment.TOP_CENTER);
+        result.setComponentAlignment(testNotCompleted, Alignment.TOP_CENTER);
+        testResultAccordion.setSizeFull();
         content.setSizeFull();
         content.setStyleName(EkoLabTheme.PANEL_TEST_FINISHED);
         content.setMargin(true);
@@ -73,7 +73,7 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
         content.setComponentAlignment(buttons, Alignment.BOTTOM_RIGHT);
         content.setExpandRatio(result, 10.0F);
         content.setExpandRatio(buttons, 1.0F);
-        buttons.setComponentAlignment(toMainMenuButton, Alignment.BOTTOM_RIGHT);
+        buttons.setComponentAlignment(toMainMenuButton, Alignment.BOTTOM_CENTER);
 
         toMainMenuButton.setCaption(i18N.get("labwizard.lab-finished.go-to-main-menu"));
 
@@ -101,10 +101,23 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
 
         settings.questions.stream().
                 sorted(Comparator.comparingInt(LabTestQuestionVariant::getNumber)).
-                forEach(questionVariant -> testResultAccordion.addTab(new Label(questionVariant.getQuestion(), ContentMode.HTML),
-                            i18N.get("test.question", questionVariant.getNumber())).setIcon(VaadinIcons.CHECK));
+                forEach(questionVariant -> {
+                    StringBuilder question = new StringBuilder(questionVariant.getQuestion());
 
-        settings.errors.forEach(tabIndex -> testResultAccordion.getTab(tabIndex - 1).setIcon(VaadinIcons.CLOSE));
+                    if (questionVariant instanceof LabTestQuestionVariantWithAnswers) {
+                        List<String> answers = ((LabTestQuestionVariantWithAnswers) questionVariant).getAnswers();
+                        IntStream.rangeClosed(0, answers.size() - 1).forEachOrdered(i -> question.append("<br>").append(i + 1).append(") ").append(answers.get(i)));
+                    }
+
+
+                    Label label = new Label(question.toString(), ContentMode.HTML);
+                    label.setWidth(500.0F, Unit.PIXELS);
+
+                    testResultAccordion.addTab(new VerticalLayout(label),
+                            i18N.get("test.question", questionVariant.getNumber())).setIcon(resourceService.getImage("ok.svg"));
+                });
+
+        settings.errors.forEach(tabIndex -> testResultAccordion.getTab(tabIndex - 1).setIcon(resourceService.getImage("error.svg")));
     }
 
     @Override

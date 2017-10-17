@@ -13,6 +13,17 @@ public abstract class MathUtils {
      * @return признак равенства
      */
     public static boolean checkEquals(double a, double b) {
-        return Math.abs(a - b) < EPS;
+        return checkEquals(a, b, EPS);
+    }
+
+    /**
+     * Проверяет равенство двух чисел
+     * @param a первое число
+     * @param b второе число
+     * @param eps погрешность
+     * @return признак равенства
+     */
+    public static boolean checkEquals(double a, double b, double eps) {
+        return Math.abs(a - b) < eps;
     }
 }
