@@ -93,7 +93,7 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
     @Override
     protected void beforeShow() {
         super.beforeShow();
-        if (settings.errors.isEmpty()) {
+        if (settings.errors.size() > 2) {
             testCompleted.setVisible(true);
         } else {
             testNotCompleted.setVisible(true);

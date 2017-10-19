@@ -10,7 +10,7 @@ import java.util.Objects;
  * Селектор, позволяющий выбрать файлы с презентациями лабораторных
  */
 public class LabPresentationsFolderIterator extends BaseFolderIterator {
-    private int i = 1;
+    private int i = 0;
     private Boolean hasNext;
 
     @NotNull
@@ -32,7 +32,7 @@ public class LabPresentationsFolderIterator extends BaseFolderIterator {
     @Override
     public boolean hasNext() {
         if (hasNext == null) {
-            hasNext = resourceService.isResourceExists("content/lab" + i + "/presentation", "");
+            hasNext = resourceService.isResourceExists("content/lab" + (i + 1) + "/presentation", "");
         }
         return hasNext;
     }
@@ -40,8 +40,9 @@ public class LabPresentationsFolderIterator extends BaseFolderIterator {
     @Override
     public String next() {
         if (hasNext()) {
-            String next = "content/lab" + i + "/presentation";
             i++;
+            String next = "content/lab" + i + "/presentation";
+            hasNext = null;
             return next;
         } else {
             throw new NoSuchElementException("No element for index " + i);

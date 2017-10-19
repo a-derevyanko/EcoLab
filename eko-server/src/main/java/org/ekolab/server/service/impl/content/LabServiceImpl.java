@@ -331,6 +331,12 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
             values.put("studentsList", studentsList.toString());
         } else {
             values.put("teacherName", UserInfoUtils.getShortInitials(userInfo));
+
+            //todo убрать всё то ниже после релиза
+            values.put("groupNumber", "");
+            values.put("teamNumber", "");
+
+            values.put("studentsList",  "");
         }
 
         Map<String, Object> labVariantAndDataValues = getValuesFromModel(data.getVariant());

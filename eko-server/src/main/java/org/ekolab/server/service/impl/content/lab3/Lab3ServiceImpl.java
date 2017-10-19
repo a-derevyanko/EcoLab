@@ -55,6 +55,11 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         cityValue.setName(messageSource.getMessage("lab3.initial-data.city", null, locale) + ": " + getFieldValueForPrint(data.getCity(), locale));
         cityValue.setValue(lab3ResourceService.getCoatOfArms(data.getCity()));
         values.add(cityValue);
+
+        DataValue desulphurizationUnitType = new DataValue();
+        desulphurizationUnitType.setName(messageSource.getMessage("desulphurizationUnitType", null, locale));
+        desulphurizationUnitType.setValue(messageSource.getMessage("desulphurizationUnitType-none", null, locale));
+        values.add(desulphurizationUnitType);
         return values;
     }
 

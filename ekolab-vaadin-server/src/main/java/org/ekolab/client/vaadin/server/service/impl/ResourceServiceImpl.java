@@ -7,6 +7,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.BrowserFrame;
 import com.vaadin.ui.UI;
+import org.apache.commons.lang.UnhandledException;
 import org.ekolab.client.vaadin.server.service.api.FolderIterator;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.slf4j.Logger;
@@ -15,13 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.vaadin.spring.context.VaadinApplicationContext;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -104,10 +104,10 @@ public class ResourceServiceImpl implements ResourceService {
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             try (ZipOutputStream zos = new ZipOutputStream(bos)) {
                 for (String path : folderIterator) {
-                    try (Stream<Path> paths = Files.walk(getFile(path).toPath())) {
-                        paths.filter(p -> Files.isRegularFile(p))
-                                .forEach(p -> addFileToZip(folderIterator.getFolderName(),
-                                        p.toFile(), zos, false));
+                    try (PathReference pathReference = PathReference.getPath(VaadinServlet.getCurrent().getServletContext().getResource(getThemeDir() + path).toURI());
+                         Stream<Path> pathStream = Files.list(pathReference.getPath())) {
+                        pathStream.filter(Files::isRegularFile).
+                                forEach(p -> addFileToZip(folderIterator.getFolderName(), p, zos, false));
                     }
                 }
             }
@@ -115,6 +115,8 @@ public class ResourceServiceImpl implements ResourceService {
             return bos.toByteArray();
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
+        } catch (URISyntaxException e) {
+            throw new UnhandledException(e);
         }
     }
 
@@ -136,16 +138,16 @@ public class ResourceServiceImpl implements ResourceService {
     /*
      * Рекурсивно добавляет файлы в архив
      */
-    private void addFileToZip(String path, File srcFile, ZipOutputStream zip, boolean emptyFolder) {
+    private void addFileToZip(String path, Path srcFile, ZipOutputStream zip, boolean emptyFolder) {
         try {
             if (emptyFolder) {
-                zip.putNextEntry(new ZipEntry(Paths.get(path,  srcFile.getName(), "").toString()));
+                zip.putNextEntry(new ZipEntry(Paths.get(path,  srcFile.getFileName().toString(), "").toString()));
             } else {
-                if (srcFile.isDirectory()) {
+                if (Files.isDirectory(srcFile)) {
                     addFolderToZip(path, srcFile, zip);
                 } else {
-                    zip.putNextEntry(new ZipEntry(Paths.get(path, srcFile.getName()).toString()));
-                    Files.copy(srcFile.toPath(), zip);
+                    zip.putNextEntry(new ZipEntry(Paths.get(path, srcFile.getFileName().toString()).toString()));
+                    Files.copy(srcFile, zip);
                     zip.closeEntry();
                 }
             }
@@ -160,30 +162,18 @@ public class ResourceServiceImpl implements ResourceService {
      * @param folder папка
      * @param zip архив
      */
-    private void addFolderToZip(String path, File folder, ZipOutputStream zip) {
+    private void addFolderToZip(String path, Path folder, ZipOutputStream zip) {
         try {
-            File[] files = folder.listFiles();
+            List<Path> files = Files.list(folder).collect(Collectors.toList());
 
-            if (files == null) {
-                throw new IllegalArgumentException("Empty folder: " + folder.getCanonicalPath());
-            }
-
-            if (files.length == 0) {
+            if (files.isEmpty()) {
                 addFileToZip(path, folder, zip, true);
             } else {
-                for (File file : files) {
-                    addFileToZip(path.isEmpty() ? folder.getName() : path + "/" + folder.getName(),
+                for (Path file : files) {
+                    addFileToZip(path.isEmpty() ? folder.getFileName().toString() : path + "/" + folder.getFileName().toString(),
                             file, zip, false);
                 }
             }
-        } catch (IOException ex) {
-            throw new UncheckedIOException(ex);
-        }
-    }
-
-    private File getFile(String path) {
-        try {
-            return VaadinApplicationContext.getContext().getResource(getThemeDir() + path).getFile();
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
         }

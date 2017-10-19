@@ -7,11 +7,11 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
-import org.ekolab.client.vaadin.server.ui.windows.EditUserWindow;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.AdminManagingView;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
+import org.ekolab.client.vaadin.server.ui.windows.EditUserWindow;
 import org.ekolab.server.common.Role;
 import org.ekolab.server.common.UserInfoUtils;
 import org.ekolab.server.model.UserInfo;
@@ -87,14 +87,9 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
     // ------------------------------ Реализация обработчиков событий ----------------
     @Override
     public boolean beforeViewChange(ViewChangeEvent event) {
-        return true;
-    }
-
-    @Override
-    public void afterViewChange(ViewChangeEvent event) {
         if (vaadinSecurity.isAuthenticated()) {
-            Authentication authentication = vaadinSecurity.getAuthentication();
-            if (userInfoItem.getText().isEmpty()) {
+            if (VaadinUI.getCurrent().getCurrentUserInfo() == null) {
+                Authentication authentication = vaadinSecurity.getAuthentication();
                 getUI().setCurrentUserInfo(userDetailsManager.getUserInfo(authentication.getName()));
                 updateUserInfoItem();
 
@@ -119,11 +114,12 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
             getUI().setCurrentUserInfo(null);
             getUI().setCurrentStudentInfo(null);
         }
+        return true;
     }
 
     @Override
     public VaadinUI getUI() {
-        return (VaadinUI) super.getUI();
+        return VaadinUI.getCurrent();
     }
 
     private void updateUserInfoItem() {

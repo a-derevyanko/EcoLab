@@ -2,7 +2,6 @@ package org.ekolab.client.vaadin.server.ui.demo;
 
 import com.vaadin.event.Action;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Notification;
@@ -35,11 +34,9 @@ public class DemoLabFinishedWindow<T extends LabData<V>, V extends LabVariant> e
     @Override
     protected void beforeShow() {
         super.beforeShow();
-        Notification notification = new Notification("Данная лабораторная работа " +
+        Notification.show("Данная лабораторная работа " +
                 "будет автоматически помечена\nкак \"Выполненная\", т. к. вы закончили её выполнение. В режиме\n" +
-                "разработчика вы можете сбросить данный признак, для этого нажмите ALT+S", Notification.Type.WARNING_MESSAGE);
-        notification.setDelayMsec(10000);
-        notification.show(Page.getCurrent());
+                "разработчика вы можете сбросить данный признак, для этого нажмите ALT+S", Notification.Type.TRAY_NOTIFICATION);
     }
 
     @Override

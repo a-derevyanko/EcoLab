@@ -101,6 +101,10 @@ public class VaadinUI extends UI {
         return currentStudentInfo;
     }
 
+    public static VaadinUI getCurrent() {
+        return (VaadinUI) UI.getCurrent();
+    }
+
     @Override
     public String toString() {
         return "VaadinUI{" +

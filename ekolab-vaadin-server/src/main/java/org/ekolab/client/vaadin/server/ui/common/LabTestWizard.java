@@ -24,6 +24,7 @@ import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
+import org.vaadin.spring.annotation.PrototypeScope;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +35,7 @@ import java.util.*;
  * Created by 777Al on 03.04.2017.
  */
 @RolesAllowed(Role.STUDENT)
+@PrototypeScope // При повторном входе тест должен быть другим
 public abstract class LabTestWizard extends Wizard implements View {
     @Autowired
     private Authentication currentUser;

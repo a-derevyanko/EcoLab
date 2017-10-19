@@ -6,12 +6,22 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbsoluteLayout;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.PopupView;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import org.ekolab.client.vaadin.server.service.api.PresentationService;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.service.impl.OneFolderIterator;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
+import org.ekolab.client.vaadin.server.ui.VaadinUI;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1TestView;
@@ -23,7 +33,7 @@ import org.ekolab.client.vaadin.server.ui.view.content.lab_2.random.Lab2RandomDa
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
 import org.ekolab.client.vaadin.server.ui.windows.LabTypeSelectorWindow;
-import org.ekolab.server.common.Profiles;
+import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab2.Lab2Data;
 import org.ekolab.server.model.content.lab3.Lab3Data;
@@ -31,7 +41,6 @@ import org.ekolab.server.service.api.content.lab1.Lab1Service;
 import org.ekolab.server.service.api.content.lab2.Lab2Service;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 
 import java.io.ByteArrayInputStream;
@@ -40,7 +49,6 @@ import java.io.ByteArrayInputStream;
  * Created by 777Al on 03.04.2017.
  */
 @SpringView(name = LabChooserView.NAME)
-@Profile({Profiles.MODE.PROD, Profiles.MODE.DEMO})
 public class LabChooserView extends VerticalLayout implements View {
     public static final String NAME = "labchooser";
 
@@ -196,13 +204,16 @@ public class LabChooserView extends VerticalLayout implements View {
         setTestButtonSate(lab1TestButton, lab1Data != null && !lab1Service.isTestCompleted(currentUser.getName()));
         setTestButtonSate(lab2TestButton, lab2Data != null && !lab2Service.isTestCompleted(currentUser.getName()));
         setTestButtonSate(lab3TestButton, lab3Data != null && !lab3Service.isTestCompleted(currentUser.getName()));
-        setLabButtonSate(lab1Button, lab1Data == null);
-        setLabButtonSate(lab2Button, lab2Data == null);
-        setLabButtonSate(lab3Button, lab3Data == null);
+        boolean isNotStudent = VaadinUI.getCurrent().getCurrentUserInfo().getGroup() != UserGroup.STUDENT;
+        /*setLabButtonSate(lab1Button, isNotStudent || lab1Data == null);
+        setLabButtonSate(lab2Button, isNotStudent || lab2Data == null);*/
+        lab1Button.setEnabled(false);
+        lab2Button.setEnabled(false);
+        setLabButtonSate(lab3Button, isNotStudent || lab3Data == null);
         setButtonSate(labDefenceButton, lab1TestButton.isEnabled() || lab2TestButton.isEnabled() || lab3TestButton.isEnabled());
     }
 
-    protected void setButtonSate(NativeButton button, boolean enabled) {
+    private void setButtonSate(NativeButton button, boolean enabled) {
         if (enabled) {
             button.setEnabled(true);
             button.removeStyleName(EkoLabTheme.BUTTON_DISABLED);
