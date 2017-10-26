@@ -345,7 +345,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         variant.setAirVolume(0.0889 * (randomFuelType.getCarbonContent() + 0.375 * randomFuelType.getSulphurContent()) +
                 0.265 * randomFuelType.getHydrogenContent() - 0.0333 * randomFuelType.getOxygenContent());
         variant.setWaterVaporVolume(0.111 * randomFuelType.getHydrogenContent() +
-                0.0124 * randomFuelType.getWaterContent() + 0.016 + variant.getAirVolume());
+                0.0124 * randomFuelType.getWaterContent() + 0.016 * variant.getAirVolume());
         variant.setCombustionProductsVolume((1.866 * (randomFuelType.getCarbonContent() +
                 0.375 * randomFuelType.getSulphurContent()) / 100) + (0.79 * variant.getAirVolume() + 0.8 *
                 randomFuelType.getNitrogenContent() / 100) + variant.getWaterVaporVolume());
