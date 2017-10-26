@@ -343,15 +343,15 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         variant.setOutsideAirTemperature(randomCity.getOutsideAirTemperature());
         variant.setExcessAirRatio(1.4);
         variant.setAirVolume(0.0889 * (randomFuelType.getCarbonContent() + 0.375 * randomFuelType.getSulphurContent()) +
-                0.0124 * randomFuelType.getHydrogenContent() - 0.0333 * randomFuelType.getOxygenContent());
+                0.265 * randomFuelType.getHydrogenContent() - 0.0333 * randomFuelType.getOxygenContent());
         variant.setWaterVaporVolume(0.111 * randomFuelType.getHydrogenContent() +
                 0.0124 * randomFuelType.getWaterContent() + 0.016 + variant.getAirVolume());
         variant.setCombustionProductsVolume((1.866 * (randomFuelType.getCarbonContent() +
                 0.375 * randomFuelType.getSulphurContent()) / 100) + (0.79 * variant.getAirVolume() + 0.8 *
                 randomFuelType.getNitrogenContent() / 100) + variant.getWaterVaporVolume());
-        variant.setNo2BackgroundConcentration(0.05 + RandomUtils.nextInt(8) * 0.01);
+        variant.setNo2BackgroundConcentration(0.005 + RandomUtils.nextInt(11) * 0.001);
         variant.setNoBackgroundConcentration(0.008 + RandomUtils.nextInt(5) * 0.01);
-        variant.setSo2BackgroundConcentration(0.1 + RandomUtils.nextInt(16) * 0.01);
+        variant.setSo2BackgroundConcentration(0.005 + RandomUtils.nextInt(6) * 0.001);
         variant.setAshBackgroundConcentration(0.005 + RandomUtils.nextInt(6) * 0.001);
         return variant;
     }
