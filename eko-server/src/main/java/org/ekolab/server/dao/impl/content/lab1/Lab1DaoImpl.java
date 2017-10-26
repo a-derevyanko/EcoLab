@@ -2,6 +2,7 @@ package org.ekolab.server.dao.impl.content.lab1;
 
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.content.lab1.Lab1Dao;
+import org.ekolab.server.dao.impl.DaoUtils;
 import org.ekolab.server.dao.impl.content.LabDaoImpl;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
@@ -66,14 +67,14 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
     @Override
     public Lab1Data getLastLabByUser(String userName, boolean completed) {
         return dsl.select().from(LAB1DATA).join(LAB1VARIANT).on(LAB1VARIANT.ID.eq(LAB1DATA.ID)).
-                where(LAB1DATA.USER_ID.eq(getFindUserIdSelect(userName))).and(LAB1DATA.COMPLETED.eq(completed)).
+                where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB1DATA.COMPLETED.eq(completed)).
                 orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB1DATA_MAPPER);
     }
 
     @Override
     public List<Lab1Data> getAllLabsByUser(String userName) {
         return dsl.select().from(LAB1DATA).join(LAB1VARIANT).on(LAB1VARIANT.ID.eq(LAB1DATA.ID))
-                .where(LAB1DATA.USER_ID.eq(getFindUserIdSelect(userName))).fetch(LAB1DATA_MAPPER);
+                .where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(LAB1DATA_MAPPER);
     }
 
     @Override
@@ -102,7 +103,7 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
                 LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE,
                 LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION).
                 values(
-                        Arrays.asList(getFindUserIdSelect(data.getUserLogin()),
+                        Arrays.asList(DaoUtils.getFindUserIdSelect(dsl, data.getUserLogin()),
                                 data.getStartDate(),
                                 data.getSaveDate(),
                                 data.isCompleted(),
@@ -177,13 +178,13 @@ public class Lab1DaoImpl extends LabDaoImpl<Lab1Data> implements Lab1Dao {
                 .set(LAB1DATA.TEMPERATURE_COEFFICIENT, data.getTemperatureCoefficient())
                 .set(LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE, data.getDistanceFromEmissionSource())
                 .set(LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION, data.getMaximumSurfaceConcentration())
-                .where(LAB1DATA.USER_ID.eq(getFindUserIdSelect(data.getUserLogin())).and(LAB1DATA.START_DATE.eq(data.getStartDate())))
+                .where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, data.getUserLogin())).and(LAB1DATA.START_DATE.eq(data.getStartDate())))
                 .execute();
     }
 
     @Override
     public int removeLabsByUser(String userName) {
-        return dsl.deleteFrom(LAB1DATA).where(LAB1DATA.USER_ID.eq(getFindUserIdSelect(userName))).execute();
+        return dsl.deleteFrom(LAB1DATA).where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).execute();
     }
 
     @Override

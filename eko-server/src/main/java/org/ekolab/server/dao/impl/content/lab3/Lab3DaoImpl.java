@@ -2,8 +2,15 @@ package org.ekolab.server.dao.impl.content.lab3;
 
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.content.lab3.Lab3Dao;
+import org.ekolab.server.dao.impl.DaoUtils;
 import org.ekolab.server.dao.impl.content.LabDaoImpl;
-import org.ekolab.server.model.content.lab3.*;
+import org.ekolab.server.model.content.lab3.City;
+import org.ekolab.server.model.content.lab3.FuelType;
+import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Variant;
+import org.ekolab.server.model.content.lab3.NumberOfStacks;
+import org.ekolab.server.model.content.lab3.NumberOfUnits;
+import org.ekolab.server.model.content.lab3.WindDirection;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.springframework.context.annotation.Profile;
@@ -103,14 +110,14 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     @Override
     public Lab3Data getLastLabByUser(String userName, boolean completed) {
         return dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID)).
-                where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(userName))).and(LAB3DATA.COMPLETED.eq(completed)).
+                where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB3DATA.COMPLETED.eq(completed)).
                 orderBy(LAB3DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB3DATA_MAPPER);
     }
 
     @Override
     public List<Lab3Data> getAllLabsByUser(String userName) {
         return dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID))
-                .where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(userName))).fetch(LAB3DATA_MAPPER);
+                .where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(LAB3DATA_MAPPER);
     }
 
     @Override
@@ -161,7 +168,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3DATA.SO2_MAC,
                 LAB3DATA.ASH_MAC).
                 values(
-                        getFindUserIdSelect(data.getUserLogin()),
+                        DaoUtils.getFindUserIdSelect(dsl, data.getUserLogin()),
                         data.getStartDate(),
                         data.getSaveDate(),
                         data.isCompleted(),
@@ -314,13 +321,13 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 .set(LAB3DATA.NO_MAC, data.getNoMAC())
                 .set(LAB3DATA.SO2_MAC, data.getSo2MAC())
                 .set(LAB3DATA.ASH_MAC, data.getAshMAC())
-                .where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(data.getUserLogin())).and(LAB3DATA.START_DATE.eq(data.getStartDate())))
+                .where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, data.getUserLogin())).and(LAB3DATA.START_DATE.eq(data.getStartDate())))
                 .execute();
     }
 
     @Override
     public int removeLabsByUser(String userName) {
-        return dsl.deleteFrom(LAB3DATA).where(LAB3DATA.USER_ID.eq(getFindUserIdSelect(userName))).execute();
+        return dsl.deleteFrom(LAB3DATA).where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).execute();
     }
 
     @Override

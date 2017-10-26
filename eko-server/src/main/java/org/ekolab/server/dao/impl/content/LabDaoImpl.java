@@ -9,9 +9,7 @@ import org.ekolab.server.model.content.LabTestQuestion;
 import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
 import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.Record1;
 import org.jooq.Result;
-import org.jooq.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -22,7 +20,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import static org.ekolab.server.db.h2.public_.Tables.*;
+import static org.ekolab.server.db.h2.public_.Tables.LAB_TEST_HOME_WORK_QUESTION;
+import static org.ekolab.server.db.h2.public_.Tables.LAB_TEST_QUESTION;
+import static org.ekolab.server.db.h2.public_.Tables.LAB_TEST_QUESTION_VARIANT;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -30,10 +30,6 @@ import static org.ekolab.server.db.h2.public_.Tables.*;
 public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
     @Autowired
     protected DSLContext dsl;
-
-    protected Select<Record1<Long>> getFindUserIdSelect(String userName) {
-        return dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userName));
-    }
 
     @Override
     public Collection<LabTestQuestion> getTestQuestions(Locale locale) {
@@ -85,16 +81,6 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
         }
 
         return questions.values();
-    }
-
-    @Override
-    public void setTestCompleted(String userName) {
-        dsl.insertInto(USER_TEST_HISTORY, USER_TEST_HISTORY.LAB_NUMBER, USER_TEST_HISTORY.USER_ID).values(Arrays.asList(getLabNumber(), getFindUserIdSelect(userName)));
-    }
-
-    @Override
-    public boolean isTestCompleted(String userName) {
-        return dsl.fetchExists(dsl.selectFrom(USER_TEST_HISTORY).where(USER_TEST_HISTORY.LAB_NUMBER.eq(getLabNumber())));
     }
 
     /**

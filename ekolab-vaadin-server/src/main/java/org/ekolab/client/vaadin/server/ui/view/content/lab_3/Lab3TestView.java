@@ -3,6 +3,7 @@ package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 import com.vaadin.spring.annotation.SpringView;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabTestWizard;
+import org.ekolab.server.service.api.content.UserLabService;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
 
 /**
@@ -13,7 +14,7 @@ public class Lab3TestView extends LabTestWizard {
     public static final String NAME = "lab3test";
     // ---------------------------- Графические компоненты --------------------
 
-    protected Lab3TestView(I18N i18N, Lab3Service labService) {
-        super(i18N, labService);
+    protected Lab3TestView(I18N i18N, UserLabService userLabService, Lab3Service labService) {
+        super(i18N, userLabService, labService);
     }
 }

@@ -10,6 +10,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.VaadinUI;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
@@ -60,6 +61,9 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant> exte
 
     @Autowired
     protected LabFinishedWindow<T, V> labFinishedWindow;
+
+    @Autowired
+    protected VaadinUI ui;
 
     @Override
     public void init() throws Exception {
@@ -129,9 +133,11 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant> exte
         if (hasUnsavedData()) {
             BinderValidationStatus<T> validationStatus = binder.validate();
             if (validationStatus.isOk()) {
-                binder.readBean(labService.updateLab(binder.getBean()));
-                hasChanges = binder.hasChanges();
-                saveButton.setVisible(false);
+                ui.access(() -> {
+                    binder.readBean(labService.updateLab(binder.getBean()));
+                    hasChanges = binder.hasChanges();
+                    saveButton.setVisible(false);
+                });
             } else {
                 if (Page.getCurrent() != null) {
                     ComponentErrorNotification.show(i18N.get("savable.save-exception"), validationStatus.getFieldValidationErrors());

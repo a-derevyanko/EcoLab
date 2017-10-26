@@ -21,6 +21,7 @@ import org.ekolab.client.vaadin.server.ui.windows.LabTestFinishedWindow;
 import org.ekolab.server.common.Role;
 import org.ekolab.server.model.content.*;
 import org.ekolab.server.service.api.content.LabService;
+import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
@@ -44,12 +45,14 @@ public abstract class LabTestWizard extends Wizard implements View {
     private LabTestFinishedWindow labTestFinishedWindow;
 
     protected final I18N i18N;
+    protected final UserLabService userLabService;
     protected final LabService<?, ?> labService;
 
     // ---------------------------- Графические компоненты --------------------
 
-    protected LabTestWizard(I18N i18N, LabService<?, ?> labService) {
+    protected LabTestWizard(I18N i18N, UserLabService userLabService, LabService<?, ?> labService) {
         this.i18N = i18N;
+        this.userLabService = userLabService;
         this.labService = labService;
     }
 
@@ -95,7 +98,7 @@ public abstract class LabTestWizard extends Wizard implements View {
         labTestFinishedWindow.show(new LabTestFinishedWindow.LabFinishedWindowSettings(errors, answers.keySet()));
 
         if (errors.isEmpty()) {
-            labService.setTestCompleted(currentUser.getName());
+            userLabService.setTestCompleted(currentUser.getName(), labService.getLabNumber());
             super.finish();
         } else {
             Notification.show(i18N.get("test.not-right", errors.size()), Notification.Type.TRAY_NOTIFICATION);

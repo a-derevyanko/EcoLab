@@ -151,5 +151,5 @@ ash_background_concentration,
 0.05,
 0.008,
 0.1,
-0.01
+0.002
 );

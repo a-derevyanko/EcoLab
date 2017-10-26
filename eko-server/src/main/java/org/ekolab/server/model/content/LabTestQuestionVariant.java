@@ -37,13 +37,14 @@ public abstract class LabTestQuestionVariant implements DomainModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof LabTestQuestionVariant)) return false;
-        LabTestQuestionVariant question1 = (LabTestQuestionVariant) o;
-        return Objects.equals(question, question1.question) &&
-                Objects.equals(image, question1.image);
+        LabTestQuestionVariant that = (LabTestQuestionVariant) o;
+        return number == that.number &&
+                Objects.equals(question, that.question) &&
+                Objects.equals(image, that.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(question, image);
+        return Objects.hash(number, question, image);
     }
 }

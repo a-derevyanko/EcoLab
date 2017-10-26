@@ -134,7 +134,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
             labData.setAshMassiveInjection(0.01 * (1000 / 3.6) * labData.getNumberOfUnits().value() * labData.getFuelConsumer() * (labData.getAshProportionEntrainedGases() *
                     labData.getAshContent() +
                     labData.getCarbonInFlyAsh() *
-                            labData.getLowHeatValue() / 32.68) * (1 - labData.getAshRecyclingFactor()));
+                            labData.getLowHeatValue() / 32.68) * (1 - labData.getAshRecyclingFactor() / 100));
         }
 
         if (labData.getStackExitTemperature() != null && labData.getOutsideAirTemperature() != null &&

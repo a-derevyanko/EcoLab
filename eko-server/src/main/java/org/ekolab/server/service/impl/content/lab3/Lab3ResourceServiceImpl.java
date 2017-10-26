@@ -69,7 +69,7 @@ public class Lab3ResourceServiceImpl implements Lab3ResourceService {
         double angle = Math.PI + windDirection.ordinal() * (Math.PI / 4.0);
         BufferedImage rotatedBackground = ImageUtil.createRotated(background, angle);
         rotatedBackground = rotatedBackground.getSubimage(rotatedBackground.getWidth() / 2,
-                rotatedBackground.getHeight() / 2 - rotatedBackground.getWidth() / 8, 680, 400);
+                rotatedBackground.getHeight() / 2 - rotatedBackground.getWidth() / 8, 635, 400);
         BufferedImage copyOfImage = new BufferedImage(rotatedBackground.getWidth(), rotatedBackground.getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics g = copyOfImage.createGraphics();
         g.drawImage(rotatedBackground, 0, 0, null);

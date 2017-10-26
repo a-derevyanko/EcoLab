@@ -34,16 +34,12 @@ import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
 import org.ekolab.client.vaadin.server.ui.windows.LabTypeSelectorWindow;
 import org.ekolab.server.model.UserGroup;
-import org.ekolab.server.model.content.lab1.Lab1Data;
-import org.ekolab.server.model.content.lab2.Lab2Data;
-import org.ekolab.server.model.content.lab3.Lab3Data;
-import org.ekolab.server.service.api.content.lab1.Lab1Service;
-import org.ekolab.server.service.api.content.lab2.Lab2Service;
-import org.ekolab.server.service.api.content.lab3.Lab3Service;
+import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collection;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -62,13 +58,7 @@ public class LabChooserView extends VerticalLayout implements View {
     private Authentication currentUser;
 
     @Autowired
-    private Lab1Service lab1Service;
-
-    @Autowired
-    private Lab2Service lab2Service;
-
-    @Autowired
-    private Lab3Service lab3Service;
+    private UserLabService userLabService;
 
     @Autowired
     private PresentationService presentationService;
@@ -198,18 +188,15 @@ public class LabChooserView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        Lab1Data lab1Data = lab1Service.getCompletedLabByUser(currentUser.getName());
-        Lab2Data lab2Data = lab2Service.getCompletedLabByUser(currentUser.getName());
-        Lab3Data lab3Data = lab3Service.getCompletedLabByUser(currentUser.getName());
-        setTestButtonSate(lab1TestButton, lab1Data != null && !lab1Service.isTestCompleted(currentUser.getName()));
-        setTestButtonSate(lab2TestButton, lab2Data != null && !lab2Service.isTestCompleted(currentUser.getName()));
-        setTestButtonSate(lab3TestButton, lab3Data != null && !lab3Service.isTestCompleted(currentUser.getName()));
+        Collection<Integer> completedLabs = userLabService.getCompletedLabs(currentUser.getName());
+        Collection<Integer> completedTests = userLabService.getCompletedTests(currentUser.getName());
+        setTestButtonSate(lab1TestButton, completedLabs.contains(1) && !completedTests.contains(1));
+        setTestButtonSate(lab2TestButton, completedLabs.contains(2) && !completedTests.contains(2));
+        setTestButtonSate(lab3TestButton, completedLabs.contains(3) && !completedTests.contains(3));
         boolean isNotStudent = VaadinUI.getCurrent().getCurrentUserInfo().getGroup() != UserGroup.STUDENT;
-        /*setLabButtonSate(lab1Button, isNotStudent || lab1Data == null);
-        setLabButtonSate(lab2Button, isNotStudent || lab2Data == null);*/
-        lab1Button.setEnabled(false);
-        lab2Button.setEnabled(false);
-        setLabButtonSate(lab3Button, isNotStudent || lab3Data == null);
+        setLabButtonSate(lab1Button, false && (isNotStudent || isNotStudent || !completedLabs.contains(1)));
+        setLabButtonSate(lab2Button, false && (isNotStudent || isNotStudent || !completedLabs.contains(2)));
+        setLabButtonSate(lab3Button, isNotStudent || !completedLabs.contains(3));
         setButtonSate(labDefenceButton, lab1TestButton.isEnabled() || lab2TestButton.isEnabled() || lab3TestButton.isEnabled());
     }
 

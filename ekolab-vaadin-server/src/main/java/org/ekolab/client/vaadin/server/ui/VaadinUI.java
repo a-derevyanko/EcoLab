@@ -68,6 +68,8 @@ public class VaadinUI extends UI {
         setLocale(Locale.getDefault());
         setErrorHandler(event -> exceptionNotification.show(Page.getCurrent(), event.getThrowable()));
 
+        getLoadingIndicatorConfiguration().setThirdDelay(50000);
+
         root.setSizeFull();
         root.setMargin(false);
         root.setSpacing(false);

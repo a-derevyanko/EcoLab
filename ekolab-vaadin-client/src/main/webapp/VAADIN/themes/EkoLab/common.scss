@@ -1,3 +1,6 @@
+$v-loading-indicator-bar-height: 35px;
+$v-loading-indicator-bar-height--wait: 35px;
+
 @include keyframes(animate-in-scale-up) {
   0% {
     @include transform(scale(0));
@@ -5,12 +8,6 @@
 }
 
 @mixin ekolab-common {
-  .v-loading-indicator,
-  .v-loading-indicator-delay,
-  .v-loading-indicator-wait {
-    width: 50px;
-    height: 35px;
-  }
 
   .valo-menu {
     border-right: none;

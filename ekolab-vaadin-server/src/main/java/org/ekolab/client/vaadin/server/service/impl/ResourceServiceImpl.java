@@ -10,6 +10,7 @@ import com.vaadin.ui.UI;
 import org.apache.commons.lang.UnhandledException;
 import org.ekolab.client.vaadin.server.service.api.FolderIterator;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
+import org.ekolab.server.common.PathReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

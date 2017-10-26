@@ -1,4 +1,4 @@
-package org.ekolab.client.vaadin.server.service.impl;
+package org.ekolab.server.common;
 
 
 import java.io.Closeable;
@@ -37,7 +37,7 @@ public class PathReference implements Closeable {
 
     /**
      * Сначала пробует получить путь в существующей ФС, затем
-     * производится попытка найти ресурс в виртуаьной ФС (JAR, WAR и т. д.)
+     * производится попытка найти ресурс в виртуальной ФС (JAR, WAR и т. д.)
      * @param resPath путь
      * @return экземпляр PathReference
      * @throws IOException возможное исключение

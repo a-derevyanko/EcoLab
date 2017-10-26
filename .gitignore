@@ -98,3 +98,4 @@ build/
 /eko-server/src/main/resources/application-custom.properties
 /_config.yml
 /ekolab-vaadin-desktop/src/main/webapp/
+/eko-server/src/main/resources/git.properties

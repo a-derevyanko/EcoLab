@@ -1,5 +1,7 @@
 package org.ekolab.server.model.content;
 
+import java.util.Objects;
+
 public class LabTestHomeWorkQuestion extends LabTestQuestionVariant {
     private Class<?> valueType;
     private String dimension;
@@ -27,5 +29,21 @@ public class LabTestHomeWorkQuestion extends LabTestQuestionVariant {
 
     public void setFormulae(String formulae) {
         this.formulae = formulae;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LabTestHomeWorkQuestion)) return false;
+        if (!super.equals(o)) return false;
+        LabTestHomeWorkQuestion question = (LabTestHomeWorkQuestion) o;
+        return Objects.equals(valueType, question.valueType) &&
+                Objects.equals(dimension, question.dimension) &&
+                Objects.equals(formulae, question.formulae);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), valueType, dimension, formulae);
     }
 }

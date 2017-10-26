@@ -27,6 +27,7 @@ public class LabTestQuestionVariantWithAnswers extends LabTestQuestionVariant {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof LabTestQuestionVariantWithAnswers)) return false;
+        if (!super.equals(o)) return false;
         LabTestQuestionVariantWithAnswers that = (LabTestQuestionVariantWithAnswers) o;
         return rightAnswer == that.rightAnswer &&
                 Objects.equals(answers, that.answers);
@@ -34,6 +35,6 @@ public class LabTestQuestionVariantWithAnswers extends LabTestQuestionVariant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(answers, rightAnswer);
+        return Objects.hash(super.hashCode(), answers, rightAnswer);
     }
 }

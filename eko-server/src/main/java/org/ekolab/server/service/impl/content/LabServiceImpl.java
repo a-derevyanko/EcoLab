@@ -38,7 +38,6 @@ import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -51,7 +50,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
-import java.awt.Image;
+import java.awt.*;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
@@ -223,18 +222,6 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         return errors;
     }
 
-    @Override
-    @Cacheable(value = "COMPLETED_TEST", key = "#root.targetClass.simpleName.concat(#userName)")
-    public boolean isTestCompleted(String userName) {
-        return labDao.isTestCompleted(userName);
-    }
-
-    @Override
-    @CacheEvict(value = "COMPLETED_TEST", key = "#root.targetClass.simpleName.concat(#userName)")
-    public void setTestCompleted(String userName) {
-        labDao.setTestCompleted(userName);
-    }
-
     @LogExecutionTime(500)
     @Override
     public byte[] printInitialData(V variant, Locale locale) {
@@ -334,7 +321,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
 
             //todo убрать всё то ниже после релиза
             values.put("groupNumber", "");
-            values.put("teamNumber", "");
+            values.put("teamNumber", 0);
 
             values.put("studentsList",  "");
         }
