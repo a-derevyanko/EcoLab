@@ -350,8 +350,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 0.375 * randomFuelType.getSulphurContent()) / 100) + (0.79 * variant.getAirVolume() + 0.8 *
                 randomFuelType.getNitrogenContent() / 100) + variant.getWaterVaporVolume());
         variant.setNo2BackgroundConcentration(0.005 + RandomUtils.nextInt(11) * 0.001);
-        variant.setNoBackgroundConcentration(0.008 + RandomUtils.nextInt(5) * 0.01);
-        variant.setSo2BackgroundConcentration(0.005 + RandomUtils.nextInt(6) * 0.001);
+        variant.setNoBackgroundConcentration(0.008 + RandomUtils.nextInt(8) * 0.01);
+        variant.setSo2BackgroundConcentration(0.1 + RandomUtils.nextInt(16) * 0.01);
         variant.setAshBackgroundConcentration(0.005 + RandomUtils.nextInt(6) * 0.001);
         return variant;
     }
