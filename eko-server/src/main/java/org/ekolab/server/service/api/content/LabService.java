@@ -5,7 +5,6 @@ import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.impl.content.DataValue;
-import org.jfree.chart.JFreeChart;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -74,8 +73,6 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
     byte[] printInitialData(V variant, Locale locale);
 
     Set<DataValue> getInitialDataValues(V data, Locale locale);
-
-    JFreeChart createChart(T labData, Locale locale, LabChartType chartType);
 
     LabTest getLabTest(Locale locale);
 

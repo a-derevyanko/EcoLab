@@ -130,6 +130,7 @@ public class LabChooserView extends VerticalLayout implements View {
         downloadPresentationButton.setHeight(45.0F, Unit.PIXELS);
         downloadPresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         downloadPresentationButton.setSizeFull();
+        downloadPresentationButton.setEnabled(false); //todo
 
         FileDownloader fileDownloader = new FileDownloader(new StreamResource(() ->
                 new ByteArrayInputStream(resourceService.getZipFolder(new OneFolderIterator("content/lab3/presentation"))),

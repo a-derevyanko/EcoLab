@@ -3,14 +3,22 @@ package org.ekolab.client.vaadin.server.ui.view.content.lab_3;
 import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.ItemCaptionGenerator;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
+import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
-import org.jfree.chart.JFreeChart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.addon.JFreeChartWrapper;
 
@@ -23,6 +31,8 @@ import java.util.Arrays;
 @SpringComponent
 @ViewScope
 public class Lab3Step5 extends GridLayout implements LabWizardStep {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Lab3Step5.class);
+
     // ----------------------------- Графические компоненты --------------------------------
     private final Label chartTypeLabel = new Label("Chart type");
     private final ComboBox<Lab3ChartType> chartType = new ComboBox<>(null, Arrays.asList(Lab3ChartType.values()));
@@ -62,14 +72,16 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
                 removeComponent(chart);
             }
 
-            JFreeChart isoLineChart = lab3Service.createChart(dataBinder.getBean(), UI.getCurrent().getLocale(), event.getValue());
-            if (isoLineChart != null) {
-                chart = new JFreeChartWrapper(isoLineChart);
+            try {
+                chart = new JFreeChartWrapper(lab3Service.createChart(dataBinder.getBean(), UI.getCurrent().getLocale(), event.getValue()));
                 chart.setSizeFull();
                 addComponent(chart, 0, 0, 19, 19);
+            } catch (Exception ex) {
+                LOGGER.error(ex.getLocalizedMessage(), ex);
+                ComponentErrorNotification.show("lab3.step5.chart-error", "lab3.step5.chart-error-check-data");
             }
         });
-}
+    }
 
     @Override
     public void placeAdditionalComponents(HorizontalLayout buttonsLayout) {
@@ -79,5 +91,10 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
     @Override
     public void beforeEnter() {
         chartType.setSelectedItem(Lab3ChartType.ISOLINE);
+    }
+
+    @Override
+    public boolean onAdvance() {
+        return chart != null;
     }
 }

@@ -5,14 +5,10 @@ import org.ekolab.server.common.MathUtils;
 import org.ekolab.server.dao.api.content.lab1.Lab1Dao;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
-import org.ekolab.server.service.api.content.LabChartType;
 import org.ekolab.server.service.api.content.lab1.Lab1Service;
 import org.ekolab.server.service.impl.content.LabServiceImpl;
-import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Locale;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -38,11 +34,6 @@ public class Lab1ServiceImpl extends LabServiceImpl<Lab1Data, Lab1Variant> imple
     @Override
     public Lab1Data createNewLabData() {
         return new Lab1Data();
-    }
-
-    @Override
-    public JFreeChart createChart(Lab1Data labData, Locale locale, LabChartType chartType) {
-        return null;
     }
 
     @Override
