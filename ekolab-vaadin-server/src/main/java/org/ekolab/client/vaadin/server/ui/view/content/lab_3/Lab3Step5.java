@@ -78,7 +78,7 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
                 addComponent(chart, 0, 0, 19, 19);
             } catch (Exception ex) {
                 LOGGER.error(ex.getLocalizedMessage(), ex);
-                ComponentErrorNotification.show("lab3.step5.chart-error", "lab3.step5.chart-error-check-data");
+                ComponentErrorNotification.show(i18N.get("lab3.step5.chart-error"), i18N.get("lab3.step5.chart-error-check-data"));
             }
         });
     }
