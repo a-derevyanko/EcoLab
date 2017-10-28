@@ -27,6 +27,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.vaadin.spring.annotation.PrototypeScope;
 import org.vaadin.teemu.wizards.WizardStep;
+import org.vaadin.teemu.wizards.event.WizardCompletedEvent;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
@@ -79,7 +80,7 @@ public abstract class LabTestWizard extends Wizard implements View {
      * Проверка результатов теста
      */
     @Override
-    public void finish() {
+    public void wizardCompleted(WizardCompletedEvent event) {
         Map<LabTestQuestionVariant, Object> answers = new HashMap<>();
         List<WizardStep> steps = getSteps();
         for (int i = 0; i < steps.size(); i++) {
@@ -95,14 +96,10 @@ public abstract class LabTestWizard extends Wizard implements View {
 
         List<Integer> errors = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers);
 
-        labTestFinishedWindow.show(new LabTestFinishedWindow.LabFinishedWindowSettings(errors, answers.keySet()));
-
-        if (errors.isEmpty()) {
+        if (errors.size() <= 2) {
             userLabService.setTestCompleted(currentUser.getName(), labService.getLabNumber());
-            super.finish();
-        } else {
-            Notification.show(i18N.get("test.not-right", errors.size()), Notification.Type.TRAY_NOTIFICATION);
         }
+        labTestFinishedWindow.show(new LabTestFinishedWindow.LabFinishedWindowSettings(errors, answers.keySet()));
     }
 
     /**

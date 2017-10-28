@@ -1,6 +1,7 @@
 package org.ekolab.client.vaadin.server;
 
 import de.codecentric.boot.admin.config.EnableAdminServer;
+import org.ekolab.client.vaadin.server.ui.development.DevUtils;
 import org.ekolab.server.ServerApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,8 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
 @EnableAdminServer
@@ -17,6 +20,13 @@ public class VaadinApplication extends ServerApplication {
 
     public static void main(String... args) throws Exception {
         new VaadinApplication().run(args);
+    }
+
+    @Override
+    protected ApplicationContext run(String... args) throws Exception {
+        ApplicationContext ctx = super.run(args);
+        DevUtils.setBuildProperties(ctx.getBean(BuildProperties.class));
+        return ctx;
     }
 
     /**

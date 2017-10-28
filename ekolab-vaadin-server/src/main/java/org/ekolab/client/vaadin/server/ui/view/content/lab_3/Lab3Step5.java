@@ -72,13 +72,14 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
                 removeComponent(chart);
             }
 
-            try {
-                chart = new JFreeChartWrapper(lab3Service.createChart(dataBinder.getBean(), UI.getCurrent().getLocale(), event.getValue()));
-                chart.setSizeFull();
-                addComponent(chart, 0, 0, 19, 19);
-            } catch (Exception ex) {
-                LOGGER.error(ex.getLocalizedMessage(), ex);
-                ComponentErrorNotification.show(i18N.get("lab3.step5.chart-error"), i18N.get("lab3.step5.chart-error-check-data"));
+            if (event.getValue() != null) {
+                try {
+                    chart = new JFreeChartWrapper(lab3Service.createChart(dataBinder.getBean(), UI.getCurrent().getLocale(), event.getValue()));
+                    chart.setSizeFull();
+                    addComponent(chart, 0, 0, 19, 19);
+                } catch (Exception ex) {
+                    ComponentErrorNotification.show(i18N.get("lab3.step5.chart-error"), i18N.get("lab3.step5.chart-error-check-data"));
+                }
             }
         });
     }
@@ -90,11 +91,16 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
 
     @Override
     public void beforeEnter() {
+        chartType.setSelectedItem(null);
         chartType.setSelectedItem(Lab3ChartType.ISOLINE);
     }
 
     @Override
     public boolean onAdvance() {
-        return chart != null;
+        if (chart == null) {
+            ComponentErrorNotification.show(i18N.get("lab3.step5.chart-error"), i18N.get("lab3.step5.chart-error-check-data"));
+            return false;
+        }
+        return true;
     }
 }

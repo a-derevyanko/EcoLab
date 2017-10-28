@@ -22,6 +22,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.service.impl.OneFolderIterator;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.VaadinUI;
+import org.ekolab.client.vaadin.server.ui.development.DevUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1TestView;
@@ -130,7 +131,7 @@ public class LabChooserView extends VerticalLayout implements View {
         downloadPresentationButton.setHeight(45.0F, Unit.PIXELS);
         downloadPresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         downloadPresentationButton.setSizeFull();
-        downloadPresentationButton.setEnabled(false); //todo
+        downloadPresentationButton.setEnabled(DevUtils.isProductionVersion());
 
         FileDownloader fileDownloader = new FileDownloader(new StreamResource(() ->
                 new ByteArrayInputStream(resourceService.getZipFolder(new OneFolderIterator("content/lab3/presentation"))),
@@ -158,9 +159,7 @@ public class LabChooserView extends VerticalLayout implements View {
         labTestChooserButtons.addComponent(lab3TestButton);
 
         labContentButton.setCaption(i18N.get("labchooser.lab-content"));
-        //labContentButton.setSizeFull();
         labContentButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        //labContentButton.addStyleName(EkoLabTheme.BUTTON_CHOOSER);
         labContentButton.addClickListener(event ->  labPresentationSelectView.setPopupVisible(true));
 
         content.addStyleName(EkoLabTheme.PANEL_LABCHOOSER);
@@ -195,8 +194,8 @@ public class LabChooserView extends VerticalLayout implements View {
         setTestButtonSate(lab2TestButton, completedLabs.contains(2) && !completedTests.contains(2));
         setTestButtonSate(lab3TestButton, completedLabs.contains(3) && !completedTests.contains(3));
         boolean isNotStudent = VaadinUI.getCurrent().getCurrentUserInfo().getGroup() != UserGroup.STUDENT;
-        setLabButtonSate(lab1Button, false && (isNotStudent || isNotStudent || !completedLabs.contains(1)));
-        setLabButtonSate(lab2Button, false && (isNotStudent || isNotStudent || !completedLabs.contains(2)));
+        setLabButtonSate(lab1Button, DevUtils.isProductionVersion() && (isNotStudent || !completedLabs.contains(1)));
+        setLabButtonSate(lab2Button, DevUtils.isProductionVersion() && (isNotStudent || !completedLabs.contains(2)));
         setLabButtonSate(lab3Button, isNotStudent || !completedLabs.contains(3));
         setButtonSate(labDefenceButton, lab1TestButton.isEnabled() || lab2TestButton.isEnabled() || lab3TestButton.isEnabled());
     }

@@ -92,6 +92,9 @@ sourceSets {
     }
 }
 
+springBoot {
+    buildInfo()
+}
 
 bootRun {
     systemProperties(System.properties)

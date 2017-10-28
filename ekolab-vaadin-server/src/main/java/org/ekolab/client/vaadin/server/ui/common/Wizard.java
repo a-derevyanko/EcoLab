@@ -7,12 +7,15 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.teemu.wizards.WizardStep;
+import org.vaadin.teemu.wizards.event.WizardCancelledEvent;
 import org.vaadin.teemu.wizards.event.WizardProgressListener;
+import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
+import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 
-public abstract class Wizard extends org.vaadin.teemu.wizards.Wizard implements View {
+public abstract class Wizard extends org.vaadin.teemu.wizards.Wizard implements View, WizardProgressListener {
     // ---------------------------- Графические компоненты --------------------
 
     @Autowired
@@ -40,6 +43,7 @@ public abstract class Wizard extends org.vaadin.teemu.wizards.Wizard implements 
         getFinishButton().setIcon(VaadinIcons.FLAG_CHECKERED, i18N.get("labwizard.finish"));
         getNextButton().setIcon(VaadinIcons.ARROW_FORWARD, i18N.get("labwizard.next"));
         getBackButton().setIcon(VaadinIcons.ARROW_BACKWARD, i18N.get("labwizard.back"));
+        addListener(this);
 
         footer.removeComponent(getCancelButton());
 
@@ -55,13 +59,21 @@ public abstract class Wizard extends org.vaadin.teemu.wizards.Wizard implements 
     @Override
     protected void activateStep(WizardStep step) {
         super.activateStep(step);
+    }
+
+    @Override
+    public void activeStepChanged(WizardStepActivationEvent event) {
         updateButtons();
     }
 
     @Override
-    public void cancel() {
+    public void stepSetChanged(WizardStepSetChangedEvent event) {
+        updateButtons();
+    }
+
+    @Override
+    public void wizardCancelled(WizardCancelledEvent event) {
         removeAllWindows();
-        super.cancel();
     }
 
     protected void replaceHeader() {

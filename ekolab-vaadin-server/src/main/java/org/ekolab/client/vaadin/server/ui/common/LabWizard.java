@@ -23,7 +23,8 @@ import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
-import org.vaadin.teemu.wizards.WizardStep;
+import org.vaadin.teemu.wizards.event.WizardCompletedEvent;
+import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.Collection;
@@ -165,18 +166,17 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant> exte
     }
 
     @Override
-    protected void activateStep(WizardStep step) {
-        super.activateStep(step);
+    public void activeStepChanged(WizardStepActivationEvent event) {
+        super.activeStepChanged(event);
         secondColumnLayout.removeAllComponents();
-        ((LabWizardStep) step).placeAdditionalComponents(secondColumnLayout);
+        ((LabWizardStep) event.getActivatedStep()).placeAdditionalComponents(secondColumnLayout);
     }
 
     @Override
-    public void finish() {
+    public void wizardCompleted(WizardCompletedEvent event) {
         beforeFinish();
         if (saveData()) {
             removeAllWindows();
-            super.finish();
         }
         labFinishedWindow.show(new LabFinishedWindow.LabFinishedWindowSettings<>(binder.getBean(), labService));
     }

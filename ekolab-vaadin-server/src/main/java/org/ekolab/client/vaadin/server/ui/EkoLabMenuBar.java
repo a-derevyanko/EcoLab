@@ -7,6 +7,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.development.DevUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.AdminManagingView;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
@@ -82,6 +83,13 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
         adminManagingItem.setVisible(false);
         teacherManagingItem.setVisible(false);
         labChooserItem.setVisible(false);
+
+        if (!DevUtils.isProductionVersion()) {
+            exitItem.setEnabled(false);
+            userInfoItem.setEnabled(false);
+            adminManagingItem.setEnabled(false);
+            teacherManagingItem.setEnabled(false);
+        }
     }
 
     // ------------------------------ Реализация обработчиков событий ----------------
