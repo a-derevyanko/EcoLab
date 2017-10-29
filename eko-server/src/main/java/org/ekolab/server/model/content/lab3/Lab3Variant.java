@@ -76,7 +76,7 @@ public class Lab3Variant extends LabVariant {
     /**
      * Расход топлива на 1 блок
      */
-    private Integer fuelConsumer;
+    private Double fuelConsumer;
 
     /**
      * Содержание серы в топливе
@@ -251,11 +251,11 @@ public class Lab3Variant extends LabVariant {
         this.lowHeatValue = lowHeatValue;
     }
 
-    public Integer getFuelConsumer() {
+    public Double getFuelConsumer() {
         return fuelConsumer;
     }
 
-    public void setFuelConsumer(Integer fuelConsumer) {
+    public void setFuelConsumer(Double fuelConsumer) {
         this.fuelConsumer = fuelConsumer;
     }
 

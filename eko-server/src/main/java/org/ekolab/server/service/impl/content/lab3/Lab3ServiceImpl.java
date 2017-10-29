@@ -404,8 +404,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         Integer randomStacksHeight = stacksHeights.get(RandomUtils.nextInt(stacksHeights.size()));
         variant.setStacksHeight(randomStacksHeight);
         variant.setTppOutput(randomUnitCount.value() * randomUnitOutput.getUnitOutput());
-        variant.setFuelConsumer((int) Math.round(randomUnitOutput.getUnitOutput() * 29.3 * randomUnitOutput.getBy(oil) /
-                (randomFuelType.getLowHeatValue() * 1000)));
+        variant.setFuelConsumer(randomUnitOutput.getUnitOutput() * 29.3 * randomUnitOutput.getBy(oil) /
+                (randomFuelType.getLowHeatValue() * 1000));
         variant.setSulphurContent(randomFuelType.getSulphurContent());
         variant.setAshContent(randomFuelType.getAshContent());
         variant.setWaterContent(randomFuelType.getWaterContent());

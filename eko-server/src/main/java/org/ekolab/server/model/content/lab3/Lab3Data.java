@@ -74,7 +74,7 @@ public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * Расход топлива на 1 блок
      */
-    private Integer fuelConsumer;
+    private Double fuelConsumer;
 
     /**
      * Потери тепла от механической неполноты сгорания топлива
@@ -482,11 +482,11 @@ public class Lab3Data extends LabData<Lab3Variant> {
         this.lowHeatValue = lowHeatValue;
     }
 
-    public Integer getFuelConsumer() {
+    public Double getFuelConsumer() {
         return fuelConsumer;
     }
 
-    public void setFuelConsumer(Integer fuelConsumer) {
+    public void setFuelConsumer(Double fuelConsumer) {
         this.fuelConsumer = fuelConsumer;
     }
 
