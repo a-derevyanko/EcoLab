@@ -127,7 +127,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     public Lab3Data updateCalculatedFields(Lab3Data labData) {
         if (labData.getCombustionProductsVolume() != null && labData.getFuelConsumer() != null
                 && labData.getStacksDiameter() != null) {
-            labData.setStackAverageGasesSpeed((4 * labData.getCombustionProductsVolume() * labData.getFuelConsumer()) /
+            labData.setStackAverageGasesSpeed((4 * labData.getCombustionProductsVolume() * labData.getFuelConsumer() * labData.getNumberOfUnits().value()) /
                     (3.6 * Math.PI * Math.pow(labData.getStacksDiameter(), 2)));
         }
 
