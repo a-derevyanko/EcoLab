@@ -5,7 +5,5 @@ include 'eko-db'
 include 'ekolab-vaadin-server'
 include 'ekolab-vaadin-client'
 include 'eko-server'
-//include 'ekolab-electron-client'
-//include 'ekolab-electron-standalone'
 include 'ekolab-vaadin-desktop'
 
