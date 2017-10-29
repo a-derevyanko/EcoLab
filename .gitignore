@@ -85,11 +85,7 @@ gradle-app.setting
 .idea/
 EkoLab.ipr
 build/
-/eko-electron-client/electron-src/node_modules/
-/eko-electron-client/electron-src/app.properties
 /ekolab-vaadin-server/src/main/webapp/VAADIN/
-/eko-electron-client/electron-src/electron-vaadin-win32-x64/
-/eko-electron-client/electron-src/electron-vaadin/
 /EkoLab-H2DB.mv.db
 /ekolab-vaadin-client/src/main/webapp/VAADIN/widgetsets/
 /ekolab-vaadin-client/src/main/resources/AppWidgetset.gwt.xml
