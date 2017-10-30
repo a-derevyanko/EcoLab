@@ -128,7 +128,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         if (labData.getCombustionProductsVolume() != null && labData.getFuelConsumer() != null
                 && labData.getStacksDiameter() != null) {
             labData.setStackAverageGasesSpeed((4 * labData.getCombustionProductsVolume() * labData.getFuelConsumer() * labData.getNumberOfUnits().value()) /
-                    (3.6 * Math.PI * Math.pow(labData.getStacksDiameter(), 2)));
+                    (3.6 * Math.PI * Math.pow(labData.getStacksDiameter(), 2) * labData.getNumberOfStacks().value()));
         }
 
         if (labData.getCombustionProductsVolume() != null && labData.getWaterVaporVolume() != null &&
