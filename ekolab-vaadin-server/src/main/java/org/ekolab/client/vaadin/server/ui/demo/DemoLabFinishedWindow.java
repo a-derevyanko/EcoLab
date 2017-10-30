@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
  */
 @SpringComponent
 @UIScope
-@Profile(value = {Profiles.MODE.DEV})
+@Profile(value = {Profiles.MODE.DEMO})
 public class DemoLabFinishedWindow<T extends LabData<V>, V extends LabVariant> extends LabFinishedWindow<T, V> implements Action.Handler{
 
     // ---------------------------- Графические компоненты --------------------
@@ -35,8 +35,8 @@ public class DemoLabFinishedWindow<T extends LabData<V>, V extends LabVariant> e
     protected void beforeShow() {
         super.beforeShow();
         Notification.show("Данная лабораторная работа " +
-                "будет автоматически помечена\nкак \"Выполненная\", т. к. вы закончили её выполнение. В режиме\n" +
-                "разработчика вы можете сбросить данный признак, для этого нажмите ALT+S", Notification.Type.TRAY_NOTIFICATION);
+                "будет автоматически помечена\nкак \"Выполненная\", т. к. вы закончили её выполнение. В демонстрационно режиме\n" +
+                "вы можете сбросить данный признак, для этого нажмите ALT+S", Notification.Type.TRAY_NOTIFICATION);
     }
 
     @Override

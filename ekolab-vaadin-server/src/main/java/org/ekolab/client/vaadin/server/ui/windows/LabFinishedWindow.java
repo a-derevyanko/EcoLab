@@ -27,7 +27,7 @@ import javax.annotation.PostConstruct;
  */
 @SpringComponent
 @UIScope
-@Profile({Profiles.MODE.DEMO, Profiles.MODE.PROD})
+@Profile({Profiles.MODE.DEV, Profiles.MODE.PROD})
 public class LabFinishedWindow<T extends LabData<V>, V extends LabVariant> extends BaseEkoLabWindow<LabFinishedWindow.LabFinishedWindowSettings<T, V>> {
 
     // ---------------------------- Графические компоненты --------------------

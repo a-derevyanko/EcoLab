@@ -103,7 +103,7 @@ VALUES
     'Предельно-допустимая концентрация',
     'Безразмерная концентрация',
     'Фоновая концентрация',
-   ), 2),
+   ), 1),
 
 -- 4 вопрос
   (3, 0, NULL,
@@ -114,7 +114,7 @@ VALUES
     'Предельно-допустимая концентрация',
     'Безразмерная концентрация',
     'Фоновая концентрация',
-   ), 1),
+   ), 2),
   (3, 0, NULL,
    'Отношение концентрации вредного вещества к ПДК этого вещества называется:',
    2,
@@ -237,8 +237,7 @@ VALUES
   Ответ округлить до целых.<br>' ||
   '<i>Пример: 140 г/с</i>', 1,
   'int', 'г/с',
-  '0.01*1.1*fuelConsumer*277.778*(ashProportionEntrainedGases*ashContent+' ||
-  '(carbonInFlyAsh*lowHeatValue / 32.68))*(1-ashRecyclingFactor)'),
+  'ashMassiveInjection*1.1'),
 
  -- 9 вопрос
  (8, 0, NULL,
@@ -248,9 +247,7 @@ VALUES
   'Ответ округлить до целых.<br>' ||
   '<i>Пример: 346 г/с</i>', 1,
   'int', 'г/с',
-  '0.02*0.8*278*fuelConsumer*sulphurContent*(1-sulphurOxidesFractionAssociatedByFlyAsh)*' ||
-  '(1-sulphurOxidesFractionAssociatedInWetDustCollector)*' ||
-  '(1-sulphurOxidesFractionAssociatedInDesulphurizationSystem*desulphurizationSystemRunningTime/boilerRunningTime)'),
+  'so2MassiveInjection*0.8'),
 
  -- 10 вопрос
  (9, 0, NULL,
@@ -260,6 +257,5 @@ VALUES
   'Ответ округлить до целых.<br>' ||
   '<i>Пример: 422 г/с</i>', 1,
   'int', 'г/с',
-  'flueGasNOxConcentration*(numberOfUnits-1)* (combustionProductsVolume - waterVaporVolume +
-(excessAirRatio - 1) * airVolume) * ((1 - carbonInFlyAsh / 100.0) * fuelConsumer) * 0.000278')
+  'noxMassiveInjection - noxMassiveInjection/numberOfUnits')
 ;
