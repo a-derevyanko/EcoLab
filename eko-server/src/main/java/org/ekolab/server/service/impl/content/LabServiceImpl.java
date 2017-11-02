@@ -9,10 +9,14 @@ import net.sf.dynamicreports.report.datasource.DRDataSource;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.UnhandledException;
 import org.apache.commons.math3.util.Precision;
 import org.ekolab.server.common.I18NUtils;
@@ -41,7 +45,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import javax.imageio.ImageIO;
@@ -51,6 +58,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
@@ -361,12 +369,32 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
      */
     @Override
     public byte[] createReport(T labData, Locale locale) {
-        try {
-            JasperReport report = reportService.getCompiledReport(this.getClass().getResource("report/report.jrxml"));
-            JRDataSource dataSource = new JREmptyDataSource();
-            JasperPrint print = JasperFillManager.fillReport(report, getValuesForReport(labData, locale), dataSource);
-            return JasperExportManager.exportReportToPdf(print);
-        } catch (JRException e) {
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            List<JasperPrint> reports = new ArrayList<>();
+
+            PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+
+            Resource[] resources = resolver.getResources(
+                    ClassUtils.convertClassNameToResourcePath(ClassUtils.getPackageName(this.getClass())) + "/report/**");
+
+            Map<String, Object> values = getValuesFromModel(labData);
+            for (Resource resource : resources) {
+                if (FilenameUtils.getExtension(resource.getFilename()).equals("jrxml")) {
+                    JasperReport report = reportService.getCompiledReport(resource.getURL());
+                    JRDataSource dataSource = new JREmptyDataSource();
+                    reports.add(JasperFillManager.fillReport(report, values, dataSource));
+                }
+            }
+
+            JRPdfExporter exporter = new JRPdfExporter();
+            exporter.setExporterInput(SimpleExporterInput.getInstance(reports));
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(os));
+            SimplePdfExporterConfiguration configuration = new SimplePdfExporterConfiguration();
+            configuration.setCreatingBatchModeBookmarks(true);
+            exporter.setConfiguration(configuration);
+            exporter.exportReport();
+            return os.toByteArray();
+        } catch (IOException | JRException e) {
             throw new UnhandledException(e);
         }
     }

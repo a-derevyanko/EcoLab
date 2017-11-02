@@ -6,8 +6,9 @@ import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.component.VerticalListBuilder;
 import net.sf.jasperreports.engine.JasperReport;
 
-import java.awt.Image;
+import java.awt.*;
 import java.net.URL;
+import java.util.List;
 import java.util.Locale;
 
 public interface ReportService {
@@ -31,4 +32,11 @@ public interface ReportService {
      * @return скомпилированный отчёт
      */
     JasperReport getCompiledReport(URL templateUrl);
+
+    /**
+     * Возвращает скомпилированные отчёты из директории без подстановки параметров
+     * @param path директория
+     * @return скомпилированный отчёт
+     */
+    List<JasperReport> getCompiledReports(String path);
 }
