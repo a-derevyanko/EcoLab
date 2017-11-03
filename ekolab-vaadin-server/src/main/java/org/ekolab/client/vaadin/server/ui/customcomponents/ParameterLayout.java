@@ -2,6 +2,7 @@ package org.ekolab.client.vaadin.server.ui.customcomponents;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.AbstractComponent;
@@ -136,6 +137,10 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
     }
 
     protected void bindField(Field propertyField, Binder.BindingBuilder<?, ?> builder) {
+        if (labService.isFieldValidated(propertyField)) {
+            builder.withValidator((value, context) -> labService.validateFieldValue(propertyField, value, dataBinder.getBean()) ?
+                    ValidationResult.ok() : ValidationResult.error(i18N.get("labwizard.wrong-value")));
+        }
         builder.bind(propertyField.getName());
     }
 

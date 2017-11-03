@@ -19,7 +19,6 @@ import com.vaadin.ui.Window;
 import org.ekolab.client.vaadin.server.service.api.PresentationService;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
-import org.ekolab.client.vaadin.server.service.impl.OneFolderIterator;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.VaadinUI;
 import org.ekolab.client.vaadin.server.ui.development.DevUtils;
@@ -39,7 +38,6 @@ import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
-import java.io.ByteArrayInputStream;
 import java.util.Collection;
 
 /**
@@ -131,11 +129,9 @@ public class LabChooserView extends VerticalLayout implements View {
         downloadPresentationButton.setHeight(45.0F, Unit.PIXELS);
         downloadPresentationButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         downloadPresentationButton.setSizeFull();
-        downloadPresentationButton.setEnabled(DevUtils.isProductionVersion());
 
-        FileDownloader fileDownloader = new FileDownloader(new StreamResource(() ->
-                new ByteArrayInputStream(resourceService.getZipFolder(new OneFolderIterator("content/lab3/presentation"))),
-                "materials.zip"));
+        FileDownloader fileDownloader = new FileDownloader(new StreamResource(
+                () -> getClass().getClassLoader().getResourceAsStream("org/ekolab/server/manual.pdf"), "manual.pdf"));
 
         fileDownloader.extend(downloadPresentationButton);
 

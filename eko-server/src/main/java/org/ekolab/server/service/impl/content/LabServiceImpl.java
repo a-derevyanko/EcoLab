@@ -25,6 +25,7 @@ import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.content.Calculated;
+import org.ekolab.server.model.content.FieldValidator;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
@@ -37,10 +38,10 @@ import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.LabService;
+import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
@@ -75,6 +76,9 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.type;
  */
 public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant> implements LabService<T, V> {
     @Autowired
+    private ValidationService<T, V> validationService;
+
+    @Autowired
     protected UserInfoService userInfoService;
 
     @Autowired
@@ -106,8 +110,8 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
      */
     @Override
     public boolean validateFieldValue(Field field, Object value, T labData) {
-        return AnnotationUtils.findAnnotation(field, Validated.class) == null ||
-                validateFieldValue(field.getName(), value, labData);
+        FieldValidator<V, T> validator = validationService.getFieldValidator(field);
+        return validator == null || validator.validate(value, labData);
     }
 
     @Override
@@ -393,10 +397,6 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
      * @return новая структура с данными лабораторной
      */
     protected abstract T createNewLabData();
-
-    protected boolean validateFieldValue(String fieldName, Object value, T labData) {
-        return true;
-    }
 
     /**
      * Генерирует вариант лабораторной, не сохраняя его

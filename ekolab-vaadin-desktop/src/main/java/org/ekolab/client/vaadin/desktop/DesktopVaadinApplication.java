@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
@@ -53,7 +54,7 @@ public class DesktopVaadinApplication extends VaadinApplication {
         SplashScreen.setVisible(true);
         try {
             JUnique.acquireLock(DesktopVaadinApplication.class.getName(), message -> {
-                if (message == null) {
+                if (StringUtils.isEmpty(message)) {
                     openEkoLabInBrowser();
                 }
                 return null;

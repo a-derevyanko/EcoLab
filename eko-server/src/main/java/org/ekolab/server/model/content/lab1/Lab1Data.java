@@ -2,6 +2,20 @@ package org.ekolab.server.model.content.lab1;
 
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.Validated;
+import org.ekolab.server.model.content.lab1.validators.DValidator;
+import org.ekolab.server.model.content.lab1.validators.DistanceFromEmissionSourceValidator;
+import org.ekolab.server.model.content.lab1.validators.DryGasesFlowRateValidator;
+import org.ekolab.server.model.content.lab1.validators.ExcessAirRatioValidator;
+import org.ekolab.server.model.content.lab1.validators.ExcessOfNormsValidator;
+import org.ekolab.server.model.content.lab1.validators.FValidator;
+import org.ekolab.server.model.content.lab1.validators.FlueGasNOxConcentrationNCValidator;
+import org.ekolab.server.model.content.lab1.validators.FlueGasesRateValidator;
+import org.ekolab.server.model.content.lab1.validators.FlueGasesSpeedValidator;
+import org.ekolab.server.model.content.lab1.validators.MValidator;
+import org.ekolab.server.model.content.lab1.validators.MassEmissionsValidator;
+import org.ekolab.server.model.content.lab1.validators.MaximumSurfaceConcentrationValidator;
+import org.ekolab.server.model.content.lab1.validators.NValidator;
+import org.ekolab.server.model.content.lab1.validators.UValidator;
 
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
@@ -66,73 +80,73 @@ public class Lab1Data extends LabData<Lab1Variant> {
     /**
      * Коэффициент избытка воздуха в точке измерения
      */
-    @Validated
+    @Validated(ExcessAirRatioValidator.class)
     private Double excessAirRatio;
 
     /**
      * Концентрация оксидов азота, приведенная к стандартному коэффициенту избытка воздуха α=1,4
      */
-    @Validated
+    @Validated(FlueGasNOxConcentrationNCValidator.class)
     private Double flueGasNOxConcentrationNC;
 
     /**
      * Превышение допустимых норм
      */
-    @Validated
+    @Validated(ExcessOfNormsValidator.class)
     private Boolean excessOfNorms;
 
     /**
      * Расход дымовых газов, выбрасываемых в атмосферу
      */
-    @Validated
+    @Validated(FlueGasesRateValidator.class)
     private Double flueGasesRate;
 
     /**
      * Объемный расход сухих газов
      */
-    @Validated
+    @Validated(DryGasesFlowRateValidator.class)
     private Double dryGasesFlowRate;
 
     /**
      * Массовые выбросы оксидов азота
      */
-    @Validated
+    @Validated(MassEmissionsValidator.class)
     private Double massEmissions;
 
     /**
      * Скорость дымовых газов на выходе из дымовой трубы
      */
-    @Validated
+    @Validated(FlueGasesSpeedValidator.class)
     private Double flueGasesSpeed;
 
     /**
      * Параметр f
      */
-    @Validated
+    @Validated(FValidator.class)
     private Double f;
 
     /**
      * Коэффициент m учитывающий условия выхода газов из дымовой трубы
      */
-    @Validated
+    @Validated(MValidator.class)
     private Double m;
 
     /**
      * Параметр υ_м
      */
-    @Validated
+    @Validated(UValidator.class)
     private Double u;
 
     /**
      * Коэффициент n учитывающий условия выхода газов из дымовой трубы
      */
-    @Validated
+    @Validated(NValidator.class)
     private Double n;
 
     /**
      * Безразмерный коэффициент d
      */
-    @Validated
+    @Validated(DValidator.class)
     private Double d;
 
     /**
@@ -153,13 +167,13 @@ public class Lab1Data extends LabData<Lab1Variant> {
     /**
      * Расстояние от источника выбросов, на котором приземные концентрации загрязняющих веществ достигают максимального значения
      */
-    @Validated
+    @Validated(DistanceFromEmissionSourceValidator.class)
     private Double distanceFromEmissionSource;
 
     /**
      * Максимальная приземная концентрация оксидов азота
      */
-    @Validated
+    @Validated(MaximumSurfaceConcentrationValidator.class)
     private Double maximumSurfaceConcentration;
 
     @Nullable

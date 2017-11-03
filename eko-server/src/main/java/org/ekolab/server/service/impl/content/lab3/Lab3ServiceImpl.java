@@ -38,6 +38,7 @@ import org.jfree.chart.title.ImageTitle;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.title.Title;
+import org.jfree.data.xy.XYDataItem;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.HorizontalAlignment;
@@ -67,7 +68,7 @@ import static java.lang.Math.pow;
 public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> implements Lab3Service {
     private static final Logger LOGGER = LoggerFactory.getLogger(Lab3ServiceImpl.class);
 
-    private static final int MAX_DISTANCE = 35000;
+    private static final int BORDER = 1000;
     private static final int BIG_SERIES_STEP = 100;
     private static final int SMALL_SERIES_STEP = 10;
     private static final Color EKO_LAB_COLOR = new Color(143, 184, 43);
@@ -181,7 +182,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                     (Math.pow(labData.getStacksHeight(), 2) * dT);
 
             double V1 = labData.getCombustionProductsVolume() * labData.getFuelConsumer() / 3.6;
-            double vm = 0.65 * Math.cbrt(V1 * dT / labData.getStacksHeight());
+            double vm = 0.65 * Math.cbrt(V1 * labData.getNumberOfUnits().value() * dT / (labData.getStacksHeight() * labData.getNumberOfStacks().value()));
             double vM = 1.3 * labData.getStackAverageGasesSpeed() * labData.getStacksDiameter() / labData.getStacksHeight();
 
             labData.setVM(vm);
@@ -249,9 +250,16 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                         3 * uUm / (2 * Math.pow(uUm, 2) - uUm + 2) :
                         0.67 * uUm + 1.67 * Math.pow(uUm, 2) - 1.34 * Math.pow(uUm, 3);
 
-                double k = labData.getTemperatureCoefficient() * labData.getHarmfulSubstancesDepositionCoefficient() *
-                        n * m * labData.getTerrainCoefficient()
-                        / (Math.pow(labData.getStacksHeight(), 2)) * Math.cbrt(labData.getNumberOfStacks().value() / (V1 * labData.getNumberOfUnits().value() * dT));
+                double k;
+                if (f >= 100 || dT < 0.1) {
+                    k = labData.getTemperatureCoefficient() * labData.getHarmfulSubstancesDepositionCoefficient() *
+                            n * labData.getTerrainCoefficient()
+                            / (Math.pow(labData.getStacksHeight(), 4.0 / 3.0) * 7.1 * Math.sqrt(labData.getStackAverageGasesSpeed() * V1 * labData.getNumberOfUnits().value() / labData.getNumberOfStacks().value()));
+                } else {
+                    k = labData.getTemperatureCoefficient() * labData.getHarmfulSubstancesDepositionCoefficient() *
+                            n * m * labData.getTerrainCoefficient()
+                            / (Math.pow(labData.getStacksHeight(), 2)) * Math.cbrt(labData.getNumberOfStacks().value() / (V1 * labData.getNumberOfUnits().value() * dT));
+                }
                 if (labData.getNoxMassiveInjection() != null) {
                     labData.setBwdNoxGroundLevelConcentration(labData.getNo2BackgroundConcentration() + k *
                             labData.getNoxMassiveInjection());
@@ -321,10 +329,10 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
 
     @Override
     public JFreeChart createChart(Lab3Data labData, Locale locale, Lab3ChartType chartType) {
-        Double windSpeedMaxGroundLevelConcentrationDistance = labData.getWindSpeedMaxGroundLevelConcentrationDistance();
+        Double bwdMaxGroundLevelConcentrationDistance = labData.getBwdMaxGroundLevelConcentrationDistance();
         Double harmfulSubstancesDepositionCoefficient = labData.getHarmfulSubstancesDepositionCoefficient();
         Double windSpeed = labData.getWindSpeed();
-        if (windSpeedMaxGroundLevelConcentrationDistance != null && harmfulSubstancesDepositionCoefficient != null && windSpeed != null)
+        if (bwdMaxGroundLevelConcentrationDistance != null && harmfulSubstancesDepositionCoefficient != null && windSpeed != null)
         {
             Double groundLevelConcentration;
             Double backgroundConcentration;
@@ -350,15 +358,13 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
             }
 
             //todo пока проверки прибиты - нужно вынести их в валидацию полей
-            if (mac != null && mac > 1) {
+            if (mac > 1) {
                 throw new IllegalArgumentException("Invalid data");
             }
-            if (groundLevelConcentration != null && backgroundConcentration != null && mac != null) {
-                return createSplineChart(labData, chartTitle, createDataset(windSpeedMaxGroundLevelConcentrationDistance,
-                        harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-                        backgroundConcentration, windSpeed, mac, locale),
-                        windSpeedMaxGroundLevelConcentrationDistance, groundLevelConcentration, locale);
-            }
+            return createSplineChart(labData, chartTitle, createDataset(bwdMaxGroundLevelConcentrationDistance,
+                    harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+                    backgroundConcentration, windSpeed, mac, locale),
+                    bwdMaxGroundLevelConcentrationDistance, groundLevelConcentration, locale);
         }
         throw new IllegalArgumentException("Invalid data");
     }
@@ -428,12 +434,12 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         return variant;
     }
 
-    private XYSeriesCollection createDataset(double windSpeedMaxGroundLevelConcentrationDistance,
+    private XYSeriesCollection createDataset(double bwdMaxGroundLevelConcentrationDistance,
                                              double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration,
                                              double backgroundConcentration, double windSpeed, double mac, Locale locale) {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
-        int Xm = Math.toIntExact(Math.round(windSpeedMaxGroundLevelConcentrationDistance));
+        int Xm = Math.toIntExact(Math.round(bwdMaxGroundLevelConcentrationDistance));
 
         for (double CyCoefficient = 0.1; CyCoefficient < 0.95; CyCoefficient += 0.1) {
             double C = CyCoefficient * groundLevelConcentration;
@@ -442,39 +448,59 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 XYSeries series = new XYSeries("C = " + description +" Cm", false);
                 series.setDescription(description);
                 dataset.addSeries(series);
-                fillIsoLineSeries(series, CyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-                        windSpeed);
+                fillIsoLineSeries(series, CyCoefficient, Xm, bwdMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+                        windSpeed, Integer.MAX_VALUE);
             }
         }
+
+        // Найдём максимальный X, для которого будем производить расчёт
+        int maxX = findMaxX(dataset) + BORDER;
 
         String backgroundName = messageSource.getMessage("lab3.isoline-background-name", new Object[]{backgroundConcentration}, locale);
         XYSeries borderSeries = new XYSeries(backgroundName, false);
         borderSeries.setDescription(messageSource.getMessage("lab3.isoline-background-name-description", null, locale));
         dataset.addSeries(borderSeries);
         double borderCyCoefficient = backgroundConcentration / groundLevelConcentration;
-        fillIsoLineSeries(borderSeries, borderCyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-                windSpeed);
+        fillIsoLineSeries(borderSeries, borderCyCoefficient, Xm, bwdMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+                windSpeed, maxX);
 
         if (backgroundConcentration + groundLevelConcentration > mac) {
             XYSeries macSeries = new XYSeries(messageSource.getMessage("lab3.isoline-mac-name", new Object[]{mac}, locale), false);
             dataset.addSeries(macSeries);
             double macCyCoefficient = mac / groundLevelConcentration;
-            fillIsoLineSeries(macSeries, macCyCoefficient, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-                    windSpeed);
+            fillIsoLineSeries(macSeries, macCyCoefficient, Xm, bwdMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+                    windSpeed, maxX);
         }
 
         return dataset;
     }
 
+    private int findMaxX(XYSeriesCollection dataset) {
+        int maxX = 0;
+
+        for (XYSeries series : (List<XYSeries>) dataset.getSeries()) {
+            XYDataItem item = series.getDataItem(0);
+            if (item.getX().intValue() > maxX) {
+                maxX = item.getX().intValue();
+            }
+        }
+        return maxX;
+    }
+
     private void fillIsoLineSeries(XYSeries series, double CyCoefficient, int Xm, double windSpeedMaxGroundLevelConcentrationDistance,
-                                   double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration, double windSpeed) {
+                                   double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration, double windSpeed, int maxBorderValue) {
         double C = CyCoefficient * groundLevelConcentration;
 
         // Находим граничные точки
         int x1 = countX0(0, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, CyCoefficient);
-        int xN = countX0(Xm, MAX_DISTANCE, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, CyCoefficient);
+        int xN = countX0(Xm, Integer.MAX_VALUE, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, CyCoefficient);
 
-        series.add(xN, 0);
+        if (xN < maxBorderValue) {
+            series.add(xN, 0);
+        } else {
+            xN = maxBorderValue;
+            series.setDescription(null);
+        }
         Map<Integer, Double> points = new TreeMap<>();
         int step = xN - x1 < 2000 ? SMALL_SERIES_STEP : BIG_SERIES_STEP;
         for (int x = xN - 1; x > x1; x-=step) {
@@ -494,18 +520,24 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         for (Map.Entry<Integer, Double> point : points.entrySet()) {
             series.add((double) point.getKey(), -point.getValue());
         }
-        series.add(xN, 0);
+        if (series.getDescription() != null) {
+            series.add(xN, 0);
+        }
     }
 
-    private int countX0(int fromDistance, int toDistance, double windSpeedMaxGroundLevelConcentrationDistance,
+    private int countX0(int fromDistance, int toDistance, double Xm,
                         double harmfulSubstancesDepositionCoefficient, double CyCoefficient) {
         for (int x = fromDistance; x < toDistance; x++) {
-            double s1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient);
+            double s1 = countS1(x, Xm, harmfulSubstancesDepositionCoefficient);
             if (MathUtils.checkEquals(s1, CyCoefficient)) {
                 return x;
             }
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException(String.format("fromDistance = %s, toDistance = %s," +
+                        " windSpeedMaxGroundLevelConcentrationDistance = %s, " +
+                        "harmfulSubstancesDepositionCoefficient = %s, CyCoefficient = %s",
+                fromDistance, toDistance, Xm,
+                harmfulSubstancesDepositionCoefficient, CyCoefficient));
     }
 
     private double countS1(double x, double windSpeedMaxGroundLevelConcentrationDistance,
@@ -599,6 +631,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         }
 
         renderer.setSeriesStroke(seriesWithLabels.size() - 1, new BasicStroke(2.0f));
+        if (seriesWithLabels.get(seriesWithLabels.size() - 2).getDescription() == null) {
+            xAxis.setUpperBound(seriesWithLabels.get((seriesWithLabels.size() - 2)).getDataItem(0).getX().doubleValue());
+        }
         renderer.setSeriesPaint(seriesWithLabels.size() - 1, EKO_LAB_COLOR);
         if (macSeriesExists) {
             renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2.0f}, 0));
