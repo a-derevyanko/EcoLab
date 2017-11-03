@@ -5,10 +5,10 @@ import org.ekolab.server.model.content.FieldValidator;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 
-public class ExcessAirRatioValidator implements FieldValidator<Lab1Variant, Lab1Data> {
+public class ExcessAirRatioValidator implements FieldValidator<Double, Lab1Variant, Lab1Data> {
     @Override
-    public boolean validate(Object value, Lab1Data labData) {
-        return MathUtils.checkEquals((Double) value,
+    public boolean validate(Double value, Lab1Data labData) {
+        return MathUtils.checkEquals(value,
                 21.0 / (21.0 - labData.getVariant().getOxygenConcentrationPoint()));
     }
 }

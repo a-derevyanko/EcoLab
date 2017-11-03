@@ -16,13 +16,13 @@ import java.lang.reflect.Field;
 public class ValidationServiceImpl<T extends LabData<V>, V extends LabVariant> implements ValidationService<T, V> {
     @Override
     @Cacheable("FIELD_VALIDATORS")
-    public FieldValidator<V, T> getFieldValidator(Field field) {
+    public FieldValidator<Object, V, T> getFieldValidator(Field field) {
         Validated annotation = AnnotationUtils.findAnnotation(field, Validated.class);
         if (annotation == null) {
             return null;
         } else {
             try {
-                return (FieldValidator<V, T>) annotation.value().newInstance();
+                return (FieldValidator<Object, V, T>) annotation.value().newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
                throw new UnhandledException(e);
             }

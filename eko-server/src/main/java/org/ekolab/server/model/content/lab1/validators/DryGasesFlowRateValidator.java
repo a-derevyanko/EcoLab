@@ -5,10 +5,10 @@ import org.ekolab.server.model.content.FieldValidator;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 
-public class DryGasesFlowRateValidator implements FieldValidator<Lab1Variant, Lab1Data> {
+public class DryGasesFlowRateValidator implements FieldValidator<Double, Lab1Variant, Lab1Data> {
 
     @Override
-    public boolean validate(Object value, Lab1Data labData) {
+    public boolean validate(Double value, Lab1Data labData) {
         return labData.getVariant().getFuelConsumerNormalized() == null ||
                 labData.getExcessAirRatio() == null ||
                 MathUtils.checkEquals((Double) value, labData.getVariant().getFuelConsumerNormalized() *

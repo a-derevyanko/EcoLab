@@ -5,9 +5,9 @@ import org.ekolab.server.model.content.FieldValidator;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 
-public class MaximumSurfaceConcentrationValidator implements FieldValidator<Lab1Variant, Lab1Data> {
+public class MaximumSurfaceConcentrationValidator implements FieldValidator<Double, Lab1Variant, Lab1Data> {
     @Override
-    public boolean validate(Object value, Lab1Data labData) {
+    public boolean validate(Double value, Lab1Data labData) {
         if (labData.getVariant().getStackExitTemperature() == null || labData.getVariant().getOutsideAirTemperature() == null ||
                 labData.getTemperatureCoefficient() == null || labData.getMassEmissions() == null ||
                 labData.getHarmfulSubstancesDepositionCoefficient() == null || labData.getM() == null || labData.getN() == null ||
@@ -16,7 +16,7 @@ public class MaximumSurfaceConcentrationValidator implements FieldValidator<Lab1
             return true;
         }
         double dT = labData.getVariant().getStackExitTemperature() - labData.getVariant().getOutsideAirTemperature();
-        return MathUtils.checkEquals((Double) value,
+        return MathUtils.checkEquals(value,
                 labData.getTemperatureCoefficient() * labData.getMassEmissions() *
                         labData.getHarmfulSubstancesDepositionCoefficient() * labData.getM() * labData.getN() *
                         labData.getTerrainCoefficient() / Math.pow(labData.getVariant().getStacksHeight(), 2) *

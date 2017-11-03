@@ -7,5 +7,5 @@ import org.ekolab.server.model.content.LabVariant;
 import java.lang.reflect.Field;
 
 public interface ValidationService<T extends LabData<V>, V extends LabVariant> {
-    FieldValidator<V, T> getFieldValidator(Field field);
+    FieldValidator<Object, V, T> getFieldValidator(Field field);
 }

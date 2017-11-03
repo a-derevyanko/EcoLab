@@ -110,7 +110,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
      */
     @Override
     public boolean validateFieldValue(Field field, Object value, T labData) {
-        FieldValidator<V, T> validator = validationService.getFieldValidator(field);
+        FieldValidator<Object, V, T> validator = validationService.getFieldValidator(field);
         return validator == null || validator.validate(value, labData);
     }
 

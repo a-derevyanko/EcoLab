@@ -13,5 +13,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Validated {
     @NotNull
-    Class<? extends FieldValidator<? extends LabVariant,? extends LabData<? extends LabVariant>>> value();
+    Class<? extends FieldValidator<?, ? extends LabVariant,? extends LabData<? extends LabVariant>>> value();
 }
