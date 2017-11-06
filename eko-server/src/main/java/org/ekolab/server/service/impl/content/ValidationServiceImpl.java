@@ -6,30 +6,24 @@ import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 @Service
 public class ValidationServiceImpl implements ValidationService {
-    private final List<FieldValidator<?, ?, ?>> validators;
+    private final ApplicationContext ctx;
 
-    public ValidationServiceImpl(List<FieldValidator<?, ?, ?>> validators) {
-        this.validators = validators;
+    public ValidationServiceImpl(ApplicationContext ctx) {
+        this.ctx = ctx;
     }
 
     @Override
     @Cacheable("FIELD_VALIDATORS")
     public <T extends LabData<V>, V extends LabVariant> FieldValidator<Object, V, T> getFieldValidator(Field field) {
         ValidatedBy annotation = AnnotationUtils.findAnnotation(field, ValidatedBy.class);
-        if (annotation == null) {
-            return null;
-        } else {
-            return (FieldValidator<Object, V, T>) validators.stream().
-                    filter(validator -> annotation.value().isAssignableFrom(validator.getClass())).
-                    reduce((u, v) -> {throw new IllegalStateException("More than one validator found");}).orElseThrow(() -> new IllegalArgumentException(field.getName()));
-        }
+        return annotation == null ? null : ctx.getBean((Class<FieldValidator<Object, V, T>>)annotation.value());
     }
 }

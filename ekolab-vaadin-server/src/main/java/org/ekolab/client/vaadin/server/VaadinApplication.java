@@ -24,7 +24,6 @@ public class VaadinApplication extends ServerApplication {
 
     @Override
     protected ApplicationContext run(String... args) throws Exception {
-        if (true) throw new RuntimeException();
         ApplicationContext ctx = super.run(args);
         DevUtils.setBuildProperties(ctx.getBean(BuildProperties.class));
         return ctx;
