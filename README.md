@@ -2,11 +2,9 @@
 
 1. Spring Framework
 2. Vaadin Framework
-3. Electron
-4. Gradle
-5. JDK 8
-6. Jetty HTTP Server
-7. Node JS
+3. Gradle
+4. JDK 8
+5. Jetty HTTP Server
 
 ## Сборка
 Для сборки необходимо выполнить команду __gradle build__.
