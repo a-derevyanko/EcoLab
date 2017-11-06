@@ -25,6 +25,7 @@ import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.content.Calculated;
+import org.ekolab.server.model.content.FieldValidationResult;
 import org.ekolab.server.model.content.FieldValidator;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
@@ -32,7 +33,7 @@ import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
 import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.Validated;
+import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.model.content.lab3.Valued;
 import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.StudentInfoService;
@@ -51,7 +52,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
-import java.awt.*;
+import java.awt.Image;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
@@ -76,7 +77,7 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.type;
  */
 public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant> implements LabService<T, V> {
     @Autowired
-    private ValidationService<T, V> validationService;
+    private ValidationService validationService;
 
     @Autowired
     protected UserInfoService userInfoService;
@@ -98,7 +99,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
 
     @Override
     public boolean isFieldValidated(Field field) {
-        return field.getAnnotation(Validated.class) != null;
+        return field.getAnnotation(ValidatedBy.class) != null;
     }
 
     /**
@@ -109,9 +110,9 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
      * @return признак того, что значение верно
      */
     @Override
-    public boolean validateFieldValue(Field field, Object value, T labData) {
+    public FieldValidationResult validateFieldValue(Field field, Object value, T labData) {
         FieldValidator<Object, V, T> validator = validationService.getFieldValidator(field);
-        return validator == null || validator.validate(value, labData);
+        return validator == null ? FieldValidationResult.ok() : validator.validate(value, labData);
     }
 
     @Override
@@ -159,7 +160,8 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
     public T updateLab(T labData) {
         labData.setSaveDate(LocalDateTime.now());
         labDao.updateLab(labData);
-        return updateCalculatedFields(labData);
+        updateCalculatedFields(labData);
+        return labData;
     }
 
     @Override
@@ -338,7 +340,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         return values;
     }
 
-    protected Map<String, Object> getValuesFromModel(DomainModel data) {
+    private Map<String, Object> getValuesFromModel(DomainModel data) {
         Map<String, Object> values = new LinkedHashMap<>();
         for (Field field : data.getClass().getDeclaredFields()) {
             ReflectionUtils.makeAccessible(field);
@@ -383,7 +385,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         return labData;
     }
 
-    protected T getLastLabByUser(String userName, boolean completed) {
+    private T getLastLabByUser(String userName, boolean completed) {
         T data = labDao.getLastLabByUser(userName, completed);
         if (data != null) {
             data.setUserLogin(userName);

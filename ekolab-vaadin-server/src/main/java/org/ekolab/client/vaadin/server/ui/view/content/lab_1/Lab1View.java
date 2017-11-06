@@ -8,12 +8,4 @@ import org.ekolab.server.model.content.lab1.Lab1Variant;
  * Created by Андрей on 02.04.2017.
  */
 public abstract class Lab1View extends LabWizard<Lab1Data, Lab1Variant> {
-    @Override
-    public void init() throws Exception {
-        super.init();
-        binder.addValueChangeListener(event -> {
-            labService.updateCalculatedFields(binder.getBean());
-            binder.validate(); // Кросс-валидация
-        });
-    }
 }

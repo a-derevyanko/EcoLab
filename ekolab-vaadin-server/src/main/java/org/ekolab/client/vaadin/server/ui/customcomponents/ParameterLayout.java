@@ -15,12 +15,14 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.RadioButtonGroup;
 import com.vaadin.ui.TextField;
 import com.vaadin.util.ReflectTools;
-import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.UIUtils;
+import org.ekolab.client.vaadin.server.ui.development.DevUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
+import org.ekolab.server.model.content.FieldValidationResult;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
@@ -136,10 +138,12 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
         component.setWidth(130, Unit.PIXELS);
     }
 
-    protected void bindField(Field propertyField, Binder.BindingBuilder<?, ?> builder) {
-        if (labService.isFieldValidated(propertyField)) {
-            builder.withValidator((value, context) -> labService.validateFieldValue(propertyField, value, dataBinder.getBean()) ?
-                    ValidationResult.ok() : ValidationResult.error(i18N.get("labwizard.wrong-value")));
+    private void bindField(Field propertyField, Binder.BindingBuilder<?, ?> builder) {
+        if (DevUtils.isProductionVersion() && labService.isFieldValidated(propertyField)) {
+            builder.withValidator((value, context) -> {
+                FieldValidationResult result = labService.validateFieldValue(propertyField, value, dataBinder.getBean());
+                return result.isError() ? ValidationResult.error(i18N.get(result.getErrorMessage())) : ValidationResult.ok();
+            });
         }
         builder.bind(propertyField.getName());
     }

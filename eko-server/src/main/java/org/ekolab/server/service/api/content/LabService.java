@@ -1,11 +1,13 @@
 package org.ekolab.server.service.api.content;
 
+import org.ekolab.server.model.content.FieldValidationResult;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.impl.content.DataValue;
 
+import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Set;
 /**
  * Created by 777Al on 26.04.2017.
  */
+//@Validated //todo
 public interface LabService<T extends LabData<V>, V extends LabVariant> {
     /**
      * Возвращает признак того, что значение поля может быть проверено программой
@@ -34,7 +37,7 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
 
     T startNewLab(String userName);
 
-    T updateLab(T labData);
+    T updateLab(@Valid T labData);
 
     int removeLabsByUser(String userName);
 
@@ -51,18 +54,17 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
     /**
      * Заполняет в модели значения вычисляемых полей
      * @param labData модель
-     * @return модель, в которой заполнены вычисляемые поля
      */
-    T updateCalculatedFields(T labData);
+    void updateCalculatedFields(T labData);
 
     /**
      * Проверяет правильность значения поля
      * @param field поле
      * @param value значение
      * @param labData данные лабораторной
-     * @return признак того, что значение верно
+     * @return результат проверки
      */
-    boolean validateFieldValue(Field field, Object value, T labData);
+    FieldValidationResult validateFieldValue(Field field, Object value, @Valid T labData);
 
     /**
      * Возвращает печатный вариант исходных данных в PDF формате
@@ -82,7 +84,7 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
      * @param answers ответы
      * @return номера вопросов, на которые был дан неверный ответ
      */
-    List<Integer> checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers);
+    List<Integer> checkLabTest(@Valid LabData<?> data, Map<LabTestQuestionVariant, Object> answers);
 
     int getLabNumber();
 }

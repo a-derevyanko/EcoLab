@@ -2,9 +2,15 @@ package org.ekolab.server.model.content.lab3;
 
 import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.ValidatedBy;
+import org.ekolab.server.model.content.lab3.validators.StacksDiameterValidator;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Objects;
 
 /**
@@ -51,6 +57,7 @@ public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * Диаметр устья дымовой трубы
      */
+    @ValidatedBy(StacksDiameterValidator.class)
     private Double stacksDiameter;
 
     /**
@@ -209,6 +216,8 @@ public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * Средняя скорость газов на выходе из дымовой трубы
      */
+    @Min(10)
+    @Max(25)
     @Calculated
     private Double stackAverageGasesSpeed;
 

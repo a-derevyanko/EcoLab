@@ -57,7 +57,7 @@ INSERT INTO lab3data (
   1050,
   2,
   150,
-  4.2,
+  6.0,
   'NORTH_WEST',
   4,
   39.73,

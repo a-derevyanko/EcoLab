@@ -109,7 +109,11 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant> exte
 
         firstColumnLayout.setComponentAlignment(leftButtonsLayout, Alignment.MIDDLE_LEFT);
 
-        binder.addValueChangeListener(event -> {saveButton.setVisible(true); hasChanges = true;});
+        binder.addValueChangeListener(event -> {
+            labService.updateCalculatedFields(binder.getBean());
+            saveButton.setVisible(true);
+            hasChanges = true;
+        });
 
         saveButton.addClickListener(event -> saveData());
         initialDataButton.addClickListener(event -> showInitialData());

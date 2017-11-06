@@ -50,7 +50,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +76,6 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     private static final int SMALL_SERIES_STEP = 10;
     private static final Color EKO_LAB_COLOR = new Color(143, 184, 43);
 
-    @Autowired
     private final Lab3ResourceService lab3ResourceService;
 
     @Autowired
@@ -125,7 +127,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
     }
 
     @Override
-    public Lab3Data updateCalculatedFields(Lab3Data labData) {
+    public void updateCalculatedFields(Lab3Data labData) {
         if (labData.getCombustionProductsVolume() != null && labData.getFuelConsumer() != null
                 && labData.getStacksDiameter() != null) {
             labData.setStackAverageGasesSpeed((4 * labData.getCombustionProductsVolume() * labData.getFuelConsumer() * labData.getNumberOfUnits().value()) /
@@ -318,8 +320,6 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 }
             }
         }
-
-        return labData;
     }
 
     @Override
@@ -464,7 +464,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         fillIsoLineSeries(borderSeries, borderCyCoefficient, Xm, bwdMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
                 windSpeed, maxX);
 
-        if (backgroundConcentration + groundLevelConcentration > mac) {
+        if (groundLevelConcentration > mac) {
             XYSeries macSeries = new XYSeries(messageSource.getMessage("lab3.isoline-mac-name", new Object[]{mac}, locale), false);
             dataset.addSeries(macSeries);
             double macCyCoefficient = mac / groundLevelConcentration;

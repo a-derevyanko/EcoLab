@@ -1,25 +1,28 @@
 package org.ekolab.server.model.content.lab1.validators;
 
 import org.ekolab.server.common.MathUtils;
+import org.ekolab.server.model.content.FieldValidationResult;
 import org.ekolab.server.model.content.FieldValidator;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MaximumSurfaceConcentrationValidator implements FieldValidator<Double, Lab1Variant, Lab1Data> {
     @Override
-    public boolean validate(Double value, Lab1Data labData) {
+    public FieldValidationResult validate(Double value, Lab1Data labData) {
         if (labData.getVariant().getStackExitTemperature() == null || labData.getVariant().getOutsideAirTemperature() == null ||
                 labData.getTemperatureCoefficient() == null || labData.getMassEmissions() == null ||
                 labData.getHarmfulSubstancesDepositionCoefficient() == null || labData.getM() == null || labData.getN() == null ||
                 labData.getTerrainCoefficient() == null || labData.getVariant().getStacksHeight() == null ||
                 labData.getFlueGasesRate() == null) {
-            return true;
+            return FieldValidationResult.ok();
         }
         double dT = labData.getVariant().getStackExitTemperature() - labData.getVariant().getOutsideAirTemperature();
-        return MathUtils.checkEquals(value,
+        return FieldValidationResult.of(MathUtils.checkEquals(value,
                 labData.getTemperatureCoefficient() * labData.getMassEmissions() *
                         labData.getHarmfulSubstancesDepositionCoefficient() * labData.getM() * labData.getN() *
                         labData.getTerrainCoefficient() / Math.pow(labData.getVariant().getStacksHeight(), 2) *
-                        Math.cbrt(1.0 / (labData.getFlueGasesRate() * dT)));
+                        Math.cbrt(1.0 / (labData.getFlueGasesRate() * dT))));
     }
 }

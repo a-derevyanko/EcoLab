@@ -66,7 +66,7 @@ public class Lab3ResourceServiceImpl implements Lab3ResourceService {
     public Image getBackgroundImage(City city, WindDirection windDirection) {
         Image background = BACKGROUND_CACHE.computeIfAbsent(city, cityName -> loadImage("map/" + city.name() + ".png", -1.0));
 
-        double angle = windDirection.ordinal() * (Math.PI / 4.0);
+        double angle = - windDirection.ordinal() * (Math.PI / 4.0);
         BufferedImage rotatedBackground = ImageUtil.createRotated(background, angle);
         rotatedBackground = rotatedBackground.getSubimage(rotatedBackground.getWidth() / 2,
                 rotatedBackground.getHeight() / 2 - rotatedBackground.getWidth() / 8, 635, 400);

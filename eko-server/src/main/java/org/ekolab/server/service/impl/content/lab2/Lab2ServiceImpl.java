@@ -19,9 +19,8 @@ public class Lab2ServiceImpl extends LabServiceImpl<Lab2Data, Lab2Variant> imple
     }
 
     @Override
-    public Lab2Data updateCalculatedFields(Lab2Data labData) {
+    public void updateCalculatedFields(Lab2Data labData) {
         //todo correctionFactor!!!!
-        return null;
     }
 
     @Override
@@ -36,7 +35,6 @@ public class Lab2ServiceImpl extends LabServiceImpl<Lab2Data, Lab2Variant> imple
 
     @Override
     protected Lab2Variant generateNewLabVariant() {
-
         return null;
     }
 }
