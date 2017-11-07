@@ -237,7 +237,7 @@ VALUES
   Ответ округлить до целых.<br>' ||
   '<i>Пример: 140 г/с</i>', 1,
   'int', 'г/с',
-  'ashMassiveInjection*1.1'),
+  'ashMassiveInjection*1.1/numberOfUnits'),
 
  -- 9 вопрос
  (8, 0, NULL,
@@ -247,7 +247,7 @@ VALUES
   'Ответ округлить до целых.<br>' ||
   '<i>Пример: 346 г/с</i>', 1,
   'int', 'г/с',
-  'so2MassiveInjection*0.8'),
+  'so2MassiveInjection*0.8/numberOfUnits'),
 
  -- 10 вопрос
  (9, 0, NULL,

@@ -71,7 +71,7 @@ import static java.lang.Math.pow;
 public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> implements Lab3Service {
     private static final Logger LOGGER = LoggerFactory.getLogger(Lab3ServiceImpl.class);
 
-    private static final int BORDER = 1000;
+    private static final int BORDER = 4000;
     private static final int BIG_SERIES_STEP = 100;
     private static final int SMALL_SERIES_STEP = 10;
     private static final Color EKO_LAB_COLOR = new Color(143, 184, 43);
@@ -466,6 +466,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
 
         if (groundLevelConcentration > mac) {
             XYSeries macSeries = new XYSeries(messageSource.getMessage("lab3.isoline-mac-name", new Object[]{mac}, locale), false);
+            macSeries.setDescription("MAC");
             dataset.addSeries(macSeries);
             double macCyCoefficient = mac / groundLevelConcentration;
             fillIsoLineSeries(macSeries, macCyCoefficient, Xm, bwdMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
@@ -579,7 +580,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
 
         List<XYSeries> seriesWithLabels = new ArrayList<>(dataSet.getSeries());
 
-        boolean macSeriesExists = seriesWithLabels.removeIf(xySeries -> xySeries.getDescription() == null);
+        boolean bigSeriesExists = seriesWithLabels.removeIf(xySeries -> xySeries.getDescription() == null);
+        boolean macSeriesExists = seriesWithLabels.removeIf(xySeries -> "MAC".equals(xySeries.getDescription()));
 
         for (XYSeries series : seriesWithLabels) {
             final XYTextAnnotation seriesNameMarker = new XYTextAnnotation(series.getDescription(), series.getX(0).doubleValue(), 0.0);
@@ -630,13 +632,16 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
             renderer.setSeriesPaint(i, Color.BLACK);
         }
 
-        renderer.setSeriesStroke(seriesWithLabels.size() - 1, new BasicStroke(2.0f));
-        if (seriesWithLabels.get(seriesWithLabels.size() - 2).getDescription() == null) {
-            xAxis.setUpperBound(seriesWithLabels.get((seriesWithLabels.size() - 2)).getDataItem(0).getX().doubleValue());
+        if (bigSeriesExists) {
+            xAxis.setUpperBound(dataSet.getSeries(dataSet.getSeriesCount() - 1).getDataItem(0).getX().doubleValue());
         }
         renderer.setSeriesPaint(seriesWithLabels.size() - 1, EKO_LAB_COLOR);
         if (macSeriesExists) {
+            renderer.setSeriesStroke(dataSet.getSeriesCount() - 2, new BasicStroke(2.0f));
+            dataSet.getSeries(dataSet.getSeriesCount() - 1).setDescription(null);
             renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2.0f}, 0));
+        } else {
+            renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f));
         }
 
         return chart;
