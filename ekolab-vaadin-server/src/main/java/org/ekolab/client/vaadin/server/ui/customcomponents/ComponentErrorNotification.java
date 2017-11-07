@@ -18,14 +18,15 @@ import java.util.stream.IntStream;
 public class ComponentErrorNotification extends Notification {
     private static final Logger LOGGER = LoggerFactory.getLogger(ComponentErrorNotification.class);
 
-    public ComponentErrorNotification(String caption, String message) {
+    private ComponentErrorNotification(String caption, String message) {
         super(caption, message, Type.WARNING_MESSAGE);
         setStyleName(EkoLabTheme.NOTIFICATION_TRAY);
         setPosition(Position.BOTTOM_CENTER);
     }
 
     public static void show(String caption, List<BindingValidationStatus<?>> validationStatuses) {
-        String errors = IntStream.range(0, validationStatuses.size())
+        String errors = validationStatuses.size() == 1 ? validationStatuses.get(0).getMessage().orElse("") :
+                IntStream.range(0, validationStatuses.size())
                 .mapToObj(i -> (i + 1) + ") " + validationStatuses.get(i).getMessage().orElse(""))
                 .collect(Collectors.joining("\n"));
         new ComponentErrorNotification(caption, errors).show(Page.getCurrent());

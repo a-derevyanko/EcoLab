@@ -156,8 +156,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
                 && labData.getBoilerRunningTime() != null) {
             labData.setSo2MassiveInjection(0.02 * (1000 / 3.6) * labData.getNumberOfUnits().value() *
                     labData.getFuelConsumer() * labData.getSulphurContent() *
-                    (1 - labData.getSulphurOxidesFractionAssociatedByFlyAsh() / 100) *
-                    (1 - labData.getSulphurOxidesFractionAssociatedInWetDustCollector() / 100) *
+                    (1 - labData.getSulphurOxidesFractionAssociatedByFlyAsh()) *
+                    (1 - labData.getSulphurOxidesFractionAssociatedInWetDustCollector()) *
                     (1 - (labData.getSulphurOxidesFractionAssociatedInDesulphurizationSystem()  / 100) *
                             labData.getDesulphurizationSystemRunningTime() / labData.getBoilerRunningTime()));
         }
