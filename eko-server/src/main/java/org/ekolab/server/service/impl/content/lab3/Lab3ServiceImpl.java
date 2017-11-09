@@ -500,7 +500,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
             series.add(xN, 0);
         } else {
             xN = maxBorderValue;
-            series.setDescription(null);
+            if (!"MAC".equals(series.getDescription())) {
+                series.setDescription(null);
+            }
         }
         Map<Integer, Double> points = new TreeMap<>();
         int step = xN - x1 < 2000 ? SMALL_SERIES_STEP : BIG_SERIES_STEP;
@@ -628,19 +630,23 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> imple
         chart.addSubtitle(title);
 
         // Все линии, кроме граничной и ПДК делаем серого цвета
-        for (int i = 0; i < seriesWithLabels.size() - 1; i++) {
+        for (int i = 0; i < seriesWithLabels.size(); i++) {
             renderer.setSeriesPaint(i, Color.BLACK);
         }
 
-        if (bigSeriesExists) {
-            xAxis.setUpperBound(dataSet.getSeries(dataSet.getSeriesCount() - 1).getDataItem(0).getX().doubleValue());
-        }
-        renderer.setSeriesPaint(seriesWithLabels.size() - 1, EKO_LAB_COLOR);
         if (macSeriesExists) {
+            if (bigSeriesExists) {
+                xAxis.setUpperBound(dataSet.getSeries(dataSet.getSeriesCount() - 2).getDataItem(0).getX().doubleValue());
+            }
+            renderer.setSeriesPaint(dataSet.getSeriesCount() - 2, EKO_LAB_COLOR);
             renderer.setSeriesStroke(dataSet.getSeriesCount() - 2, new BasicStroke(2.0f));
             dataSet.getSeries(dataSet.getSeriesCount() - 1).setDescription(null);
             renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2.0f}, 0));
         } else {
+            if (bigSeriesExists) {
+                xAxis.setUpperBound(dataSet.getSeries(dataSet.getSeriesCount() - 1).getDataItem(0).getX().doubleValue());
+            }
+            renderer.setSeriesPaint(dataSet.getSeriesCount() - 1, EKO_LAB_COLOR);
             renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f));
         }
 

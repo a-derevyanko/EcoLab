@@ -12,7 +12,7 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="mm"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="mm"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="mm"/>
-	<style name="Style1" isDefault="true" hTextAlign="Left" vTextAlign="Top" markup="html" pattern="" fontName="Times New Roman" fontSize="11"/>
+	<style name="Style1" isDefault="true" hTextAlign="Left" vTextAlign="Top" markup="html" pattern="" fontName="Times New Roman" fontSize="12"/>
 	<style name="Style1Bold" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontSize="12" isBold="true"/>
 	<style name="StyleFortableCells" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12"/>
 	<style name="StyleFortableCaption" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12" isBold="true"/>
@@ -1582,6 +1582,9 @@
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
+					<font fontName="DejaVu Sans" size="10"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{excessAirRatio}]]></textFieldExpression>
 			</textField>
 			<textField>

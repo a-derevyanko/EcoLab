@@ -22,5 +22,5 @@ public interface UserLabService {
      * @param userName имя пользователя, прошедшего тест
      * @param labNumber номер лабораторной
      */
-    int setTestCompleted(String userName, int labNumber);
+    Collection<Integer> setTestCompleted(String userName, int labNumber);
 }
