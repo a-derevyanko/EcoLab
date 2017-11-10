@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * Created by Андрей on 24.06.2017.
  */
-public abstract class Lab1Data<V extends Lab1Variant> extends LabData<V> {
+public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
     /**
      * Название объекта
      */

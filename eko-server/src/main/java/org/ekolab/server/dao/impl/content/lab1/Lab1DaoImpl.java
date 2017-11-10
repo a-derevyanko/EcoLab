@@ -21,11 +21,11 @@ import static org.ekolab.server.db.h2.public_.Tables.LAB1VARIANT;
  * Created by 777Al on 19.04.2017.
  */
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
-public abstract class Lab1DaoImpl<T extends Lab1Data<V>, V extends Lab1Variant> extends LabDaoImpl<T> implements Lab1Dao<T> {
-    protected abstract static class Lab1DataMapper<T extends Lab1Data<V>, V extends Lab1Variant>  implements RecordMapper<Record, T> {
+public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1Data<V>> implements Lab1Dao<Lab1Data<V>> {
+    protected abstract static class Lab1DataMapper<V extends Lab1Variant>  implements RecordMapper<Record, Lab1Data<V>> {
         @Override
-        public T map(Record record) {
-            T data = createData();
+        public Lab1Data<V> map(Record record) {
+            Lab1Data<V> data = new Lab1Data<V>();
             data.setStartDate(record.get(LAB1DATA.START_DATE));
             data.setSaveDate(record.get(LAB1DATA.SAVE_DATE));
             data.setCompleted(record.get(LAB1DATA.COMPLETED));
@@ -50,6 +50,7 @@ public abstract class Lab1DaoImpl<T extends Lab1Data<V>, V extends Lab1Variant> 
 
             V variant = createVariant();
             variant.setName(record.get(LAB1VARIANT.NAME));
+            variant.setTime(record.get(LAB1VARIANT.TIME));
             variant.setOutsideAirTemperature(record.get(LAB1VARIANT.OUTSIDE_AIR_TEMPERATURE));
             variant.setSteamProductionCapacity(record.get(LAB1VARIANT.STEAM_PRODUCTION_CAPACITY));
             variant.setOxygenConcentrationPoint(record.get(LAB1VARIANT.OXYGEN_CONCENTRATION_POINT));
@@ -63,25 +64,23 @@ public abstract class Lab1DaoImpl<T extends Lab1Data<V>, V extends Lab1Variant> 
         }
 
         protected abstract V createVariant();
-
-        protected abstract T createData();
     }
 
     @Override
-    public T getLastLabByUser(String userName, boolean completed) {
+    public Lab1Data<V> getLastLabByUser(String userName, boolean completed) {
         return dsl.select().from(LAB1DATA).join(LAB1VARIANT).on(LAB1VARIANT.ID.eq(LAB1DATA.ID)).
                 where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB1DATA.COMPLETED.eq(completed)).
                 orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
     }
 
     @Override
-    public List<T> getAllLabsByUser(String userName) {
+    public List<Lab1Data<V>> getAllLabsByUser(String userName) {
         return dsl.select().from(LAB1DATA).join(LAB1VARIANT).on(LAB1VARIANT.ID.eq(LAB1DATA.ID))
                 .where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(getLabMapper());
     }
 
     @Override
-    public long saveLab(T data) {
+    public long saveLab(Lab1Data<V> data) {
         long id = dsl.insertInto(LAB1DATA,
                 LAB1DATA.USER_ID,
                 LAB1DATA.START_DATE,
@@ -135,7 +134,7 @@ public abstract class Lab1DaoImpl<T extends Lab1Data<V>, V extends Lab1Variant> 
     }
 
     @Override
-    public int updateLab(T data) {
+    public int updateLab(Lab1Data<V> data) {
         return dsl.update(LAB1DATA)
                 .set(LAB1DATA.START_DATE, data.getStartDate())
                 .set(LAB1DATA.SAVE_DATE, data.getSaveDate())
@@ -177,7 +176,7 @@ public abstract class Lab1DaoImpl<T extends Lab1Data<V>, V extends Lab1Variant> 
         return 1;
     }
 
-    protected abstract Lab1DataMapper<T, V> getLabMapper();
+    protected abstract Lab1DataMapper<V> getLabMapper();
 
     protected abstract void saveVariant(long id, V variant);
 }

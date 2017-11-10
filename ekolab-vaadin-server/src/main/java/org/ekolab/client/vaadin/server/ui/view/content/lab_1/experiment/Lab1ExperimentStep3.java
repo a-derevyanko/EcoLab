@@ -25,7 +25,7 @@ public class Lab1ExperimentStep3 extends HorizontalLayout implements LabWizardSt
     private I18N i18N;
 
     @Autowired
-    private ParameterWithFormulaeLayout<Lab1Data, Lab1Variant> firstFormLayout;
+    private ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout;
 
     @Override
     public void init() throws IOException {

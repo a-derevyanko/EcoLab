@@ -3,7 +3,7 @@ package org.ekolab.server.service.impl.content.lab1.random;
 import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab1.random.Lab1RandomDao;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
-import org.ekolab.server.model.content.lab1.random.Lab1RandomData;
+import org.ekolab.server.service.api.content.lab1.random.Lab1RandomService;
 import org.ekolab.server.service.impl.content.lab1.Lab1ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,16 +15,11 @@ import java.util.Locale;
  * Created by 777Al on 26.04.2017.
  */
 @Service
-public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1RandomData, Lab1Variant> {
+public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1Variant> implements Lab1RandomService {
 
     @Autowired
     public Lab1RandomServiceImpl(Lab1RandomDao lab1Dao) {
         super(lab1Dao);
-    }
-
-    @Override
-    public Lab1RandomData createNewLabData() {
-        return new Lab1RandomData();
     }
 
     @Override

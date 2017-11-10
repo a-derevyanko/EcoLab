@@ -92,7 +92,7 @@ CREATE TABLE lab1variant (
   fuel_Consumer                             INT,
   stack_Exit_Temperature                    INT,
   flue_Gas_NOx_Concentration                INT,
-  is_experiment                             BOOL
+  is_experiment                             BOOL NOT NULL DEFAULT FALSE
 );
 
 /*

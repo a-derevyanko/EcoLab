@@ -25,7 +25,7 @@ public class Lab1ExperimentStep2 extends HorizontalLayout implements LabWizardSt
     private I18N i18N;
 
     @Autowired
-    private ParameterWithFormulaeLayout<Lab1Data, Lab1Variant> firstFormLayout;
+    private ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout;
 
     @Override
     public void init() throws IOException {
@@ -35,6 +35,9 @@ public class Lab1ExperimentStep2 extends HorizontalLayout implements LabWizardSt
         addComponent(firstFormLayout);
         setComponentAlignment(firstFormLayout, Alignment.MIDDLE_CENTER);
         firstFormLayout.setCaption(i18N.get("lab1.step2.max-concentration-calculation"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "excessAirRatio"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasNOforxConcentrationNC"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "excessOfNorms"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasesRate"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "dryGasesFlowRate"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "massEmissions"));
