@@ -8,11 +8,11 @@ import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DValidator implements FieldValidator<Double, Lab1Variant, Lab1Data> {
+public class DValidator implements FieldValidator<Double, Lab1Variant, Lab1Data<Lab1Variant>> {
     @Override
-    public FieldValidationResult validate(Double value, Lab1Data labData) {
-        return FieldValidationResult.of(labData.getVariant().getStacksHeight() == null || labData.getD() == null || labData.getF() == null ||
+    public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
+        return FieldValidationResult.of(labData.getStacksHeight() == null || labData.getD() == null || labData.getF() == null ||
                 MathUtils.checkEquals(value,
-                        (5 - labData.getF()) / 4.0 * labData.getVariant().getStacksHeight() * labData.getD()));
+                        (5 - labData.getF()) / 4.0 * labData.getStacksHeight() * labData.getD()));
     }
 }

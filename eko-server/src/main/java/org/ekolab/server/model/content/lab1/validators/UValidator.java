@@ -8,15 +8,15 @@ import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UValidator implements FieldValidator<Double, Lab1Variant, Lab1Data> {
+public class UValidator implements FieldValidator<Double, Lab1Variant, Lab1Data<Lab1Variant>> {
     @Override
-    public FieldValidationResult validate(Double value, Lab1Data labData) {
-        if (labData.getVariant().getStackExitTemperature() == null || labData.getVariant().getOutsideAirTemperature() == null ||
-                labData.getFlueGasesRate() == null || labData.getVariant().getStacksHeight() == null) {
+    public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
+        if (labData.getStackExitTemperature() == null || labData.getOutsideAirTemperature() == null ||
+                labData.getFlueGasesRate() == null || labData.getStacksHeight() == null) {
             return FieldValidationResult.ok();
         }
-        double dT = labData.getVariant().getStackExitTemperature() - labData.getVariant().getOutsideAirTemperature();
+        double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
         return FieldValidationResult.of(MathUtils.checkEquals(value, 0.65 *
-                Math.cbrt(labData.getFlueGasesRate() * dT / labData.getVariant().getStacksHeight())));
+                Math.cbrt(labData.getFlueGasesRate() * dT / labData.getStacksHeight())));
     }
 }

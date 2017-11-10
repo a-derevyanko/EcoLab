@@ -8,21 +8,21 @@ import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MaximumSurfaceConcentrationValidator implements FieldValidator<Double, Lab1Variant, Lab1Data> {
+public class MaximumSurfaceConcentrationValidator implements FieldValidator<Double, Lab1Variant, Lab1Data<Lab1Variant>> {
     @Override
-    public FieldValidationResult validate(Double value, Lab1Data labData) {
-        if (labData.getVariant().getStackExitTemperature() == null || labData.getVariant().getOutsideAirTemperature() == null ||
+    public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
+        if (labData.getStackExitTemperature() == null || labData.getOutsideAirTemperature() == null ||
                 labData.getTemperatureCoefficient() == null || labData.getMassEmissions() == null ||
                 labData.getHarmfulSubstancesDepositionCoefficient() == null || labData.getM() == null || labData.getN() == null ||
-                labData.getTerrainCoefficient() == null || labData.getVariant().getStacksHeight() == null ||
+                labData.getTerrainCoefficient() == null || labData.getStacksHeight() == null ||
                 labData.getFlueGasesRate() == null) {
             return FieldValidationResult.ok();
         }
-        double dT = labData.getVariant().getStackExitTemperature() - labData.getVariant().getOutsideAirTemperature();
+        double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
         return FieldValidationResult.of(MathUtils.checkEquals(value,
                 labData.getTemperatureCoefficient() * labData.getMassEmissions() *
                         labData.getHarmfulSubstancesDepositionCoefficient() * labData.getM() * labData.getN() *
-                        labData.getTerrainCoefficient() / Math.pow(labData.getVariant().getStacksHeight(), 2) *
+                        labData.getTerrainCoefficient() / Math.pow(labData.getStacksHeight(), 2) *
                         Math.cbrt(1.0 / (labData.getFlueGasesRate() * dT))));
     }
 }

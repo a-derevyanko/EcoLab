@@ -22,16 +22,6 @@ public class Lab1Variant extends LabVariant {
     private Integer outsideAirTemperature;
 
     /**
-     * Высота дымовой трубы
-     */
-    private Double stacksHeight;
-
-    /**
-     * Диаметр дымовой трубы
-     */
-    private Double stacksDiameter;
-
-    /**
      * Время проведения измерений
      */
     private LocalDateTime time;
@@ -77,22 +67,6 @@ public class Lab1Variant extends LabVariant {
 
     public void setOutsideAirTemperature(Integer outsideAirTemperature) {
         this.outsideAirTemperature = outsideAirTemperature;
-    }
-
-    public Double getStacksHeight() {
-        return stacksHeight;
-    }
-
-    public void setStacksHeight(Double stacksHeight) {
-        this.stacksHeight = stacksHeight;
-    }
-
-    public Double getStacksDiameter() {
-        return stacksDiameter;
-    }
-
-    public void setStacksDiameter(Double stacksDiameter) {
-        this.stacksDiameter = stacksDiameter;
     }
 
     public LocalDateTime getTime() {
@@ -150,8 +124,6 @@ public class Lab1Variant extends LabVariant {
         Lab1Variant that = (Lab1Variant) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(outsideAirTemperature, that.outsideAirTemperature) &&
-                Objects.equals(stacksHeight, that.stacksHeight) &&
-                Objects.equals(stacksDiameter, that.stacksDiameter) &&
                 Objects.equals(time, that.time) &&
                 Objects.equals(steamProductionCapacity, that.steamProductionCapacity) &&
                 Objects.equals(oxygenConcentrationPoint, that.oxygenConcentrationPoint) &&
@@ -162,6 +134,6 @@ public class Lab1Variant extends LabVariant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, outsideAirTemperature, stacksHeight, stacksDiameter, time, steamProductionCapacity, oxygenConcentrationPoint, fuelConsumerNormalized, stackExitTemperature, flueGasNOxConcentration);
+        return Objects.hash(name, outsideAirTemperature, time, steamProductionCapacity, oxygenConcentrationPoint, fuelConsumerNormalized, stackExitTemperature, flueGasNOxConcentration);
     }
 }

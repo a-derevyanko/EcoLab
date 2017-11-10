@@ -8,17 +8,17 @@ import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FValidator implements FieldValidator<Double, Lab1Variant, Lab1Data> {
+public class FValidator implements FieldValidator<Double, Lab1Variant, Lab1Data<Lab1Variant>> {
     @Override
-    public FieldValidationResult validate(Double value, Lab1Data labData) {
-        if (labData.getVariant().getStackExitTemperature() == null || labData.getVariant().getOutsideAirTemperature() == null ||
-                labData.getFlueGasesSpeed() == null || labData.getVariant().getStacksDiameter() == null ||
-                labData.getVariant().getStacksHeight() == null) {
+    public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
+        if (labData.getStackExitTemperature() == null || labData.getOutsideAirTemperature() == null ||
+                labData.getFlueGasesSpeed() == null || labData.getStacksDiameter() == null ||
+                labData.getStacksHeight() == null) {
             return FieldValidationResult.ok();
         }
 
-        double dT = labData.getVariant().getStackExitTemperature() - labData.getVariant().getOutsideAirTemperature();
-        return FieldValidationResult.of(MathUtils.checkEquals(value, 1000 * labData.getFlueGasesSpeed() * labData.getVariant().getStacksDiameter() /
-                (Math.pow(labData.getVariant().getStacksHeight(), 2) * dT)));
+        double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
+        return FieldValidationResult.of(MathUtils.checkEquals(value, 1000 * labData.getFlueGasesSpeed() * labData.getStacksDiameter() /
+                (Math.pow(labData.getStacksHeight(), 2) * dT)));
     }
 }

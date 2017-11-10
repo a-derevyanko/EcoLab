@@ -8,14 +8,14 @@ import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FlueGasesRateValidator implements FieldValidator<Double, Lab1Variant, Lab1Data> {
+public class FlueGasesRateValidator implements FieldValidator<Double, Lab1Variant, Lab1Data<Lab1Variant>> {
 
     @Override
-    public FieldValidationResult validate(Double value, Lab1Data labData) {
-        return FieldValidationResult.of(labData.getVariant().getFuelConsumerNormalized() == null ||
-                labData.getVariant().getStackExitTemperature() == null ||
-                MathUtils.checkEquals(value, labData.getVariant().getFuelConsumerNormalized() *
+    public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
+        return FieldValidationResult.of(labData.getFuelConsumerNormalized() == null ||
+                labData.getStackExitTemperature() == null ||
+                MathUtils.checkEquals(value, labData.getFuelConsumerNormalized() *
                         (Constants.V0g + 1.016 * (Constants.Ayx - 1) *
-                                Constants.V0) * (273 + labData.getVariant().getStackExitTemperature()) / 273.0));
+                                Constants.V0) * (273 + labData.getStackExitTemperature()) / 273.0));
     }
 }

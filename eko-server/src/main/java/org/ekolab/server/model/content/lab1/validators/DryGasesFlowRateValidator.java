@@ -8,13 +8,13 @@ import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DryGasesFlowRateValidator implements FieldValidator<Double, Lab1Variant, Lab1Data> {
+public class DryGasesFlowRateValidator implements FieldValidator<Double, Lab1Variant, Lab1Data<Lab1Variant>> {
 
     @Override
-    public FieldValidationResult validate(Double value, Lab1Data labData) {
-        return FieldValidationResult.of(labData.getVariant().getFuelConsumerNormalized() == null ||
+    public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
+        return FieldValidationResult.of(labData.getFuelConsumerNormalized() == null ||
                 labData.getExcessAirRatio() == null ||
-                MathUtils.checkEquals((Double) value, labData.getVariant().getFuelConsumerNormalized() *
+                MathUtils.checkEquals((Double) value, labData.getFuelConsumerNormalized() *
                         (Constants.V0g + (labData.getExcessAirRatio() - 1) * Constants.V0 - Constants.V_H2O)));
     }
 }

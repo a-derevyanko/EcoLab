@@ -91,7 +91,8 @@ CREATE TABLE lab1variant (
   oxygen_Concentration_Point                DOUBLE,
   fuel_Consumer                             INT,
   stack_Exit_Temperature                    INT,
-  flue_Gas_NOx_Concentration                INT
+  flue_Gas_NOx_Concentration                INT,
+  is_experiment                             BOOL
 );
 
 /*
@@ -112,4 +113,5 @@ COMMENT ON COLUMN lab1variant.outside_air_temperature IS 'Температура
 COMMENT ON COLUMN lab1variant.name IS 'Название объекта';
 COMMENT ON COLUMN lab1variant.steam_Production_Capacity IS 'Паровая нагрузка котла';
 COMMENT ON COLUMN lab1variant.oxygen_Concentration_Point IS 'Содержание кислорода в сечении газохода, где проводились измерения';
+COMMENT ON COLUMN lab1variant.is_experiment IS 'Работа выполняется на основании эксперимента';
 

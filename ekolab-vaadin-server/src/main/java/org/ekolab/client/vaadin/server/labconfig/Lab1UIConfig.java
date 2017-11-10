@@ -2,12 +2,13 @@ package org.ekolab.client.vaadin.server.labconfig;
 
 import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.ViewScope;
-import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
 import org.ekolab.server.model.content.lab1.Lab1Data;
+import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.ekolab.server.service.api.content.lab1.Lab1Service;
 import org.springframework.boot.SpringBootConfiguration;
@@ -24,10 +25,17 @@ public class Lab1UIConfig {
     public Binder<Lab1Data> lab1Binder() {
         return new Binder<>(Lab1Data.class);
     }
+
     @Bean
     @ViewScope
     public Binder<Lab1Variant> lab1VariantBinder() {
         return new Binder<>(Lab1Variant.class);
+    }
+
+    @Bean
+    @ViewScope
+    public Binder<Lab1ExperimentLog> lab1ExperimentLogBinder() {
+        return new Binder<>(Lab1ExperimentLog.class);
     }
 
     @Bean

@@ -5,7 +5,14 @@ import com.vaadin.data.Converter;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
-import com.vaadin.ui.*;
+import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.DateTimeField;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
@@ -13,6 +20,7 @@ import org.ekolab.client.vaadin.server.ui.common.UIUtils;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.lab1.Lab1Data;
+import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +37,7 @@ import java.lang.reflect.Field;
 @ViewScope
 public class Lab1ExperimentStep1 extends VerticalLayout implements LabWizardStep {
     @Autowired
-    private Binder<Lab1Variant> variantBinder;
+    private Binder<Lab1ExperimentLog> experimentLogBinder;
 
     @Autowired
     private Binder<Lab1Data> dataBinder;
@@ -100,14 +108,14 @@ public class Lab1ExperimentStep1 extends VerticalLayout implements LabWizardStep
         layout.addComponent(signLabel, 4, row);
         component.setWidth(250.0F, Unit.PIXELS);
         if (component instanceof TextField) {
-            Binder.BindingBuilder<Lab1Variant, String> bindingBuilder = variantBinder.forField((TextField)component).withNullRepresentation("");
+            Binder.BindingBuilder<Lab1ExperimentLog, String> bindingBuilder = experimentLogBinder.forField((TextField)component).withNullRepresentation("");
             Converter<String, ?> converter = UIUtils.getStringConverter(field, i18N);
             if (converter != null) {
                 bindingBuilder.withConverter(converter).bind(field.getName());
                 return;
             }
         }
-        variantBinder.forField(component).bind(field.getName());
+        experimentLogBinder.forField(component).bind(field.getName());
     }
 
     /**
@@ -118,13 +126,13 @@ public class Lab1ExperimentStep1 extends VerticalLayout implements LabWizardStep
     public boolean onAdvance() {
         for (Field field : Lab1Variant.class.getDeclaredFields()) {
             ReflectionUtils.makeAccessible(field);
-            Object value = ReflectionUtils.getField(field, variantBinder.getBean());
+            Object value = ReflectionUtils.getField(field, experimentLogBinder.getBean());
             if (value == null) {
                 ComponentErrorNotification.show(i18N.get("labwizard.next-step-unavailable"), i18N.get("lab1.step1.fill-variant"));
                 return false;
             }
         }
-        BeanUtils.copyProperties(variantBinder.getBean(), dataBinder.getBean());
+        BeanUtils.copyProperties(experimentLogBinder.getBean(), dataBinder.getBean());
         return LabWizardStep.super.onAdvance();
     }
 }

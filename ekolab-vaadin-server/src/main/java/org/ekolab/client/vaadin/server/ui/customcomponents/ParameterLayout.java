@@ -19,7 +19,6 @@ import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.UIUtils;
-import org.ekolab.client.vaadin.server.ui.development.DevUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
 import org.ekolab.server.model.content.FieldValidationResult;
@@ -139,8 +138,11 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
     }
 
     private void bindField(Field propertyField, Binder.BindingBuilder<?, ?> builder) {
-        if (DevUtils.isProductionVersion() && labService.isFieldValidated(propertyField)) {
+        if (labService.isFieldValidated(propertyField)) {
             builder.withValidator((value, context) -> {
+                if (value == null) {
+                    return ValidationResult.ok();
+                }
                 FieldValidationResult result = labService.validateFieldValue(propertyField, value, dataBinder.getBean());
                 return result.isError() ? ValidationResult.error(i18N.get(result.getErrorMessage())) : ValidationResult.ok();
             });

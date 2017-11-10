@@ -190,7 +190,7 @@ public class LabChooserView extends VerticalLayout implements View {
         setTestButtonSate(lab2TestButton, completedLabs.contains(2) && !completedTests.contains(2));
         setTestButtonSate(lab3TestButton, completedLabs.contains(3) && !completedTests.contains(3));
         boolean isNotStudent = VaadinUI.getCurrent().getCurrentUserInfo().getGroup() != UserGroup.STUDENT;
-        setLabButtonSate(lab1Button, DevUtils.isProductionVersion() && (isNotStudent || !completedLabs.contains(1)));
+        setLabButtonSate(lab1Button, isNotStudent || !completedLabs.contains(1));
         setLabButtonSate(lab2Button, DevUtils.isProductionVersion() && (isNotStudent || !completedLabs.contains(2)));
         setLabButtonSate(lab3Button, isNotStudent || !completedLabs.contains(3));
         setButtonSate(labDefenceButton, lab1TestButton.isEnabled() || lab2TestButton.isEnabled() || lab3TestButton.isEnabled());

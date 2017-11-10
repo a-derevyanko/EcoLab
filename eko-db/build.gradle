@@ -1,5 +1,5 @@
 plugins {
-    id 'nu.studer.jooq' version '2.0.8'
+    id 'nu.studer.jooq' version '2.0.7'
     id "org.flywaydb.flyway" version "4.2.0"
 }
 
