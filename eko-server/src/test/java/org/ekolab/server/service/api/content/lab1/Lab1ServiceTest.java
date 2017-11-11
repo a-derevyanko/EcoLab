@@ -4,9 +4,7 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.AbstractTestWithUser;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
-import org.ekolab.server.service.api.content.lab1.random.Lab1RandomService;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.testng.Assert;
@@ -20,11 +18,14 @@ import java.time.LocalDateTime;
  * Created by Андрей on 01.05.2017.
  */
 @EnableAutoConfiguration(exclude = {ManagementWebSecurityAutoConfiguration.class})
-public class Lab1ServiceTest extends AbstractTestWithUser {
-    private Lab1Data<Lab1Variant> createdLab;
+public abstract class Lab1ServiceTest<V extends Lab1Variant> extends AbstractTestWithUser {
+    private Lab1Data<V> createdLab;
 
-    @Autowired
-    private Lab1RandomService lab1Service;
+    private final Lab1Service<V> lab1Service;
+
+    public Lab1ServiceTest(Lab1Service<V> lab1Service) {
+        this.lab1Service = lab1Service;
+    }
 
     @BeforeClass
     public void generateLab() {

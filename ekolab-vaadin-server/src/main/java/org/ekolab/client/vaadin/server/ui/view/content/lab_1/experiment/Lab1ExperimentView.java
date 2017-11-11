@@ -2,17 +2,14 @@ package org.ekolab.client.vaadin.server.ui.view.content.lab_1.experiment;
 
 import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.SpringView;
-import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
-import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1ExperimentPresentationStep;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1Step2;
+import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1Step3;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1View;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Created by Андрей on 02.04.2017.
@@ -25,17 +22,12 @@ public class Lab1ExperimentView extends Lab1View<Lab1ExperimentLog> {
     @Autowired
     private Binder<Lab1Variant> variantBinder;
 
-    @Autowired
-    private Lab1ExperimentPresentationStep presentationStep;
-
-    @Autowired
-    private Lab1ExperimentStep1 step1;
-
-    @Autowired
-    private Lab1ExperimentStep2 step2;
-
-    @Autowired
-    private Lab1ExperimentStep3 step3;
+    public Lab1ExperimentView(Lab1ExperimentPresentationStep presentationStep, Lab1ExperimentStep1 step1, Lab1Step2 step2, Lab1Step3 step3) {
+        labSteps.add(presentationStep);
+        labSteps.add(step1);
+        labSteps.add(step2);
+        labSteps.add(step3);
+    }
 
     @Override
     public void init() throws Exception {
@@ -50,10 +42,5 @@ public class Lab1ExperimentView extends Lab1View<Lab1ExperimentLog> {
     protected void updateButtons() {
         super.updateButtons();
         initialDataButton.setVisible(steps.indexOf(currentStep) > 1);
-    }
-
-    @Override
-    protected Collection<LabWizardStep> getLabSteps() {
-        return Arrays.asList(presentationStep, step1, step2, step3);
     }
 }

@@ -57,7 +57,7 @@ task pathingJar(type: Jar) {
 bootRun {
     dependsOn pathingJar
     doFirst {
-        classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
+        classpath = files(sourceSets.main.output.files, pathingJar.archivePath)
     }
     systemProperties(System.properties)
     jvmArgs = ["-Dspring.profiles.active=dev,h2", "-Dorg.jooq.no-logo=true"]

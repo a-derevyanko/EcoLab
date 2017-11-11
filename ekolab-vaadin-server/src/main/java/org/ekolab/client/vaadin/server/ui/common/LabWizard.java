@@ -27,7 +27,8 @@ import org.vaadin.teemu.wizards.event.WizardCompletedEvent;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Андрей on 19.03.2017.
@@ -44,6 +45,8 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant> exte
     protected final HorizontalLayout thirdComponentsLayout = new HorizontalLayout();
 
     protected boolean hasChanges;
+
+    protected final List<LabWizardStep> labSteps = new ArrayList<>();
 
     @Autowired
     protected I18N i18N;
@@ -118,14 +121,8 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant> exte
         saveButton.addClickListener(event -> saveData());
         initialDataButton.addClickListener(event -> showInitialData());
 
-        getLabSteps().forEach(this::addStep);
+        labSteps.forEach(this::addStep);
     }
-
-    /**
-     * Возвращает список шагов лабораторной.
-     * @return список шагов лабораторной.
-     */
-    protected abstract Collection<LabWizardStep> getLabSteps();
 
     @Override
     @Scheduled(fixedRateString = "${ekolab.lab.autoSaveRate:#{60000}}", initialDelayString = "${ekolab.lab.autoSaveRate:#{60000}}")

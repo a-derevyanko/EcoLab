@@ -63,6 +63,7 @@ springBoot.mainClass = 'org.ekolab.client.vaadin.server.VaadinApplication'
 /**
  * Линковка ClassPath, чтобы обойти ошибку Windows 'CreateProcess error=206, Имя файла или его расширение имеет слишком большую длину'
  */
+//todo вынести в утилиты
 task pathingJar(type: Jar) {
     dependsOn configurations.runtime
     appendix = 'pathing'
@@ -79,7 +80,7 @@ task pathingJar(type: Jar) {
 bootRun {
     dependsOn pathingJar
     doFirst {
-        classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
+        classpath = files(sourceSets.main.output.files, pathingJar.archivePath)
     }
     systemProperties(System.properties)
     jvmArgs = ["-Dspring.profiles.active=dev,h2", "-Dorg.jooq.no-logo=true"]
