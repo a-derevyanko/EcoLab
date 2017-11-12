@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.addon.JFreeChartWrapper;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -50,7 +49,7 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
     private Lab3Service lab3Service;
 
     @Override
-    public void init() throws IOException {
+    public void init() {
         LabWizardStep.super.init();
         setSizeFull();
         setMargin(true);

@@ -13,6 +13,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.types.date.FixedTimestamp;
 import org.apache.commons.lang.UnhandledException;
 import org.apache.commons.math3.util.Precision;
 import org.ekolab.server.common.I18NUtils;
@@ -58,6 +59,8 @@ import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -76,6 +79,8 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.type;
  * Created by 777Al on 26.04.2017.
  */
 public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant> implements LabService<T, V> {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(FixedTimestamp.TIMESTAMP_PATTERN);
+
     @Autowired
     private ValidationService validationService;
 
@@ -302,6 +307,8 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
             return value;
         } else if (value instanceof Double) {
             return Precision.round((double) value, (double) value > 2.0 ? 2 : 3);
+        } else if (value instanceof LocalDateTime) {
+            return DATE_TIME_FORMATTER.format((TemporalAccessor) value);
         } else {
             return value instanceof Enum ? messageSource.getMessage(I18NUtils.getEnumName((Enum<?>) value), null, locale) : String.valueOf(value);
         }

@@ -12,8 +12,6 @@ import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.util.FieldUtils;
 
-import java.io.IOException;
-
 /**
  * Created by 777Al on 06.04.2017.
  */
@@ -28,13 +26,13 @@ public class Lab1Step2 extends HorizontalLayout implements LabWizardStep {
     private ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout;
 
     @Override
-    public void init() throws IOException {
+    public void init() {
         LabWizardStep.super.init();
         setSizeFull();
         setMargin(true);
         addComponent(firstFormLayout);
         setComponentAlignment(firstFormLayout, Alignment.MIDDLE_CENTER);
-        firstFormLayout.setCaption(i18N.get("lab1.step2.max-concentration-calculation"));
+        firstFormLayout.setCaption(i18N.get("lab1.step1.data-normalization"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "excessAirRatio"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasNOxConcentrationNC"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "excessOfNorms"));
@@ -42,6 +40,5 @@ public class Lab1Step2 extends HorizontalLayout implements LabWizardStep {
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "dryGasesFlowRate"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "massEmissions"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasesSpeed"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "f"));
     }
 }

@@ -10,6 +10,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.DateTimeField;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.RadioButtonGroup;
@@ -28,6 +29,7 @@ import org.ekolab.server.service.api.content.LabService;
 import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.ekolab.client.vaadin.server.ui.windows.ResourceWindow.show;
@@ -119,6 +121,8 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
         } else if (propClass == Boolean.class) {
             RadioButtonGroup<Boolean> yesNoComponent = new RadioButtonGroup<>(null, Arrays.asList(Boolean.FALSE, Boolean.TRUE));
             yesNoComponent.setItemCaptionGenerator(item -> item ? i18N.get("labwizard.yes-value") : i18N.get("labwizard.no-value"));
+            yesNoComponent.setStyleName(EkoLabTheme.OPTIONGROUP_HORIZONTAL);
+            yesNoComponent.setSizeFull();
             dataBinder.forField(yesNoComponent).bind(propertyField.getName());
             component = yesNoComponent;
         } else if (propClass == String.class || Number.class.isAssignableFrom(propClass)) {
@@ -130,8 +134,12 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
             field.setReadOnly(readOnly);
             field.addStyleName(EkoLabTheme.TEXTFIELD_TINY);
             component = field;
+        } else if (propClass == LocalDateTime.class) {
+            DateTimeField field = new DateTimeField();
+            dataBinder.forField(field).bind(propertyField.getName());
+            component = field;
         } else {
-            throw new IllegalArgumentException("Unknown property class");
+            throw new IllegalArgumentException("Unknown property class: " + propClass);
         }
         super.addComponent(component, 1, row);
         component.setWidth(130, Unit.PIXELS);

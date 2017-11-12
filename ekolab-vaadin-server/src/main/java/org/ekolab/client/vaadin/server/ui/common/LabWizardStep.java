@@ -8,7 +8,6 @@ import org.ekolab.server.dev.LogExecutionTime;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 
 /**
  * Created by 777Al on 05.04.2017.
@@ -17,7 +16,7 @@ public interface LabWizardStep extends Component, UIComponent, WizardStep {
     @Override
     @PostConstruct
     @LogExecutionTime
-    default void init() throws IOException {
+    default void init() {
         setSizeUndefined();
         setStyleName(EkoLabTheme.PANEL_WIZARD_STEP);
     }

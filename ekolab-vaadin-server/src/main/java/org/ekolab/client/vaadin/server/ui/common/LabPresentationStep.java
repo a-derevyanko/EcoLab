@@ -6,15 +6,14 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.service.api.PresentationService;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -32,7 +31,7 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
 
     @Override
     @PostConstruct
-    public void init() throws IOException {
+    public void init() {
         LabWizardStep.super.init();
         setSizeFull();
         addStyleName(getPanelStyleName());

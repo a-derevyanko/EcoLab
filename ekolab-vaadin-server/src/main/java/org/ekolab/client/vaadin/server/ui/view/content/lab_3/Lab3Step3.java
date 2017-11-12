@@ -11,8 +11,6 @@ import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.util.FieldUtils;
 
-import java.io.IOException;
-
 /**
  * Created by 777Al on 06.04.2017.
  */
@@ -30,7 +28,7 @@ public class Lab3Step3 extends HorizontalLayout implements LabWizardStep {
     private ParameterLayout<Lab3Data, Lab3Variant> secondFormLayout;
 
     @Override
-    public void init() throws IOException {
+    public void init() {
         LabWizardStep.super.init();
         setSizeFull();
         setMargin(true);

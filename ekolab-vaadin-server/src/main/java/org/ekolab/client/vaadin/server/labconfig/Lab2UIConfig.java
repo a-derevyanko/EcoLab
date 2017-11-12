@@ -37,7 +37,7 @@ public class Lab2UIConfig {
             I18N i18N,
             ResourceService resourceService,
             ParameterCustomizer parameterCustomizer) {
-        return new ParameterLayout<>("content/Lab2/", Lab2Binder(), labService,
+        return new ParameterLayout<>("content/lab2/", Lab2Binder(), labService,
                 i18N, resourceService, parameterCustomizer);
     }
 
