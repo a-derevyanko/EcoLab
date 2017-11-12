@@ -1,8 +1,7 @@
 package org.ekolab.server.service.impl.content;
 
+import org.ekolab.server.model.DomainModel;
 import org.ekolab.server.model.content.FieldValidator;
-import org.ekolab.server.model.content.LabData;
-import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,9 +20,18 @@ public class ValidationServiceImpl implements ValidationService {
     }
 
     @Override
+    public boolean isFieldValidated(Field field) {
+        return field.getAnnotation(ValidatedBy.class) != null;
+    }
+
+    @Override
     @Cacheable("FIELD_VALIDATORS")
-    public <T extends LabData<V>, V extends LabVariant> FieldValidator<Object, V, T> getFieldValidator(Field field) {
+    public <M extends DomainModel> FieldValidator<Object, M> getFieldValidator(Field field) {
         ValidatedBy annotation = AnnotationUtils.findAnnotation(field, ValidatedBy.class);
-        return annotation == null ? null : ctx.getBean((Class<FieldValidator<Object, V, T>>)annotation.value());
+        if (annotation == null) {
+            throw new IllegalArgumentException("No validator for: " + field);
+        } else {
+            return ctx.getBean((Class<FieldValidator<Object, M>>) annotation.value());
+        }
     }
 }

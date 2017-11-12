@@ -1,5 +1,7 @@
 package org.ekolab.server.model.content;
 
+import org.ekolab.server.model.DomainModel;
+
 import javax.validation.constraints.NotNull;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,5 +15,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidatedBy {
     @NotNull
-    Class<? extends FieldValidator<?, ? extends LabVariant,? extends LabData<? extends LabVariant>>> value();
+    Class<? extends FieldValidator<?, ? extends DomainModel>> value();
 }

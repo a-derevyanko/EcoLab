@@ -1,5 +1,6 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
+import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.data.Validator;
@@ -10,6 +11,9 @@ import com.vaadin.server.UserError;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.util.ReflectTools;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.server.model.DomainModel;
+import org.ekolab.server.model.content.FieldValidationResult;
+import org.ekolab.server.service.api.content.ValidationService;
 
 import java.lang.reflect.Field;
 
@@ -45,6 +49,27 @@ public abstract class UIUtils {
                 field.setComponentError(null);
             }
         });
+    }
+
+    /**
+     * Добавляет валидатор, который проверяет правильность значения поля
+     */
+    public static <M extends DomainModel> void bindField(Field propertyField,
+                                                        Binder.BindingBuilder<?, ?> builder,
+                                                        Binder<M> dataBinder,
+                                                        ValidationService validationService,
+                                                        I18N i18N) {
+        if (validationService.isFieldValidated(propertyField)) {
+            builder.withValidator((value, context) -> {
+                if (value == null) {
+                    return ValidationResult.ok();
+                }
+
+                FieldValidationResult result = validationService.getFieldValidator(propertyField).validate(value, dataBinder.getBean());
+                return result.isError() ? ValidationResult.error(i18N.get(result.getErrorMessage())) : ValidationResult.ok();
+            });
+        }
+        builder.bind(propertyField.getName());
     }
 
     public static <T> Validator<T> notNullValidator(I18N i18N) {

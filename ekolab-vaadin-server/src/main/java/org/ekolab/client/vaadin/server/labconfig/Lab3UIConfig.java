@@ -8,6 +8,7 @@ import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.model.content.lab3.Lab3Variant;
+import org.ekolab.server.service.api.content.ValidationService;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -30,8 +31,9 @@ public class Lab3UIConfig {
                                                                    Lab3Service labService,
                                                                    I18N i18N,
                                                                    ResourceService resourceService,
-                                                                   ParameterCustomizer parameterCustomizer) {
+                                                                   ParameterCustomizer parameterCustomizer,
+                                                                   ValidationService validationService) {
         return new ParameterLayout<>("content/lab3/", binder, labService,
-                i18N, resourceService, parameterCustomizer);
+                i18N, resourceService, parameterCustomizer, validationService);
     }
 }

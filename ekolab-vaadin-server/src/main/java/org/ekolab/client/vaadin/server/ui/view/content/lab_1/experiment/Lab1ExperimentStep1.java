@@ -7,19 +7,18 @@ import com.vaadin.ui.DateTimeField;
 import com.vaadin.ui.TextField;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
-import org.ekolab.client.vaadin.server.ui.common.LabExperimentStep;
+import org.ekolab.client.vaadin.server.ui.common.LabExperimentJournalStep;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.security.util.FieldUtils;
-
-import java.io.IOException;
 
 /**
  * Created by 777Al on 06.04.2017.
  */
 @SpringComponent
 @ViewScope
-public class Lab1ExperimentStep1 extends LabExperimentStep<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> {
+public class Lab1ExperimentStep1 extends LabExperimentJournalStep<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> {
 
     // ----------------------------- Графические компоненты --------------------------------
     private final DateTimeField timeField = new DateTimeField();
@@ -33,8 +32,12 @@ public class Lab1ExperimentStep1 extends LabExperimentStep<Lab1Data<Lab1Experime
     private final TextField stackExitTemperatureField = new TextField();
     private final TextField flueGasNOxConcentrationField = new TextField();
 
-    public Lab1ExperimentStep1(Binder<Lab1ExperimentLog> experimentLogBinder, Binder<Lab1Data<Lab1ExperimentLog>> dataBinder, I18N i18N, ParameterCustomizer parameterCustomizer) {
-        super(experimentLogBinder, dataBinder, i18N, parameterCustomizer);
+    public Lab1ExperimentStep1(Binder<Lab1ExperimentLog> experimentLogBinder,
+                               Binder<Lab1Data<Lab1ExperimentLog>> dataBinder,
+                               I18N i18N,
+                               ValidationService validationService,
+                               ParameterCustomizer parameterCustomizer) {
+        super(experimentLogBinder, dataBinder, i18N, validationService, parameterCustomizer);
     }
 
     @Override

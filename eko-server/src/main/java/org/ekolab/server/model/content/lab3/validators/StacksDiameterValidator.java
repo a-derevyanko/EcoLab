@@ -3,11 +3,10 @@ package org.ekolab.server.model.content.lab3.validators;
 import org.ekolab.server.model.content.FieldValidationResult;
 import org.ekolab.server.model.content.FieldValidator;
 import org.ekolab.server.model.content.lab3.Lab3Data;
-import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StacksDiameterValidator implements FieldValidator<Double, Lab3Variant, Lab3Data> {
+public class StacksDiameterValidator implements FieldValidator<Double, Lab3Data> {
     @Override
     public FieldValidationResult validate(Double value, Lab3Data labData) {
         if (labData.getCombustionProductsVolume() != null && labData.getFuelConsumer() != null && labData.getNumberOfUnits() != null && labData.getNumberOfStacks() != null) {

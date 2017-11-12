@@ -17,18 +17,20 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 
-public abstract class LabExperimentStep<T extends LabData<V>, V extends LabVariant> extends VerticalLayout implements LabWizardStep {
+public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends LabVariant> extends VerticalLayout implements LabWizardStep {
     protected final Binder<V> experimentLogBinder;
 
     protected final Binder<T> dataBinder;
 
     protected final I18N i18N;
+
+    protected final ValidationService validationService;
 
     protected final ParameterCustomizer parameterCustomizer;
 
@@ -38,10 +40,11 @@ public abstract class LabExperimentStep<T extends LabData<V>, V extends LabVaria
     protected final HorizontalLayout centerLayout = new HorizontalLayout(firstLayout, secondLayout);
     protected final Label journalLabel = new Label("Experiment journal");
 
-    public LabExperimentStep(Binder<V> experimentLogBinder, Binder<T> dataBinder, I18N i18N, ParameterCustomizer parameterCustomizer) {
+    public LabExperimentJournalStep(Binder<V> experimentLogBinder, Binder<T> dataBinder, I18N i18N, ValidationService validationService, ParameterCustomizer parameterCustomizer) {
         this.experimentLogBinder = experimentLogBinder;
         this.dataBinder = dataBinder;
         this.i18N = i18N;
+        this.validationService = validationService;
         this.parameterCustomizer = parameterCustomizer;
     }
 
@@ -55,7 +58,7 @@ public abstract class LabExperimentStep<T extends LabData<V>, V extends LabVaria
         setComponentAlignment(journalLabel, Alignment.TOP_CENTER);
         setComponentAlignment(centerLayout, Alignment.MIDDLE_CENTER);
         setExpandRatio(centerLayout, 1.0f);
-        journalLabel.setValue(i18N.get("lab1.step1.experiment-journal"));
+        journalLabel.setValue(i18N.get("lab.step-experiment-journal.title"));
         journalLabel.setStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
         firstLayout.setMargin(true);
         firstLayout.setSpacing(true);
@@ -81,12 +84,14 @@ public abstract class LabExperimentStep<T extends LabData<V>, V extends LabVaria
         if (component instanceof TextField) {
             Binder.BindingBuilder<V, String> bindingBuilder = experimentLogBinder.forField((TextField)component).withNullRepresentation("");
             Converter<String, ?> converter = UIUtils.getStringConverter(field, i18N);
-            if (converter != null) {
+            if (converter == null) {
+                UIUtils.bindField(field, bindingBuilder, experimentLogBinder, validationService, i18N);
+            } else {
                 bindingBuilder.withConverter(converter).bind(field.getName());
-                return;
             }
+        } else {
+            experimentLogBinder.forField(component).bind(field.getName());
         }
-        experimentLogBinder.forField(component).bind(field.getName());
     }
 
     /**

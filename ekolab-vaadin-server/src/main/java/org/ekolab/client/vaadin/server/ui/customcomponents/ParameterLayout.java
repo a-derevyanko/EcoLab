@@ -2,7 +2,6 @@ package org.ekolab.client.vaadin.server.ui.customcomponents;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.AbstractComponent;
@@ -22,10 +21,10 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.UIUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
-import org.ekolab.server.model.content.FieldValidationResult;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
+import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 
 import java.lang.reflect.Field;
@@ -52,8 +51,10 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
 
     protected final ParameterCustomizer parameterCustomizer;
 
+    protected final ValidationService validationService;
+
     public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService<BEAN, V> labService, I18N i18N,
-                           ResourceService res, ParameterCustomizer parameterCustomizer) {
+                           ResourceService res, ParameterCustomizer parameterCustomizer, ValidationService validationService) {
         this.parametersPath = parametersPath;
         this.additionsPath = parametersPath + "additions/";
         this.dataBinder = dataBinder;
@@ -61,6 +62,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
         this.i18N = i18N;
         this.res = res;
         this.parameterCustomizer = parameterCustomizer;
+        this.validationService = validationService;
     }
 
     @Override
@@ -129,8 +131,8 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
             TextField field = new TextField();
             Converter<String, ?> converter = UIUtils.getStringConverter(propertyField, i18N);
 
-            bindField(propertyField, dataBinder.forField(field).withNullRepresentation(readOnly ? i18N.get("labwizard.unknown-value") : "")
-                    .withConverter(converter));
+            UIUtils.bindField(propertyField, dataBinder.forField(field).withNullRepresentation(readOnly ? i18N.get("labwizard.unknown-value") : "")
+                    .withConverter(converter), dataBinder, validationService, i18N);
             field.setReadOnly(readOnly);
             field.addStyleName(EkoLabTheme.TEXTFIELD_TINY);
             component = field;
@@ -145,18 +147,6 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
         component.setWidth(130, Unit.PIXELS);
     }
 
-    private void bindField(Field propertyField, Binder.BindingBuilder<?, ?> builder) {
-        if (labService.isFieldValidated(propertyField)) {
-            builder.withValidator((value, context) -> {
-                if (value == null) {
-                    return ValidationResult.ok();
-                }
-                FieldValidationResult result = labService.validateFieldValue(propertyField, value, dataBinder.getBean());
-                return result.isError() ? ValidationResult.error(i18N.get(result.getErrorMessage())) : ValidationResult.ok();
-            });
-        }
-        builder.bind(propertyField.getName());
-    }
 
     private void addInfoButton(String fieldName, int row) {
         if (res.isResourceExists(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)) {

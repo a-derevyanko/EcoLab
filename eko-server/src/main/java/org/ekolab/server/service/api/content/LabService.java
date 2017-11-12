@@ -1,6 +1,5 @@
 package org.ekolab.server.service.api.content;
 
-import org.ekolab.server.model.content.FieldValidationResult;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
@@ -20,12 +19,6 @@ import java.util.Set;
  */
 //@Validated //todo
 public interface LabService<T extends LabData<V>, V extends LabVariant> {
-    /**
-     * Возвращает признак того, что значение поля может быть проверено программой
-     * @param field поле
-     * @return признак того, что значение поля может быть проверено программой
-     */
-    boolean isFieldValidated(Field field);
 
     boolean isFieldCalculated(Field field);
 
@@ -56,15 +49,6 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
      * @param labData модель
      */
     void updateCalculatedFields(T labData);
-
-    /**
-     * Проверяет правильность значения поля
-     * @param field поле
-     * @param value значение
-     * @param labData данные лабораторной
-     * @return результат проверки
-     */
-    FieldValidationResult validateFieldValue(Field field, Object value, @Valid T labData);
 
     /**
      * Возвращает печатный вариант исходных данных в PDF формате

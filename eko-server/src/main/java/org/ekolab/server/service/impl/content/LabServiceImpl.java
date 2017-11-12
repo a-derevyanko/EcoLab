@@ -26,15 +26,12 @@ import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.content.Calculated;
-import org.ekolab.server.model.content.FieldValidationResult;
-import org.ekolab.server.model.content.FieldValidator;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
 import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.model.content.lab3.Valued;
 import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.StudentInfoService;
@@ -100,24 +97,6 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
 
     protected LabServiceImpl(LabDao<T> labDao) {
         this.labDao = labDao;
-    }
-
-    @Override
-    public boolean isFieldValidated(Field field) {
-        return field.getAnnotation(ValidatedBy.class) != null;
-    }
-
-    /**
-     * Проверяет правильность значения поля
-     * @param field поле
-     * @param value значение
-     * @param labData данные лабораторной
-     * @return признак того, что значение верно
-     */
-    @Override
-    public FieldValidationResult validateFieldValue(Field field, Object value, T labData) {
-        FieldValidator<Object, V, T> validator = validationService.getFieldValidator(field);
-        return validator == null ? FieldValidationResult.ok() : validator.validate(value, labData);
     }
 
     @Override
@@ -349,7 +328,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
 
     private Map<String, Object> getValuesFromModel(DomainModel data) {
         Map<String, Object> values = new LinkedHashMap<>();
-        for (Field field : data.getClass().getDeclaredFields()) {
+        ReflectionUtils.doWithFields(data.getClass(), field -> {
             ReflectionUtils.makeAccessible(field);
             Object value = ReflectionUtils.getField(field, data);
             if (value instanceof Valued) {
@@ -359,7 +338,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
             } else {
                 values.put(field.getName(), ReflectionUtils.getField(field, data));
             }
-        }
+        }, field -> field.getDeclaringClass() != LabVariant.class);
         return values;
     }
 

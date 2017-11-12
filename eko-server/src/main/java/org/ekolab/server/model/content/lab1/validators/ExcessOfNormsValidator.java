@@ -8,7 +8,7 @@ import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ExcessOfNormsValidator implements FieldValidator<Boolean, Lab1Variant, Lab1Data<Lab1Variant>> {
+public class ExcessOfNormsValidator implements FieldValidator<Boolean, Lab1Data<Lab1Variant>> {
     @Override
     public FieldValidationResult validate(Boolean value, Lab1Data<Lab1Variant> labData) {
         return FieldValidationResult.of(labData.getFlueGasNOxConcentrationNC() == null || value == MathUtils.checkEquals(125.0,

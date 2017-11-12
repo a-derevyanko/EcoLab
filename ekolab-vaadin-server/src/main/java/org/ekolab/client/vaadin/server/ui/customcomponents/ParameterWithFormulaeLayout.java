@@ -9,6 +9,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
+import org.ekolab.server.service.api.content.ValidationService;
 import org.jfree.chart.encoders.ImageFormat;
 
 /**
@@ -18,8 +19,9 @@ public class ParameterWithFormulaeLayout<BEAN extends LabData<V>, V extends LabV
     private final String formulaePath;
 
     public ParameterWithFormulaeLayout(String parametersPath, Binder<BEAN> dataBinder, LabService<BEAN, V> labService, I18N i18N,
-                                       ResourceService res, ParameterCustomizer parameterCustomizer) {
-        super(parametersPath, dataBinder, labService, i18N, res, parameterCustomizer);
+                                       ResourceService res, ParameterCustomizer parameterCustomizer,
+                                       ValidationService validationService) {
+        super(parametersPath, dataBinder, labService, i18N, res, parameterCustomizer, validationService);
         this.formulaePath = parametersPath + "formulae/";
     }
 

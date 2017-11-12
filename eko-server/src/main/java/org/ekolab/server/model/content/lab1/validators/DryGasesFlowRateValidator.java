@@ -8,7 +8,7 @@ import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DryGasesFlowRateValidator implements FieldValidator<Double, Lab1Variant, Lab1Data<Lab1Variant>> {
+public class DryGasesFlowRateValidator implements FieldValidator<Double, Lab1Data<Lab1Variant>> {
 
     @Override
     public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {

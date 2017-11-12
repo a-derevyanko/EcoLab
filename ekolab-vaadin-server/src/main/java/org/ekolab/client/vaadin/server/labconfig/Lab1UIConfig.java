@@ -10,6 +10,7 @@ import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulae
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
+import org.ekolab.server.service.api.content.ValidationService;
 import org.ekolab.server.service.api.content.lab1.experiment.Lab1ExperimentService;
 import org.ekolab.server.service.api.content.lab1.random.Lab1RandomService;
 import org.springframework.boot.SpringBootConfiguration;
@@ -51,9 +52,10 @@ public class Lab1UIConfig {
             Lab1RandomService labService,
             I18N i18N,
             ResourceService resourceService,
-            ParameterCustomizer parameterCustomizer) {
+            ParameterCustomizer parameterCustomizer,
+            ValidationService validationService) {
         return new ParameterLayout<>("content/lab1/", lab1Binder(), labService,
-                i18N, resourceService, parameterCustomizer);
+                i18N, resourceService, parameterCustomizer, validationService);
     }
 
     @Bean
@@ -62,9 +64,10 @@ public class Lab1UIConfig {
             Lab1RandomService labService,
             I18N i18N,
             ResourceService resourceService,
-            ParameterCustomizer parameterCustomizer) {
+            ParameterCustomizer parameterCustomizer,
+            ValidationService validationService) {
         return new ParameterWithFormulaeLayout<>("content/lab1/", lab1Binder(), labService,
-                i18N, resourceService, parameterCustomizer);
+                i18N, resourceService, parameterCustomizer, validationService);
     }
     @Bean
     @PrototypeScope
@@ -72,9 +75,10 @@ public class Lab1UIConfig {
             Lab1ExperimentService labService,
             I18N i18N,
             ResourceService resourceService,
-            ParameterCustomizer parameterCustomizer) {
+            ParameterCustomizer parameterCustomizer,
+            ValidationService validationService) {
         return new ParameterLayout<>("content/lab1/", lab1ExperimentBinder(), labService,
-                i18N, resourceService, parameterCustomizer);
+                i18N, resourceService, parameterCustomizer, validationService);
     }
 
     @Bean
@@ -83,8 +87,9 @@ public class Lab1UIConfig {
             Lab1ExperimentService labService,
             I18N i18N,
             ResourceService resourceService,
-            ParameterCustomizer parameterCustomizer) {
+            ParameterCustomizer parameterCustomizer,
+            ValidationService validationService) {
         return new ParameterWithFormulaeLayout<>("content/lab1/", lab1ExperimentBinder(), labService,
-                i18N, resourceService, parameterCustomizer);
+                i18N, resourceService, parameterCustomizer, validationService);
     }
 }
