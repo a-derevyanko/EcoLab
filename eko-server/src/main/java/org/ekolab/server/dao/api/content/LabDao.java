@@ -16,7 +16,7 @@ public interface LabDao<T extends LabData> {
 
     List<T> getAllLabsByUser(String userName);
 
-    long saveLab(T labData);
+    void saveLab(T labData);
 
     int updateLab(T labData);
 

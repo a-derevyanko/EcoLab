@@ -66,6 +66,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.col;
@@ -75,7 +76,7 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.type;
 /**
  * Created by 777Al on 26.04.2017.
  */
-public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant> implements LabService<T, V> {
+public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant, D extends LabDao<T>> implements LabService<T, V> {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(FixedTimestamp.TIMESTAMP_PATTERN);
 
     @Autowired
@@ -93,9 +94,9 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
     @Autowired
     protected StudentInfoService studentInfoService;
 
-    protected final LabDao<T> labDao;
+    protected final D labDao;
 
-    protected LabServiceImpl(LabDao<T> labDao) {
+    protected LabServiceImpl(D labDao) {
         this.labDao = labDao;
     }
 
@@ -321,7 +322,10 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
         Map<String, Object> labVariantAndDataValues = getValuesFromModel(data.getVariant());
 
         labVariantAndDataValues.putAll(getValuesFromModel(data));
-        labVariantAndDataValues.forEach((key, value) -> values.put(key, getFieldValueForPrint(value, locale)));
+        values.putAll(labVariantAndDataValues.entrySet().stream().
+                filter(e -> e.getValue() != null).collect(Collectors.toMap(Map.Entry::getKey,
+                e -> getFieldValueForPrint(e.getValue(), locale)))
+        );
 
         return values;
     }
@@ -338,7 +342,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant>
             } else {
                 values.put(field.getName(), ReflectionUtils.getField(field, data));
             }
-        }, field -> field.getDeclaringClass() != LabVariant.class);
+        }, field -> (field.getDeclaringClass() != LabVariant.class && LabVariant.class.isAssignableFrom(field.getDeclaringClass())));
         return values;
     }
 

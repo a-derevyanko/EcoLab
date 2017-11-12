@@ -5,6 +5,7 @@ import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.impl.content.DataValue;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.lang.reflect.Field;
@@ -17,7 +18,7 @@ import java.util.Set;
 /**
  * Created by 777Al on 26.04.2017.
  */
-//@Validated //todo
+@Validated
 public interface LabService<T extends LabData<V>, V extends LabVariant> {
 
     boolean isFieldCalculated(Field field);

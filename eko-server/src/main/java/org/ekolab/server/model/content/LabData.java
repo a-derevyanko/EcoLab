@@ -1,6 +1,6 @@
 package org.ekolab.server.model.content;
 
-import org.ekolab.server.model.DomainModel;
+import org.ekolab.server.model.IdentifiedDomainModel;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Created by 777Al on 19.04.2017.
  */
-public abstract class LabData<V extends LabVariant> implements DomainModel {
+public abstract class LabData<V extends LabVariant> extends IdentifiedDomainModel {
     @NotNull
     private V variant;
 

@@ -68,7 +68,7 @@ import static java.lang.Math.pow;
  * Created by 777Al on 26.04.2017.
  */
 @Service
-public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant> implements Lab3Service {
+public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3Dao> implements Lab3Service {
     private static final Logger LOGGER = LoggerFactory.getLogger(Lab3ServiceImpl.class);
 
     private static final int BORDER = 4000;

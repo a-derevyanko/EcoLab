@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Created by 777Al on 26.04.2017.
  */
 @Service
-public class Lab1ExperimentServiceImpl extends Lab1ServiceImpl<Lab1ExperimentLog> implements Lab1ExperimentService {
+public class Lab1ExperimentServiceImpl extends Lab1ServiceImpl<Lab1ExperimentLog, Lab1ExperimentDao> implements Lab1ExperimentService {
 
     @Autowired
     public Lab1ExperimentServiceImpl(Lab1ExperimentDao lab1Dao) {
@@ -21,5 +21,11 @@ public class Lab1ExperimentServiceImpl extends Lab1ServiceImpl<Lab1ExperimentLog
     @Override
     protected Lab1ExperimentLog generateNewLabVariant() {
         return new Lab1ExperimentLog();
+    }
+
+    @Override
+    public Lab1ExperimentLog updateExperimentJournal(Lab1ExperimentLog experimentJournal) {
+        labDao.updateExperimentJournal(experimentJournal);
+        return experimentJournal;
     }
 }

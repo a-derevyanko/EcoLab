@@ -339,7 +339,7 @@
 			</textField>
 			<image>
 				<reportElement x="0" y="0" width="497" height="70" uuid="08b4a56d-5f77-45cb-8ed4-d81fc8507067"/>
-				<imageExpression><![CDATA["org/ekolab/server/service/impl/content/lab3/report/mainbuilding.png"]]></imageExpression>
+				<imageExpression><![CDATA["org/ekolab/server/service/impl/content/report/images/mainbuilding.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement style="Style1" x="0" y="70" width="497" height="20" uuid="775a5057-d5c6-44f5-af61-99f70d3e49c8"/>

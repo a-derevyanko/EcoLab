@@ -34,7 +34,7 @@ import java.util.List;
  * Created by Андрей on 19.03.2017.
  */
 @RolesAllowed(Role.STUDENT)
-public abstract class LabWizard<T extends LabData<V>, V extends LabVariant> extends Wizard implements AutoSavableView {
+public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S extends LabService<T, V>> extends Wizard implements AutoSavableView {
     // ---------------------------- Графические компоненты --------------------
     protected final GridLayout buttons = new GridLayout(3, 1);
     protected final Button saveButton = new Button("Save", VaadinIcons.CLOUD_DOWNLOAD_O);
@@ -58,7 +58,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant> exte
     protected InitialDataWindow<T, V> initialDataWindow;
 
     @Autowired
-    protected LabService<T, V> labService;
+    protected S labService;
 
     @Autowired
     protected Binder<T> binder;

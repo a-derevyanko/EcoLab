@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * Created by 777Al on 26.04.2017.
  */
 @Service
-public class Lab2ServiceImpl extends LabServiceImpl<Lab2Data, Lab2Variant> implements Lab2Service {
+public class Lab2ServiceImpl extends LabServiceImpl<Lab2Data, Lab2Variant, Lab2Dao> implements Lab2Service {
     @Autowired
     public Lab2ServiceImpl(Lab2Dao lab2Dao) {
         super(lab2Dao);

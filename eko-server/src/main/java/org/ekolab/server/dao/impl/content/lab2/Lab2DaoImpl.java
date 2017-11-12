@@ -34,8 +34,7 @@ public class Lab2DaoImpl extends LabDaoImpl<Lab2Data> implements Lab2Dao {
     }
 
     @Override
-    public long saveLab(Lab2Data labData) {
-        return 0;
+    public void saveLab(Lab2Data labData) {
     }
 
     @Override

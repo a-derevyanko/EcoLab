@@ -8,6 +8,7 @@ import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1Step3;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.service.api.content.lab1.experiment.Lab1ExperimentService;
 import org.springframework.context.annotation.Profile;
 
 /**
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Profile;
  */
 @SpringView(name = Lab1ExperimentView.NAME)
 @Profile(Profiles.MODE.PROD)
-public class Lab1ExperimentView extends LabExperimentView<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> {
+public class Lab1ExperimentView extends LabExperimentView<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog, Lab1ExperimentService> {
     public static final String NAME = "lab1experiment";
 
     public Lab1ExperimentView(Lab1ExperimentPresentationStep presentationStep, Lab1ExperimentStep1 step1,

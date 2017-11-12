@@ -12,8 +12,8 @@
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<style name="Style1" isDefault="true" hTextAlign="Left" vTextAlign="Top" markup="html" pattern="" fontName="Times New Roman" fontSize="12"/>
-	<style name="Style1Bold" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontSize="12" isBold="true"/>
+	<style name="Style1" isDefault="true" hTextAlign="Left" vTextAlign="Top" markup="html" pattern="" fontName="Times New Roman" fontSize="11"/>
+	<style name="Style1Bold" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontSize="11" isBold="true"/>
 	<style name="StyleFortableCells" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12"/>
 	<style name="StyleFortableCaption" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12" isBold="true"/>
 	<parameter name="groupNumber">
@@ -22,10 +22,10 @@
 	<parameter name="teacherName">
 		<parameterDescription><![CDATA[Имя преподавателя]]></parameterDescription>
 	</parameter>
-	<parameter name="teamNumber">
+	<parameter name="teamNumber" class="java.lang.Integer">
 		<parameterDescription><![CDATA[номер бригады]]></parameterDescription>
 	</parameter>
-	<parameter name="sudentsList">
+	<parameter name="studentsList">
 		<parameterDescription><![CDATA[список студентов, членов бригады]]></parameterDescription>
 	</parameter>
 	<parameter name="outsideAirTemperature" class="java.lang.Integer"/>
@@ -61,7 +61,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="765" splitType="Stretch">
+		<band height="758" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
 			<image>
@@ -69,7 +69,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="mm"/>
 					<property name="com.jaspersoft.studio.unit.width" value="mm"/>
 				</reportElement>
-				<imageExpression><![CDATA["mainbuilding.png"]]></imageExpression>
+				<imageExpression><![CDATA["org/ekolab/server/service/impl/content/report/images/mainbuilding.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement style="Style1" x="0" y="70" width="497" height="20" uuid="540589cb-f917-44ed-b32e-ea59bcf3e0a1"/>
@@ -188,7 +188,7 @@
 				<textElement textAlignment="Left">
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{sudentsList}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{studentsList}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="205" y="210" width="87" height="20" uuid="3533eb65-bb8c-4ccc-a2fd-58a8bff154a7"/>
@@ -286,7 +286,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
-				<text><![CDATA[˚С]]></text>
+				<text><![CDATA[<sup>о</sup>С]]></text>
 			</staticText>
 			<textField>
 				<reportElement style="Style1" x="226" y="230" width="42" height="20" uuid="dcb25b7a-5124-4349-8255-a2034785ffe2"/>
@@ -528,7 +528,7 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<text><![CDATA[˚С]]></text>
+				<text><![CDATA[<sup>о</sup>С]]></text>
 			</staticText>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" x="381" y="470" width="115" height="50" uuid="62f0e0cc-5b15-4a54-a1d9-1b85d8818087"/>
@@ -576,7 +576,7 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<text><![CDATA[˚С]]></text>
+				<text><![CDATA[<sup>о</sup>С]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" x="30" y="520" width="180" height="50" uuid="e6783391-83b6-45b4-9c9f-2ab56cc58344"/>
@@ -1743,7 +1743,7 @@
 			</textField>
 			<image>
 				<reportElement x="1" y="80" width="495" height="610" uuid="cfddbc9c-6fa1-4e27-9dbb-4b26a15427c6"/>
-				<imageExpression><![CDATA["file:/C:/Users/kojib/JaspersoftWorkspace/Lab3/formula.png"]]></imageExpression>
+				<imageExpression><![CDATA["org/ekolab/server/service/impl/content/lab1/formulae.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement key="" style="Style1Bold" x="0" y="30" width="495" height="20" uuid="4eb51039-fe41-469b-8c0c-2b663345c688"/>

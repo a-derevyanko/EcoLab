@@ -121,7 +121,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     }
 
     @Override
-    public long saveLab(Lab3Data data) {
+    public void saveLab(Lab3Data data) {
         long id = dsl.insertInto(LAB3DATA,
                 LAB3DATA.USER_ID,
                 LAB3DATA.START_DATE,
@@ -272,7 +272,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         variant.getSo2BackgroundConcentration(),
                         variant.getAshBackgroundConcentration()
                 ).execute();
-        return id;
     }
 
     @Override
@@ -321,7 +320,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 .set(LAB3DATA.NO_MAC, data.getNoMAC())
                 .set(LAB3DATA.SO2_MAC, data.getSo2MAC())
                 .set(LAB3DATA.ASH_MAC, data.getAshMAC())
-                .where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, data.getUserLogin())).and(LAB3DATA.START_DATE.eq(data.getStartDate())))
+                .where(LAB3DATA.USER_ID.eq(data.getId()))
                 .execute();
     }
 

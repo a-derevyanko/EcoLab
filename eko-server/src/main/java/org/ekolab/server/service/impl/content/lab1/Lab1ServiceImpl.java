@@ -9,8 +9,8 @@ import org.ekolab.server.service.impl.content.LabServiceImpl;
 /**
  * Created by 777Al on 26.04.2017.
  */
-public abstract class Lab1ServiceImpl<V extends Lab1Variant> extends LabServiceImpl<Lab1Data<V>, V> implements Lab1Service<V> {
-    protected Lab1ServiceImpl(Lab1Dao<Lab1Data<V>> labDao) {
+public abstract class Lab1ServiceImpl<V extends Lab1Variant, D extends Lab1Dao<Lab1Data<V>>> extends LabServiceImpl<Lab1Data<V>, V, D> implements Lab1Service<V> {
+    protected Lab1ServiceImpl(D labDao) {
         super(labDao);
     }
 

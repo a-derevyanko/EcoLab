@@ -15,7 +15,7 @@ import java.util.Locale;
  * Created by 777Al on 26.04.2017.
  */
 @Service
-public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1Variant> implements Lab1RandomService {
+public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1Variant, Lab1RandomDao> implements Lab1RandomService {
 
     @Autowired
     public Lab1RandomServiceImpl(Lab1RandomDao lab1Dao) {
