@@ -1,13 +1,16 @@
 package org.ekolab.server.dao.impl;
 
 import org.ekolab.server.dao.api.content.UserLabDao;
+import org.ekolab.server.service.api.content.LabService;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
 import static org.ekolab.server.db.h2.public_.Tables.LAB3DATA;
@@ -15,11 +18,13 @@ import static org.ekolab.server.db.h2.public_.Tables.USER_TEST_HISTORY;
 
 @Service
 public class UserLabDaoImpl implements UserLabDao {
-    @Autowired
     private final DSLContext dsl;
 
-    public UserLabDaoImpl(DSLContext dsl) {
+    private final List<LabService<?, ?>> labServices;
+
+    public UserLabDaoImpl(DSLContext dsl, List<LabService<?, ?>> labServices) {
         this.dsl = dsl;
+        this.labServices = labServices;
     }
 
     @Override
@@ -57,5 +62,12 @@ public class UserLabDaoImpl implements UserLabDao {
     @Override
     public void setTestCompleted(String userName, int labNumber) {
         dsl.insertInto(USER_TEST_HISTORY, USER_TEST_HISTORY.LAB_NUMBER, USER_TEST_HISTORY.USER_ID).values(Arrays.asList(labNumber, DaoUtils.getFindUserIdSelect(dsl, userName)));
+    }
+
+    @Override
+    public int removeAllOldLabs(LocalDateTime lastSaveDate) {
+        AtomicInteger removedLabs = new AtomicInteger();
+        labServices.forEach(labService -> removedLabs.addAndGet(labService.removeOldLabs(lastSaveDate)));
+        return removedLabs.get();
     }
 }
