@@ -10,7 +10,6 @@ import org.ekolab.client.vaadin.server.service.api.PresentationService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
@@ -19,15 +18,18 @@ import javax.validation.constraints.NotNull;
  * Created by 777Al on 03.04.2017.
  */
 public abstract class LabPresentationStep extends VerticalLayout implements LabWizardStep {
-    @Autowired
-    protected I18N i18N;
+    protected final I18N i18N;
 
-    @Autowired
-    protected PresentationService presentationService;
+    protected final PresentationService presentationService;
 
     // ---------------------------- Графические компоненты --------------------
     private final Gallery gallery = new Gallery();
     private final Button showGallery = new Button("Show presentation", VaadinIcons.PRESENTATION);
+
+    protected LabPresentationStep(I18N i18N, PresentationService presentationService) {
+        this.i18N = i18N;
+        this.presentationService = presentationService;
+    }
 
     @Override
     @PostConstruct

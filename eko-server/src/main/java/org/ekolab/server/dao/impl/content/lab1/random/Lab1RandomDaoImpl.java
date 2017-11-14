@@ -28,7 +28,6 @@ public class Lab1RandomDaoImpl extends Lab1DaoImpl<Lab1Variant> implements Lab1R
             Lab1Data<Lab1Variant> data = super.map(record);
             data.getVariant().setId(record.get(LAB1VARIANT.ID));
             data.getVariant().setName(record.get(LAB1VARIANT.NAME));
-            data.getVariant().setTime(record.get(LAB1VARIANT.TIME));
             data.getVariant().setOutsideAirTemperature(record.get(LAB1VARIANT.OUTSIDE_AIR_TEMPERATURE));
             data.getVariant().setSteamProductionCapacity(record.get(LAB1VARIANT.STEAM_PRODUCTION_CAPACITY));
             data.getVariant().setOxygenConcentrationPoint(record.get(LAB1VARIANT.OXYGEN_CONCENTRATION_POINT));
@@ -67,7 +66,6 @@ public class Lab1RandomDaoImpl extends Lab1DaoImpl<Lab1Variant> implements Lab1R
         dsl.insertInto(LAB1VARIANT,
                 LAB1VARIANT.ID,
                 LAB1VARIANT.NAME,
-                LAB1VARIANT.TIME,
                 LAB1VARIANT.OUTSIDE_AIR_TEMPERATURE,
                 LAB1VARIANT.STEAM_PRODUCTION_CAPACITY,
                 LAB1VARIANT.OXYGEN_CONCENTRATION_POINT,
@@ -77,7 +75,6 @@ public class Lab1RandomDaoImpl extends Lab1DaoImpl<Lab1Variant> implements Lab1R
                 values(
                         variant.getId(),
                         variant.getName(),
-                        variant.getTime(),
                         variant.getOutsideAirTemperature(),
                         variant.getSteamProductionCapacity(),
                         variant.getOxygenConcentrationPoint(),

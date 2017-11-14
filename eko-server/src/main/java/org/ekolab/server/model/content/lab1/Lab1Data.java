@@ -18,6 +18,7 @@ import org.ekolab.server.model.content.lab1.validators.NValidator;
 import org.ekolab.server.model.content.lab1.validators.UValidator;
 
 import javax.annotation.Nullable;
+import javax.validation.constraints.Digits;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -80,12 +81,14 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
     /**
      * Коэффициент избытка воздуха в точке измерения
      */
+    @Digits(integer = Integer.MAX_VALUE, fraction = 2)
     @ValidatedBy(ExcessAirRatioValidator.class)
     private Double excessAirRatio;
 
     /**
      * Концентрация оксидов азота, приведенная к стандартному коэффициенту избытка воздуха α=1,4
      */
+    @Digits(integer = Integer.MAX_VALUE, fraction = 1)
     @ValidatedBy(FlueGasNOxConcentrationNCValidator.class)
     private Double flueGasNOxConcentrationNC;
 
@@ -98,24 +101,28 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
     /**
      * Расход дымовых газов, выбрасываемых в атмосферу
      */
+    @Digits(integer = Integer.MAX_VALUE, fraction = 1)
     @ValidatedBy(FlueGasesRateValidator.class)
     private Double flueGasesRate;
 
     /**
      * Объемный расход сухих газов
      */
+    @Digits(integer = Integer.MAX_VALUE, fraction = 1)
     @ValidatedBy(DryGasesFlowRateValidator.class)
     private Double dryGasesFlowRate;
 
     /**
      * Массовые выбросы оксидов азота
      */
+    @Digits(integer = 2, fraction = 1)
     @ValidatedBy(MassEmissionsValidator.class)
     private Double massEmissions;
 
     /**
      * Скорость дымовых газов на выходе из дымовой трубы
      */
+    @Digits(integer = Integer.MAX_VALUE, fraction = 1)
     @ValidatedBy(FlueGasesSpeedValidator.class)
     private Double flueGasesSpeed;
 

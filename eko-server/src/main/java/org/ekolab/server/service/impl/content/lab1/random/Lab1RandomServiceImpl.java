@@ -27,7 +27,6 @@ public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1Variant, Lab1Rand
         Lab1Variant variant = new Lab1Variant();
 
         variant.setName(messageSource.getMessage("lab1.random-object-name", null, Locale.getDefault()));
-        variant.setTime(LocalDateTime.now());
         variant.setOutsideAirTemperature(-25 + RandomUtils.nextInt(11) * 5);
         variant.setSteamProductionCapacity(30 + RandomUtils.nextInt(5)*5);
 

@@ -3,7 +3,6 @@ package org.ekolab.server.model.content.lab1;
 import org.ekolab.server.model.content.LabVariant;
 
 import javax.annotation.Nullable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -20,11 +19,6 @@ public class Lab1Variant extends LabVariant {
      * Температура наружного воздуха
      */
     private Integer outsideAirTemperature;
-
-    /**
-     * Время проведения измерений
-     */
-    private LocalDateTime time;
 
     /**
      * Паровая нагрузка котла
@@ -67,14 +61,6 @@ public class Lab1Variant extends LabVariant {
 
     public void setOutsideAirTemperature(Integer outsideAirTemperature) {
         this.outsideAirTemperature = outsideAirTemperature;
-    }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
     }
 
     public Integer getSteamProductionCapacity() {
@@ -124,7 +110,6 @@ public class Lab1Variant extends LabVariant {
         Lab1Variant that = (Lab1Variant) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(outsideAirTemperature, that.outsideAirTemperature) &&
-                Objects.equals(time, that.time) &&
                 Objects.equals(steamProductionCapacity, that.steamProductionCapacity) &&
                 Objects.equals(oxygenConcentrationPoint, that.oxygenConcentrationPoint) &&
                 Objects.equals(fuelConsumerNormalized, that.fuelConsumerNormalized) &&
@@ -134,6 +119,6 @@ public class Lab1Variant extends LabVariant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, outsideAirTemperature, time, steamProductionCapacity, oxygenConcentrationPoint, fuelConsumerNormalized, stackExitTemperature, flueGasNOxConcentration);
+        return Objects.hash(name, outsideAirTemperature, steamProductionCapacity, oxygenConcentrationPoint, fuelConsumerNormalized, stackExitTemperature, flueGasNOxConcentration);
     }
 }

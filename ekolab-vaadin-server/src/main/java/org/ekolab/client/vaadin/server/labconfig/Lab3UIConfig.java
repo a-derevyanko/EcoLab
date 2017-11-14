@@ -6,6 +6,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
+import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.lab3.Lab3Data;
 import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.ekolab.server.service.api.content.ValidationService;
@@ -32,8 +33,8 @@ public class Lab3UIConfig {
                                                                    I18N i18N,
                                                                    ResourceService resourceService,
                                                                    ParameterCustomizer parameterCustomizer,
-                                                                   ValidationService validationService) {
+                                                                   ValidationService validationService, ResourceWindow resourceWindow) {
         return new ParameterLayout<>("content/lab3/", binder, labService,
-                i18N, resourceService, parameterCustomizer, validationService);
+                i18N, resourceService, parameterCustomizer, validationService, resourceWindow);
     }
 }

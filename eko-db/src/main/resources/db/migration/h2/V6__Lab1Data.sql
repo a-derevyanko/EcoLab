@@ -84,7 +84,6 @@ CREATE TABLE lab1variant (
   */
   name                                      VARCHAR(256),
   outside_Air_Temperature                   INT,
-  time                                      TIMESTAMP,
   steam_Production_Capacity                 INT,
   oxygen_Concentration_Point                DOUBLE,
   fuel_Consumer                             INT,

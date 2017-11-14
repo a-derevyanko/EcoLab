@@ -21,6 +21,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.UIUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
+import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
@@ -30,8 +31,6 @@ import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-
-import static org.ekolab.client.vaadin.server.ui.windows.ResourceWindow.show;
 
 /**
  * Created by 777Al on 08.04.2017.
@@ -53,8 +52,10 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
 
     protected final ValidationService validationService;
 
+    protected final ResourceWindow resourceWindow;
+
     public ParameterLayout(String parametersPath, Binder<BEAN> dataBinder, LabService<BEAN, V> labService, I18N i18N,
-                           ResourceService res, ParameterCustomizer parameterCustomizer, ValidationService validationService) {
+                           ResourceService res, ParameterCustomizer parameterCustomizer, ValidationService validationService, ResourceWindow resourceWindow) {
         this.parametersPath = parametersPath;
         this.additionsPath = parametersPath + "additions/";
         this.dataBinder = dataBinder;
@@ -63,6 +64,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
         this.res = res;
         this.parameterCustomizer = parameterCustomizer;
         this.validationService = validationService;
+        this.resourceWindow = resourceWindow;
     }
 
     @Override
@@ -151,7 +153,9 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
     private void addInfoButton(String fieldName, int row) {
         if (res.isResourceExists(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)) {
             Button infoButton = new Button(VaadinIcons.QUESTION);
-            infoButton.addClickListener(event -> show(i18N.get(fieldName), res.getHtmlData(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)));
+            infoButton.addClickListener(event -> resourceWindow.show(
+                    new ResourceWindow.ResourceWindowSettings(i18N.get(fieldName),
+                            res.getHtmlData(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX))));
             infoButton.addStyleName(EkoLabTheme.BUTTON_TINY);
             super.addComponent(infoButton, 3, row);
         }

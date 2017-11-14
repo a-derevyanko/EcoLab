@@ -1,5 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
+import org.ekolab.client.vaadin.server.service.api.PresentationService;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -9,6 +11,10 @@ import javax.validation.constraints.NotNull;
  * Created by 777Al on 03.04.2017.
  */
 public abstract class ExperimentLabPresentationStep extends LabPresentationStep {
+    protected ExperimentLabPresentationStep(I18N i18N, PresentationService presentationService) {
+        super(i18N, presentationService);
+    }
+
     @NotEmpty
     @NotNull
     protected String getPanelStyleName() {

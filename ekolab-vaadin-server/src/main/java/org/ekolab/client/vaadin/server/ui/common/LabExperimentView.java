@@ -2,14 +2,23 @@ package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FileDownloader;
 import com.vaadin.server.Page;
+import com.vaadin.server.StreamResource;
+import com.vaadin.ui.Button;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
+import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabExperimentService;
+import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 
 public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S extends LabExperimentService<T, V>> extends LabWizard<T, V, S> {
+    // ---------------------------- Графические компоненты --------------------
+    private final Button downloadExperimentLogJournal = new Button("Download experiment journal", VaadinIcons.DOWNLOAD);
+
     private final Binder<V> variantBinder;
 
     private boolean hasVariantChanges;
@@ -21,7 +30,19 @@ public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S ext
     @Override
     public void init() throws Exception {
         super.init();
-        initialDataButton.setCaption(i18N.get("lab.random-data.view.experiment-journal"));
+        footer.addComponent(downloadExperimentLogJournal, 0);
+        downloadExperimentLogJournal.setCaption(i18N.get("lab.experiment.view.experiment-journal"));
+        downloadExperimentLogJournal.addStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        downloadExperimentLogJournal.addStyleName(EkoLabTheme.BUTTON_TINY);
+
+        FileDownloader fileDownloader = new FileDownloader(new StreamResource(
+                () -> getClass().getClassLoader().
+                        getResourceAsStream("org/ekolab/server/service/impl/content/lab1/experiment/report/experimentJournal.pdf"),
+                "experimentJournal.pdf"));
+
+        fileDownloader.extend(downloadExperimentLogJournal);
+
+        initialDataButton.setCaption(i18N.get("lab.experiment.view.experiment-journal"));
         variantBinder.addValueChangeListener(event -> {
             saveButton.setVisible(true);
             hasVariantChanges = true;
@@ -32,9 +53,10 @@ public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S ext
      * Скрывает на первых двух шагах кнопку "Журнал наблюдений"
      */
     @Override
-    protected void updateButtons() {
-        super.updateButtons();
-        initialDataButton.setVisible(steps.indexOf(currentStep) > 1);
+    public void activeStepChanged(WizardStepActivationEvent event) {
+        super.activeStepChanged(event);
+        initialDataButton.setVisible(steps.indexOf(event.getActivatedStep()) > 1);
+        downloadExperimentLogJournal.setVisible(!initialDataButton.isVisible());
     }
 
     @Override

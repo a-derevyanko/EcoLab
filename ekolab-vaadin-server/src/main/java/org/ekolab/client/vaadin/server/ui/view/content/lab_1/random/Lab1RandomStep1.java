@@ -22,8 +22,7 @@ public class Lab1RandomStep1 extends HorizontalLayout implements LabWizardStep {
 
     private final ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> secondFormLayout;
 
-    public Lab1RandomStep1(I18N i18N,
-                           ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout,
+    public Lab1RandomStep1(I18N i18N, ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout,
                            ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> secondFormLayout) {
         this.i18N = i18N;
         this.firstFormLayout = firstFormLayout;

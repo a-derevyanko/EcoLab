@@ -7,6 +7,7 @@ import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
+import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.lab2.Lab2Data;
 import org.ekolab.server.model.content.lab2.Lab2Variant;
 import org.ekolab.server.service.api.content.ValidationService;
@@ -38,9 +39,9 @@ public class Lab2UIConfig {
             I18N i18N,
             ResourceService resourceService,
             ParameterCustomizer parameterCustomizer,
-            ValidationService validationService) {
+            ValidationService validationService, ResourceWindow resourceWindow) {
         return new ParameterLayout<>("content/lab2/", Lab2Binder(), labService,
-                i18N, resourceService, parameterCustomizer, validationService);
+                i18N, resourceService, parameterCustomizer, validationService, resourceWindow);
     }
 
     @Bean
@@ -50,8 +51,8 @@ public class Lab2UIConfig {
             I18N i18N,
             ResourceService resourceService,
             ParameterCustomizer parameterCustomizer,
-            ValidationService validationService) {
+            ValidationService validationService, ResourceWindow resourceWindow) {
         return new ParameterWithFormulaeLayout<>("content/Lab2/", Lab2Binder(), labService,
-                i18N, resourceService, parameterCustomizer, validationService);
+                i18N, resourceService, parameterCustomizer, validationService, resourceWindow);
     }
 }

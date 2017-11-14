@@ -6,6 +6,7 @@ import com.vaadin.ui.Image;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
@@ -20,8 +21,8 @@ public class ParameterWithFormulaeLayout<BEAN extends LabData<V>, V extends LabV
 
     public ParameterWithFormulaeLayout(String parametersPath, Binder<BEAN> dataBinder, LabService<BEAN, V> labService, I18N i18N,
                                        ResourceService res, ParameterCustomizer parameterCustomizer,
-                                       ValidationService validationService) {
-        super(parametersPath, dataBinder, labService, i18N, res, parameterCustomizer, validationService);
+                                       ValidationService validationService, ResourceWindow resourceWindow) {
+        super(parametersPath, dataBinder, labService, i18N, res, parameterCustomizer, validationService, resourceWindow);
         this.formulaePath = parametersPath + "formulae/";
     }
 
