@@ -1,10 +1,11 @@
 package org.ekolab.client.vaadin.server.labconfig;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.ViewScope;
-import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterLayout;
 import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.lab3.Lab3Data;
@@ -23,7 +24,7 @@ public class Lab3UIConfig {
     @Bean
     @ViewScope
     public Binder<Lab3Data> lab3Binder() {
-        return new Binder<>(Lab3Data.class);
+        return new BeanValidationBinder<>(Lab3Data.class);
     }
 
     @Bean

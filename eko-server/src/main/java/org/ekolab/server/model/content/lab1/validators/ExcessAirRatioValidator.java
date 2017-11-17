@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class ExcessAirRatioValidator implements FieldValidator<Double, Lab1Data<Lab1Variant>> {
     @Override
     public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
-        return FieldValidationResult.of(MathUtils.checkEquals(value,
+        return FieldValidationResult.of(labData.getOxygenConcentrationPoint() == null || MathUtils.checkEquals(value,
                 21.0 / (21.0 - labData.getOxygenConcentrationPoint())));
     }
 }

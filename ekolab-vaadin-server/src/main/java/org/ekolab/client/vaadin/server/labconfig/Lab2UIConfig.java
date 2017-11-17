@@ -1,5 +1,6 @@
 package org.ekolab.client.vaadin.server.labconfig;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.ViewScope;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
@@ -24,12 +25,12 @@ public class Lab2UIConfig {
     @Bean
     @ViewScope
     public Binder<Lab2Data> Lab2Binder() {
-        return new Binder<>(Lab2Data.class);
+        return new BeanValidationBinder<>(Lab2Data.class);
     }
     @Bean
     @ViewScope
     public Binder<Lab2Variant> Lab2VariantBinder() {
-        return new Binder<>(Lab2Variant.class);
+        return new BeanValidationBinder<>(Lab2Variant.class);
     }
 
     @Bean
