@@ -142,7 +142,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
                 });
             } else {
                 if (Page.getCurrent() != null) {
-                    ComponentErrorNotification.show(i18N.get("savable.save-exception"), validationStatus.getFieldValidationErrors());
+                    ComponentErrorNotification.show(i18N.get("savable.save-exception-caption"), i18N.get("savable.save-exception"));
                 }
                 return false;
             }
