@@ -3,12 +3,14 @@ package org.ekolab.server.service.impl.content.lab1.random;
 import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab1.random.Lab1RandomDao;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
+import org.ekolab.server.service.api.ReportService;
+import org.ekolab.server.service.api.StudentInfoService;
+import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.lab1.random.Lab1RandomService;
 import org.ekolab.server.service.impl.content.lab1.Lab1ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Locale;
 
 /**
@@ -17,9 +19,8 @@ import java.util.Locale;
 @Service
 public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1Variant, Lab1RandomDao> implements Lab1RandomService {
 
-    @Autowired
-    public Lab1RandomServiceImpl(Lab1RandomDao lab1Dao) {
-        super(lab1Dao);
+    public Lab1RandomServiceImpl(Lab1RandomDao labDao, UserInfoService userInfoService, ReportService reportService, MessageSource messageSource, StudentInfoService studentInfoService) {
+        super(labDao, userInfoService, reportService, messageSource, studentInfoService);
     }
 
     @Override

@@ -10,12 +10,10 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import org.apache.commons.lang3.SerializationUtils;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
-import org.ekolab.client.vaadin.server.ui.common.UIUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.UserInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.function.Consumer;
@@ -38,13 +36,10 @@ public abstract class UserDataWindow extends BaseEkoLabWindow<UserDataWindow.Use
     protected final HorizontalLayout actions = new HorizontalLayout(save, cancel);
 
     // ------------------------------------ Данные экземпляра -------------------------------------------
-    @Autowired
     protected final I18N i18N;
 
-    @Autowired
     protected final Binder<UserInfo> userInfoBinder;
 
-    @Autowired
     protected final UserInfoService userInfoService;
 
     protected UserDataWindow(I18N i18N, Binder<UserInfo> userInfoBinder, UserInfoService userInfoService) {
@@ -71,11 +66,11 @@ public abstract class UserDataWindow extends BaseEkoLabWindow<UserDataWindow.Use
         userGroup.setTextInputAllowed(false);
         userGroup.setEmptySelectionAllowed(false);
 
-        userInfoBinder.forField(lastName).withValidator(UIUtils.notNullValidator(i18N)).bind(UserInfo::getLastName, UserInfo::setLastName);
-        userInfoBinder.forField(firstName).withValidator(UIUtils.notNullValidator(i18N)).bind(UserInfo::getFirstName, UserInfo::setFirstName);
-        userInfoBinder.forField(middleName).withValidator(UIUtils.notNullValidator(i18N)).bind(UserInfo::getMiddleName, UserInfo::setMiddleName);
+        userInfoBinder.forField(lastName).bind(UserInfo::getLastName, UserInfo::setLastName);
+        userInfoBinder.forField(firstName).bind(UserInfo::getFirstName, UserInfo::setFirstName);
+        userInfoBinder.forField(middleName).bind(UserInfo::getMiddleName, UserInfo::setMiddleName);
         userInfoBinder.forField(note).bind(UserInfo::getNote, UserInfo::setNote);
-        userInfoBinder.forField(userGroup).withValidator(UIUtils.notNullValidator(i18N)).bind(UserInfo::getGroup, UserInfo::setGroup);
+        userInfoBinder.forField(userGroup).bind(UserInfo::getGroup, UserInfo::setGroup);
 
         lastName.setCaption(i18N.get("userdata.lastname"));
         firstName.setCaption(i18N.get("userdata.firstname"));

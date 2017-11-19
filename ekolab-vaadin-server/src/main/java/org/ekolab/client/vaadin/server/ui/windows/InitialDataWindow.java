@@ -21,7 +21,7 @@ import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
-import org.ekolab.server.service.impl.content.DataValue;
+import org.ekolab.server.model.content.DataValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 

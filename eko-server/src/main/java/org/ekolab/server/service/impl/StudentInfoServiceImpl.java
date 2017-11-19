@@ -6,7 +6,6 @@ import org.ekolab.server.model.StudentTeam;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,18 +16,23 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static org.ekolab.server.CacheContext.*;
+import static org.ekolab.server.CacheContext.STUDENT_INFO_CACHE;
+import static org.ekolab.server.CacheContext.STUDENT_TEACHERS_CACHE;
+import static org.ekolab.server.CacheContext.TEAM_MEMBERS_CACHE;
 
 /**
  * Created by 777Al on 24.05.2017.
  */
 @Service
 public class StudentInfoServiceImpl implements StudentInfoService {
-    @Autowired
-    private UserInfoService userInfoService;
+    private final UserInfoService userInfoService;
 
-    @Autowired
-    private StudentInfoDao studentInfoDao;
+    private final StudentInfoDao studentInfoDao;
+
+    public StudentInfoServiceImpl(UserInfoService userInfoService, StudentInfoDao studentInfoDao) {
+        this.userInfoService = userInfoService;
+        this.studentInfoDao = studentInfoDao;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -69,7 +73,9 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, key = "#number")
     @NotNull
     public StudentInfo createStudentInfo(@NotNull UserInfo userInfo, @NotNull String group, @NotNull Integer number, @NotNull String teacherName) {
-        userInfoService.createUserInfo(userInfo);
+        if (userInfo.getId() == null) {
+            userInfoService.createUserInfo(userInfo);
+        }
         studentInfoDao.addTeacherToStudent(userInfo.getLogin(), teacherName);
         studentInfoDao.updateStudentGroup(userInfo.getLogin(), group);
         studentInfoDao.updateStudentTeam(userInfo.getLogin(), number);

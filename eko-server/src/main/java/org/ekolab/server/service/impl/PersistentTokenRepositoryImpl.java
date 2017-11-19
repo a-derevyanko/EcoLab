@@ -1,7 +1,6 @@
 package org.ekolab.server.service.impl;
 
 import org.ekolab.server.dao.api.TokenRepositoryDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,11 @@ import java.util.Date;
 @Service
 @Transactional
 public class PersistentTokenRepositoryImpl implements PersistentTokenRepository {
-    @Autowired
-    private TokenRepositoryDao tokenRepositoryDao;
+    private final TokenRepositoryDao tokenRepositoryDao;
+
+    public PersistentTokenRepositoryImpl(TokenRepositoryDao tokenRepositoryDao) {
+        this.tokenRepositoryDao = tokenRepositoryDao;
+    }
 
     @Override
     public void createNewToken(@NotNull PersistentRememberMeToken token) {

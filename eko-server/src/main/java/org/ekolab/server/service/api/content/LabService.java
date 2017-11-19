@@ -4,7 +4,7 @@ import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.service.impl.content.DataValue;
+import org.ekolab.server.model.content.DataValue;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;

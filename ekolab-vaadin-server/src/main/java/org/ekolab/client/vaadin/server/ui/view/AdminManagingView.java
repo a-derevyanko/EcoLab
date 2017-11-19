@@ -68,7 +68,7 @@ public class AdminManagingView extends VerticalLayout implements View {
 
         autoSaveRate.setCaption(i18N.get("autoSaveRate"));
 
-        Converter<String, Integer> converter = UIUtils.getStringConverter(Integer.class, "autoSaveRate", i18N);
+        Converter<String, Integer> converter = UIUtils.getStringConverter(Integer.class, i18N);
         binder.forField(autoSaveRate).withConverter(converter).
                 bind(EkoLabVaadinProperties.Lab::getAutoSaveRate, EkoLabVaadinProperties.Lab::setAutoSaveRate);
 

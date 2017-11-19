@@ -1,4 +1,4 @@
-package org.ekolab.server.service.impl.content;
+package org.ekolab.server.model.content;
 
 import org.ekolab.server.model.DomainModel;
 

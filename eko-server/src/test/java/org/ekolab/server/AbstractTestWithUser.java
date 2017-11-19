@@ -31,6 +31,9 @@ public abstract class AbstractTestWithUser extends AbstractTestNGSpringContextTe
     public void generateInitialData() {
         UserInfo userDetails = new UserInfo();
         userDetails.setLogin(USERNAME);
+        userDetails.setFirstName(USERNAME);
+        userDetails.setLastName(USERNAME);
+        userDetails.setMiddleName(USERNAME);
         userDetails.setGroup(UserGroup.ADMIN);
         userInfoService.createUserInfo(userDetails);
     }

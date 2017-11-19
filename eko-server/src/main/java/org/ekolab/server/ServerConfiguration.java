@@ -5,6 +5,8 @@ import org.jfree.chart.StandardChartTheme;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 import java.awt.*;
 
@@ -13,6 +15,16 @@ import java.awt.*;
  */
 @SpringBootConfiguration
 public class ServerConfiguration {
+
+    private final JdbcUserDetailsManager userDetailsManager;
+
+    private final AuthenticationManager authenticationManager;
+
+    public ServerConfiguration(JdbcUserDetailsManager userDetailsManager, AuthenticationManager authenticationManager) {
+        this.userDetailsManager = userDetailsManager;
+        this.authenticationManager = authenticationManager;
+    }
+
     @EventListener(ApplicationReadyEvent.class)
     private void createDefaultChartTheme() {
         StandardChartTheme chartTheme = new StandardChartTheme("EkoLab");
@@ -24,6 +36,11 @@ public class ServerConfiguration {
         chartTheme.setRangeGridlinePaint(Color.DARK_GRAY);
 
         ChartFactory.setChartTheme(chartTheme);
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    private void installAuthenticationManager() {
+        userDetailsManager.setAuthenticationManager(authenticationManager);
     }
 
 }

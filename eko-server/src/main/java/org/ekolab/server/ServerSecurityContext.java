@@ -26,7 +26,6 @@ public class ServerSecurityContext {
     }
 
     @Bean
-    @Lazy
     public AuthenticationProvider authenticationProvider(UserCache userCache,
                                                          PasswordEncoder passwordEncoder,
                                                          UserDetailsService userDetailsService) {

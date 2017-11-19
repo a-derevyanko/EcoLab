@@ -4,8 +4,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.AbstractTestWithUser;
 import org.ekolab.server.model.StudentInfo;
-import org.ekolab.server.model.UserGroup;
-import org.ekolab.server.model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -27,12 +25,10 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
     @BeforeClass
     @Override
     public void generateInitialData() {
+        super.generateInitialData();
         studentInfoService.createStudentTeam(TEAMNUMBER);
         studentInfoService.createStudentGroup(GROUPNAME);
-        UserInfo userDetails = new UserInfo();
-        userDetails.setLogin(USERNAME);
-        userDetails.setGroup(UserGroup.STUDENT);
-        studentInfoService.createStudentInfo(userDetails, GROUPNAME, TEAMNUMBER, "");
+        studentInfoService.createStudentInfo(userInfoService.getUserInfo(USERNAME), GROUPNAME, TEAMNUMBER, "");
     }
 
     @Test

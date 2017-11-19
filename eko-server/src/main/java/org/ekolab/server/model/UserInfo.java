@@ -1,29 +1,35 @@
 package org.ekolab.server.model;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
 /**
  * Created by 777Al on 22.05.2017.
  */
-public class UserInfo implements DomainModel {
+public class UserInfo extends IdentifiedDomainModel {
     @Size(max = 256)
+    @NotNull
     private String login;
 
     @Size(max = 256)
+    @NotNull
     private String firstName;
 
     @Size(max = 256)
+    @NotNull
     private String middleName;
 
     @Size(max = 256)
+    @NotNull
     private String lastName;
 
     @Size(max = 256)
     private String note;
 
     @Valid
+    @NotNull
     private UserGroup group;
 
     public String getLogin() {

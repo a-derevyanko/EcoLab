@@ -1,6 +1,5 @@
 package org.ekolab.server.dao.api.content;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 public interface UserLabDao {
@@ -24,11 +23,4 @@ public interface UserLabDao {
      * @param labNumber номер лабораторной
      */
     void setTestCompleted(String userName, int labNumber);
-
-    /**
-     * Удаление всех лабораторных, которые были сохранены раньше, чем указанная дата
-     * @param lastSaveDate дата, раньше которой удаляются все лабораторные
-     * @return количество удалённых лабораторных
-     */
-    int removeAllOldLabs(LocalDateTime lastSaveDate);
 }

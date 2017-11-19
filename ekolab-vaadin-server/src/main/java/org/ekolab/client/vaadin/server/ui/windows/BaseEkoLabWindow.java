@@ -28,12 +28,12 @@ public abstract class BaseEkoLabWindow<T extends WindowSettings> extends Window 
      */
     protected void beforeShow() {
 
-    };
+    }
 
     /**
      * Очистка компонента
      */
     protected void clear() {
 
-    };
+    }
 }

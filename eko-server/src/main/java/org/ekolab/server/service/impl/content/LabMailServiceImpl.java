@@ -24,11 +24,15 @@ import java.util.Locale;
 @Profile(Profiles.ADDITIONS.EMAIL)
 public class LabMailServiceImpl implements LabMailService {
 
-    @Autowired
-    protected JavaMailSender mailSender;
+    protected final JavaMailSender mailSender;
+
+    protected final MessageSource messageSource;
 
     @Autowired
-    protected MessageSource messageSource;
+    public LabMailServiceImpl(JavaMailSender mailSender, MessageSource messageSource) {
+        this.mailSender = mailSender;
+        this.messageSource = messageSource;
+    }
 
     @Override
     public void sentInitialDataToEmail(byte[] variant, Locale locale, String email) throws MailException {

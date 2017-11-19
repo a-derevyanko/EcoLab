@@ -1,5 +1,6 @@
 package org.ekolab.server.service.api.content;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public interface UserLabService {
@@ -23,4 +24,11 @@ public interface UserLabService {
      * @param labNumber номер лабораторной
      */
     Collection<Integer> setTestCompleted(String userName, int labNumber);
+
+    /**
+     * Удаление всех лабораторных, которые были сохранены раньше, чем указанная дата
+     * @param lastSaveDate дата, раньше которой удаляются все лабораторные
+     * @return количество удалённых лабораторных
+     */
+    int removeAllOldLabs(LocalDateTime lastSaveDate);
 }

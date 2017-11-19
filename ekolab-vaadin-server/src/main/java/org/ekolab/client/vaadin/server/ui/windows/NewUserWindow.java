@@ -17,7 +17,6 @@ public class NewUserWindow extends UserDataWindow {
     // ---------------------------- Графические компоненты --------------------
 
     // ------------------------------------ Данные экземпляра -------------------------------------
-    @Autowired
     private final UserSavedWindow userSavedWindow;
 
     public NewUserWindow(I18N i18N, Binder<UserInfo> userInfoBinder, UserInfoService userInfoService, UserSavedWindow userSavedWindow) {

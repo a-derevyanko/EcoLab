@@ -14,8 +14,12 @@ import java.util.Arrays;
 public class ConfigurationCommonServiceImpl implements ConfigurationCommonService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationCommonServiceImpl.class);
 
+    private final ApplicationContext appContext;
+
     @Autowired
-    private ApplicationContext appContext;
+    public ConfigurationCommonServiceImpl(ApplicationContext appContext) {
+        this.appContext = appContext;
+    }
 
     @Override
     @Async

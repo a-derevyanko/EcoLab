@@ -2,9 +2,13 @@ package org.ekolab.server.service.impl.content.lab1.experiment;
 
 import org.ekolab.server.dao.api.content.lab1.experiment.Lab1ExperimentDao;
 import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.service.api.ReportService;
+import org.ekolab.server.service.api.StudentInfoService;
+import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.lab1.experiment.Lab1ExperimentService;
 import org.ekolab.server.service.impl.content.lab1.Lab1ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,9 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class Lab1ExperimentServiceImpl extends Lab1ServiceImpl<Lab1ExperimentLog, Lab1ExperimentDao> implements Lab1ExperimentService {
 
-    @Autowired
-    public Lab1ExperimentServiceImpl(Lab1ExperimentDao lab1Dao) {
-        super(lab1Dao);
+    public Lab1ExperimentServiceImpl(Lab1ExperimentDao labDao, @Lazy UserInfoService userInfoService, ReportService reportService, MessageSource messageSource, StudentInfoService studentInfoService) {
+        super(labDao, userInfoService, reportService, messageSource, studentInfoService);
     }
 
     @Override

@@ -15,10 +15,13 @@ import org.ekolab.server.model.content.lab3.NumberOfStacks;
 import org.ekolab.server.model.content.lab3.NumberOfUnits;
 import org.ekolab.server.model.content.lab3.UnitOutput;
 import org.ekolab.server.model.content.lab3.WindDirection;
+import org.ekolab.server.service.api.ReportService;
+import org.ekolab.server.service.api.StudentInfoService;
+import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
 import org.ekolab.server.service.api.content.lab3.Lab3ResourceService;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
-import org.ekolab.server.service.impl.content.DataValue;
+import org.ekolab.server.model.content.DataValue;
 import org.ekolab.server.service.impl.content.LabServiceImpl;
 import org.ekolab.server.service.impl.content.equations.ferrari.EquationFunction;
 import org.ekolab.server.service.impl.content.equations.ferrari.QuarticFunction;
@@ -47,7 +50,7 @@ import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.TextAnchor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.awt.BasicStroke;
@@ -78,11 +81,11 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     private final Lab3ResourceService lab3ResourceService;
 
-    @Autowired
-    public Lab3ServiceImpl(Lab3Dao lab3Dao, Lab3ResourceService lab3ResourceService) {
-        super(lab3Dao);
+    protected Lab3ServiceImpl(Lab3Dao labDao, UserInfoService userInfoService, ReportService reportService, MessageSource messageSource, StudentInfoService studentInfoService, Lab3ResourceService lab3ResourceService) {
+        super(labDao, userInfoService, reportService, messageSource, studentInfoService);
         this.lab3ResourceService = lab3ResourceService;
     }
+
 
     @Override
     public Set<DataValue> getInitialDataValues(Lab3Variant data, Locale locale) {

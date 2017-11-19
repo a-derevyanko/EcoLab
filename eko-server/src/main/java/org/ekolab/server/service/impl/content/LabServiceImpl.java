@@ -26,6 +26,7 @@ import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.content.Calculated;
+import org.ekolab.server.model.content.DataValue;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
@@ -37,7 +38,6 @@ import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.LabService;
-import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
@@ -79,25 +79,23 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.type;
 public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant, D extends LabDao<T>> implements LabService<T, V> {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(FixedTimestamp.TIMESTAMP_PATTERN);
 
-    @Autowired
-    private ValidationService validationService;
+    protected final UserInfoService userInfoService;
 
-    @Autowired
-    protected UserInfoService userInfoService;
+    protected final ReportService reportService;
 
-    @Autowired
-    protected ReportService reportService;
+    protected final MessageSource messageSource;
 
-    @Autowired
-    protected MessageSource messageSource;
-
-    @Autowired
-    protected StudentInfoService studentInfoService;
+    protected final StudentInfoService studentInfoService;
 
     protected final D labDao;
 
-    protected LabServiceImpl(D labDao) {
+    @Autowired
+    protected LabServiceImpl(D labDao, UserInfoService userInfoService, ReportService reportService, MessageSource messageSource, StudentInfoService studentInfoService) {
         this.labDao = labDao;
+        this.userInfoService = userInfoService;
+        this.reportService = reportService;
+        this.messageSource = messageSource;
+        this.studentInfoService = studentInfoService;
     }
 
     @Override

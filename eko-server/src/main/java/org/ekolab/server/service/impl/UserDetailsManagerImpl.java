@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
@@ -44,6 +43,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
     private static final RecordMapper<Record, UserInfo> USER_INFO_RECORD_MAPPER = record -> {
         UserInfo info = new UserInfo();
+        info.setId(record.get(USERS.ID));
         info.setLogin(record.get(USERS.LOGIN));
         info.setFirstName(record.get(USERS.FIRST_NAME));
         info.setMiddleName(record.get(USERS.MIDDLE_NAME));
@@ -53,24 +53,24 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
         return info;
     };
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final UserCache userCache;
+
+    private final JdbcTemplate jdbcTemplate;
+
+    private final DSLContext dsl;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserCache userCache;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private DSLContext dsl;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserDetailsManagerImpl(UserCache userCache, JdbcTemplate jdbcTemplate, DSLContext dsl, PasswordEncoder passwordEncoder) {
+        this.userCache = userCache;
+        this.jdbcTemplate = jdbcTemplate;
+        this.dsl = dsl;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostConstruct
     public void init() {
-        setAuthenticationManager(authenticationManager);
         setJdbcTemplate(jdbcTemplate);
         setUserCache(userCache);
         setEnableGroups(true);
@@ -133,7 +133,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Cacheable("USER")
     public UserInfo getUserInfo(String userName) {
-        return dsl.select(USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
+        return dsl.select(USERS.ID, USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
                 .join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID)).join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID))
         .where(USERS.LOGIN.eq(userName)).fetchOne().map(USER_INFO_RECORD_MAPPER);
     }
@@ -197,7 +197,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
             userInfo.setLogin(newLogin);
         }
 
-        Long userID = dsl.insertInto(USERS)
+        userInfo.setId(dsl.insertInto(USERS)
                 .set(USERS.FIRST_NAME, userInfo.getFirstName())
                 .set(USERS.MIDDLE_NAME, userInfo.getMiddleName())
                 .set(USERS.LAST_NAME, userInfo.getLastName())
@@ -205,11 +205,11 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
                 .set(USERS.LOGIN, userInfo.getLogin())
                 .set(USERS.ENABLED, true)
                 .set(USERS.PASSWORD, passwordEncoder.encode(userInfo.getLogin()))
-                .returning(USERS.ID).fetchOne().getId();
+                .returning(USERS.ID).fetchOne().getId());
 
         dsl.insertInto(GROUP_MEMBERS)
                 .set(GROUP_MEMBERS.GROUP_ID, dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq(userInfo.getGroup().name())))
-                .set(GROUP_MEMBERS.USER_ID, userID).execute();
+                .set(GROUP_MEMBERS.USER_ID, userInfo.getId()).execute();
         return userInfo;
     }
 }
