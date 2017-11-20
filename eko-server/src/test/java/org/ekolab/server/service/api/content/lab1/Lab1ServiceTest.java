@@ -5,8 +5,6 @@ import org.ekolab.server.AbstractTestWithUser;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -17,7 +15,6 @@ import java.time.LocalDateTime;
 /**
  * Created by Андрей on 01.05.2017.
  */
-@EnableAutoConfiguration(exclude = {ManagementWebSecurityAutoConfiguration.class})
 public abstract class Lab1ServiceTest<V extends Lab1Variant> extends AbstractTestWithUser {
     private Lab1Data<V> createdLab;
 

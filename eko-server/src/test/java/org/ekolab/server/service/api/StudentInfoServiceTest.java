@@ -5,8 +5,6 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.AbstractTestWithUser;
 import org.ekolab.server.model.StudentInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -14,7 +12,6 @@ import org.testng.annotations.Test;
 /**
  * Created by 777Al on 24.05.2017.
  */
-@EnableAutoConfiguration(exclude = {ManagementWebSecurityAutoConfiguration.class})
 public class StudentInfoServiceTest extends AbstractTestWithUser {
     private final String GROUPNAME = "testGroup_" + RandomStringUtils.randomAlphabetic(5);
     private final int TEAMNUMBER = RandomUtils.nextInt();

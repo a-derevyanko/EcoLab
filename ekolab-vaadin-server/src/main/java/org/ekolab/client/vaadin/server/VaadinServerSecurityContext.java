@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -54,15 +53,6 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
                 .csrf().disable().exceptionHandling()
                 .and()
                 .authenticationProvider(authenticationProvider).rememberMe().tokenRepository(persistentTokenRepository).rememberMeServices(rememberMeServices);
-    }
-
-    /**
-     * The {@link AuthenticationManager} must be available as a Spring bean for Vaadin4Spring.
-     */
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
     }
 
     /**

@@ -9,10 +9,10 @@ import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.api.PresentationService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -44,11 +44,9 @@ public abstract class LabPresentationStep extends VerticalLayout implements LabW
         showGallery.addClickListener(event -> gallery.showGallery(presentationService.getPresentationSlides(getLabNumber()), presentationService.getPresentationOptions()));
     }
 
-    @NotEmpty
-    @NotNull
     protected abstract int getLabNumber();
 
-    @NotEmpty
+    @Size(min = 1)
     @NotNull
     protected String getPanelStyleName() {
         return EkoLabTheme.PANEL_WIZARD_PRESENTATION;

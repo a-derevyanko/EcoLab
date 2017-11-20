@@ -3,8 +3,10 @@ package org.ekolab.server;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,7 +20,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
  * Created by Андрей on 19.11.2016.
  */
 @SpringBootConfiguration
-public class ServerSecurityContext {
+public class ServerSecurityContext extends WebSecurityConfigurerAdapter {
     @Bean
     @Lazy
     public PasswordEncoder passwordEncoder() {
@@ -42,5 +44,14 @@ public class ServerSecurityContext {
                                                  PersistentTokenRepository tokenRepository) {
         return new PersistentTokenBasedRememberMeServices(AbstractRememberMeServices.DEFAULT_PARAMETER,
                 userDetailsService, tokenRepository);
+    }
+
+    /**
+     * The {@link AuthenticationManager} must be available as a Spring bean for Vaadin4Spring.
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }
