@@ -1,6 +1,5 @@
 package org.ekolab.client.vaadin.server;
 
-import de.codecentric.boot.admin.config.EnableAdminServer;
 import org.ekolab.client.vaadin.server.ui.development.DevUtils;
 import org.ekolab.server.ServerApplication;
 import org.slf4j.Logger;
@@ -13,7 +12,7 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
-@EnableAdminServer
+//todo @EnableAdminServer
 @EnableConfigurationProperties(EkoLabVaadinProperties.class)
 public class VaadinApplication extends ServerApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(VaadinApplication.class);

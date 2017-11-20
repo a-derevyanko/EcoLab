@@ -2,7 +2,6 @@ package org.ekolab.server.model.content.lab1;
 
 import org.ekolab.server.model.content.LabVariant;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -12,7 +11,6 @@ public class Lab1Variant extends LabVariant {
     /**
      * Название объекта
      */
-    @Nullable
     private String name;
 
     /**
@@ -46,12 +44,11 @@ public class Lab1Variant extends LabVariant {
      */
     private Integer flueGasNOxConcentration;
 
-    @Nullable
     public String getName() {
         return name;
     }
 
-    public void setName(@Nullable String name) {
+    public void setName(String name) {
         this.name = name;
     }
 

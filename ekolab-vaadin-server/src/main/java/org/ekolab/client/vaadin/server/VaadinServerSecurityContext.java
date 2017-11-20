@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +29,7 @@ import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 @EnableVaadinSharedSecurity
 @Import(VaadinSharedSecurityConfiguration.class)
+@Order(2)
 public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationProvider authenticationProvider;

@@ -3,6 +3,7 @@ package org.ekolab.server;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
  * Created by Андрей on 19.11.2016.
  */
 @SpringBootConfiguration
+@Order(1)
 public class ServerSecurityContext extends WebSecurityConfigurerAdapter {
     @Bean
     @Lazy

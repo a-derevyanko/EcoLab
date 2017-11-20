@@ -12,7 +12,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -37,7 +36,6 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Override
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = STUDENT_INFO_CACHE, key = "#userName")
-    @Nullable
     public StudentInfo getStudentInfo(String userName) {
         String group = studentInfoDao.getStudentGroup(userName);
         if (group == null) {

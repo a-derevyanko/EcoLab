@@ -1,26 +1,9 @@
-/*buildscript {
-    ext {
-        springBootVersion = '2.0.0.BUILD-SNAPSHOT'
-    }
-    repositories {
-        mavenCentral()
-        mavenLocal()
-        maven { url 'https://repo.spring.io/libs-snapshot' }
-    }
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-    }
-}*/
 
 import org.ekolab.gradle.CustomTest
 
 plugins {
     id "com.gorylenko.gradle-git-properties" version "1.4.16"
 }
-
-apply plugin: 'war'
-/*apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'*/
 
 repositories {
     mavenCentral()
@@ -58,10 +41,13 @@ dependencies {
     compile group: 'org.flywaydb',              name: 'flyway-core',                                version: property("flyway.version")
     compile group: 'com.github.ben-manes.caffeine', name: 'caffeine',                               version: '2.5.4'
 
+    /*todo
     compile (group: 'de.codecentric',                name: 'spring-boot-admin-server',               version: '1.5.5') {
-        exclude (group: 'org.springframework.cloud') // todo пока не своместимо со Spring 2
+        exclude (group: 'org.springframework.cloud',  module: 'spring-cloud-context') // todo пока не своместимо со Spring 2
     }
+
     compile group: 'de.codecentric',                name: 'spring-boot-admin-server-ui',            version: '1.5.5'
+    */
     compile group: 'org.jolokia',                   name: 'jolokia-core',                           version: '1.3.5'
 
     compile group: 'com.twelvemonkeys.imageio',     name: 'imageio-batik',                      version: '3.3.2'
@@ -80,14 +66,7 @@ dependencies {
     runtime     group: 'com.h2database',            name: 'h2',                                 version: '+'
     runtime     group: 'org.postgresql',            name: 'postgresql',                         version: '+'
 
-    providedRuntime group: 'org.springframework.boot',  name: 'spring-boot-starter-jetty',      version: '2.0.0.M6'
-
     testCompile group: 'com.h2database',            name: 'h2',                                 version: '+'
-}
-
-war {
-    baseName = 'EkoLab-Server'
-    version =  '0.0.1'
 }
 
 sourceSets {
@@ -97,20 +76,6 @@ sourceSets {
         }
     }
 }
-
-/*springBoot {
-    buildInfo()
-}
-
-bootRun {
-    jvmArgs = ["-Dspring.profiles.active=dev,h2", "-Dorg.jooq.no-logo=true"]
-    sourceResources sourceSets.main
-}
-
-bootWar {
-    enabled = false
-    launchScript()
-}*/
 
 gitProperties {
     gitPropertiesDir = new File("${project.projectDir.path}/src/main/resources")

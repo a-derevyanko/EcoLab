@@ -17,7 +17,6 @@ import org.ekolab.server.model.content.lab1.validators.MaximumSurfaceConcentrati
 import org.ekolab.server.model.content.lab1.validators.NValidator;
 import org.ekolab.server.model.content.lab1.validators.UValidator;
 
-import javax.annotation.Nullable;
 import javax.validation.constraints.Digits;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -29,7 +28,6 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
     /**
      * Название объекта
      */
-    @Nullable
     private String name;
 
     /**
@@ -183,12 +181,11 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
     @ValidatedBy(MaximumSurfaceConcentrationValidator.class)
     private Double maximumSurfaceConcentration;
 
-    @Nullable
     public String getName() {
         return name;
     }
 
-    public void setName(@Nullable String name) {
+    public void setName(String name) {
         this.name = name;
     }
 

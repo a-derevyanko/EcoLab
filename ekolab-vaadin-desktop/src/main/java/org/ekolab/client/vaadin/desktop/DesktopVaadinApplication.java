@@ -1,6 +1,5 @@
 package org.ekolab.client.vaadin.desktop;
 
-import de.codecentric.boot.admin.config.EnableAdminServer;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
 import org.apache.commons.lang.UnhandledException;
@@ -30,7 +29,7 @@ import java.net.URI;
 import java.util.ResourceBundle;
 
 @SpringBootApplication
-@EnableAdminServer
+//todo @EnableAdminServer
 @EnableConfigurationProperties(EkoLabVaadinProperties.class)
 public class DesktopVaadinApplication extends VaadinApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(DesktopVaadinApplication.class);
