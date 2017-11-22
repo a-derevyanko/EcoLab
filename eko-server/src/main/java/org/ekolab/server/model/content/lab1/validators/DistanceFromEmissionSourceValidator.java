@@ -12,7 +12,7 @@ public class DistanceFromEmissionSourceValidator implements FieldValidator<Doubl
     @Override
     public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
         return FieldValidationResult.of(labData.getStacksHeight() == null || labData.getD() == null || labData.getF() == null ||
-                MathUtils.checkEquals(value,
-                        (5 - labData.getF()) / 4.0 * labData.getStacksHeight() * labData.getD()));
+                MathUtils.roundedCheckEquals(value,
+                        (5 - labData.getHarmfulSubstancesDepositionCoefficient()) / 4.0 * labData.getStacksHeight() * labData.getD(), 2));
     }
 }

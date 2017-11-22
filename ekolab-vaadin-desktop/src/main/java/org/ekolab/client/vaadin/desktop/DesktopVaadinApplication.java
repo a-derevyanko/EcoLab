@@ -18,11 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
-import java.awt.Desktop;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;

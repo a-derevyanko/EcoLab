@@ -3,13 +3,14 @@ package org.ekolab.client.vaadin.server.ui.view.content.lab_1;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.HorizontalLayout;
+import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
+import org.ekolab.client.vaadin.server.ui.view.content.LabStepWithHelp;
+import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.util.FieldUtils;
 
 /**
@@ -17,17 +18,19 @@ import org.springframework.security.util.FieldUtils;
  */
 @SpringComponent
 @ViewScope
-public class Lab1Step2 extends HorizontalLayout implements LabWizardStep {
-    // ----------------------------- Графические компоненты --------------------------------
-    @Autowired
-    private I18N i18N;
+public class Lab1Step2 extends LabStepWithHelp {
 
-    @Autowired
-    private ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout;
+    // ----------------------------- Графические компоненты --------------------------------
+    private final ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout;
+
+    public Lab1Step2(I18N i18N, ResourceWindow resourceWindow, ResourceService resourceService, ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout) {
+        super(i18N, resourceWindow, resourceService);
+        this.firstFormLayout = firstFormLayout;
+    }
 
     @Override
     public void init() {
-        LabWizardStep.super.init();
+        super.init();
         setSizeFull();
         setMargin(true);
         addComponent(firstFormLayout);

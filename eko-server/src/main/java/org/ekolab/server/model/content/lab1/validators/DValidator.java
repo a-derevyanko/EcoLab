@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 public class DValidator implements FieldValidator<Double, Lab1Data<Lab1Variant>> {
     @Override
     public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
-        return FieldValidationResult.of(labData.getStacksHeight() == null || labData.getD() == null || labData.getF() == null ||
-                MathUtils.checkEquals(value,
-                        (5 - labData.getF()) / 4.0 * labData.getStacksHeight() * labData.getD()));
+        return FieldValidationResult.of(labData.getF() == null || labData.getU() == null ||
+                MathUtils.roundedCheckEquals(value,
+                        7 * Math.sqrt(labData.getU())  * (1 + 0.28*Math.cbrt(labData.getF())), 2));
     }
 }

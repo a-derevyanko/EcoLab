@@ -12,7 +12,7 @@ public class MValidator implements FieldValidator<Double, Lab1Data<Lab1Variant>>
     @Override
     public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
         return FieldValidationResult.of(labData.getF() == null ||
-                MathUtils.checkEquals(value, 1.0 /
-                        (0.67 + 0.1 * Math.sqrt(labData.getF()) + 0.34 * Math.cbrt(labData.getF()))));
+                MathUtils.roundedCheckEquals(value, 1.0 /
+                        (0.67 + 0.1 * Math.sqrt(labData.getF()) + 0.34 * Math.cbrt(labData.getF())), 2));
     }
 }

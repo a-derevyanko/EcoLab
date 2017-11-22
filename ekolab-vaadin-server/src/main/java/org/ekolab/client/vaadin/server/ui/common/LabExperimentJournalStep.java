@@ -11,12 +11,9 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
-import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
-import org.ekolab.client.vaadin.server.ui.view.LabViewUtils;
-import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
@@ -37,24 +34,18 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
 
     protected final ParameterCustomizer parameterCustomizer;
 
-    private final ResourceWindow resourceWindow;
-
-    private final ResourceService resourceService;
-
     // ----------------------------- Графические компоненты --------------------------------
     protected final GridLayout firstLayout = new GridLayout(5, 7);
     protected final GridLayout secondLayout = new GridLayout(5, 7);
     protected final HorizontalLayout centerLayout = new HorizontalLayout(firstLayout, secondLayout);
     protected final Label journalLabel = new Label("Experiment journal");
 
-    public LabExperimentJournalStep(Binder<V> experimentLogBinder, Binder<T> dataBinder, I18N i18N, ValidationService validationService, ParameterCustomizer parameterCustomizer, ResourceWindow resourceWindow, ResourceService resourceService) {
+    public LabExperimentJournalStep(Binder<V> experimentLogBinder, Binder<T> dataBinder, I18N i18N, ValidationService validationService, ParameterCustomizer parameterCustomizer) {
         this.experimentLogBinder = experimentLogBinder;
         this.dataBinder = dataBinder;
         this.i18N = i18N;
         this.validationService = validationService;
         this.parameterCustomizer = parameterCustomizer;
-        this.resourceWindow = resourceWindow;
-        this.resourceService = resourceService;
     }
 
     @Override
@@ -118,7 +109,7 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
             }
         }
         BeanUtils.copyProperties(experimentLogBinder.getBean(), dataBinder.getBean());
-        LabViewUtils.showHelpBeforeLab(resourceWindow, i18N, resourceService);
+
         return LabWizardStep.super.onAdvance();
     }
 }

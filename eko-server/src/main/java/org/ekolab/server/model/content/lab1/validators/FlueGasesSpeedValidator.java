@@ -12,7 +12,7 @@ public class FlueGasesSpeedValidator implements FieldValidator<Double, Lab1Data<
     @Override
     public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
         return FieldValidationResult.of(labData.getFlueGasesRate() == null || labData.getStacksDiameter() == null ||
-                MathUtils.checkEquals(value, 4 *
-                        labData.getFlueGasesRate() / (Math.PI * labData.getStacksDiameter())));
+                MathUtils.roundedCheckEquals(value, 4 *
+                        labData.getFlueGasesRate() / (Math.PI * Math.pow(labData.getStacksDiameter(), 2)), 1));
     }
 }

@@ -16,7 +16,7 @@ public class UValidator implements FieldValidator<Double, Lab1Data<Lab1Variant>>
             return FieldValidationResult.ok();
         }
         double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
-        return FieldValidationResult.of(MathUtils.checkEquals(value, 0.65 *
-                Math.cbrt(labData.getFlueGasesRate() * dT / labData.getStacksHeight())));
+        return FieldValidationResult.of(MathUtils.roundedCheckEquals(value, 0.65 *
+                Math.cbrt(labData.getFlueGasesRate() * dT / labData.getStacksHeight()), 2));
     }
 }

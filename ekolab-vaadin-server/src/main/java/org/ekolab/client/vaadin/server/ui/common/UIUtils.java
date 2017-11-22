@@ -5,6 +5,7 @@ import com.vaadin.data.Converter;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
+import com.vaadin.ui.UI;
 import com.vaadin.util.ReflectTools;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.server.model.DomainModel;
@@ -12,6 +13,7 @@ import org.ekolab.server.model.content.FieldValidationResult;
 import org.ekolab.server.service.api.content.ValidationService;
 
 import java.lang.reflect.Field;
+import java.text.DecimalFormatSymbols;
 
 /**
  * Created by 777Al on 29.06.2017.
@@ -26,7 +28,8 @@ public abstract class UIUtils {
         if (propClass == Integer.class) {
             return (Converter<String, T>) new StringToIntegerConverter(i18N.get("validator.must-be-number"));
         } else if (propClass == Double.class) {
-            return (Converter<String, T>) new StringToDoubleConverter(i18N.get("validator.must-be-double"));
+            return (Converter<String, T>) new StringToDoubleConverter(i18N.get("validator.must-be-double",
+                    DecimalFormatSymbols.getInstance(UI.getCurrent().getLocale()).getDecimalSeparator()));
         } else {
             return null;
         }

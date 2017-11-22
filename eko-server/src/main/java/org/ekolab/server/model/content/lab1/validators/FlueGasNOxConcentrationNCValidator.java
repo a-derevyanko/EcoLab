@@ -13,7 +13,7 @@ public class FlueGasNOxConcentrationNCValidator implements FieldValidator<Double
     public FieldValidationResult validate(Double value,  Lab1Data<Lab1Variant> labData) {
         return FieldValidationResult.of(labData.getFlueGasNOxConcentration() == null ||
                 labData.getExcessAirRatio() == null ||
-                MathUtils.checkEquals(value,
-                        labData.getFlueGasNOxConcentration() * labData.getExcessAirRatio() / 1.4));
+                MathUtils.roundedCheckEquals(value,
+                        labData.getFlueGasNOxConcentration() * labData.getExcessAirRatio() / 1.4, 1));
     }
 }

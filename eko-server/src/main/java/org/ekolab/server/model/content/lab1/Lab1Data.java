@@ -17,20 +17,13 @@ import org.ekolab.server.model.content.lab1.validators.MaximumSurfaceConcentrati
 import org.ekolab.server.model.content.lab1.validators.NValidator;
 import org.ekolab.server.model.content.lab1.validators.UValidator;
 
-import javax.annotation.Nullable;
 import javax.validation.constraints.Digits;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
  * Created by Андрей on 24.06.2017.
  */
 public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
-    /**
-     * Название объекта
-     */
-    @Nullable
-    private String name;
 
     /**
      * Температура наружного воздуха
@@ -46,11 +39,6 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
      * Диаметр дымовой трубы
      */
     private Double stacksDiameter;
-
-    /**
-     * Время проведения измерений
-     */
-    private LocalDateTime time;
 
     /**
      * Паровая нагрузка котла
@@ -81,14 +69,14 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
     /**
      * Коэффициент избытка воздуха в точке измерения
      */
-    @Digits(integer = Integer.MAX_VALUE, fraction = 2)
+    @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE)
     @ValidatedBy(ExcessAirRatioValidator.class)
     private Double excessAirRatio;
 
     /**
      * Концентрация оксидов азота, приведенная к стандартному коэффициенту избытка воздуха α=1,4
      */
-    @Digits(integer = Integer.MAX_VALUE, fraction = 1)
+    @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE)
     @ValidatedBy(FlueGasNOxConcentrationNCValidator.class)
     private Double flueGasNOxConcentrationNC;
 
@@ -101,28 +89,28 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
     /**
      * Расход дымовых газов, выбрасываемых в атмосферу
      */
-    @Digits(integer = Integer.MAX_VALUE, fraction = 1)
+    @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE)
     @ValidatedBy(FlueGasesRateValidator.class)
     private Double flueGasesRate;
 
     /**
      * Объемный расход сухих газов
      */
-    @Digits(integer = Integer.MAX_VALUE, fraction = 1)
+    @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE)
     @ValidatedBy(DryGasesFlowRateValidator.class)
     private Double dryGasesFlowRate;
 
     /**
      * Массовые выбросы оксидов азота
      */
-    @Digits(integer = 2, fraction = 1)
+    @Digits(integer = 2, fraction = Integer.MAX_VALUE)
     @ValidatedBy(MassEmissionsValidator.class)
     private Double massEmissions;
 
     /**
      * Скорость дымовых газов на выходе из дымовой трубы
      */
-    @Digits(integer = Integer.MAX_VALUE, fraction = 1)
+    @Digits(integer = Integer.MAX_VALUE, fraction = Integer.MAX_VALUE)
     @ValidatedBy(FlueGasesSpeedValidator.class)
     private Double flueGasesSpeed;
 
@@ -182,15 +170,6 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
      */
     @ValidatedBy(MaximumSurfaceConcentrationValidator.class)
     private Double maximumSurfaceConcentration;
-
-    @Nullable
-    public String getName() {
-        return name;
-    }
-
-    public void setName(@Nullable String name) {
-        this.name = name;
-    }
 
     public Double getExcessAirRatio() {
         return excessAirRatio;
@@ -352,14 +331,6 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
         this.stacksDiameter = stacksDiameter;
     }
 
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
-
     public Integer getSteamProductionCapacity() {
         return steamProductionCapacity;
     }
@@ -406,11 +377,9 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
         if (!(o instanceof Lab1Data)) return false;
         if (!super.equals(o)) return false;
         Lab1Data lab1Data = (Lab1Data) o;
-        return Objects.equals(name, lab1Data.name) &&
-                Objects.equals(outsideAirTemperature, lab1Data.outsideAirTemperature) &&
+        return Objects.equals(outsideAirTemperature, lab1Data.outsideAirTemperature) &&
                 Objects.equals(stacksHeight, lab1Data.stacksHeight) &&
                 Objects.equals(stacksDiameter, lab1Data.stacksDiameter) &&
-                Objects.equals(time, lab1Data.time) &&
                 Objects.equals(steamProductionCapacity, lab1Data.steamProductionCapacity) &&
                 Objects.equals(oxygenConcentrationPoint, lab1Data.oxygenConcentrationPoint) &&
                 Objects.equals(fuelConsumerNormalized, lab1Data.fuelConsumerNormalized) &&
@@ -437,6 +406,6 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, outsideAirTemperature, stacksHeight, stacksDiameter, time, steamProductionCapacity, oxygenConcentrationPoint, fuelConsumerNormalized, stackExitTemperature, flueGasNOxConcentration, excessAirRatio, flueGasNOxConcentrationNC, excessOfNorms, flueGasesRate, dryGasesFlowRate, massEmissions, flueGasesSpeed, f, m, u, n, d, harmfulSubstancesDepositionCoefficient, terrainCoefficient, temperatureCoefficient, distanceFromEmissionSource, maximumSurfaceConcentration);
+        return Objects.hash(super.hashCode(), outsideAirTemperature, stacksHeight, stacksDiameter, steamProductionCapacity, oxygenConcentrationPoint, fuelConsumerNormalized, stackExitTemperature, flueGasNOxConcentration, excessAirRatio, flueGasNOxConcentrationNC, excessOfNorms, flueGasesRate, dryGasesFlowRate, massEmissions, flueGasesSpeed, f, m, u, n, d, harmfulSubstancesDepositionCoefficient, terrainCoefficient, temperatureCoefficient, distanceFromEmissionSource, maximumSurfaceConcentration);
     }
 }

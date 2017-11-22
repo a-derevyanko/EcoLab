@@ -14,7 +14,7 @@ public class DryGasesFlowRateValidator implements FieldValidator<Double, Lab1Dat
     public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
         return FieldValidationResult.of(labData.getFuelConsumerNormalized() == null ||
                 labData.getExcessAirRatio() == null ||
-                MathUtils.checkEquals(value, labData.getFuelConsumerNormalized() / 3600.0 *
-                        (Constants.V0g + (labData.getExcessAirRatio() - 1) * Constants.V0 - Constants.V_H2O)));
+                MathUtils.roundedCheckEquals(value, labData.getFuelConsumerNormalized() / 3600.0 *
+                        (Constants.V0g + (labData.getExcessAirRatio() - 1) * Constants.V0 - Constants.V_H2O), 2));
     }
 }

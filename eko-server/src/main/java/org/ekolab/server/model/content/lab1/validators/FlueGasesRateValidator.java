@@ -14,8 +14,8 @@ public class FlueGasesRateValidator implements FieldValidator<Double, Lab1Data<L
     public FieldValidationResult validate(Double value, Lab1Data<Lab1Variant> labData) {
         return FieldValidationResult.of(labData.getFuelConsumerNormalized() == null ||
                 labData.getStackExitTemperature() == null ||
-                MathUtils.checkEquals(value, labData.getFuelConsumerNormalized() / 3600.0 *
+                MathUtils.roundedCheckEquals(value, labData.getFuelConsumerNormalized() / 3600.0 *
                         (Constants.V0g + 1.016 * (Constants.Ayx - 1) *
-                                Constants.V0) * (273 + labData.getStackExitTemperature()) / 273.0));
+                                Constants.V0) * (273 + labData.getStackExitTemperature()) / 273.0, 1));
     }
 }

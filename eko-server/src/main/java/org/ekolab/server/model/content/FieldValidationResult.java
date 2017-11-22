@@ -80,6 +80,6 @@ public interface FieldValidationResult {
     }
 
     static FieldValidationResult of(boolean result) {
-        return result ? ok() : error("");
+        return result ? ok() : error("validator.wrong-value");
     }
 }

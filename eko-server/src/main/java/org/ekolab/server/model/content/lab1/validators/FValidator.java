@@ -18,7 +18,7 @@ public class FValidator implements FieldValidator<Double, Lab1Data<Lab1Variant>>
         }
 
         double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
-        return FieldValidationResult.of(MathUtils.checkEquals(value, 1000 * labData.getFlueGasesSpeed() * labData.getStacksDiameter() /
-                (Math.pow(labData.getStacksHeight(), 2) * dT)));
+        return FieldValidationResult.of(MathUtils.roundedCheckEquals(value, 1000 * Math.pow(labData.getFlueGasesSpeed(), 2) * labData.getStacksDiameter() /
+                (Math.pow(labData.getStacksHeight(), 2) * dT), 2));
     }
 }

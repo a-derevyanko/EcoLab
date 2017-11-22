@@ -28,7 +28,14 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
             data.setStartDate(record.get(LAB1DATA.START_DATE));
             data.setSaveDate(record.get(LAB1DATA.SAVE_DATE));
             data.setCompleted(record.get(LAB1DATA.COMPLETED));
-            data.setName(record.get(LAB1DATA.NAME));
+            data.setStacksHeight(record.get(LAB1DATA.STACKS_HEIGHT));
+            data.setStacksDiameter(record.get(LAB1DATA.STACKS_DIAMETER));
+            data.setOutsideAirTemperature(record.get(LAB1DATA.OUTSIDE_AIR_TEMPERATURE));
+            data.setSteamProductionCapacity(record.get(LAB1DATA.STEAM_PRODUCTION_CAPACITY));
+            data.setOxygenConcentrationPoint(record.get(LAB1DATA.OXYGEN_CONCENTRATION_POINT));
+            data.setFuelConsumerNormalized(record.get(LAB1DATA.FUEL_CONSUMER_NORMALIZED));
+            data.setStackExitTemperature(record.get(LAB1DATA.STACK_EXIT_TEMPERATURE));
+            data.setFlueGasNOxConcentration(record.get(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION));
             data.setExcessAirRatio(record.get(LAB1DATA.EXCESS_AIR_RATIO));
             data.setFlueGasNOxConcentrationNC(record.get(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC));
             data.setExcessOfNorms(record.get(LAB1DATA.EXCESS_OF_NORMS));
@@ -63,7 +70,14 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
                 LAB1DATA.START_DATE,
                 LAB1DATA.SAVE_DATE,
                 LAB1DATA.COMPLETED,
-                LAB1DATA.NAME,
+                LAB1DATA.STACKS_DIAMETER,
+                LAB1DATA.STACKS_HEIGHT,
+                LAB1DATA.OUTSIDE_AIR_TEMPERATURE,
+                LAB1DATA.STEAM_PRODUCTION_CAPACITY,
+                LAB1DATA.OXYGEN_CONCENTRATION_POINT,
+                LAB1DATA.FUEL_CONSUMER_NORMALIZED,
+                LAB1DATA.STACK_EXIT_TEMPERATURE,
+                LAB1DATA.FLUE_GAS_NOX_CONCENTRATION,
                 LAB1DATA.EXCESS_AIR_RATIO,
                 LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC,
                 LAB1DATA.EXCESS_OF_NORMS,
@@ -86,7 +100,14 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
                                 data.getStartDate(),
                                 data.getSaveDate(),
                                 data.isCompleted(),
-                                data.getName(),
+                                data.getStacksDiameter(),
+                                data.getStacksHeight(),
+                                data.getOutsideAirTemperature(),
+                                data.getSteamProductionCapacity(),
+                                data.getOxygenConcentrationPoint(),
+                                data.getFuelConsumerNormalized(),
+                                data.getStackExitTemperature(),
+                                data.getFlueGasNOxConcentration(),
                                 data.getExcessAirRatio(),
                                 data.getFlueGasNOxConcentrationNC(),
                                 data.getExcessOfNorms(),
@@ -115,8 +136,15 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
         return dsl.update(LAB1DATA)
                 .set(LAB1DATA.START_DATE, data.getStartDate())
                 .set(LAB1DATA.SAVE_DATE, data.getSaveDate())
-                .set(LAB1DATA.NAME, data.getName())
                 .set(LAB1DATA.COMPLETED, data.isCompleted())
+                .set(LAB1DATA.STACKS_HEIGHT, data.getStacksHeight())
+                .set(LAB1DATA.STACKS_DIAMETER, data.getStacksDiameter())
+                .set(LAB1DATA.OUTSIDE_AIR_TEMPERATURE, data.getOutsideAirTemperature())
+                .set(LAB1DATA.STEAM_PRODUCTION_CAPACITY, data.getSteamProductionCapacity())
+                .set(LAB1DATA.OXYGEN_CONCENTRATION_POINT, data.getOxygenConcentrationPoint())
+                .set(LAB1DATA.FUEL_CONSUMER_NORMALIZED, data.getFuelConsumerNormalized())
+                .set(LAB1DATA.STACK_EXIT_TEMPERATURE, data.getStackExitTemperature())
+                .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION, data.getFlueGasNOxConcentration())
                 .set(LAB1DATA.EXCESS_AIR_RATIO, data.getExcessAirRatio())
                 .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC, data.getFlueGasNOxConcentrationNC())
                 .set(LAB1DATA.EXCESS_OF_NORMS, data.getExcessOfNorms())

@@ -1,5 +1,7 @@
 package org.ekolab.server.common;
 
+import org.apache.commons.math3.util.Precision;
+
 /**
  * Created by 777Al on 12.07.2017.
  */
@@ -14,6 +16,16 @@ public abstract class MathUtils {
      */
     public static boolean checkEquals(double a, double b) {
         return checkEquals(a, b, EPS);
+    }
+
+    /**
+     * Проверяет равенство двух чисел
+     * @param a первое число
+     * @param b второе число
+     * @return признак равенства
+     */
+    public static boolean roundedCheckEquals(double a, double b, int precision) {
+        return checkEquals(Precision.round(a, precision), Precision.round(b, precision), EPS);
     }
 
     /**

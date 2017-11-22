@@ -155,7 +155,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
             Button infoButton = new Button(VaadinIcons.QUESTION);
             infoButton.addClickListener(event -> resourceWindow.show(
                     new ResourceWindow.ResourceWindowSettings(i18N.get(fieldName),
-                            res.getHtmlData(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX))));
+                            res.getHtmlData(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX), false)));
             infoButton.addStyleName(EkoLabTheme.BUTTON_TINY);
             super.addComponent(infoButton, 3, row);
         }

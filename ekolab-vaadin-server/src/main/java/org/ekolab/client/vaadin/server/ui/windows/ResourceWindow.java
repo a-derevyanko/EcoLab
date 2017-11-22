@@ -27,6 +27,7 @@ public class ResourceWindow extends BaseEkoLabWindow<ResourceWindow.ResourceWind
      */
     protected void beforeShow() {
         setCaption(settings.caption);
+        setModal(settings.isModal);
         content.addComponent(settings.infoResource);
         settings.infoResource.setSizeFull();
     };
@@ -41,10 +42,12 @@ public class ResourceWindow extends BaseEkoLabWindow<ResourceWindow.ResourceWind
     public static class ResourceWindowSettings implements WindowSettings {
         private final String caption;
         private final BrowserFrame infoResource;
+        private final boolean isModal;
 
-        public ResourceWindowSettings(String caption, BrowserFrame infoResource) {
+        public ResourceWindowSettings(String caption, BrowserFrame infoResource, boolean isModal) {
             this.caption = caption;
             this.infoResource = infoResource;
+            this.isModal = isModal;
         }
     }
 }

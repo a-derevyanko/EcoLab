@@ -6,10 +6,8 @@ import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.DateTimeField;
 import com.vaadin.ui.TextField;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
-import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabExperimentJournalStep;
-import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
 import org.ekolab.server.service.api.content.ValidationService;
@@ -38,8 +36,8 @@ public class Lab1ExperimentStep1 extends LabExperimentJournalStep<Lab1Data<Lab1E
                                Binder<Lab1Data<Lab1ExperimentLog>> dataBinder,
                                I18N i18N,
                                ValidationService validationService,
-                               ParameterCustomizer parameterCustomizer, ResourceWindow resourceWindow, ResourceService resourceService) {
-        super(experimentLogBinder, dataBinder, i18N, validationService, parameterCustomizer, resourceWindow, resourceService);
+                               ParameterCustomizer parameterCustomizer) {
+        super(experimentLogBinder, dataBinder, i18N, validationService, parameterCustomizer);
     }
 
     @Override

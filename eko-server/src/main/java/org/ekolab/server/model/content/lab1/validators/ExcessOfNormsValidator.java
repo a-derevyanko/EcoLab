@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class ExcessOfNormsValidator implements FieldValidator<Boolean, Lab1Data<Lab1Variant>> {
     @Override
     public FieldValidationResult validate(Boolean value, Lab1Data<Lab1Variant> labData) {
-        return FieldValidationResult.of(labData.getFlueGasNOxConcentrationNC() == null || value == MathUtils.checkEquals(125.0,
-                labData.getFlueGasNOxConcentrationNC()));
+        return FieldValidationResult.of(labData.getFlueGasNOxConcentrationNC() == null || value == MathUtils.roundedCheckEquals(125.0,
+                labData.getFlueGasNOxConcentrationNC(), 2));
     }
 }
