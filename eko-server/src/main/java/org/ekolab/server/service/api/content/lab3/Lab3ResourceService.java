@@ -10,9 +10,7 @@ import java.net.URL;
 /**
  * Created by 777Al on 24.04.2017.
  */
-public interface Lab3ResourceService extends LabResourceService{
-    URL getCoatOfArms(City city);
-
+public interface Lab3ResourceService extends LabResourceService {
     URL getWindRose(City city);
 
     Image getWindRoseImage(City city);

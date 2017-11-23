@@ -22,6 +22,7 @@ import org.ekolab.server.common.UserInfoUtils;
 import org.ekolab.server.dao.api.content.LabDao;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.DomainModel;
+import org.ekolab.server.model.IdentifiedDomainModel;
 import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
@@ -340,7 +341,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
             } else {
                 values.put(field.getName(), ReflectionUtils.getField(field, data));
             }
-        }, field -> (field.getDeclaringClass() != LabVariant.class && LabVariant.class.isAssignableFrom(field.getDeclaringClass())));
+        }, field -> (field.getDeclaringClass() != LabVariant.class && field.getDeclaringClass() != IdentifiedDomainModel.class));
         return values;
     }
 

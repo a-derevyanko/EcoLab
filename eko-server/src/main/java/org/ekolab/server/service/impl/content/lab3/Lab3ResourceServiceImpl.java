@@ -5,6 +5,7 @@ import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.content.lab3.City;
 import org.ekolab.server.model.content.lab3.WindDirection;
 import org.ekolab.server.service.api.content.lab3.Lab3ResourceService;
+import org.ekolab.server.service.impl.content.LabResourceServiceImpl;
 import org.jfree.chart.encoders.EncoderUtil;
 import org.jfree.chart.encoders.ImageFormat;
 import org.slf4j.Logger;
@@ -13,10 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
-import java.awt.AlphaComposite;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -30,18 +28,12 @@ import java.util.Map;
  * Created by 777Al on 24.04.2017.
  */
 @Service
-public class Lab3ResourceServiceImpl implements Lab3ResourceService {
+public class Lab3ResourceServiceImpl extends LabResourceServiceImpl implements Lab3ResourceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(Lab3ResourceServiceImpl.class);
 
     private final Image COMPASS_ARROW = loadImage("map/compass-arrow.svg", 0.2);
 
     private final Map<City, Image> BACKGROUND_CACHE = new HashMap<>(City.values().length);
-
-    @Override
-    @Cacheable("COAT_OF_ARMS_URL_CACHE")
-    public URL getCoatOfArms(City city) {
-        return Lab3ResourceServiceImpl.class.getResource("coatofarms/" + city.name() + ".png");
-    }
 
     @Override
     @Cacheable("WIND_ROSE_URL_CACHE")

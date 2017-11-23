@@ -92,7 +92,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
         Set<DataValue> values = super.getInitialDataValues(data, locale);
         DataValue cityValue = new DataValue();
         cityValue.setName(messageSource.getMessage("lab3.initial-data.city", null, locale) + ": " + getFieldValueForPrint(data.getCity(), locale));
-        cityValue.setValue(lab3ResourceService.getCoatOfArms(data.getCity()));
+        cityValue.setValue(lab3ResourceService.getCoatOfArms(data.getCity().name()));
         values.add(cityValue);
 
         DataValue desulphurizationUnitType = new DataValue();

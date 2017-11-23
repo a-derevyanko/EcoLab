@@ -5,7 +5,6 @@ import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
-import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
 import org.ekolab.client.vaadin.server.ui.view.content.LabStepWithHelp;
 import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
@@ -43,5 +42,6 @@ public class Lab1Step2 extends LabStepWithHelp {
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "dryGasesFlowRate"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "massEmissions"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasesSpeed"));
+        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "f"));
     }
 }

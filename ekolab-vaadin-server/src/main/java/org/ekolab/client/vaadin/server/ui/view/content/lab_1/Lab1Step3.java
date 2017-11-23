@@ -33,7 +33,6 @@ public class Lab1Step3 extends HorizontalLayout implements LabWizardStep {
         addComponent(firstFormLayout);
         setComponentAlignment(firstFormLayout, Alignment.MIDDLE_CENTER);
         firstFormLayout.setCaption(i18N.get("lab1.step3.max-concentration-calculation"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "f"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "m"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "u"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "n"));
