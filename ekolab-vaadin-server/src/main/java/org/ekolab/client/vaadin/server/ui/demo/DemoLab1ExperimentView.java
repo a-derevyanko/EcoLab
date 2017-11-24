@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Profile;
 @Profile(value = {Profiles.MODE.DEMO, Profiles.MODE.DEV})
 public class DemoLab1ExperimentView extends Lab1ExperimentView {
     public DemoLab1ExperimentView(Lab1ExperimentPresentationStep presentationStep, Lab1ExperimentStep1 step1,
-                                  Lab1Step2 step2, Lab1Step3 step3, Binder<Lab1ExperimentLog> variantBinder) {
+                                  Lab1Step2<Lab1ExperimentLog> step2, Lab1Step3<Lab1ExperimentLog> step3, Binder<Lab1ExperimentLog> variantBinder) {
         super(presentationStep, step1, step2, step3, variantBinder);
     }
 }

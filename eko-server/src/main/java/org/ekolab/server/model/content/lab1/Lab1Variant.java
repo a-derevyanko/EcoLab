@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Created by Андрей on 24.06.2017.
  */
-public class Lab1Variant extends LabVariant {
+public abstract class Lab1Variant extends LabVariant {
     /**
      * Название объекта
      */

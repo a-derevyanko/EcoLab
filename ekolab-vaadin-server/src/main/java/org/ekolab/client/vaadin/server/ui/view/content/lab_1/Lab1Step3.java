@@ -1,7 +1,5 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_1;
 
-import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
@@ -9,21 +7,21 @@ import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.util.FieldUtils;
 
 /**
  * Created by 777Al on 06.04.2017.
  */
-@SpringComponent
-@ViewScope
-public class Lab1Step3 extends HorizontalLayout implements LabWizardStep {
+public abstract class Lab1Step3<V extends Lab1Variant> extends HorizontalLayout implements LabWizardStep {
     // ----------------------------- Графические компоненты --------------------------------
-    @Autowired
-    private I18N i18N;
+    private final I18N i18N;
 
-    @Autowired
-    private ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout;
+    private final ParameterWithFormulaeLayout<Lab1Data<V>, V> firstFormLayout;
+
+    public Lab1Step3(I18N i18N, ParameterWithFormulaeLayout<Lab1Data<V>, V> firstFormLayout) {
+        this.i18N = i18N;
+        this.firstFormLayout = firstFormLayout;
+    }
 
     @Override
     public void init() {

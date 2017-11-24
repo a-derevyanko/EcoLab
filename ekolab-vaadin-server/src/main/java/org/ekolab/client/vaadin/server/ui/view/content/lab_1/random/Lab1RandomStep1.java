@@ -7,7 +7,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
 import org.ekolab.server.model.content.lab1.Lab1Data;
-import org.ekolab.server.model.content.lab1.Lab1Variant;
+import org.ekolab.server.model.content.lab1.Lab1RandomVariant;
 import org.springframework.security.util.FieldUtils;
 
 /**
@@ -18,12 +18,12 @@ import org.springframework.security.util.FieldUtils;
 public class Lab1RandomStep1 extends HorizontalLayout implements LabWizardStep {
     private final I18N i18N;
 
-    private final ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout;
+    private final ParameterWithFormulaeLayout<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> firstFormLayout;
 
-    private final ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> secondFormLayout;
+    private final ParameterWithFormulaeLayout<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> secondFormLayout;
 
-    public Lab1RandomStep1(I18N i18N, ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout,
-                           ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> secondFormLayout) {
+    public Lab1RandomStep1(I18N i18N, ParameterWithFormulaeLayout<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> firstFormLayout,
+                           ParameterWithFormulaeLayout<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> secondFormLayout) {
         this.i18N = i18N;
         this.firstFormLayout = firstFormLayout;
         this.secondFormLayout = secondFormLayout;

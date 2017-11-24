@@ -2,7 +2,8 @@ package org.ekolab.server.service.impl.content.lab1.random;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab1.random.Lab1RandomDao;
-import org.ekolab.server.model.content.lab1.Lab1Variant;
+import org.ekolab.server.model.content.lab1.City;
+import org.ekolab.server.model.content.lab1.Lab1RandomVariant;
 import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;
@@ -17,17 +18,18 @@ import java.util.Locale;
  * Created by 777Al on 26.04.2017.
  */
 @Service
-public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1Variant, Lab1RandomDao> implements Lab1RandomService {
+public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1RandomVariant, Lab1RandomDao> implements Lab1RandomService {
 
     public Lab1RandomServiceImpl(Lab1RandomDao labDao, UserInfoService userInfoService, ReportService reportService, MessageSource messageSource, StudentInfoService studentInfoService) {
         super(labDao, userInfoService, reportService, messageSource, studentInfoService);
     }
 
     @Override
-    protected Lab1Variant generateNewLabVariant() {
-        Lab1Variant variant = new Lab1Variant();
+    protected Lab1RandomVariant generateNewLabVariant() {
+        Lab1RandomVariant variant = new Lab1RandomVariant();
 
         variant.setName(messageSource.getMessage("lab1.random-object-name", null, Locale.getDefault()));
+        variant.setCity(City.values()[RandomUtils.nextInt(City.values().length)]);
         variant.setOutsideAirTemperature(-25 + RandomUtils.nextInt(11) * 5);
         variant.setSteamProductionCapacity(30 + RandomUtils.nextInt(5)*5);
 

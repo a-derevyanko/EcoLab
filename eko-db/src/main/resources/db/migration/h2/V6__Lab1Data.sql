@@ -90,13 +90,14 @@ COMMENT ON COLUMN LAB1DATA.d IS 'Безразмерный коэффициент
 COMMENT ON COLUMN LAB1DATA.distance_From_Emission_Source IS 'Расстояние от источника выбросов, на котором приземные концентрации загрязняющих веществ достигают максимального значения';
 COMMENT ON COLUMN LAB1DATA.maximum_Surface_Concentration IS 'Максимальная приземная концентрация оксидов азота';
 
-CREATE TABLE lab1variant (
+CREATE TABLE LAB1_RANDOM_VARIANT (
   id                           BIGINT IDENTITY PRIMARY KEY REFERENCES LAB1DATA (id) ON DELETE CASCADE,
   version                      INT,
   /**
   *Блок свойств лабы
   */
   name                                      VARCHAR(256),
+  CITY                                      VARCHAR(256),
   outside_Air_Temperature                   INT,
   steam_Production_Capacity                 INT,
   oxygen_Concentration_Point                DOUBLE,
@@ -108,20 +109,21 @@ CREATE TABLE lab1variant (
 /*
 * Создадим индексы
 */
-CREATE UNIQUE INDEX ix_lab1variant_id
-  ON lab1variant (id);
+CREATE UNIQUE INDEX ix_LAB1_RANDOM_VARIANT_id
+  ON LAB1_RANDOM_VARIANT (id);
 
 /*
 * Добавим комментарии
 */
-COMMENT ON TABLE lab1variant IS 'Вариант лабораторной №1';
-COMMENT ON COLUMN lab1variant.flue_gas_nox_concentration IS 'Концентрация оксидов азота в сухих газах';
-COMMENT ON COLUMN lab1variant.stack_exit_temperature IS 'Температура газов на выходе из дымовой трубы';
-COMMENT ON COLUMN lab1variant.outside_air_temperature IS 'Температура наружного воздуха';
-COMMENT ON COLUMN lab1variant.steam_Production_Capacity IS 'Паровая нагрузка котла';
-COMMENT ON COLUMN lab1variant.oxygen_Concentration_Point IS 'Содержание кислорода в сечении газохода, где проводились измерения';
-COMMENT ON COLUMN lab1variant.fuel_Consumer IS 'Расход природного газа на котел';
-COMMENT ON COLUMN lab1variant.name IS 'Название объекта';
+COMMENT ON TABLE LAB1_RANDOM_VARIANT IS 'Вариант лабораторной №1';
+COMMENT ON COLUMN LAB1_RANDOM_VARIANT.flue_gas_nox_concentration IS 'Концентрация оксидов азота в сухих газах';
+COMMENT ON COLUMN LAB1_RANDOM_VARIANT.stack_exit_temperature IS 'Температура газов на выходе из дымовой трубы';
+COMMENT ON COLUMN LAB1_RANDOM_VARIANT.outside_air_temperature IS 'Температура наружного воздуха';
+COMMENT ON COLUMN LAB1_RANDOM_VARIANT.steam_Production_Capacity IS 'Паровая нагрузка котла';
+COMMENT ON COLUMN LAB1_RANDOM_VARIANT.oxygen_Concentration_Point IS 'Содержание кислорода в сечении газохода, где проводились измерения';
+COMMENT ON COLUMN LAB1_RANDOM_VARIANT.fuel_Consumer IS 'Расход природного газа на котел';
+COMMENT ON COLUMN LAB1_RANDOM_VARIANT.name IS 'Название объекта';
+COMMENT ON COLUMN LAB1_RANDOM_VARIANT.city IS 'Город';
 
 CREATE TABLE lab1_experiment_log (
   id                           BIGINT IDENTITY PRIMARY KEY REFERENCES LAB1DATA (id) ON DELETE CASCADE,

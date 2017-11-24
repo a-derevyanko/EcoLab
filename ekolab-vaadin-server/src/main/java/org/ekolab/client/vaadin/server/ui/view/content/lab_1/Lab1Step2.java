@@ -1,7 +1,5 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_1;
 
-import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Alignment;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
@@ -15,14 +13,12 @@ import org.springframework.security.util.FieldUtils;
 /**
  * Created by 777Al on 06.04.2017.
  */
-@SpringComponent
-@ViewScope
-public class Lab1Step2 extends LabStepWithHelp {
+public abstract class Lab1Step2<V extends Lab1Variant> extends LabStepWithHelp {
 
     // ----------------------------- Графические компоненты --------------------------------
-    private final ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout;
+    private final ParameterWithFormulaeLayout<Lab1Data<V>, V> firstFormLayout;
 
-    public Lab1Step2(I18N i18N, ResourceWindow resourceWindow, ResourceService resourceService, ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> firstFormLayout) {
+    public Lab1Step2(I18N i18N, ResourceWindow resourceWindow, ResourceService resourceService, ParameterWithFormulaeLayout<Lab1Data<V>, V> firstFormLayout) {
         super(i18N, resourceWindow, resourceService);
         this.firstFormLayout = firstFormLayout;
     }

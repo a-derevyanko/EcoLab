@@ -11,6 +11,7 @@ import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulae
 import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.model.content.lab1.Lab1RandomVariant;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
 import org.ekolab.server.service.api.content.ValidationService;
 import org.ekolab.server.service.api.content.lab1.experiment.Lab1ExperimentService;
@@ -26,8 +27,8 @@ import org.vaadin.spring.annotation.PrototypeScope;
 public class Lab1UIConfig {
     @Bean
     @ViewScope
-    public Binder<Lab1Data<Lab1Variant>> lab1Binder() {
-        return new BeanValidationBinder<Lab1Data<Lab1Variant>>((Class) Lab1Data.class);
+    public Binder<Lab1Data<Lab1RandomVariant>> lab1Binder() {
+        return new BeanValidationBinder<Lab1Data<Lab1RandomVariant>>((Class) Lab1Data.class);
     }
 
     @Bean
@@ -50,7 +51,7 @@ public class Lab1UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterLayout<Lab1Data<Lab1Variant>, Lab1Variant> parameterLayout1(
+    public ParameterLayout<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> parameterLayout1(
             Lab1RandomService labService,
             I18N i18N,
             ResourceService resourceService,
@@ -62,7 +63,7 @@ public class Lab1UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterWithFormulaeLayout<Lab1Data<Lab1Variant>, Lab1Variant> parameterWithFormulaeLayout1(
+    public ParameterWithFormulaeLayout<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> parameterWithFormulaeLayout1(
             Lab1RandomService labService,
             I18N i18N,
             ResourceService resourceService,

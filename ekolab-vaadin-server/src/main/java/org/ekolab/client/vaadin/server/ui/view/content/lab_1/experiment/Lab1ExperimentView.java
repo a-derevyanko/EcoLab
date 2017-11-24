@@ -20,7 +20,7 @@ public class Lab1ExperimentView extends LabExperimentView<Lab1Data<Lab1Experimen
     public static final String NAME = "lab1experiment";
 
     public Lab1ExperimentView(Lab1ExperimentPresentationStep presentationStep, Lab1ExperimentStep1 step1,
-                              Lab1Step2 step2, Lab1Step3 step3, Binder<Lab1ExperimentLog> variantBinder) {
+                              Lab1Step2<Lab1ExperimentLog> step2, Lab1Step3<Lab1ExperimentLog> step3, Binder<Lab1ExperimentLog> variantBinder) {
         super(variantBinder);
         labSteps.add(presentationStep);
         labSteps.add(step1);

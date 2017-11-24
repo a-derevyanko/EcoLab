@@ -1,7 +1,5 @@
 package org.ekolab.server.service.api.content;
 
-import org.ekolab.server.model.content.lab3.City;
-
 import java.net.URL;
 
 /**
