@@ -96,7 +96,6 @@ CREATE TABLE LAB1_RANDOM_VARIANT (
   /**
   *Блок свойств лабы
   */
-  name                                      VARCHAR(256),
   CITY                                      VARCHAR(256),
   outside_Air_Temperature                   INT,
   steam_Production_Capacity                 INT,
@@ -122,7 +121,6 @@ COMMENT ON COLUMN LAB1_RANDOM_VARIANT.outside_air_temperature IS 'Темпера
 COMMENT ON COLUMN LAB1_RANDOM_VARIANT.steam_Production_Capacity IS 'Паровая нагрузка котла';
 COMMENT ON COLUMN LAB1_RANDOM_VARIANT.oxygen_Concentration_Point IS 'Содержание кислорода в сечении газохода, где проводились измерения';
 COMMENT ON COLUMN LAB1_RANDOM_VARIANT.fuel_Consumer IS 'Расход природного газа на котел';
-COMMENT ON COLUMN LAB1_RANDOM_VARIANT.name IS 'Название объекта';
 COMMENT ON COLUMN LAB1_RANDOM_VARIANT.city IS 'Город';
 
 CREATE TABLE lab1_experiment_log (

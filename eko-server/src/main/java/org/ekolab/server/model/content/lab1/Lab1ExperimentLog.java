@@ -4,6 +4,10 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Lab1ExperimentLog extends Lab1Variant {
+    /**
+     * Название объекта
+     */
+    private String name;
 
     /**
      * Время проведения измерений
@@ -44,18 +48,28 @@ public class Lab1ExperimentLog extends Lab1Variant {
         this.time = time;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Lab1ExperimentLog)) return false;
+        if (!super.equals(o)) return false;
         Lab1ExperimentLog that = (Lab1ExperimentLog) o;
-        return Objects.equals(stacksHeight, that.stacksHeight) &&
+        return Objects.equals(name, that.name) &&
                 Objects.equals(time, that.time) &&
+                Objects.equals(stacksHeight, that.stacksHeight) &&
                 Objects.equals(stacksDiameter, that.stacksDiameter);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(stacksHeight, stacksDiameter, time);
+        return Objects.hash(super.hashCode(), name, time, stacksHeight, stacksDiameter);
     }
 }

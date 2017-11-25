@@ -28,7 +28,6 @@ public class Lab1RandomDaoImpl extends Lab1DaoImpl<Lab1RandomVariant> implements
         public Lab1Data<Lab1RandomVariant> map(Record record) {
             Lab1Data<Lab1RandomVariant> data = super.map(record);
             data.getVariant().setId(record.get(LAB1_RANDOM_VARIANT.ID));
-            data.getVariant().setName(record.get(LAB1_RANDOM_VARIANT.NAME));
             data.getVariant().setCity(record.get(LAB1_RANDOM_VARIANT.CITY) == null ? null : City.valueOf(record.get(LAB1_RANDOM_VARIANT.CITY)));
             data.getVariant().setOutsideAirTemperature(record.get(LAB1_RANDOM_VARIANT.OUTSIDE_AIR_TEMPERATURE));
             data.getVariant().setSteamProductionCapacity(record.get(LAB1_RANDOM_VARIANT.STEAM_PRODUCTION_CAPACITY));
@@ -67,7 +66,6 @@ public class Lab1RandomDaoImpl extends Lab1DaoImpl<Lab1RandomVariant> implements
     protected void saveVariant(Lab1RandomVariant variant) {
         dsl.insertInto(LAB1_RANDOM_VARIANT,
                 LAB1_RANDOM_VARIANT.ID,
-                LAB1_RANDOM_VARIANT.NAME,
                 LAB1_RANDOM_VARIANT.CITY,
                 LAB1_RANDOM_VARIANT.OUTSIDE_AIR_TEMPERATURE,
                 LAB1_RANDOM_VARIANT.STEAM_PRODUCTION_CAPACITY,
@@ -77,7 +75,6 @@ public class Lab1RandomDaoImpl extends Lab1DaoImpl<Lab1RandomVariant> implements
                 LAB1_RANDOM_VARIANT.FLUE_GAS_NOX_CONCENTRATION).
                 values(
                         variant.getId(),
-                        variant.getName(),
                         variant.getCity().name(),
                         variant.getOutsideAirTemperature(),
                         variant.getSteamProductionCapacity(),

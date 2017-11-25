@@ -14,11 +14,28 @@ import org.ekolab.server.service.api.content.ValidationService;
 
 import java.lang.reflect.Field;
 import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * Created by 777Al on 29.06.2017.
  */
 public abstract class UIUtils {
+    private static class StringToDoubleConverterWithMaximumFractionDigits extends StringToDoubleConverter {
+
+        public StringToDoubleConverterWithMaximumFractionDigits(I18N i18N) {
+            super(i18N.get("validator.must-be-double",
+                    DecimalFormatSymbols.getInstance(UI.getCurrent().getLocale()).getDecimalSeparator()));
+        }
+
+        @Override
+        protected NumberFormat getFormat(Locale locale) {
+            NumberFormat format = super.getFormat(locale);
+            format.setMaximumFractionDigits(6);
+            return format;
+        }
+    }
+
     public static Converter<String, ?> getStringConverter(Field field, I18N i18N) {
         Class<?> propClass = ReflectTools.convertPrimitiveType(field.getType());
         return getStringConverter(propClass, i18N);
@@ -28,8 +45,7 @@ public abstract class UIUtils {
         if (propClass == Integer.class) {
             return (Converter<String, T>) new StringToIntegerConverter(i18N.get("validator.must-be-number"));
         } else if (propClass == Double.class) {
-            return (Converter<String, T>) new StringToDoubleConverter(i18N.get("validator.must-be-double",
-                    DecimalFormatSymbols.getInstance(UI.getCurrent().getLocale()).getDecimalSeparator()));
+            return (Converter<String, T>) new StringToDoubleConverterWithMaximumFractionDigits(i18N);
         } else {
             return null;
         }
