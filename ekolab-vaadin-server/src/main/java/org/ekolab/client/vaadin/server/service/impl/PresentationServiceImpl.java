@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 @UIScope
 public class PresentationServiceImpl implements PresentationService {
-    @Autowired
     private final ResourceService resourceService;
 
     public PresentationServiceImpl(ResourceService resourceService) {

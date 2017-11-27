@@ -37,23 +37,17 @@ public class VaadinUI extends UI {
     private static final long serialVersionUID = -2988327335267095955L;
     private static final Logger LOG = LoggerFactory.getLogger(VaadinUI.class);
 
-    @Autowired
-    private EkoLabNavigator navigator;
+    private final EkoLabNavigator navigator;
 
-    @Autowired
-    private EkoLabMenuBar menuBar;
+    private final EkoLabMenuBar menuBar;
 
-    @Autowired
-    private ExceptionNotification exceptionNotification;
+    private final ExceptionNotification exceptionNotification;
 
-    @Autowired
-    private ViewContainerPanel viewContainer;
+    private final ViewContainerPanel viewContainer;
 
-    @Autowired
-    protected VaadinSharedSecurity vaadinSecurity;
+    protected final VaadinSharedSecurity vaadinSecurity;
 
-    @Autowired
-    private I18N i18N;
+    private final I18N i18N;
 
     // ----------------------------- Графические компоненты --------------------------------
     private final VerticalLayout root = new VerticalLayout();
@@ -62,6 +56,16 @@ public class VaadinUI extends UI {
     private UserInfo currentUserInfo;
 
     private StudentInfo currentStudentInfo;
+
+    @Autowired
+    public VaadinUI(EkoLabNavigator navigator, EkoLabMenuBar menuBar, ExceptionNotification exceptionNotification, ViewContainerPanel viewContainer, VaadinSharedSecurity vaadinSecurity, I18N i18N) {
+        this.navigator = navigator;
+        this.menuBar = menuBar;
+        this.exceptionNotification = exceptionNotification;
+        this.viewContainer = viewContainer;
+        this.vaadinSecurity = vaadinSecurity;
+        this.i18N = i18N;
+    }
 
     @Override
     protected void init(VaadinRequest request) {

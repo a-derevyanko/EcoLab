@@ -37,7 +37,6 @@ public class UserInfoDataProvider extends AbstractBackEndDataProvider<UserInfo, 
         return info;
     };
 
-    @Autowired
     private final DSLContext dsl;
 
     public UserInfoDataProvider(DSLContext dsl) {

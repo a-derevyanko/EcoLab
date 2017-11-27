@@ -16,7 +16,6 @@ import org.ekolab.client.vaadin.server.ui.common.UsersPanel;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.common.Role;
 import org.ekolab.server.model.UserGroup;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -28,11 +27,16 @@ import javax.annotation.security.RolesAllowed;
 public class AdminManagingView extends VerticalLayout implements View {
     public static final String NAME = "admin";
 
-    @Autowired
     private final I18N i18N;
 
-    @Autowired
     private final EkoLabVaadinProperties systemProperties;
+
+    private final UsersPanel adminsPanel;
+
+    private final UsersPanel teachersPanel;
+
+    private final UsersPanel studentsPanel;
+
     // ---------------------------- Графические компоненты --------------------
     private final TextField autoSaveRate = new TextField();
 
@@ -41,13 +45,6 @@ public class AdminManagingView extends VerticalLayout implements View {
     private final HorizontalLayout systemPropertiesPanel = new HorizontalLayout(properties);
 
     private final Binder<EkoLabVaadinProperties.Lab> binder = new Binder<>();
-
-    @Autowired
-    protected final UsersPanel adminsPanel;
-    @Autowired
-    protected final UsersPanel teachersPanel;
-    @Autowired
-    protected final UsersPanel studentsPanel;
 
     protected final TabSheet userTabs = new TabSheet();
 

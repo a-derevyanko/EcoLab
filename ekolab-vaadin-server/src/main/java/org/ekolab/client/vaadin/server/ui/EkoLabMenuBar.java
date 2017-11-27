@@ -32,19 +32,14 @@ import java.util.Collection;
 @SpringComponent
 public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
     // ---------------------- Данные экземпляра ----------------------------------
-    @Autowired
     private final I18N i18N;
 
-    @Autowired
     private final EkoLabNavigator navigator;
 
-    @Autowired
     private final VaadinSecurity vaadinSecurity;
 
-    @Autowired
     private final UserInfoService userDetailsManager;
 
-    @Autowired
     private final EditUserWindow userDataWindow;
 
     // ---------------------- Графические компоненты -----------------------------
@@ -56,6 +51,7 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
     private MenuItem teacherManagingItem;
     private MenuItem labChooserItem;
 
+    @Autowired
     public EkoLabMenuBar(I18N i18N, EkoLabNavigator navigator, VaadinSecurity vaadinSecurity, UserInfoService userDetailsManager, EditUserWindow userDataWindow) {
         this.i18N = i18N;
         this.navigator = navigator;

@@ -6,6 +6,7 @@ import org.ekolab.server.dao.impl.DaoUtils;
 import org.ekolab.server.dao.impl.content.LabDaoImpl;
 import org.ekolab.server.model.content.lab1.Lab1Data;
 import org.ekolab.server.model.content.lab1.Lab1Variant;
+import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.springframework.context.annotation.Profile;
@@ -20,6 +21,10 @@ import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
  */
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
 public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1Data<V>> implements Lab1Dao<Lab1Data<V>> {
+    public Lab1DaoImpl(DSLContext dsl) {
+        super(dsl);
+    }
+
     protected abstract static class Lab1DataMapper<V extends Lab1Variant>  implements RecordMapper<Record, Lab1Data<V>> {
         @Override
         public Lab1Data<V> map(Record record) {

@@ -20,8 +20,12 @@ import static org.ekolab.server.db.h2.public_.Tables.*;
 @Service
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
 public class StudentInfoDaoImpl implements StudentInfoDao {
+    private final DSLContext dsl;
+
     @Autowired
-    private DSLContext dsl;
+    public StudentInfoDaoImpl(DSLContext dsl) {
+        this.dsl = dsl;
+    }
 
     @Override
     public String getStudentGroup(String userName) {

@@ -19,13 +19,10 @@ import javax.annotation.PostConstruct;
 @SpringComponent
 @UIScope
 public class LabTypeSelectorWindow extends BaseEkoLabWindow<LabTypeSelectorWindow.LabTypeSelectorWindowSettings> {
-    @Autowired
     private final EkoLabNavigator navigator;
 
-    @Autowired
     private final I18N i18N;
 
-    @Autowired
     private final ResourceService resourceService;
 
     // ---------------------------- Графические компоненты --------------------

@@ -42,7 +42,6 @@ import java.util.zip.ZipOutputStream;
 public class ResourceServiceImpl implements ResourceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceServiceImpl.class);
 
-    @Autowired
     private final I18N i18N;
 
     public ResourceServiceImpl(I18N i18N) {

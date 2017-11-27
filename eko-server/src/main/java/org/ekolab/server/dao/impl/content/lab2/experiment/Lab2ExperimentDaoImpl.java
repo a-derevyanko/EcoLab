@@ -6,6 +6,7 @@ import org.ekolab.server.dao.impl.DaoUtils;
 import org.ekolab.server.dao.impl.content.lab2.Lab2DaoImpl;
 import org.ekolab.server.model.content.lab2.Lab2Data;
 import org.ekolab.server.model.content.lab2.Lab2ExperimentLog;
+import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,10 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
             return new Lab2ExperimentLog();
         }
     };
+
+    public Lab2ExperimentDaoImpl(DSLContext dsl) {
+        super(dsl);
+    }
 
     @Override
     public Lab2Data<Lab2ExperimentLog> getLastLabByUser(String userName, boolean completed) {

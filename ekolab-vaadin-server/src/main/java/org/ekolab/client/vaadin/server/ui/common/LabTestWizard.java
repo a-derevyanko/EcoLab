@@ -7,10 +7,22 @@ import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.RadioButtonGroup;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.binding.IntegerExpression;
-import javafx.beans.property.*;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.WritableValue;
 import org.apache.commons.lang3.RandomUtils;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
@@ -19,10 +31,13 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.windows.LabTestFinishedWindow;
 import org.ekolab.server.common.Role;
-import org.ekolab.server.model.content.*;
+import org.ekolab.server.model.content.LabTest;
+import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
+import org.ekolab.server.model.content.LabTestQuestion;
+import org.ekolab.server.model.content.LabTestQuestionVariant;
+import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
 import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.api.content.UserLabService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.vaadin.spring.annotation.PrototypeScope;
@@ -31,7 +46,12 @@ import org.vaadin.teemu.wizards.event.WizardCompletedEvent;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -39,22 +59,21 @@ import java.util.*;
 @RolesAllowed(Role.STUDENT)
 @PrototypeScope // При повторном входе тест должен быть другим
 public abstract class LabTestWizard extends Wizard implements View {
-    @Autowired
-    private Authentication currentUser;
+    private final Authentication currentUser;
 
-    @Autowired
-    private LabTestFinishedWindow labTestFinishedWindow;
+    private final LabTestFinishedWindow labTestFinishedWindow;
 
-    protected final I18N i18N;
     protected final UserLabService userLabService;
     protected final LabService<?, ?> labService;
 
     // ---------------------------- Графические компоненты --------------------
 
-    protected LabTestWizard(I18N i18N, UserLabService userLabService, LabService<?, ?> labService) {
-        this.i18N = i18N;
+    protected LabTestWizard(I18N i18N, UserLabService userLabService, LabService<?, ?> labService, Authentication currentUser, LabTestFinishedWindow labTestFinishedWindow) {
+        super(i18N);
         this.userLabService = userLabService;
         this.labService = labService;
+        this.currentUser = currentUser;
+        this.labTestFinishedWindow = labTestFinishedWindow;
     }
 
     @PostConstruct

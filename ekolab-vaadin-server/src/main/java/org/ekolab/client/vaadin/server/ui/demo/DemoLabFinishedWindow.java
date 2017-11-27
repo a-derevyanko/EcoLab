@@ -5,6 +5,8 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Notification;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.LabData;
@@ -24,6 +26,10 @@ public class DemoLabFinishedWindow<T extends LabData<V>, V extends LabVariant> e
     // ---------------------------- Графические компоненты --------------------
     private final Action saveAction = new ShortcutAction("SaveData",
             ShortcutAction.KeyCode.S, new int[] {ShortcutAction.ModifierKey.ALT});
+
+    public DemoLabFinishedWindow(I18N i18N, EkoLabNavigator navigator) {
+        super(i18N, navigator);
+    }
 
     @PostConstruct
     public void init() {

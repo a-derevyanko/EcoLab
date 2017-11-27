@@ -23,8 +23,12 @@ import static org.ekolab.server.db.h2.public_.tables.PersistentLogins.PERSISTENT
 @Service
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
 public class TokenRepositoryDaoImpl implements TokenRepositoryDao {
+    private final DSLContext dsl;
+
     @Autowired
-    private DSLContext dsl;
+    public TokenRepositoryDaoImpl(DSLContext dsl) {
+        this.dsl = dsl;
+    }
 
     public void insertToken(String userName, String series, String token, Date lastUsed) {
         dsl.insertInto(PERSISTENT_LOGINS, PERSISTENT_LOGINS.USER_ID, PERSISTENT_LOGINS.SERIES, PERSISTENT_LOGINS.TOKEN, PERSISTENT_LOGINS.LAST_USED)

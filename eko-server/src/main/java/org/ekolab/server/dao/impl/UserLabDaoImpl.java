@@ -1,14 +1,20 @@
 package org.ekolab.server.dao.impl;
 
 import org.ekolab.server.dao.api.content.UserLabDao;
+import org.ekolab.server.model.LabMode;
 import org.jooq.DSLContext;
+import org.jooq.Record2;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
+import static org.ekolab.server.db.h2.public_.Tables.LAB1_EXPERIMENT_LOG;
+import static org.ekolab.server.db.h2.public_.Tables.LAB1_RANDOM_VARIANT;
 import static org.ekolab.server.db.h2.public_.Tables.LAB3DATA;
 import static org.ekolab.server.db.h2.public_.Tables.USER_TEST_HISTORY;
 
@@ -26,13 +32,16 @@ public class UserLabDaoImpl implements UserLabDao {
     }
 
     @Override
-    public Collection<Integer> getCompletedLabs(String userName) {
-        return dsl.select(DSL.val(1)).from(LAB1DATA).
+    public Map<Integer, LabMode> getCompletedLabs(String userName) {
+        return dsl.select(DSL.val(1), DSL.val(LabMode.EXPERIMENT.name())).from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1DATA.ID.eq(LAB1_EXPERIMENT_LOG.ID)).
                 where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB1DATA.COMPLETED.eq(true))
+                .union(dsl.select(DSL.val(1), DSL.val(LabMode.RANDOM.name())).from(LAB1DATA).join(LAB1_RANDOM_VARIANT).on(LAB1DATA.ID.eq(LAB1_RANDOM_VARIANT.ID)).
+                        where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB1DATA.COMPLETED.eq(true)))
         /*.union(dsl.select(DSL.val(2)).from(LAB2DATA).
                 where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB2DATA.COMPLETED.eq(true)))*/
-        .union(dsl.select(DSL.val(3)).from(LAB3DATA).
-                where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB3DATA.COMPLETED.eq(true))).fetchInto(Integer.class);
+        .union(dsl.select(DSL.val(3), DSL.val(LabMode.NONE.name())).from(LAB3DATA).
+                where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB3DATA.COMPLETED.eq(true))).
+                        fetch().stream().collect(Collectors.toMap(Record2::value1, r -> LabMode.valueOf(r.value2())));
 
         /*
         Collection<Integer> completed = new ArrayList<>();

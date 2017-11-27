@@ -36,11 +36,15 @@ public class LabFinishedWindow<T extends LabData<V>, V extends LabVariant> exten
     private final Button saveReportButton = new Button("Save report", VaadinIcons.DOWNLOAD);
     private final Button toMainMenuButton = new Button("Exit to main menu", VaadinIcons.EXIT);
 
-    @Autowired
-    private I18N i18N;
+    private final I18N i18N;
+
+    private final EkoLabNavigator navigator;
 
     @Autowired
-    private EkoLabNavigator navigator;
+    public LabFinishedWindow(I18N i18N, EkoLabNavigator navigator) {
+        this.i18N = i18N;
+        this.navigator = navigator;
+    }
 
     @PostConstruct
     public void init() {

@@ -1,7 +1,10 @@
 package org.ekolab.server.service.api.content;
 
+import org.ekolab.server.model.LabMode;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Map;
 
 public interface UserLabService {
     /**
@@ -16,7 +19,7 @@ public interface UserLabService {
      * @param userName имя пользователя
      * @return лабораторные работы, пройденные пользователем
      */
-    Collection<Integer> getCompletedLabs(String userName);
+    Map<Integer, LabMode> getCompletedLabs(String userName);
 
     /**
      * Устанавливает признак пройденного теста для лабораторной

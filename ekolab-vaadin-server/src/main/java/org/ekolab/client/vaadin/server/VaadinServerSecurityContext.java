@@ -30,12 +30,16 @@ import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
 @EnableVaadinSharedSecurity
 @Import(VaadinSharedSecurityConfiguration.class)
 public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
+    private final AuthenticationProvider authenticationProvider;
+    private final RememberMeServices rememberMeServices;
+    private final PersistentTokenRepository persistentTokenRepository;
+
     @Autowired
-    private AuthenticationProvider authenticationProvider;
-    @Autowired
-    private RememberMeServices rememberMeServices;
-    @Autowired
-    private PersistentTokenRepository persistentTokenRepository;
+    public VaadinServerSecurityContext(AuthenticationProvider authenticationProvider, RememberMeServices rememberMeServices, PersistentTokenRepository persistentTokenRepository) {
+        this.authenticationProvider = authenticationProvider;
+        this.rememberMeServices = rememberMeServices;
+        this.persistentTokenRepository = persistentTokenRepository;
+    }
 /*
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {

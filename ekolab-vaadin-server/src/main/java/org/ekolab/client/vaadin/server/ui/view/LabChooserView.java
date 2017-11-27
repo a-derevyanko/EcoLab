@@ -33,12 +33,14 @@ import org.ekolab.client.vaadin.server.ui.view.content.lab_2.random.Lab2RandomDa
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3TestView;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
 import org.ekolab.client.vaadin.server.ui.windows.LabTypeSelectorWindow;
+import org.ekolab.server.model.LabMode;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -47,26 +49,19 @@ import java.util.Collection;
 public class LabChooserView extends VerticalLayout implements View {
     public static final String NAME = "labchooser";
 
-    @Autowired
-    private EkoLabNavigator navigator;
+    private final EkoLabNavigator navigator;
 
-    @Autowired
-    private ResourceService resourceService;
+    private final ResourceService resourceService;
 
-    @Autowired
-    private Authentication currentUser;
+    private final Authentication currentUser;
 
-    @Autowired
-    private UserLabService userLabService;
+    private final UserLabService userLabService;
 
-    @Autowired
-    private PresentationService presentationService;
+    private final PresentationService presentationService;
 
-    @Autowired
-    private I18N i18N;
+    private final I18N i18N;
 
-    @Autowired
-    private LabTypeSelectorWindow labTypeSelectorWindow;
+    private final LabTypeSelectorWindow labTypeSelectorWindow;
 
     // ---------------------------- Графические компоненты --------------------
     private final Gallery gallery = new Gallery();
@@ -89,6 +84,17 @@ public class LabChooserView extends VerticalLayout implements View {
     private final Window labTestChooser = new Window("Choose lab for test", labTestChooserContent);
     private final VerticalLayout labPresentationSelectContent = new VerticalLayout();
     private final PopupView labPresentationSelectView = new PopupView(null, labPresentationSelectContent);
+
+    @Autowired
+    public LabChooserView(EkoLabNavigator navigator, ResourceService resourceService, Authentication currentUser, UserLabService userLabService, PresentationService presentationService, I18N i18N, LabTypeSelectorWindow labTypeSelectorWindow) {
+        this.navigator = navigator;
+        this.resourceService = resourceService;
+        this.currentUser = currentUser;
+        this.userLabService = userLabService;
+        this.presentationService = presentationService;
+        this.i18N = i18N;
+        this.labTypeSelectorWindow = labTypeSelectorWindow;
+    }
 
     @Override
     public void init() throws Exception {
@@ -184,15 +190,15 @@ public class LabChooserView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        Collection<Integer> completedLabs = userLabService.getCompletedLabs(currentUser.getName());
+        Map<Integer, LabMode> completedLabs = userLabService.getCompletedLabs(currentUser.getName());
         Collection<Integer> completedTests = userLabService.getCompletedTests(currentUser.getName());
-        setTestButtonSate(lab1TestButton, completedLabs.contains(1) && !completedTests.contains(1));
-        setTestButtonSate(lab2TestButton, completedLabs.contains(2) && !completedTests.contains(2));
-        setTestButtonSate(lab3TestButton, completedLabs.contains(3) && !completedTests.contains(3));
+        setTestButtonSate(lab1TestButton, completedLabs.containsKey(1) && !completedTests.contains(1));
+        setTestButtonSate(lab2TestButton, completedLabs.containsKey(2) && !completedTests.contains(2));
+        setTestButtonSate(lab3TestButton, completedLabs.containsKey(3) && !completedTests.contains(3));
         boolean isNotStudent = VaadinUI.getCurrent().getCurrentUserInfo().getGroup() != UserGroup.STUDENT;
-        setLabButtonSate(lab1Button, isNotStudent || !completedLabs.contains(1));
-        setLabButtonSate(lab2Button, DevUtils.isProductionVersion() && (isNotStudent || !completedLabs.contains(2)));
-        setLabButtonSate(lab3Button, isNotStudent || !completedLabs.contains(3));
+        setLabButtonSate(lab1Button, isNotStudent || !completedLabs.containsKey(1));
+        setLabButtonSate(lab2Button, DevUtils.isProductionVersion() && (isNotStudent || !completedLabs.containsKey(2)));
+        setLabButtonSate(lab3Button, isNotStudent || !completedLabs.containsKey(3));
         setButtonSate(labDefenceButton, lab1TestButton.isEnabled() || lab2TestButton.isEnabled() || lab3TestButton.isEnabled());
     }
 

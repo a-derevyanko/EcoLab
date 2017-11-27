@@ -6,6 +6,7 @@ import org.ekolab.server.dao.impl.DaoUtils;
 import org.ekolab.server.dao.impl.content.lab2.Lab2DaoImpl;
 import org.ekolab.server.model.content.lab2.Lab2Data;
 import org.ekolab.server.model.content.lab2.Lab2RandomVariant;
+import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,10 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
             return new Lab2RandomVariant();
         }
     };
+
+    public Lab2RandomDaoImpl(DSLContext dsl) {
+        super(dsl);
+    }
 
     @Override
     public Lab2Data<Lab2RandomVariant> getLastLabByUser(String userName, boolean completed) {

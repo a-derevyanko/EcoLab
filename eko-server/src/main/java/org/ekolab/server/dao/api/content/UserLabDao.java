@@ -1,6 +1,9 @@
 package org.ekolab.server.dao.api.content;
 
+import org.ekolab.server.model.LabMode;
+
 import java.util.Collection;
+import java.util.Map;
 
 public interface UserLabDao {
     /**
@@ -15,7 +18,7 @@ public interface UserLabDao {
      * @param userName имя пользователя
      * @return лабораторные работы, пройденные пользователем
      */
-    Collection<Integer> getCompletedLabs(String userName);
+    Map<Integer, LabMode> getCompletedLabs(String userName);
 
     /**
      * Устанавливает признак пройденного теста для лабораторной

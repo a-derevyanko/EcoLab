@@ -28,8 +28,12 @@ import static org.ekolab.server.db.h2.public_.Tables.LAB_TEST_QUESTION_VARIANT;
  * Created by 777Al on 19.04.2017.
  */
 public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
+    protected final DSLContext dsl;
+
     @Autowired
-    protected DSLContext dsl;
+    public LabDaoImpl(DSLContext dsl) {
+        this.dsl = dsl;
+    }
 
     @Override
     public Collection<LabTestQuestion> getTestQuestions(Locale locale) {

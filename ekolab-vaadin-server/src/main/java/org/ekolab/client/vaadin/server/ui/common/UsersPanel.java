@@ -28,16 +28,12 @@ import org.vaadin.spring.annotation.PrototypeScope;
 @PrototypeScope
 public class UsersPanel extends VerticalLayout implements UIComponent {
 
-    @Autowired
     private final EditUserWindow editUserWindow;
 
-    @Autowired
     private final NewUserWindow newUserWindow;
 
-    @Autowired
     private final UserInfoService userInfoService;
 
-    @Autowired
     private final I18N i18N;
 
     private final UserInfoDataProvider userInfoDataProvider;

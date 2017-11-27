@@ -18,8 +18,12 @@ import java.util.ArrayList;
 public abstract class Wizard extends org.vaadin.teemu.wizards.Wizard implements View, WizardProgressListener {
     // ---------------------------- Графические компоненты --------------------
 
+    protected final I18N i18N;
+
     @Autowired
-    private I18N i18N;
+    public Wizard(I18N i18N) {
+        this.i18N = i18N;
+    }
 
     @PostConstruct
     public void init() throws Exception {

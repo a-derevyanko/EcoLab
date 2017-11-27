@@ -9,13 +9,13 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabMailService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.MailSendException;
 
@@ -31,12 +31,13 @@ public class InitialDataWindowWithEmail<T extends LabData<V>, V extends LabVaria
     private final Button sendDataButton = new Button("Send initial data to email", VaadinIcons.AT);
     private final TextField emailField = new TextField();
 
-    @Autowired
     private final LabMailService labMailService;
 
-    public InitialDataWindowWithEmail(LabMailService labMailService) {
+    public InitialDataWindowWithEmail(I18N i18N, LabMailService labMailService) {
+        super(i18N);
         this.labMailService = labMailService;
     }
+
 
     @PostConstruct
     protected void init() {

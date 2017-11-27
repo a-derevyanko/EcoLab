@@ -44,14 +44,18 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
     private final VerticalLayout rightPane = new VerticalLayout(testCompleted, testNotCompleted, toMainMenuButton);
     private final HorizontalLayout content = new HorizontalLayout(testResultAccordion, rightPane);
 
-    @Autowired
-    private I18N i18N;
+    private final I18N i18N;
+
+    private final EkoLabNavigator navigator;
+
+    private final ResourceService resourceService;
 
     @Autowired
-    private EkoLabNavigator navigator;
-
-    @Autowired
-    private ResourceService resourceService;
+    public LabTestFinishedWindow(I18N i18N, EkoLabNavigator navigator, ResourceService resourceService) {
+        this.i18N = i18N;
+        this.navigator = navigator;
+        this.resourceService = resourceService;
+    }
 
     @PostConstruct
     public void init() {

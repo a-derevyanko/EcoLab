@@ -48,8 +48,6 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     protected final List<LabWizardStep<T, V>> labSteps;
 
-    protected final I18N i18N;
-
     protected final Authentication currentUser;
 
     protected final InitialDataWindow<T, V> initialDataWindow;
@@ -72,7 +70,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
                      LabFinishedWindow<T, V> labFinishedWindow,
                      List<LabWizardStep<T, V>> labSteps,
                      ConfirmWindow confirmWindow, VaadinUI ui) {
-        this.i18N = i18N;
+        super(i18N);
         this.currentUser = currentUser;
         this.initialDataWindow = initialDataWindow;
         this.labService = labService;

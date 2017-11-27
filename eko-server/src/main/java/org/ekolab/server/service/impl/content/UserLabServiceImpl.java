@@ -1,6 +1,7 @@
 package org.ekolab.server.service.impl.content;
 
 import org.ekolab.server.dao.api.content.UserLabDao;
+import org.ekolab.server.model.LabMode;
 import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.cache.annotation.CachePut;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -30,7 +32,7 @@ public class UserLabServiceImpl implements UserLabService {
     }
 
     @Override
-    public Collection<Integer> getCompletedLabs(String userName) {
+    public Map<Integer, LabMode> getCompletedLabs(String userName) {
         return dao.getCompletedLabs(userName);
     }
 

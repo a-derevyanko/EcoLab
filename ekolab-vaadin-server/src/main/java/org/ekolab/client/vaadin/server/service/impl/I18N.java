@@ -21,10 +21,8 @@ import java.io.Serializable;
 public class I18N implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(I18N.class);
 
-    @Autowired
     private final MessageSource messageSource;
 
-    @Autowired
     private final VaadinSession vaadinSession;
 
     public I18N(MessageSource messageSource, VaadinSession vaadinSession) {

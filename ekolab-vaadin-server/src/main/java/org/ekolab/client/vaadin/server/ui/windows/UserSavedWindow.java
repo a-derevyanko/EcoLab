@@ -27,8 +27,12 @@ public class UserSavedWindow extends BaseEkoLabWindow<UserSavedWindow.UserSavedW
     private final VerticalLayout content = new VerticalLayout(userSaved, login, password, ok);
 
     // ------------------------------------ Данные экземпляра -------------------------------------------
+    private final I18N i18N;
+
     @Autowired
-    private I18N i18N;
+    public UserSavedWindow(I18N i18N) {
+        this.i18N = i18N;
+    }
 
     @PostConstruct
     public void init() {

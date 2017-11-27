@@ -23,6 +23,6 @@ public class MaximumSurfaceConcentrationValidator implements FieldValidator<Doub
                 labData.getTemperatureCoefficient() * labData.getMassEmissions() * 1000 *
                         labData.getHarmfulSubstancesDepositionCoefficient() * labData.getM() * labData.getN() *
                         labData.getTerrainCoefficient() / Math.pow(labData.getStacksHeight(), 2) *
-                        Math.cbrt(1.0 / (labData.getFlueGasesRate() * dT)), 2));
+                        Math.cbrt(1.0 / (labData.getFlueGasesRate() * dT)), 3));
     }
 }

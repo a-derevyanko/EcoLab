@@ -11,6 +11,7 @@ import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.ekolab.server.model.content.lab3.NumberOfStacks;
 import org.ekolab.server.model.content.lab3.NumberOfUnits;
 import org.ekolab.server.model.content.lab3.WindDirection;
+import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.springframework.context.annotation.Profile;
@@ -106,6 +107,10 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
 
         return data;
     };
+
+    public Lab3DaoImpl(DSLContext dsl) {
+        super(dsl);
+    }
 
     @Override
     public Lab3Data getLastLabByUser(String userName, boolean completed) {

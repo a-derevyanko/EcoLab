@@ -50,8 +50,12 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
     protected final Button printDataButton = new Button("Print initial data", VaadinIcons.PRINT);
     protected final Grid<DataValue> valuesGrid = new Grid<>();
 
+    protected final I18N i18N;
+
     @Autowired
-    protected I18N i18N;
+    public InitialDataWindow(I18N i18N) {
+        this.i18N = i18N;
+    }
 
     @PostConstruct
     protected void init() {
