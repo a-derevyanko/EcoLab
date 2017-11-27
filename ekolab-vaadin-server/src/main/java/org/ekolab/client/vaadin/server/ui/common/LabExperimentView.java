@@ -8,12 +8,19 @@ import com.vaadin.server.FileDownloader;
 import com.vaadin.server.Page;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Button;
+import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.VaadinUI;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
+import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
+import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabExperimentService;
+import org.springframework.security.core.Authentication;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
+
+import java.util.List;
 
 public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S extends LabExperimentService<T, V>> extends LabWizard<T, V, S> {
     // ---------------------------- Графические компоненты --------------------
@@ -23,9 +30,11 @@ public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S ext
 
     private boolean hasVariantChanges;
 
-    public LabExperimentView(Binder<V> variantBinder) {
+    public LabExperimentView(I18N i18N, Authentication currentUser, InitialDataWindow<T, V> initialDataWindow, S labService, Binder<T> binder, LabFinishedWindow<T, V> labFinishedWindow, List<LabWizardStep> labSteps, VaadinUI ui, Binder<V> variantBinder) {
+        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, ui);
         this.variantBinder = variantBinder;
     }
+
 
     @Override
     public void init() throws Exception {

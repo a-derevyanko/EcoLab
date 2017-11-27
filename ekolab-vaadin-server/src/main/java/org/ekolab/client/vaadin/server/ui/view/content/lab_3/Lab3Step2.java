@@ -16,16 +16,20 @@ import org.springframework.security.util.FieldUtils;
  */
 @SpringComponent
 @ViewScope
-public class Lab3Step2 extends HorizontalLayout implements LabWizardStep {
+public class Lab3Step2 extends HorizontalLayout implements LabWizardStep<Lab3Data, Lab3Variant> {
     // ----------------------------- Графические компоненты --------------------------------
-    @Autowired
-    private I18N i18N;
+    private final I18N i18N;
+
+    private final ParameterLayout<Lab3Data, Lab3Variant> firstFormLayout;
+
+    private final ParameterLayout<Lab3Data, Lab3Variant> secondFormLayout;
 
     @Autowired
-    private ParameterLayout<Lab3Data, Lab3Variant> firstFormLayout;
-
-    @Autowired
-    private ParameterLayout<Lab3Data, Lab3Variant> secondFormLayout;
+    public Lab3Step2(I18N i18N, ParameterLayout<Lab3Data, Lab3Variant> firstFormLayout, ParameterLayout<Lab3Data, Lab3Variant> secondFormLayout) {
+        this.i18N = i18N;
+        this.firstFormLayout = firstFormLayout;
+        this.secondFormLayout = secondFormLayout;
+    }
 
     @Override
     public void init() {

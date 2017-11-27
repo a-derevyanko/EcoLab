@@ -1582,9 +1582,6 @@
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
-					<font fontName="DejaVu Sans" size="10"/>
-				</textElement>
 				<textFieldExpression><![CDATA[$P{excessAirRatio}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -3413,9 +3410,6 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
-					<font fontName="DejaVu Sans" size="10"/>
-				</textElement>
 				<textFieldExpression><![CDATA["Параметр \u03C5<sub>м</sub>"]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -3575,9 +3569,6 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
-					<font fontName="DejaVu Sans" size="10"/>
-				</textElement>
 				<textFieldExpression><![CDATA["Коэффициент \u03B7, учитывающий влияние рельефа местности"]]></textFieldExpression>
 			</textField>
 			<textField>

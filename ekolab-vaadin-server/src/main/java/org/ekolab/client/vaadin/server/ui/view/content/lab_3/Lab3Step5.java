@@ -15,6 +15,7 @@ import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Variant;
 import org.ekolab.server.service.api.content.lab3.Lab3ChartType;
 import org.ekolab.server.service.api.content.lab3.Lab3Service;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ import java.util.Arrays;
  */
 @SpringComponent
 @ViewScope
-public class Lab3Step5 extends GridLayout implements LabWizardStep {
+public class Lab3Step5 extends GridLayout implements LabWizardStep<Lab3Data, Lab3Variant> {
     private static final Logger LOGGER = LoggerFactory.getLogger(Lab3Step5.class);
 
     // ----------------------------- Графические компоненты --------------------------------
@@ -39,14 +40,18 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep {
 
     private JFreeChartWrapper chart;
 
-    @Autowired
-    private I18N i18N;
+    private final I18N i18N;
+
+    private final Binder<Lab3Data> dataBinder;
+
+    private final Lab3Service lab3Service;
 
     @Autowired
-    private Binder<Lab3Data> dataBinder;
-
-    @Autowired
-    private Lab3Service lab3Service;
+    public Lab3Step5(I18N i18N, Binder<Lab3Data> dataBinder, Lab3Service lab3Service) {
+        this.i18N = i18N;
+        this.dataBinder = dataBinder;
+        this.lab3Service = lab3Service;
+    }
 
     @Override
     public void init() {

@@ -12,7 +12,7 @@ import org.springframework.security.util.FieldUtils;
 /**
  * Created by 777Al on 06.04.2017.
  */
-public abstract class Lab1Step3<V extends Lab1Variant> extends HorizontalLayout implements LabWizardStep {
+public abstract class Lab1Step3<V extends Lab1Variant> extends HorizontalLayout implements LabWizardStep<Lab1Data<V>, V> {
     // ----------------------------- Графические компоненты --------------------------------
     private final I18N i18N;
 

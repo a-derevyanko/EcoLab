@@ -5,13 +5,15 @@ import com.vaadin.spring.annotation.ViewScope;
 import org.ekolab.client.vaadin.server.service.api.PresentationService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabPresentationStep;
+import org.ekolab.server.model.content.lab3.Lab3Data;
+import org.ekolab.server.model.content.lab3.Lab3Variant;
 
 /**
  * Created by 777Al on 03.04.2017.
  */
 @SpringComponent
 @ViewScope
-public class Lab3PresentationStep extends LabPresentationStep {
+public class Lab3PresentationStep extends LabPresentationStep<Lab3Data, Lab3Variant> {
     // ---------------------------- Графические компоненты --------------------
 
     public Lab3PresentationStep(I18N i18N, PresentationService presentationService) {

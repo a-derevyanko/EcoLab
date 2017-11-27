@@ -8,7 +8,7 @@
         <bold>report/fonts/timesbd.ttf</bold>
         <italic>report/fonts/timesi.ttf</italic>
         <boldItalic>report/fonts/timesbi.ttf</boldItalic>
-        <pdfEncoding>cp1251</pdfEncoding>
+        <pdfEncoding>Identity-H</pdfEncoding>
         <pdfEmbedded>true</pdfEmbedded>
         <exportFonts>
             <export key="net.sf.jasperreports.html">'Times New Roman', Times, serif</export>
@@ -48,7 +48,7 @@
         <normal>report/fonts/DejaVuSans.ttf</normal>
         <bold>report/fonts/DejaVuSans-Bold.ttf</bold>
         <italic>report/fonts/DejaVuSans-BoldOblique.ttf</italic>
-        <pdfEncoding>cp1251</pdfEncoding>
+        <pdfEncoding>Identity-H</pdfEncoding>
         <pdfEmbedded>true</pdfEmbedded>
         <exportFonts>
             <export key="net.sf.jasperreports.html">'DejaVu Sans', DejaVu Sans</export>
@@ -62,7 +62,7 @@
         <bold>report/fonts/Courier-New-Bold.ttf</bold>
         <italic>report/fonts/Courier-New-Italic.ttf</italic>
         <boldItalic>report/fonts/Courier-New-Bold-Italic.ttf</boldItalic>
-        <pdfEncoding>cp1251</pdfEncoding>
+        <pdfEncoding>Identity-H</pdfEncoding>
         <pdfEmbedded>false</pdfEmbedded>
         <exportFonts>
             <export key="net.sf.jasperreports.html">'Courier New', Courier</export>

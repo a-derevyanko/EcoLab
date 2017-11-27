@@ -33,15 +33,16 @@ public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1RandomVariant, La
     @Override
     public Set<DataValue> getInitialDataValues(Lab1RandomVariant data, Locale locale) {
         Set<DataValue> values = super.getInitialDataValues(data, locale);
-        DataValue cityValue = new DataValue();
-        cityValue.setName(messageSource.getMessage("lab1.city", new Object[]{getFieldValueForPrint(data.getCity(), locale)}, locale));
-        cityValue.setValue(labResourceService.getCoatOfArms(data.getCity().name()));
-        values.add(cityValue);
 
         DataValue imageValue = new DataValue();
         imageValue.setName(messageSource.getMessage("lab1.initial-data.boiler", null, locale));
         imageValue.setValue(labResourceService.getBoiler());
         values.add(imageValue);
+
+        DataValue cityValue = new DataValue();
+        cityValue.setName(messageSource.getMessage("lab1.city", new Object[]{getFieldValueForPrint(data.getCity(), locale)}, locale));
+        cityValue.setValue(labResourceService.getCoatOfArms(data.getCity().name()));
+        values.add(cityValue);
 
         return values;
     }
