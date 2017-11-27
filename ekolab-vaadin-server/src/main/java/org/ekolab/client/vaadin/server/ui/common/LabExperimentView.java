@@ -12,6 +12,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.VaadinUI;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
+import org.ekolab.client.vaadin.server.ui.windows.ConfirmWindow;
 import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
 import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.model.content.LabData;
@@ -30,8 +31,8 @@ public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S ext
 
     private boolean hasVariantChanges;
 
-    public LabExperimentView(I18N i18N, Authentication currentUser, InitialDataWindow<T, V> initialDataWindow, S labService, Binder<T> binder, LabFinishedWindow<T, V> labFinishedWindow, List<LabWizardStep> labSteps, VaadinUI ui, Binder<V> variantBinder) {
-        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, ui);
+    public LabExperimentView(I18N i18N, Authentication currentUser, InitialDataWindow<T, V> initialDataWindow, S labService, Binder<T> binder, LabFinishedWindow<T, V> labFinishedWindow, List<LabWizardStep<T, V>> labSteps, ConfirmWindow confirmWindow, VaadinUI ui, Binder<V> variantBinder) {
+        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui);
         this.variantBinder = variantBinder;
     }
 

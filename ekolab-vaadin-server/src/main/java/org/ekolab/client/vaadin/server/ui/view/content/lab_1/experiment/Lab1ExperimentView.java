@@ -6,6 +6,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.VaadinUI;
 import org.ekolab.client.vaadin.server.ui.common.LabExperimentView;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
+import org.ekolab.client.vaadin.server.ui.windows.ConfirmWindow;
 import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
 import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.common.Profiles;
@@ -32,8 +33,10 @@ public class Lab1ExperimentView extends LabExperimentView<Lab1Data<Lab1Experimen
                               Binder<Lab1Data<Lab1ExperimentLog>> binder,
                               LabFinishedWindow<Lab1Data<Lab1ExperimentLog>,
                                       Lab1ExperimentLog> labFinishedWindow,
-                              List<LabWizardStep> labSteps, VaadinUI ui,
+                              List<LabWizardStep<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog>> labSteps,
+                              ConfirmWindow confirmWindow,
+                              VaadinUI ui,
                               Binder<Lab1ExperimentLog> variantBinder) {
-        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, ui, variantBinder);
+        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui, variantBinder);
     }
 }

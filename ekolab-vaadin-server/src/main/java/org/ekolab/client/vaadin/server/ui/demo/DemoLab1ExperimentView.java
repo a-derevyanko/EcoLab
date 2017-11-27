@@ -6,6 +6,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.VaadinUI;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.experiment.Lab1ExperimentView;
+import org.ekolab.client.vaadin.server.ui.windows.ConfirmWindow;
 import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
 import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.common.Profiles;
@@ -24,7 +25,13 @@ import java.util.List;
 @Profile(value = {Profiles.MODE.DEMO, Profiles.MODE.DEV})
 public class DemoLab1ExperimentView extends Lab1ExperimentView {
 
-    public DemoLab1ExperimentView(I18N i18N, Authentication currentUser, InitialDataWindow<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> initialDataWindow, Lab1ExperimentService labService, Binder<Lab1Data<Lab1ExperimentLog>> binder, LabFinishedWindow<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> labFinishedWindow, List<LabWizardStep> labSteps, VaadinUI ui, Binder<Lab1ExperimentLog> variantBinder) {
-        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, ui, variantBinder);
+    public DemoLab1ExperimentView(I18N i18N, Authentication currentUser, InitialDataWindow<Lab1Data<Lab1ExperimentLog>,
+            Lab1ExperimentLog> initialDataWindow, Lab1ExperimentService labService,
+                                  Binder<Lab1Data<Lab1ExperimentLog>> binder,
+                                  LabFinishedWindow<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> labFinishedWindow,
+                                  List<LabWizardStep<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog>> labSteps,
+                                  ConfirmWindow confirmWindow,
+                                  VaadinUI ui, Binder<Lab1ExperimentLog> variantBinder) {
+        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui, variantBinder);
     }
 }

@@ -5,6 +5,6 @@ import org.ekolab.server.model.content.LabData;
 /**
  * Created by Андрей on 24.06.2017.
  */
-public class Lab2Data extends LabData<Lab2Variant> {
+public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
 
 }

@@ -38,6 +38,5 @@ public abstract class Lab1Step2<V extends Lab1Variant> extends LabStepWithHelp<V
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "dryGasesFlowRate"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "massEmissions"));
         firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasesSpeed"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "f"));
     }
 }

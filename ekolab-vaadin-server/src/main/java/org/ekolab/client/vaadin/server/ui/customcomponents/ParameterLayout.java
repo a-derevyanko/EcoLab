@@ -92,7 +92,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
         throw new UnsupportedOperationException();
     }
 
-    private void addCaption(String fieldName, int row) {
+    public void addCaption(String fieldName, int row) {
         String fieldCaption = parameterCustomizer.getParameterPrefix() + i18N.get(fieldName);
         String fieldDimension = i18N.get(fieldName + "-dimension");
         Label captionLabel = new Label(fieldDimension.isEmpty() ? fieldCaption : fieldCaption + " (" + fieldDimension + ')', ContentMode.HTML);
@@ -150,7 +150,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
     }
 
 
-    private void addInfoButton(String fieldName, int row) {
+    public void addInfoButton(String fieldName, int row) {
         if (res.isResourceExists(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)) {
             Button infoButton = new Button(VaadinIcons.QUESTION);
             infoButton.addClickListener(event -> resourceWindow.show(

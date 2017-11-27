@@ -51,7 +51,7 @@ public class Lab1UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterLayout<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> parameterLayout1(
+    public ParameterLayout<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> lab1ParameterLayout1(
             Lab1RandomService labService,
             I18N i18N,
             ResourceService resourceService,
@@ -63,7 +63,7 @@ public class Lab1UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterWithFormulaeLayout<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> parameterWithFormulaeLayout1(
+    public ParameterWithFormulaeLayout<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> lab1ParameterWithFormulaeLayout1(
             Lab1RandomService labService,
             I18N i18N,
             ResourceService resourceService,
@@ -74,7 +74,7 @@ public class Lab1UIConfig {
     }
     @Bean
     @PrototypeScope
-    public ParameterLayout<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> experimentParameterLayout1(
+    public ParameterLayout<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> lab1ExperimentParameterLayout1(
             Lab1ExperimentService labService,
             I18N i18N,
             ResourceService resourceService,
@@ -86,7 +86,7 @@ public class Lab1UIConfig {
 
     @Bean
     @PrototypeScope
-    public ParameterWithFormulaeLayout<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> experimentParameterWithFormulaeLayout1(
+    public ParameterWithFormulaeLayout<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> lab1ExperimentParameterWithFormulaeLayout1(
             Lab1ExperimentService labService,
             I18N i18N,
             ResourceService resourceService,

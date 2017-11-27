@@ -3,15 +3,14 @@ package org.ekolab.client.vaadin.server.ui;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.navigator.SpringNavigator;
-import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.client.vaadin.server.ui.view.LoginView;
 import org.ekolab.client.vaadin.server.ui.view.api.SavableView;
+import org.ekolab.client.vaadin.server.ui.windows.ConfirmWindow;
 import org.ekolab.server.common.Profiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.spring.security.VaadinSecurity;
 
 import javax.validation.constraints.NotNull;
@@ -23,11 +22,18 @@ import javax.validation.constraints.NotNull;
 @SpringComponent
 @Profile(value = {Profiles.MODE.PROD, Profiles.MODE.DEMO})
 public class EkoLabNavigator extends SpringNavigator {
-    @Autowired
-    protected I18N i18N;
+    protected final I18N i18N;
+
+    protected final VaadinSecurity vaadinSecurity;
+
+    protected final ConfirmWindow confirmWindow;
 
     @Autowired
-    protected VaadinSecurity vaadinSecurity;
+    public EkoLabNavigator(I18N i18N, VaadinSecurity vaadinSecurity, ConfirmWindow confirmWindow) {
+        this.i18N = i18N;
+        this.vaadinSecurity = vaadinSecurity;
+        this.confirmWindow = confirmWindow;
+    }
 
     @Override
     public void navigateTo(String navigationState) {
@@ -46,13 +52,8 @@ public class EkoLabNavigator extends SpringNavigator {
 
     public void redirectToView(String viewName) {
         if (getCurrentView() instanceof SavableView && ((SavableView) getCurrentView()).hasUnsavedData()) {
-            ConfirmDialog.show(UI.getCurrent(), i18N.get("confirm.title"),
-                    i18N.get("savable.unsaved-data-missing"), i18N.get("confirm.ok"),
-                    i18N.get("confirm.cancel"), (ConfirmDialog.Listener) dialog -> {
-                        if (!dialog.isCanceled() && dialog.isConfirmed()) {
-                            EkoLabNavigator.super.navigateTo(viewName);
-                        }
-                    });
+            confirmWindow.show(new ConfirmWindow.ConfirmWindowSettings("savable.unsaved-data-missing",
+            () -> EkoLabNavigator.super.navigateTo(viewName)));
         } else {
             super.navigateTo(viewName);
         }

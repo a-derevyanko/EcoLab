@@ -7,5 +7,5 @@ import org.ekolab.server.service.api.content.LabService;
 /**
  * Created by 777Al on 26.04.2017.
  */
-public interface Lab2Service extends LabService<Lab2Data, Lab2Variant> {
+public interface Lab2Service<V extends Lab2Variant> extends LabService<Lab2Data<V>, V> {
 }

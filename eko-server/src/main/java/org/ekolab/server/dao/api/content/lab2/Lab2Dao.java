@@ -6,5 +6,5 @@ import org.ekolab.server.model.content.lab2.Lab2Data;
 /**
  * Created by 777Al on 19.04.2017.
  */
-public interface Lab2Dao extends LabDao<Lab2Data> {
+public interface Lab2Dao<T extends Lab2Data<?>> extends LabDao<T> {
 }

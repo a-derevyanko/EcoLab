@@ -6,6 +6,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.VaadinUI;
 import org.ekolab.client.vaadin.server.ui.common.LabWizard;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
+import org.ekolab.client.vaadin.server.ui.windows.ConfirmWindow;
 import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
 import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.model.content.lab1.Lab1Data;
@@ -27,10 +28,12 @@ public class Lab1RandomDataView extends LabWizard<Lab1Data<Lab1RandomVariant>, L
                                       Lab1RandomVariant> initialDataWindow,
                               Lab1RandomService labService,
                               Binder<Lab1Data<Lab1RandomVariant>> binder,
-                              LabFinishedWindow<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant> labFinishedWindow,
-                              List<LabWizardStep> labSteps,
+                              LabFinishedWindow<Lab1Data<Lab1RandomVariant>,
+                                      Lab1RandomVariant> labFinishedWindow,
+                              List<LabWizardStep<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant>> labSteps,
+                              ConfirmWindow confirmWindow,
                               VaadinUI ui) {
-        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, ui);
+        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui);
     }
 
 

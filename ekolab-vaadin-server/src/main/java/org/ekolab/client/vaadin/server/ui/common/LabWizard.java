@@ -9,12 +9,12 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.VaadinUI;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
+import org.ekolab.client.vaadin.server.ui.windows.ConfirmWindow;
 import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
 import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.common.Role;
@@ -24,7 +24,6 @@ import org.ekolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
-import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.teemu.wizards.event.WizardCompletedEvent;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 
@@ -47,7 +46,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     protected boolean hasChanges;
 
-    protected final List<LabWizardStep> labSteps;
+    protected final List<LabWizardStep<T, V>> labSteps;
 
     protected final I18N i18N;
 
@@ -61,6 +60,8 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     protected final LabFinishedWindow<T, V> labFinishedWindow;
 
+    protected final ConfirmWindow confirmWindow;
+
     protected final VaadinUI ui;
 
     @Autowired
@@ -69,8 +70,8 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
                      InitialDataWindow<T, V> initialDataWindow,
                      S labService, Binder<T> binder,
                      LabFinishedWindow<T, V> labFinishedWindow,
-                     List<LabWizardStep> labSteps,
-                     VaadinUI ui) {
+                     List<LabWizardStep<T, V>> labSteps,
+                     ConfirmWindow confirmWindow, VaadinUI ui) {
         this.i18N = i18N;
         this.currentUser = currentUser;
         this.initialDataWindow = initialDataWindow;
@@ -78,6 +79,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
         this.binder = binder;
         this.labFinishedWindow = labFinishedWindow;
         this.labSteps = labSteps;
+        this.confirmWindow = confirmWindow;
         this.ui = ui;
     }
 
@@ -187,16 +189,14 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     @Override
     public void wizardCompleted(WizardCompletedEvent event) {
-        ConfirmDialog.show(UI.getCurrent(), i18N.get("labwizard.lab-finished.confirm"), dialog -> {
-            if (dialog.isConfirmed()) {
-                binder.getBean().setCompleted(true);
-                hasChanges = true;
-                if (saveData()) {
-                    removeAllWindows();
-                }
-                labFinishedWindow.show(new LabFinishedWindow.LabFinishedWindowSettings<>(binder.getBean(), labService));
+        confirmWindow.show(new ConfirmWindow.ConfirmWindowSettings("labwizard.lab-finished.confirm", () -> {
+            binder.getBean().setCompleted(true);
+            hasChanges = true;
+            if (saveData()) {
+                removeAllWindows();
             }
-        });
+            labFinishedWindow.show(new LabFinishedWindow.LabFinishedWindowSettings<>(binder.getBean(), labService));
+        }));
     }
 
     @Override
