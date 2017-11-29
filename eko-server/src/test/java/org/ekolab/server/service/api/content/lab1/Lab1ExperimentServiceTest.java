@@ -1,6 +1,6 @@
 package org.ekolab.server.service.api.content.lab1;
 
-import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.model.content.lab1.experiment.Lab1ExperimentLog;
 import org.ekolab.server.service.api.content.lab1.experiment.Lab1ExperimentService;
 
 /**

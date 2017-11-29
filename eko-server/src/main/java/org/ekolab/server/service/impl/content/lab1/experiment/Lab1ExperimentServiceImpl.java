@@ -1,7 +1,7 @@
 package org.ekolab.server.service.impl.content.lab1.experiment;
 
 import org.ekolab.server.dao.api.content.lab1.experiment.Lab1ExperimentDao;
-import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.model.content.lab1.experiment.Lab1ExperimentLog;
 import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;

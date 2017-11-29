@@ -8,7 +8,7 @@ import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulae
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1Step2;
 import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.lab1.Lab1Data;
-import org.ekolab.server.model.content.lab1.Lab1RandomVariant;
+import org.ekolab.server.model.content.lab1.random.Lab1RandomVariant;
 
 /**
  * Created by 777Al on 06.04.2017.

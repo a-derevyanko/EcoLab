@@ -5,7 +5,7 @@ import org.ekolab.server.dao.api.content.lab1.experiment.Lab1ExperimentDao;
 import org.ekolab.server.dao.impl.DaoUtils;
 import org.ekolab.server.dao.impl.content.lab1.Lab1DaoImpl;
 import org.ekolab.server.model.content.lab1.Lab1Data;
-import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.model.content.lab1.experiment.Lab1ExperimentLog;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.springframework.context.annotation.Profile;

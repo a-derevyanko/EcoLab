@@ -16,7 +16,7 @@ import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotific
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.model.content.lab1.experiment.Lab1ExperimentLog;
 import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;

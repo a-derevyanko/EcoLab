@@ -4,7 +4,7 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab1.random.Lab1RandomDao;
 import org.ekolab.server.model.content.DataValue;
 import org.ekolab.server.model.content.lab1.City;
-import org.ekolab.server.model.content.lab1.Lab1RandomVariant;
+import org.ekolab.server.model.content.lab1.random.Lab1RandomVariant;
 import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;

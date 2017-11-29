@@ -10,7 +10,7 @@ import org.ekolab.client.vaadin.server.ui.windows.ConfirmWindow;
 import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
 import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.model.content.lab1.Lab1Data;
-import org.ekolab.server.model.content.lab1.Lab1RandomVariant;
+import org.ekolab.server.model.content.lab1.random.Lab1RandomVariant;
 import org.ekolab.server.service.api.content.lab1.random.Lab1RandomService;
 import org.springframework.security.core.Authentication;
 

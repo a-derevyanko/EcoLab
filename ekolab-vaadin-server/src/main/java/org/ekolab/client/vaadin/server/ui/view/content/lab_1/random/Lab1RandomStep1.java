@@ -9,7 +9,7 @@ import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.lab1.Lab1Data;
-import org.ekolab.server.model.content.lab1.Lab1RandomVariant;
+import org.ekolab.server.model.content.lab1.random.Lab1RandomVariant;
 import org.springframework.security.util.FieldUtils;
 
 /**

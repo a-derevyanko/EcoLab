@@ -1,9 +1,7 @@
 package org.ekolab.server.service.impl.content.lab2.random;
 
-import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab2.random.Lab2RandomDao;
-import org.ekolab.server.model.content.DataValue;
-import org.ekolab.server.model.content.lab2.Lab2RandomVariant;
+import org.ekolab.server.model.content.lab2.random.Lab2RandomVariant;
 import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;

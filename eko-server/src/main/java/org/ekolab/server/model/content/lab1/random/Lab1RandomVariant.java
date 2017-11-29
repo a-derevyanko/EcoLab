@@ -1,4 +1,7 @@
-package org.ekolab.server.model.content.lab1;
+package org.ekolab.server.model.content.lab1.random;
+
+import org.ekolab.server.model.content.lab1.City;
+import org.ekolab.server.model.content.lab1.Lab1Variant;
 
 import java.util.Objects;
 

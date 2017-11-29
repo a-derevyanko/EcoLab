@@ -6,7 +6,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1Step3;
 import org.ekolab.server.model.content.lab1.Lab1Data;
-import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.model.content.lab1.experiment.Lab1ExperimentLog;
 
 /**
  * Created by 777Al on 06.04.2017.

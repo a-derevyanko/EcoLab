@@ -1,4 +1,6 @@
-package org.ekolab.server.model.content.lab1;
+package org.ekolab.server.model.content.lab1.experiment;
+
+import org.ekolab.server.model.content.lab1.Lab1Variant;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

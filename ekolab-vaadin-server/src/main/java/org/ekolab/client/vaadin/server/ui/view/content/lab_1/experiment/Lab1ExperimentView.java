@@ -11,7 +11,7 @@ import org.ekolab.client.vaadin.server.ui.windows.InitialDataWindow;
 import org.ekolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.model.content.lab1.Lab1Data;
-import org.ekolab.server.model.content.lab1.Lab1ExperimentLog;
+import org.ekolab.server.model.content.lab1.experiment.Lab1ExperimentLog;
 import org.ekolab.server.service.api.content.lab1.experiment.Lab1ExperimentService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
