@@ -46,7 +46,7 @@ CREATE TABLE lab_test_home_work_question (
   question_text    VARCHAR(1024) NOT NULL,
   question_variant INT          NOT NULL,
   value_type       VARCHAR(32)  NOT NULL,
-  dimension        VARCHAR(8),
+  dimension        VARCHAR(32),
   formulae         VARCHAR(4000),
 );
 
