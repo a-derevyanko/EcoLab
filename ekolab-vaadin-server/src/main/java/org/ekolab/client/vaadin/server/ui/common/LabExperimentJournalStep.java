@@ -2,14 +2,18 @@ package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
+import com.vaadin.data.HasValue;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.DateTimeField;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.util.ReflectTools;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
@@ -22,6 +26,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends LabVariant> extends VerticalLayout implements LabWizardStep<T, V> {
     protected final Binder<V> experimentLogBinder;
@@ -35,10 +45,11 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
     protected final ParameterCustomizer parameterCustomizer;
 
     // ----------------------------- Графические компоненты --------------------------------
-    protected final GridLayout firstLayout = new GridLayout(5, 7);
-    protected final GridLayout secondLayout = new GridLayout(5, 7);
+    protected final GridLayout firstLayout = new GridLayout(5, 1);
+    protected final GridLayout secondLayout = new GridLayout(8, 2);
     protected final HorizontalLayout centerLayout = new HorizontalLayout(firstLayout, secondLayout);
     protected final Label journalLabel = new Label("Experiment journal");
+    protected final Label measurementLabel = new Label("Mesurement");
 
     public LabExperimentJournalStep(Binder<V> experimentLogBinder, Binder<T> dataBinder, I18N i18N, ValidationService validationService, ParameterCustomizer parameterCustomizer) {
         this.experimentLogBinder = experimentLogBinder;
@@ -64,9 +75,68 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
         firstLayout.setSpacing(true);
         secondLayout.setMargin(true);
         secondLayout.setSpacing(true);
+
+        measurementLabel.setValue(i18N.get("lab.step-experiment-journal.measurement-title"));
+        measurementLabel.setStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
+        secondLayout.addComponent(measurementLabel, 0, 0, 7, 0);
+        secondLayout.setComponentAlignment(measurementLabel, Alignment.TOP_CENTER);
     }
 
-    protected void addField(AbstractField<?> component, Field field, GridLayout layout, int row) {
+    /**
+     * Добавляет три поля для измерений и поле со средним значением
+     * @param field поле класса журнала наблюдений
+     */
+    protected void addTextFieldWithAverageFields(Field field) {
+        TextField component = new TextField();
+        component.setWidth(100.0F, Unit.PIXELS);
+        component.setEnabled(false);
+        List<Component> components = new ArrayList<>(createFieldComponents(component, field));
+
+        List<TextField> measurementComponents = new ArrayList<>(3);
+
+        for (int i = 1; i < 4; i++) {
+            TextField iMeasurementTextField = new TextField();
+            iMeasurementTextField.setPlaceholder(i18N.get("lab.step-experiment-journal.measurement", i));
+            iMeasurementTextField.setWidth(50.0F, Unit.PIXELS);
+            measurementComponents.add(iMeasurementTextField);
+        }
+        components.addAll(2, measurementComponents);
+
+        HasValue.ValueChangeListener<String> listener = event -> {
+            if (measurementComponents.stream().noneMatch(HasValue::isEmpty)) {
+                double value = measurementComponents.stream()
+                        .mapToDouble(x -> Double.valueOf(x.getValue()))
+                        .average().orElseThrow(IllegalStateException::new);
+                Class<?> propClass = ReflectTools.convertPrimitiveType(field.getType());
+                if (propClass == Integer.class) {
+                    component.setValue(String.valueOf(Math.round(value)));
+                } else if (propClass == Double.class) {
+                    component.setValue(NumberFormat.getInstance().format(value));
+                } else {
+                    throw new IllegalArgumentException("Unsupported field type: " + propClass);
+                }
+            } else {
+                component.setValue(String.valueOf(0));
+            }
+        };
+        measurementComponents.forEach(x -> x.addValueChangeListener(listener));
+
+        addComponentsToGridRow(secondLayout, components);
+    }
+
+    protected void addField(Field field) {
+        AbstractField<?> fieldComponent;
+        Class<?> propClass = ReflectTools.convertPrimitiveType(field.getType());
+        if (propClass == Date.class) {
+            fieldComponent = new DateTimeField();
+        } else {
+            fieldComponent = new TextField();
+        }
+        fieldComponent.setWidth(250.0F, Unit.PIXELS);
+        addComponentsToGridRow(firstLayout, createFieldComponents(fieldComponent, field));
+    }
+
+    private List<Component> createFieldComponents(AbstractField<?> fieldComponent, Field field) {
         Label numberLabel = new Label(parameterCustomizer.getParameterPrefix());
         numberLabel.addStyleName(EkoLabTheme.LABEL_TINY);
         Label captionLabel = new Label(i18N.get(field.getName()), ContentMode.HTML);
@@ -75,14 +145,8 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
         dimensionLabel.addStyleName(EkoLabTheme.LABEL_TINY);
         Label signLabel = new Label(i18N.get(field.getName() + "-sign"), ContentMode.HTML);
         signLabel.addStyleName(EkoLabTheme.LABEL_TINY);
-        layout.addComponent(numberLabel, 0, row);
-        layout.addComponent(captionLabel, 1, row);
-        layout.addComponent(component, 2, row);
-        layout.addComponent(dimensionLabel, 3, row);
-        layout.addComponent(signLabel, 4, row);
-        component.setWidth(250.0F, Unit.PIXELS);
-        if (component instanceof TextField) {
-            Binder.BindingBuilder<V, String> bindingBuilder = experimentLogBinder.forField((TextField)component).withNullRepresentation("");
+        if (fieldComponent instanceof TextField) {
+            Binder.BindingBuilder<V, String> bindingBuilder = experimentLogBinder.forField((TextField)fieldComponent).withNullRepresentation("");
             Converter<String, ?> converter = UIUtils.getStringConverter(field, i18N);
             if (converter == null) {
                 UIUtils.bindField(field, bindingBuilder, experimentLogBinder, validationService, i18N);
@@ -90,8 +154,16 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
                 bindingBuilder.withConverter(converter).bind(field.getName());
             }
         } else {
-            experimentLogBinder.forField(component).bind(field.getName());
+            experimentLogBinder.forField(fieldComponent).bind(field.getName());
         }
+
+        return Arrays.asList(numberLabel, captionLabel, fieldComponent, dimensionLabel, signLabel);
+    }
+
+    private void addComponentsToGridRow(GridLayout layout, List<Component> components) {
+        int lastRow = layout.getRows() - 1;
+        IntStream.range(0, components.size()).forEach(i -> layout.addComponent(components.get(i), i, lastRow));
+        layout.insertRow(layout.getRows());
     }
 
     /**

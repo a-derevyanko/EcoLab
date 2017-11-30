@@ -12,8 +12,9 @@ import org.jooq.RecordMapper;
 import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
-import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
+import static org.ekolab.server.db.h2.public_.Tables.LAB2DATA;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -28,35 +29,26 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
         @Override
         public Lab2Data<V> map(Record record) {
             Lab2Data<V> data = new Lab2Data<>();
-            data.setId(record.get(LAB1DATA.ID));
-            data.setStartDate(record.get(LAB1DATA.START_DATE));
-            data.setSaveDate(record.get(LAB1DATA.SAVE_DATE));
-            data.setCompleted(record.get(LAB1DATA.COMPLETED));
-           /* data.setStacksHeight(record.get(LAB1DATA.STACKS_HEIGHT));
-            data.setStacksDiameter(record.get(LAB1DATA.STACKS_DIAMETER));
-            data.setOutsideAirTemperature(record.get(LAB1DATA.OUTSIDE_AIR_TEMPERATURE));
-            data.setSteamProductionCapacity(record.get(LAB1DATA.STEAM_PRODUCTION_CAPACITY));
-            data.setOxygenConcentrationPoint(record.get(LAB1DATA.OXYGEN_CONCENTRATION_POINT));
-            data.setFuelConsumerNormalized(record.get(LAB1DATA.FUEL_CONSUMER_NORMALIZED));
-            data.setStackExitTemperature(record.get(LAB1DATA.STACK_EXIT_TEMPERATURE));
-            data.setFlueGasNOxConcentration(record.get(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION));
-            data.setExcessAirRatio(record.get(LAB1DATA.EXCESS_AIR_RATIO));
-            data.setFlueGasNOxConcentrationNC(record.get(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC));
-            data.setExcessOfNorms(record.get(LAB1DATA.EXCESS_OF_NORMS));
-            data.setFlueGasesRate(record.get(LAB1DATA.FLUE_GASES_RATE));
-            data.setDryGasesFlowRate(record.get(LAB1DATA.DRY_GASES_FLOW_RATE));
-            data.setMassEmissions(record.get(LAB1DATA.MASS_EMISSIONS));
-            data.setFlueGasesSpeed(record.get(LAB1DATA.FLUE_GASES_SPEED));
-            data.setF(record.get(LAB1DATA.F));
-            data.setM(record.get(LAB1DATA.M));
-            data.setU(record.get(LAB1DATA.U));
-            data.setN(record.get(LAB1DATA.N));
-            data.setD(record.get(LAB1DATA.D));
-            data.setHarmfulSubstancesDepositionCoefficient(record.get(LAB1DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT));
-            data.setTerrainCoefficient(record.get(LAB1DATA.TERRAIN_COEFFICIENT));
-            data.setTemperatureCoefficient(record.get(LAB1DATA.TEMPERATURE_COEFFICIENT));
-            data.setDistanceFromEmissionSource(record.get(LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE));
-            data.setMaximumSurfaceConcentration(record.get(LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION));*/
+            data.setId(record.get(LAB2DATA.ID));
+            data.setStartDate(record.get(LAB2DATA.START_DATE));
+            data.setSaveDate(record.get(LAB2DATA.SAVE_DATE));
+            data.setCompleted(record.get(LAB2DATA.COMPLETED));
+            data.setBarometricPressure(record.get(LAB2DATA.BAROMETRIC_PRESSURE));
+            data.setIndoorsTemperature(record.get(LAB2DATA.INDOORS_TEMPERATURE));
+            data.setRoomSize(record.get(LAB2DATA.ROOM_SIZE));
+            data.setQuantityOfSingleTypeEquipment(record.get(LAB2DATA.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
+            data.setHemisphereRadius(record.get(LAB2DATA.HEMISPHERE_RADIUS));
+            data.setAverageSoundPressureControlPoint(record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE_CONTROL_POINT) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE_CONTROL_POINT)));
+            data.setAverageSoundPressure(record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE)));
+            data.setCorrectionFactor(record.get(LAB2DATA.CORRECTION_FACTOR));
+            data.setSoundPressureMeasuringSurface(record.get(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE)));
+            data.setHemisphereSurface(record.get(LAB2DATA.HEMISPHERE_SURFACE));
+            data.setMeasuringFactor(record.get(LAB2DATA.MEASURING_FACTOR));
+            data.setSoundPowerLevel(record.get(LAB2DATA.SOUND_POWER_LEVEL) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.SOUND_POWER_LEVEL)));
+            data.setRoomConstant1000(record.get(LAB2DATA.ROOM_CONSTANT_1000));
+            data.setFrequencyCoefficient(record.get(LAB2DATA.FREQUENCY_COEFFICIENT) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.FREQUENCY_COEFFICIENT)));
+            data.setRoomConstant(record.get(LAB2DATA.ROOM_CONSTANT));
+            data.setReflectedSoundPower(record.get(LAB2DATA.REFLECTED_SOUND_POWER) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.REFLECTED_SOUND_POWER)));
 
             V variant = createVariant();
             data.setVariant(variant);
@@ -69,67 +61,49 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
 
     @Override
     public void saveLab(Lab2Data<V> data) {
-       /* data.setId(dsl.insertInto(LAB1DATA,
-                LAB1DATA.USER_ID,
-                LAB1DATA.START_DATE,
-                LAB1DATA.SAVE_DATE,
-                LAB1DATA.COMPLETED,
-                LAB1DATA.STACKS_DIAMETER,
-                LAB1DATA.STACKS_HEIGHT,
-                LAB1DATA.OUTSIDE_AIR_TEMPERATURE,
-                LAB1DATA.STEAM_PRODUCTION_CAPACITY,
-                LAB1DATA.OXYGEN_CONCENTRATION_POINT,
-                LAB1DATA.FUEL_CONSUMER_NORMALIZED,
-                LAB1DATA.STACK_EXIT_TEMPERATURE,
-                LAB1DATA.FLUE_GAS_NOX_CONCENTRATION,
-                LAB1DATA.EXCESS_AIR_RATIO,
-                LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC,
-                LAB1DATA.EXCESS_OF_NORMS,
-                LAB1DATA.FLUE_GASES_RATE,
-                LAB1DATA.DRY_GASES_FLOW_RATE,
-                LAB1DATA.MASS_EMISSIONS,
-                LAB1DATA.FLUE_GASES_SPEED,
-                LAB1DATA.F,
-                LAB1DATA.M,
-                LAB1DATA.U,
-                LAB1DATA.N,
-                LAB1DATA.D,
-                LAB1DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT,
-                LAB1DATA.TERRAIN_COEFFICIENT,
-                LAB1DATA.TEMPERATURE_COEFFICIENT,
-                LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE,
-                LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION).
+        data.setId(dsl.insertInto(LAB2DATA,
+                LAB2DATA.USER_ID,
+                LAB2DATA.START_DATE,
+                LAB2DATA.SAVE_DATE,
+                LAB2DATA.COMPLETED,
+                LAB2DATA.BAROMETRIC_PRESSURE,
+                LAB2DATA.INDOORS_TEMPERATURE,
+                LAB2DATA.ROOM_SIZE,
+                LAB2DATA.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
+                LAB2DATA.HEMISPHERE_RADIUS,
+                LAB2DATA.AVERAGE_SOUND_PRESSURE_CONTROL_POINT,
+                LAB2DATA.AVERAGE_SOUND_PRESSURE,
+                LAB2DATA.CORRECTION_FACTOR,
+                LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE,
+                LAB2DATA.HEMISPHERE_SURFACE,
+                LAB2DATA.MEASURING_FACTOR,
+                LAB2DATA.SOUND_POWER_LEVEL,
+                LAB2DATA.ROOM_CONSTANT_1000,
+                LAB2DATA.FREQUENCY_COEFFICIENT,
+                LAB2DATA.ROOM_CONSTANT,
+                LAB2DATA.REFLECTED_SOUND_POWER).
                 values(
                         Arrays.asList(DaoUtils.getFindUserIdSelect(dsl, data.getUserLogin()),
                                 data.getStartDate(),
                                 data.getSaveDate(),
                                 data.isCompleted(),
-                                data.getStacksDiameter(),
-                                data.getStacksHeight(),
-                                data.getOutsideAirTemperature(),
-                                data.getSteamProductionCapacity(),
-                                data.getOxygenConcentrationPoint(),
-                                data.getFuelConsumerNormalized(),
-                                data.getStackExitTemperature(),
-                                data.getFlueGasNOxConcentration(),
-                                data.getExcessAirRatio(),
-                                data.getFlueGasNOxConcentrationNC(),
-                                data.getExcessOfNorms(),
-                                data.getFlueGasesRate(),
-                                data.getDryGasesFlowRate(),
-                                data.getMassEmissions(),
-                                data.getFlueGasesSpeed(),
-                                data.getF(),
-                                data.getM(),
-                                data.getU(),
-                                data.getN(),
-                                data.getD(),
-                                data.getHarmfulSubstancesDepositionCoefficient(),
-                                data.getTerrainCoefficient(),
-                                data.getTemperatureCoefficient(),
-                                data.getDistanceFromEmissionSource(),
-                                data.getMaximumSurfaceConcentration())
-                ).returning(LAB1DATA.ID).fetchOne().getId());*/
+                                data.getBarometricPressure(),
+                                data.getIndoorsTemperature(),
+                                data.getRoomSize(),
+                                data.getQuantityOfSingleTypeEquipment(),
+                                data.getHemisphereRadius(),
+                                data.getAverageSoundPressureControlPoint(),
+                                data.getAverageSoundPressure(),
+                                data.getCorrectionFactor(),
+                                data.getSoundPressureMeasuringSurface(),
+                                data.getHemisphereSurface(),
+                                data.getMeasuringFactor(),
+                                data.getSoundPowerLevel(),
+                                data.getRoomConstant1000(),
+                                data.getFrequencyCoefficient(),
+                                data.getRoomConstant(),
+                                data.getReflectedSoundPower())
+                ).returning(LAB2DATA.ID).fetchOne().getId());
 
         data.getVariant().setId(data.getId());
         saveVariant(data.getVariant());
@@ -137,53 +111,43 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
 
     @Override
     public int updateLab(Lab2Data<V> data) {
-       /* return dsl.update(LAB1DATA)
-                .set(LAB1DATA.START_DATE, data.getStartDate())
-                .set(LAB1DATA.SAVE_DATE, data.getSaveDate())
-                .set(LAB1DATA.COMPLETED, data.isCompleted())
-                .set(LAB1DATA.STACKS_HEIGHT, data.getStacksHeight())
-                .set(LAB1DATA.STACKS_DIAMETER, data.getStacksDiameter())
-                .set(LAB1DATA.OUTSIDE_AIR_TEMPERATURE, data.getOutsideAirTemperature())
-                .set(LAB1DATA.STEAM_PRODUCTION_CAPACITY, data.getSteamProductionCapacity())
-                .set(LAB1DATA.OXYGEN_CONCENTRATION_POINT, data.getOxygenConcentrationPoint())
-                .set(LAB1DATA.FUEL_CONSUMER_NORMALIZED, data.getFuelConsumerNormalized())
-                .set(LAB1DATA.STACK_EXIT_TEMPERATURE, data.getStackExitTemperature())
-                .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION, data.getFlueGasNOxConcentration())
-                .set(LAB1DATA.EXCESS_AIR_RATIO, data.getExcessAirRatio())
-                .set(LAB1DATA.FLUE_GAS_NOX_CONCENTRATION_NC, data.getFlueGasNOxConcentrationNC())
-                .set(LAB1DATA.EXCESS_OF_NORMS, data.getExcessOfNorms())
-                .set(LAB1DATA.FLUE_GASES_RATE, data.getFlueGasesRate())
-                .set(LAB1DATA.DRY_GASES_FLOW_RATE, data.getDryGasesFlowRate())
-                .set(LAB1DATA.MASS_EMISSIONS, data.getMassEmissions())
-                .set(LAB1DATA.FLUE_GASES_SPEED, data.getFlueGasesSpeed())
-                .set(LAB1DATA.F, data.getF())
-                .set(LAB1DATA.M, data.getM())
-                .set(LAB1DATA.U, data.getU())
-                .set(LAB1DATA.N, data.getN())
-                .set(LAB1DATA.D, data.getD())
-                .set(LAB1DATA.HARMFUL_SUBSTANCES_DEPOSITION_COEFFICIENT, data.getHarmfulSubstancesDepositionCoefficient())
-                .set(LAB1DATA.TERRAIN_COEFFICIENT, data.getTerrainCoefficient())
-                .set(LAB1DATA.TEMPERATURE_COEFFICIENT, data.getTemperatureCoefficient())
-                .set(LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE, data.getDistanceFromEmissionSource())
-                .set(LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION, data.getMaximumSurfaceConcentration())
-                .where(LAB1DATA.ID.eq(data.getId()))
-                .execute();*/
-       return 0;
+        return dsl.update(LAB2DATA)
+                .set(LAB2DATA.START_DATE, data.getStartDate())
+                .set(LAB2DATA.SAVE_DATE, data.getSaveDate())
+                .set(LAB2DATA.COMPLETED, data.isCompleted())
+                .set(LAB2DATA.BAROMETRIC_PRESSURE, data.getBarometricPressure())
+                .set(LAB2DATA.INDOORS_TEMPERATURE, data.getIndoorsTemperature())
+                .set(LAB2DATA.ROOM_SIZE, data.getRoomSize())
+                .set(LAB2DATA.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT, data.getQuantityOfSingleTypeEquipment())
+                .set(LAB2DATA.HEMISPHERE_RADIUS, data.getHemisphereRadius())
+                .set(LAB2DATA.AVERAGE_SOUND_PRESSURE_CONTROL_POINT, data.getAverageSoundPressureControlPoint().toArray(new Double[0]))
+                .set(LAB2DATA.AVERAGE_SOUND_PRESSURE, data.getAverageSoundPressure().toArray(new Double[0]))
+                .set(LAB2DATA.CORRECTION_FACTOR, data.getCorrectionFactor())
+                .set(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE, data.getSoundPressureMeasuringSurface().toArray(new Double[0]))
+                .set(LAB2DATA.HEMISPHERE_SURFACE, data.getHemisphereSurface())
+                .set(LAB2DATA.MEASURING_FACTOR, data.getMeasuringFactor())
+                .set(LAB2DATA.SOUND_POWER_LEVEL, data.getSoundPowerLevel().toArray(new Double[0]))
+                .set(LAB2DATA.ROOM_CONSTANT_1000, data.getRoomConstant1000())
+                .set(LAB2DATA.FREQUENCY_COEFFICIENT, data.getFrequencyCoefficient().toArray(new Double[0]))
+                .set(LAB2DATA.ROOM_CONSTANT, data.getRoomConstant())
+                .set(LAB2DATA.REFLECTED_SOUND_POWER, data.getReflectedSoundPower().toArray(new Double[0]))
+                .where(LAB2DATA.ID.eq(data.getId()))
+                .execute();
     }
 
     @Override
     public int removeLabsByUser(String userName) {
-        return dsl.deleteFrom(LAB1DATA).where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).execute();
+        return dsl.deleteFrom(LAB2DATA).where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).execute();
     }
 
     @Override
     public int removeOldLabs(LocalDateTime lastSaveDate) {
-        return dsl.deleteFrom(LAB1DATA).where(LAB1DATA.SAVE_DATE.greaterThan(lastSaveDate)).execute();
+        return dsl.deleteFrom(LAB2DATA).where(LAB2DATA.SAVE_DATE.greaterThan(lastSaveDate)).execute();
     }
 
     @Override
     protected int getLabNumber() {
-        return 1;
+        return 2;
     }
 
     protected abstract Lab2DataMapper<V> getLabMapper();

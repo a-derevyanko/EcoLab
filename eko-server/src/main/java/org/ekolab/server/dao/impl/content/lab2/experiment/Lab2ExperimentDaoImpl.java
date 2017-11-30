@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
-import static org.ekolab.server.db.h2.public_.Tables.LAB1_EXPERIMENT_LOG;
+import static org.ekolab.server.db.h2.public_.Tables.LAB2DATA;
+import static org.ekolab.server.db.h2.public_.Tables.LAB2_EXPERIMENT_LOG;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -27,17 +27,8 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
         @Override
         public Lab2Data<Lab2ExperimentLog> map(Record record) {
             Lab2Data<Lab2ExperimentLog> data = super.map(record);
-            data.getVariant().setId(record.get(LAB1_EXPERIMENT_LOG.ID));
-            /*data.getVariant().setName(record.get(LAB1_EXPERIMENT_LOG.NAME));
-            data.getVariant().setTime(record.get(LAB1_EXPERIMENT_LOG.TIME));
-            data.getVariant().setOutsideAirTemperature(record.get(LAB1_EXPERIMENT_LOG.OUTSIDE_AIR_TEMPERATURE));
-            data.getVariant().setSteamProductionCapacity(record.get(LAB1_EXPERIMENT_LOG.STEAM_PRODUCTION_CAPACITY));
-            data.getVariant().setOxygenConcentrationPoint(record.get(LAB1_EXPERIMENT_LOG.OXYGEN_CONCENTRATION_POINT));
-            data.getVariant().setFuelConsumerNormalized(record.get(LAB1_EXPERIMENT_LOG.FUEL_CONSUMER));
-            data.getVariant().setStackExitTemperature(record.get(LAB1_EXPERIMENT_LOG.STACK_EXIT_TEMPERATURE));
-            data.getVariant().setFlueGasNOxConcentration(record.get(LAB1_EXPERIMENT_LOG.FLUE_GAS_NOX_CONCENTRATION));
-            data.getVariant().setStacksHeight(record.get(LAB1_EXPERIMENT_LOG.STACKS_HEIGHT));
-            data.getVariant().setStacksDiameter(record.get(LAB1_EXPERIMENT_LOG.STACKS_DIAMETER));*/
+            data.getVariant().setId(record.get(LAB2_EXPERIMENT_LOG.ID));
+            data.getVariant().setName(record.get(LAB2_EXPERIMENT_LOG.NAME));
             return data;
         }
 
@@ -53,15 +44,15 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
 
     @Override
     public Lab2Data<Lab2ExperimentLog> getLastLabByUser(String userName, boolean completed) {
-        return dsl.select().from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1_EXPERIMENT_LOG.ID.eq(LAB1DATA.ID)).
-                where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB1DATA.COMPLETED.eq(completed)).
-                orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
+        return dsl.select().from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2_EXPERIMENT_LOG.ID.eq(LAB2DATA.ID)).
+                where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB2DATA.COMPLETED.eq(completed)).
+                orderBy(LAB2DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
     }
 
     @Override
     public List<Lab2Data<Lab2ExperimentLog>> getAllLabsByUser(String userName) {
-        return dsl.select().from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1_EXPERIMENT_LOG.ID.eq(LAB1DATA.ID))
-                .where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(getLabMapper());
+        return dsl.select().from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2_EXPERIMENT_LOG.ID.eq(LAB2DATA.ID))
+                .where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(getLabMapper());
     }
 
     @Override
@@ -71,47 +62,42 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
 
     @Override
     protected void saveVariant(Lab2ExperimentLog variant) {
-       /* dsl.insertInto(LAB1_EXPERIMENT_LOG,
-                LAB1_EXPERIMENT_LOG.ID,
-                LAB1_EXPERIMENT_LOG.NAME,
-                LAB1_EXPERIMENT_LOG.TIME,
-                LAB1_EXPERIMENT_LOG.OUTSIDE_AIR_TEMPERATURE,
-                LAB1_EXPERIMENT_LOG.STACKS_HEIGHT,
-                LAB1_EXPERIMENT_LOG.STACKS_DIAMETER,
-                LAB1_EXPERIMENT_LOG.STEAM_PRODUCTION_CAPACITY,
-                LAB1_EXPERIMENT_LOG.OXYGEN_CONCENTRATION_POINT,
-                LAB1_EXPERIMENT_LOG.FUEL_CONSUMER,
-                LAB1_EXPERIMENT_LOG.STACK_EXIT_TEMPERATURE,
-                LAB1_EXPERIMENT_LOG.FLUE_GAS_NOX_CONCENTRATION).
+        dsl.insertInto(LAB2_EXPERIMENT_LOG,
+                LAB2_EXPERIMENT_LOG.ID,
+                LAB2_EXPERIMENT_LOG.NAME,
+                LAB2_EXPERIMENT_LOG.BAROMETRIC_PRESSURE,
+                LAB2_EXPERIMENT_LOG.INDOORS_TEMPERATURE,
+                LAB2_EXPERIMENT_LOG.ROOM_SIZE,
+                LAB2_EXPERIMENT_LOG.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
+                LAB2_EXPERIMENT_LOG.HEMISPHERE_RADIUS,
+                LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE_CONTROL_POINT,
+                LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE).
                 values(
                         variant.getId(),
                         variant.getName(),
-                        variant.getTime(),
-                        variant.getOutsideAirTemperature(),
-                        variant.getStacksHeight(),
-                        variant.getStacksDiameter(),
-                        variant.getSteamProductionCapacity(),
-                        variant.getOxygenConcentrationPoint(),
-                        variant.getFuelConsumerNormalized(),
-                        variant.getStackExitTemperature(),
-                        variant.getFlueGasNOxConcentration()
-                ).execute();*/
+                        variant.getBarometricPressure(),
+                        variant.getIndoorsTemperature(),
+                        variant.getRoomSize(),
+                        variant.getQuantityOfSingleTypeEquipment(),
+                        variant.getHemisphereRadius(),
+                        variant.getAverageSoundPressureControlPoint().toArray(new Double[0]),
+                        variant.getAverageSoundPressure().toArray(new Double[0])
+                ).execute();
     }
 
     @Override
     public void updateExperimentJournal(Lab2ExperimentLog experimentJournal) {
-       /* dsl.update(LAB1_EXPERIMENT_LOG)
-                .set(LAB1_EXPERIMENT_LOG.NAME, experimentJournal.getName())
-                .set(LAB1_EXPERIMENT_LOG.TIME, experimentJournal.getTime())
-                .set(LAB1_EXPERIMENT_LOG.OUTSIDE_AIR_TEMPERATURE, experimentJournal.getOutsideAirTemperature())
-                .set(LAB1_EXPERIMENT_LOG.STACKS_HEIGHT, experimentJournal.getStacksHeight())
-                .set(LAB1_EXPERIMENT_LOG.STACKS_DIAMETER, experimentJournal.getStacksDiameter())
-                .set(LAB1_EXPERIMENT_LOG.STEAM_PRODUCTION_CAPACITY, experimentJournal.getSteamProductionCapacity())
-                .set(LAB1_EXPERIMENT_LOG.OXYGEN_CONCENTRATION_POINT, experimentJournal.getOxygenConcentrationPoint())
-                .set(LAB1_EXPERIMENT_LOG.FUEL_CONSUMER, experimentJournal.getFuelConsumerNormalized())
-                .set(LAB1_EXPERIMENT_LOG.STACK_EXIT_TEMPERATURE, experimentJournal.getStackExitTemperature())
-                .set(LAB1_EXPERIMENT_LOG.FLUE_GAS_NOX_CONCENTRATION, experimentJournal.getFlueGasNOxConcentration())
-                .where(LAB1_EXPERIMENT_LOG.ID.eq(experimentJournal.getId()))
-                .execute();*/
+        dsl.update(LAB2_EXPERIMENT_LOG)
+                .set(LAB2_EXPERIMENT_LOG.NAME, experimentJournal.getName())
+                .set(LAB2_EXPERIMENT_LOG.BAROMETRIC_PRESSURE, experimentJournal.getBarometricPressure())
+                .set(LAB2_EXPERIMENT_LOG.INDOORS_TEMPERATURE, experimentJournal.getIndoorsTemperature())
+                .set(LAB2_EXPERIMENT_LOG.ROOM_SIZE, experimentJournal.getRoomSize())
+                .set(LAB2_EXPERIMENT_LOG.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT, experimentJournal.getQuantityOfSingleTypeEquipment())
+                .set(LAB2_EXPERIMENT_LOG.HEMISPHERE_RADIUS, experimentJournal.getHemisphereRadius())
+                .set(LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE_CONTROL_POINT,
+                        experimentJournal.getAverageSoundPressureControlPoint().toArray(new Double[0]))
+                .set(LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE, experimentJournal.getAverageSoundPressure().toArray(new Double[0]))
+                .where(LAB2_EXPERIMENT_LOG.ID.eq(experimentJournal.getId()))
+                .execute();
     }
 }

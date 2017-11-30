@@ -11,10 +11,11 @@ import org.jooq.Record;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
-import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
-import static org.ekolab.server.db.h2.public_.Tables.LAB1_RANDOM_VARIANT;
+import static org.ekolab.server.db.h2.public_.Tables.LAB2DATA;
+import static org.ekolab.server.db.h2.public_.Tables.LAB2_RANDOM_VARIANT;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -27,14 +28,14 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
         @Override
         public Lab2Data<Lab2RandomVariant> map(Record record) {
             Lab2Data<Lab2RandomVariant> data = super.map(record);
-            data.getVariant().setId(record.get(LAB1_RANDOM_VARIANT.ID));
-            /*data.getVariant().setCity(record.get(LAB1_RANDOM_VARIANT.CITY) == null ? null : City.valueOf(record.get(LAB1_RANDOM_VARIANT.CITY)));
-            data.getVariant().setOutsideAirTemperature(record.get(LAB1_RANDOM_VARIANT.OUTSIDE_AIR_TEMPERATURE));
-            data.getVariant().setSteamProductionCapacity(record.get(LAB1_RANDOM_VARIANT.STEAM_PRODUCTION_CAPACITY));
-            data.getVariant().setOxygenConcentrationPoint(record.get(LAB1_RANDOM_VARIANT.OXYGEN_CONCENTRATION_POINT));
-            data.getVariant().setFuelConsumerNormalized(record.get(LAB1_RANDOM_VARIANT.FUEL_CONSUMER));
-            data.getVariant().setStackExitTemperature(record.get(LAB1_RANDOM_VARIANT.STACK_EXIT_TEMPERATURE));
-            data.getVariant().setFlueGasNOxConcentration(record.get(LAB1_RANDOM_VARIANT.FLUE_GAS_NOX_CONCENTRATION));*/
+            data.getVariant().setId(record.get(LAB2_RANDOM_VARIANT.ID));
+            data.setBarometricPressure(record.get(LAB2_RANDOM_VARIANT.BAROMETRIC_PRESSURE));
+            data.setIndoorsTemperature(record.get(LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE));
+            data.setRoomSize(record.get(LAB2_RANDOM_VARIANT.ROOM_SIZE));
+            data.setQuantityOfSingleTypeEquipment(record.get(LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
+            data.setHemisphereRadius(record.get(LAB2_RANDOM_VARIANT.HEMISPHERE_RADIUS));
+            data.setAverageSoundPressureControlPoint(record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE_CONTROL_POINT) == null ? null : Arrays.asList((Double[]) record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE_CONTROL_POINT)));
+            data.setAverageSoundPressure(record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE) == null ? null : Arrays.asList((Double[]) record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE)));
             return data;
         }
 
@@ -50,15 +51,15 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
 
     @Override
     public Lab2Data<Lab2RandomVariant> getLastLabByUser(String userName, boolean completed) {
-        return dsl.select().from(LAB1DATA).join(LAB1_RANDOM_VARIANT).on(LAB1_RANDOM_VARIANT.ID.eq(LAB1DATA.ID)).
-                where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB1DATA.COMPLETED.eq(completed)).
-                orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
+        return dsl.select().from(LAB2DATA).join(LAB2_RANDOM_VARIANT).on(LAB2_RANDOM_VARIANT.ID.eq(LAB2DATA.ID)).
+                where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB2DATA.COMPLETED.eq(completed)).
+                orderBy(LAB2DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
     }
 
     @Override
     public List<Lab2Data<Lab2RandomVariant>> getAllLabsByUser(String userName) {
-        return dsl.select().from(LAB1DATA).join(LAB1_RANDOM_VARIANT).on(LAB1_RANDOM_VARIANT.ID.eq(LAB1DATA.ID))
-                .where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(getLabMapper());
+        return dsl.select().from(LAB2DATA).join(LAB2_RANDOM_VARIANT).on(LAB2_RANDOM_VARIANT.ID.eq(LAB2DATA.ID))
+                .where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(getLabMapper());
     }
 
     @Override
@@ -68,24 +69,24 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
 
     @Override
     protected void saveVariant(Lab2RandomVariant variant) {
-       /* dsl.insertInto(LAB1_RANDOM_VARIANT,
-                LAB1_RANDOM_VARIANT.ID,
-                LAB1_RANDOM_VARIANT.CITY,
-                LAB1_RANDOM_VARIANT.OUTSIDE_AIR_TEMPERATURE,
-                LAB1_RANDOM_VARIANT.STEAM_PRODUCTION_CAPACITY,
-                LAB1_RANDOM_VARIANT.OXYGEN_CONCENTRATION_POINT,
-                LAB1_RANDOM_VARIANT.FUEL_CONSUMER,
-                LAB1_RANDOM_VARIANT.STACK_EXIT_TEMPERATURE,
-                LAB1_RANDOM_VARIANT.FLUE_GAS_NOX_CONCENTRATION).
+        dsl.insertInto(LAB2_RANDOM_VARIANT,
+                LAB2_RANDOM_VARIANT.ID,
+                LAB2_RANDOM_VARIANT.BAROMETRIC_PRESSURE,
+                LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE,
+                LAB2_RANDOM_VARIANT.ROOM_SIZE,
+                LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
+                LAB2_RANDOM_VARIANT.HEMISPHERE_RADIUS,
+                LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE_CONTROL_POINT,
+                LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE).
                 values(
                         variant.getId(),
-                        variant.getCity().name(),
-                        variant.getOutsideAirTemperature(),
-                        variant.getSteamProductionCapacity(),
-                        variant.getOxygenConcentrationPoint(),
-                        variant.getFuelConsumerNormalized(),
-                        variant.getStackExitTemperature(),
-                        variant.getFlueGasNOxConcentration()
-                ).execute();*/
+                        variant.getBarometricPressure(),
+                        variant.getIndoorsTemperature(),
+                        variant.getRoomSize(),
+                        variant.getQuantityOfSingleTypeEquipment(),
+                        variant.getHemisphereRadius(),
+                        variant.getAverageSoundPressureControlPoint().toArray(new Double[0]),
+                        variant.getAverageSoundPressure().toArray(new Double[0])
+                ).execute();
     }
 }
