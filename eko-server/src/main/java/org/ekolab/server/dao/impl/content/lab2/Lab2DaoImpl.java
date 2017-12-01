@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.ekolab.server.db.h2.public_.Tables.LAB2DATA;
 
@@ -123,7 +124,7 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
                 .set(LAB2DATA.AVERAGE_SOUND_PRESSURE_CONTROL_POINT, data.getAverageSoundPressureControlPoint().toArray(new Double[0]))
                 .set(LAB2DATA.AVERAGE_SOUND_PRESSURE, data.getAverageSoundPressure().toArray(new Double[0]))
                 .set(LAB2DATA.CORRECTION_FACTOR, data.getCorrectionFactor())
-                .set(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE, data.getSoundPressureMeasuringSurface().toArray(new Double[0]))
+                .set(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE, toArray(data.getSoundPressureMeasuringSurface()))
                 .set(LAB2DATA.HEMISPHERE_SURFACE, data.getHemisphereSurface())
                 .set(LAB2DATA.MEASURING_FACTOR, data.getMeasuringFactor())
                 .set(LAB2DATA.SOUND_POWER_LEVEL, data.getSoundPowerLevel().toArray(new Double[0]))
@@ -148,6 +149,10 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
     @Override
     protected int getLabNumber() {
         return 2;
+    }
+
+    protected Object[] toArray(List<?> list) {
+        return list == null ? null : list.toArray(new Object[0]);
     }
 
     protected abstract Lab2DataMapper<V> getLabMapper();

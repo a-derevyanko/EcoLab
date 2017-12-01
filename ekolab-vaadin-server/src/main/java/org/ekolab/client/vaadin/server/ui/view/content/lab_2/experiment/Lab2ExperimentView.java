@@ -22,7 +22,6 @@ import java.util.List;
  * Created by Андрей on 02.04.2017.
  */
 @SpringView(name = Lab2ExperimentView.NAME)
-@Profile(Profiles.MODE.PROD)
 public class Lab2ExperimentView extends LabExperimentView<Lab2Data<Lab2ExperimentLog>, Lab2ExperimentLog, Lab2ExperimentService> {
     public static final String NAME = "lab2experiment";
 

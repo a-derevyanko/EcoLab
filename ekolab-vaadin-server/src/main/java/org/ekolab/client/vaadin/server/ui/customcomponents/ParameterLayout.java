@@ -28,9 +28,11 @@ import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 
+import javax.validation.constraints.Size;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by 777Al on 08.04.2017.
@@ -140,6 +142,14 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
             component = field;
         } else if (propClass == LocalDateTime.class) {
             DateTimeField field = new DateTimeField();
+            dataBinder.forField(field).bind(propertyField.getName());
+            component = field;
+        }  else if (propClass == List.class) {
+            Size annotation = propertyField.getAnnotation(Size.class);
+            if (annotation == null) {
+                throw new IllegalArgumentException("Unknown size of the field!");
+            }
+            ListField<?> field = new ListField<>(annotation.max());
             dataBinder.forField(field).bind(propertyField.getName());
             component = field;
         } else {
