@@ -85,8 +85,8 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
                         variant.getRoomSize(),
                         variant.getQuantityOfSingleTypeEquipment(),
                         variant.getHemisphereRadius(),
-                        variant.getAverageSoundPressureControlPoint().toArray(new Double[0]),
-                        variant.getAverageSoundPressure().toArray(new Double[0])
+                        toArray(variant.getAverageSoundPressureControlPoint()),
+                        toArray(variant.getAverageSoundPressure())
                 ).execute();
     }
 }

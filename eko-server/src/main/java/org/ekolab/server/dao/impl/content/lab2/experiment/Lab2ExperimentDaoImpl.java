@@ -80,8 +80,8 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
                         variant.getRoomSize(),
                         variant.getQuantityOfSingleTypeEquipment(),
                         variant.getHemisphereRadius(),
-                        variant.getAverageSoundPressureControlPoint().toArray(new Double[0]),
-                        variant.getAverageSoundPressure().toArray(new Double[0])
+                        toArray(variant.getAverageSoundPressureControlPoint()),
+                        toArray(variant.getAverageSoundPressure())
                 ).execute();
     }
 
@@ -95,8 +95,8 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
                 .set(LAB2_EXPERIMENT_LOG.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT, experimentJournal.getQuantityOfSingleTypeEquipment())
                 .set(LAB2_EXPERIMENT_LOG.HEMISPHERE_RADIUS, experimentJournal.getHemisphereRadius())
                 .set(LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE_CONTROL_POINT,
-                        experimentJournal.getAverageSoundPressureControlPoint().toArray(new Double[0]))
-                .set(LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE, experimentJournal.getAverageSoundPressure().toArray(new Double[0]))
+                        toArray(experimentJournal.getAverageSoundPressureControlPoint()))
+                .set(LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE, toArray(experimentJournal.getAverageSoundPressure()))
                 .where(LAB2_EXPERIMENT_LOG.ID.eq(experimentJournal.getId()))
                 .execute();
     }
