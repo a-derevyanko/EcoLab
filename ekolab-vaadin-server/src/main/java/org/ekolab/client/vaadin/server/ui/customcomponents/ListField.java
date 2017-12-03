@@ -1,28 +1,25 @@
 package org.ekolab.client.vaadin.server.ui.customcomponents;
 
+import com.vaadin.data.Converter;
 import com.vaadin.data.HasValue;
-import com.vaadin.data.ValueProvider;
 import com.vaadin.shared.Registration;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.components.grid.ItemClickListener;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
-public class ListField<T> extends Grid<List<T>> implements HasValue<List<T>> {
-    public ListField(int size) {
-        IntStream.range(0, size).mapToObj(i -> (ValueProvider<List<T>, T>) ts -> ts.get(i)).forEach(this::addColumn);
+public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
+    public ListField(Converter<String, T> converter, List<String> captions) {
+        createColumns(null, captions, converter);
     }
 
     @Override
     public void setValue(List<T> value) {
-        setItems(Collections.singleton(value));
+        setItems(Collections.singleton(new EditableGridData<>(0, value)));
     }
 
     @Override
     public List<T> getValue() {
-        return getSelectedItems().iterator().next();
+        return getSelectedItems().iterator().next().getValues();
     }
 
     @Override
@@ -47,6 +44,8 @@ public class ListField<T> extends Grid<List<T>> implements HasValue<List<T>> {
 
     @Override
     public Registration addValueChangeListener(ValueChangeListener<List<T>> listener) {
-        return addItemClickListener((ItemClickListener<List<T>>) event -> listener.valueChange(new ValueChangeEvent<List<T>>(event.getSource(), ListField.this, getValue(), true)));
+        return getEditor().addSaveListener(
+                event -> listener.valueChange(
+                        new ValueChangeEvent<>(ListField.this, ListField.this, getValue(), true)));
     }
 }

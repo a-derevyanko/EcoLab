@@ -20,7 +20,7 @@ import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
  * Created by 777Al on 19.04.2017.
  */
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
-public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1Data<V>> implements Lab1Dao<Lab1Data<V>> {
+public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1Data<V>> implements Lab1Dao<V> {
     public Lab1DaoImpl(DSLContext dsl) {
         super(dsl);
     }

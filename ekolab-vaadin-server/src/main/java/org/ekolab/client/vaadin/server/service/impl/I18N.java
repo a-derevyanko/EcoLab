@@ -5,7 +5,6 @@ import com.vaadin.spring.annotation.UIScope;
 import org.ekolab.server.common.I18NUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
@@ -21,6 +20,8 @@ import java.io.Serializable;
 public class I18N implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(I18N.class);
 
+    private static I18N INSTANCE = null;
+
     private final MessageSource messageSource;
 
     private final VaadinSession vaadinSession;
@@ -28,6 +29,11 @@ public class I18N implements Serializable {
     public I18N(MessageSource messageSource, VaadinSession vaadinSession) {
         this.messageSource = messageSource;
         this.vaadinSession = vaadinSession;
+        INSTANCE = this;
+    }
+
+    public static I18N getInstance() {
+        return INSTANCE;
     }
 
     @Cacheable("I18N")

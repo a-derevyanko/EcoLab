@@ -14,7 +14,7 @@ import org.springframework.context.MessageSource;
 /**
  * Created by 777Al on 26.04.2017.
  */
-public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<Lab2Data<V>>> extends LabServiceImpl<Lab2Data<V>, V, D> implements Lab2Service<V> {
+public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V>> extends LabServiceImpl<Lab2Data<V>, V, D> implements Lab2Service<V> {
 
     protected Lab2ServiceImpl(D labDao, UserInfoService userInfoService, ReportService reportService, MessageSource messageSource, StudentInfoService studentInfoService) {
         super(labDao, userInfoService, reportService, messageSource, studentInfoService);

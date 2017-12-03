@@ -149,7 +149,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
             if (annotation == null) {
                 throw new IllegalArgumentException("Unknown size of the field!");
             }
-            ListField<?> field = new ListField<>(annotation.max());
+            ListField<?> field = new ListField<>(UIUtils.getStringConverter(Double.class, i18N), Arrays.asList(i18N.get(propertyField.getName() + "-columns").split(",")));
             dataBinder.forField(field).bind(propertyField.getName());
             component = field;
         } else {

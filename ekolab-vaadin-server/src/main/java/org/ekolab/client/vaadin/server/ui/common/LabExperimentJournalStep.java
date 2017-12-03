@@ -20,7 +20,6 @@ import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotific
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.lab1.experiment.Lab1ExperimentLog;
 import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
@@ -44,12 +43,13 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
 
     protected final ParameterCustomizer parameterCustomizer;
 
+    protected float fieldWidth = 250.0F;
     // ----------------------------- Графические компоненты --------------------------------
     protected final GridLayout firstLayout = new GridLayout(5, 1);
     protected final GridLayout secondLayout = new GridLayout(8, 2);
     protected final HorizontalLayout centerLayout = new HorizontalLayout(firstLayout, secondLayout);
     protected final Label journalLabel = new Label("Experiment journal");
-    protected final Label measurementLabel = new Label("Mesurement");
+    protected final Label measurementLabel = new Label("Measurement");
 
     public LabExperimentJournalStep(Binder<V> experimentLogBinder, Binder<T> dataBinder, I18N i18N, ValidationService validationService, ParameterCustomizer parameterCustomizer) {
         this.experimentLogBinder = experimentLogBinder;
@@ -132,7 +132,7 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
         } else {
             fieldComponent = new TextField();
         }
-        fieldComponent.setWidth(250.0F, Unit.PIXELS);
+        fieldComponent.setWidth(fieldWidth, Unit.PIXELS);
         addComponentsToGridRow(firstLayout, createFieldComponents(fieldComponent, field));
     }
 
@@ -172,7 +172,7 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
      */
     @Override
     public boolean onAdvance() {
-        for (Field field : Lab1ExperimentLog.class.getDeclaredFields()) {
+        for (Field field : experimentLogBinder.getBean().getClass().getDeclaredFields()) {
             ReflectionUtils.makeAccessible(field);
             Object value = ReflectionUtils.getField(field, experimentLogBinder.getBean());
             if (value == null) {

@@ -47,7 +47,8 @@ public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S ext
 
         FileDownloader fileDownloader = new FileDownloader(new StreamResource(
                 () -> getClass().getClassLoader().
-                        getResourceAsStream("org/ekolab/server/service/impl/content/lab1/experiment/report/experimentJournal.pdf"),
+                        getResourceAsStream("org/ekolab/server/service/impl/content/lab" + labService.getLabNumber() +
+                                "/experiment/report/experimentJournal.pdf"),
                 "experimentJournal.pdf"));
 
         fileDownloader.extend(downloadExperimentLogJournal);
