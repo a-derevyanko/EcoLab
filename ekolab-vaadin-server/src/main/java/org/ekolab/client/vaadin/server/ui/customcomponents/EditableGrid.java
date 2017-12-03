@@ -2,6 +2,7 @@ package org.ekolab.client.vaadin.server.ui.customcomponents;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
@@ -37,8 +38,10 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
     }
 
     public void setRowCount(int rows, T defaultValue) {
-        List<EditableGridData<T>> items = new ArrayList<>();
-        IntStream.rangeClosed(1, rows).forEach(i -> {
+        List<EditableGridData<T>> items = new ArrayList<>(getDataProvider() instanceof ListDataProvider ?
+                ((ListDataProvider<EditableGridData<T>>) getDataProvider()).getItems() : Collections.emptyList());
+
+        IntStream.rangeClosed(1, rows).forEachOrdered(i -> {
             EditableGridData<T> data = new EditableGridData<>(i, new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue)));
             items.add(data);
         });
