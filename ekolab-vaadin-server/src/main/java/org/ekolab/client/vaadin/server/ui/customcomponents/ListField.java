@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
     public ListField(Converter<String, T> converter, List<String> captions) {
+        setHeightByRows(1.0);
         createColumns(null, captions, converter);
     }
 
