@@ -21,7 +21,6 @@ import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.VaadinUI;
-import org.ekolab.client.vaadin.server.ui.development.DevUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.view.content.lab_1.Lab1TestView;
@@ -197,7 +196,7 @@ public class LabChooserView extends VerticalLayout implements View {
         setTestButtonSate(lab3TestButton, completedLabs.containsKey(3) && !completedTests.contains(3));
         boolean isNotStudent = VaadinUI.getCurrent().getCurrentUserInfo().getGroup() != UserGroup.STUDENT;
         setLabButtonSate(lab1Button, isNotStudent || !completedLabs.containsKey(1));
-        setLabButtonSate(lab2Button, DevUtils.isProductionVersion() && (isNotStudent || !completedLabs.containsKey(2)));
+        setLabButtonSate(lab2Button, isNotStudent || !completedLabs.containsKey(2));
         setLabButtonSate(lab3Button, isNotStudent || !completedLabs.containsKey(3));
         setButtonSate(labDefenceButton, lab1TestButton.isEnabled() || lab2TestButton.isEnabled() || lab3TestButton.isEnabled());
     }

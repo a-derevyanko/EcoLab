@@ -45,11 +45,10 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
 
     protected float fieldWidth = 250.0F;
     // ----------------------------- Графические компоненты --------------------------------
-    protected final GridLayout firstLayout = new GridLayout(5, 1);
-    protected final GridLayout secondLayout = new GridLayout(8, 2);
-    protected final HorizontalLayout centerLayout = new HorizontalLayout(firstLayout, secondLayout);
+    protected final Label objectLabel = new Label("Object");
+    protected final GridLayout firstLayout = new GridLayout(5, 2);
+    protected final HorizontalLayout centerLayout = new HorizontalLayout(firstLayout);
     protected final Label journalLabel = new Label("Experiment journal");
-    protected final Label measurementLabel = new Label("Measurement");
 
     public LabExperimentJournalStep(Binder<V> experimentLogBinder, Binder<T> dataBinder, I18N i18N, ValidationService validationService, ParameterCustomizer parameterCustomizer) {
         this.experimentLogBinder = experimentLogBinder;
@@ -73,20 +72,17 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
         journalLabel.setStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
         firstLayout.setMargin(true);
         firstLayout.setSpacing(true);
-        secondLayout.setMargin(true);
-        secondLayout.setSpacing(true);
-
-        measurementLabel.setValue(i18N.get("lab.step-experiment-journal.measurement-title"));
-        measurementLabel.setStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
-        secondLayout.addComponent(measurementLabel, 0, 0, 7, 0);
-        secondLayout.setComponentAlignment(measurementLabel, Alignment.TOP_CENTER);
+        firstLayout.addComponent(objectLabel, 0, 0, 4, 0);
+        firstLayout.setComponentAlignment(objectLabel, Alignment.TOP_CENTER);
+        objectLabel.setValue(i18N.get("lab1.step1.object-title"));
+        objectLabel.setStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
     }
 
     /**
      * Добавляет три поля для измерений и поле со средним значением
      * @param field поле класса журнала наблюдений
      */
-    protected void addTextFieldWithAverageFields(Field field) {
+    protected void addTextFieldWithAverageFields(GridLayout layout, Field field) {
         TextField component = new TextField();
         component.setWidth(100.0F, Unit.PIXELS);
         component.setEnabled(false);
@@ -121,7 +117,7 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
         };
         measurementComponents.forEach(x -> x.addValueChangeListener(listener));
 
-        addComponentsToGridRow(secondLayout, components);
+        addComponentsToGridRow(layout, components);
     }
 
     protected void addField(Field field) {

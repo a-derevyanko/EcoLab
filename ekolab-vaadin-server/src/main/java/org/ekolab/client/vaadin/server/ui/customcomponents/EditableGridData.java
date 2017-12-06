@@ -1,6 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.customcomponents;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EditableGridData<T> {
     private final int number;
@@ -26,5 +27,20 @@ public class EditableGridData<T> {
 
     public List<T> getValues() {
         return values;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EditableGridData)) return false;
+        EditableGridData<?> that = (EditableGridData<?>) o;
+        return number == that.number &&
+                Objects.equals(values, that.values);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(number, values);
     }
 }

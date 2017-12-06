@@ -20,8 +20,6 @@ import java.io.Serializable;
 public class I18N implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(I18N.class);
 
-    private static I18N INSTANCE = null;
-
     private final MessageSource messageSource;
 
     private final VaadinSession vaadinSession;
@@ -29,11 +27,6 @@ public class I18N implements Serializable {
     public I18N(MessageSource messageSource, VaadinSession vaadinSession) {
         this.messageSource = messageSource;
         this.vaadinSession = vaadinSession;
-        INSTANCE = this;
-    }
-
-    public static I18N getInstance() {
-        return INSTANCE;
     }
 
     @Cacheable("I18N")

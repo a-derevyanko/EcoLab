@@ -2,6 +2,7 @@ package org.ekolab.client.vaadin.server.ui.customcomponents;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
@@ -15,12 +16,14 @@ import java.util.stream.IntStream;
 
 public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComponent {
     public EditableGrid() {
+        setWidth(100.0F, Unit.PERCENTAGE);
+        setDataProvider(DataProvider.ofCollection(Collections.emptyList()));
         getEditor().setEnabled(true);
-        getEditor().setSaveCaption(I18N.getInstance().get("savable.save"));
-        getEditor().setCancelCaption(I18N.getInstance().get("editable.cancel"));
     }
 
-    public void createColumns(String numberCaption, List<String> captions, Converter<String, T> converter) {
+    public void createColumns(I18N i18N, String numberCaption, List<String> captions, Converter<String, T> converter) {
+        getEditor().setSaveCaption(i18N.get("savable.save"));
+        getEditor().setCancelCaption(i18N.get("editable.cancel"));
         if (numberCaption != null) {
             addColumn(EditableGridData::getNumber).setCaption(numberCaption);
         }
@@ -32,19 +35,22 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
             Binder.Binding<EditableGridData<T>, T> binding = binder.forField(field).
                     withConverter(converter).
                     bind(data -> data.getValue(i), (doubleData, aDouble) -> doubleData.setValue(i, aDouble));
-            Column<EditableGridData<T>, T> column = addColumn(data -> data.getValue(i)).setCaption(caption);
+            Column<EditableGridData<T>, T> column = addColumn(data -> data.getValue(i)).setCaption(caption).setSortable(false);
             column.setEditorBinding(binding);
         });
     }
 
     public void setRowCount(int rows, T defaultValue) {
-        List<EditableGridData<T>> items = new ArrayList<>(getDataProvider() instanceof ListDataProvider ?
-                ((ListDataProvider<EditableGridData<T>>) getDataProvider()).getItems() : Collections.emptyList());
+        List<EditableGridData<T>> items = getItems();
 
-        IntStream.rangeClosed(1, rows).forEachOrdered(i -> {
+        IntStream.rangeClosed(items.size() + 1, rows).forEachOrdered(i -> {
             EditableGridData<T> data = new EditableGridData<>(i, new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue)));
             items.add(data);
         });
         setItems(items);
+    }
+
+    public List<EditableGridData<T>> getItems() {
+        return new ArrayList<>(((ListDataProvider<EditableGridData<T>>) getDataProvider()).getItems());
     }
 }
