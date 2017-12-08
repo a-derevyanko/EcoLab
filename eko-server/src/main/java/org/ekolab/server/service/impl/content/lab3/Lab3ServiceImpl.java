@@ -90,7 +90,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
     public Set<DataValue> getInitialDataValues(Lab3Variant data, Locale locale) {
         Set<DataValue> values = super.getInitialDataValues(data, locale);
         DataValue cityValue = new DataValue();
-        cityValue.setName(messageSource.getMessage("initial-data.city", null, locale) + ": " + getFieldValueForPrint(data.getCity(), locale));
+        cityValue.setName(messageSource.getMessage("lab3.initial-data.city", null, locale) + ": " + getFieldValueForPrint(data.getCity(), locale));
         cityValue.setValue(lab3ResourceService.getCoatOfArms(data.getCity().name()));
         values.add(cityValue);
 

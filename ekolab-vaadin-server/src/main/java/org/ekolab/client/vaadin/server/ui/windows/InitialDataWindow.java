@@ -11,6 +11,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
@@ -89,6 +90,8 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
         valuesGrid.addColumn(DataValue::getValue).setCaption(i18N.get("report.lab-data.parameter-value")).setExpandRatio(1);
         valuesGrid.addColumn(DataValue::getDimension, new HtmlRenderer()).setCaption(i18N.get("report.lab-data.parameter-dimension")).setExpandRatio(1);
 
+        additionalFields.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+
         new BrowserWindowOpener(new DownloadStreamResource(
                 () -> settings.labService.printInitialData(settings.variant, UI.getCurrent().getLocale()),
                 "initialData.pdf")).extend(printDataButton);
@@ -115,6 +118,9 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
                         Lists.newArrayList(val.keySet()));
                 field.setValue(Lists.newArrayList(((Map) val).values()));
                 field.setReadOnly(true);
+                Label caption = new Label(dataValue.getName());
+                caption.setStyleName(EkoLabTheme.LABEL_LARGE);
+                additionalComponents.add(caption);
                 additionalComponents.add(field);
             } else {
                 values.add(dataValue);
