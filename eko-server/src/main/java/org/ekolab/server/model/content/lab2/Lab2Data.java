@@ -11,35 +11,29 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Барометрическое давление
      */
-    private Double barometricPressure;
+    private Integer barometricPressure;
 
     /**
      * Температура воздуха в помещении
      */
 
-    private Double indoorsTemperature;
+    private Integer indoorsTemperature;
 
     /**
      * Объем помещения с исследуемым объектом
      */
 
-    private Double roomSize;
+    private Integer roomSize;
     /**
      * Количество однотипного оборудования
      */
 
-    private Double quantityOfSingleTypeEquipment;
+    private Integer quantityOfSingleTypeEquipment;
 
     /**
      * Радиус полусферы
      */
     private Double hemisphereRadius;
-
-    /**
-     * Результаты измерений уровня звукового давления, дБ, для каждой точки
-     */
-    @Size(min = 9, max = 9)
-    private List<Double> averageSoundPressureControlPoint;
 
     /**
      * Средний уровень звукового давления
@@ -96,35 +90,35 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     @Size(min = 9, max = 9)
     private List<Double> reflectedSoundPower;
 
-    public Double getBarometricPressure() {
+    public Integer getBarometricPressure() {
         return barometricPressure;
     }
 
-    public void setBarometricPressure(Double barometricPressure) {
+    public void setBarometricPressure(Integer barometricPressure) {
         this.barometricPressure = barometricPressure;
     }
 
-    public Double getIndoorsTemperature() {
+    public Integer getIndoorsTemperature() {
         return indoorsTemperature;
     }
 
-    public void setIndoorsTemperature(Double indoorsTemperature) {
+    public void setIndoorsTemperature(Integer indoorsTemperature) {
         this.indoorsTemperature = indoorsTemperature;
     }
 
-    public Double getRoomSize() {
+    public Integer getRoomSize() {
         return roomSize;
     }
 
-    public void setRoomSize(Double roomSize) {
+    public void setRoomSize(Integer roomSize) {
         this.roomSize = roomSize;
     }
 
-    public Double getQuantityOfSingleTypeEquipment() {
+    public Integer getQuantityOfSingleTypeEquipment() {
         return quantityOfSingleTypeEquipment;
     }
 
-    public void setQuantityOfSingleTypeEquipment(Double quantityOfSingleTypeEquipment) {
+    public void setQuantityOfSingleTypeEquipment(Integer quantityOfSingleTypeEquipment) {
         this.quantityOfSingleTypeEquipment = quantityOfSingleTypeEquipment;
     }
 
@@ -134,14 +128,6 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
 
     public void setHemisphereRadius(Double hemisphereRadius) {
         this.hemisphereRadius = hemisphereRadius;
-    }
-
-    public List<Double> getAverageSoundPressureControlPoint() {
-        return averageSoundPressureControlPoint;
-    }
-
-    public void setAverageSoundPressureControlPoint(List<Double> averageSoundPressureControlPoint) {
-        this.averageSoundPressureControlPoint = averageSoundPressureControlPoint;
     }
 
     public List<Double> getAverageSoundPressure() {
@@ -235,7 +221,6 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
                 Objects.equals(roomSize, lab2Data.roomSize) &&
                 Objects.equals(quantityOfSingleTypeEquipment, lab2Data.quantityOfSingleTypeEquipment) &&
                 Objects.equals(hemisphereRadius, lab2Data.hemisphereRadius) &&
-                Objects.equals(averageSoundPressureControlPoint, lab2Data.averageSoundPressureControlPoint) &&
                 Objects.equals(averageSoundPressure, lab2Data.averageSoundPressure) &&
                 Objects.equals(correctionFactor, lab2Data.correctionFactor) &&
                 Objects.equals(soundPressureMeasuringSurface, lab2Data.soundPressureMeasuringSurface) &&
@@ -250,6 +235,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), barometricPressure, indoorsTemperature, roomSize, quantityOfSingleTypeEquipment, hemisphereRadius, averageSoundPressureControlPoint, averageSoundPressure, correctionFactor, soundPressureMeasuringSurface, hemisphereSurface, measuringFactor, soundPowerLevel, roomConstant1000, frequencyCoefficient, roomConstant, reflectedSoundPower);
+
+        return Objects.hash(super.hashCode(), barometricPressure, indoorsTemperature, roomSize, quantityOfSingleTypeEquipment, hemisphereRadius, averageSoundPressure, correctionFactor, soundPressureMeasuringSurface, hemisphereSurface, measuringFactor, soundPowerLevel, roomConstant1000, frequencyCoefficient, roomConstant, reflectedSoundPower);
     }
 }

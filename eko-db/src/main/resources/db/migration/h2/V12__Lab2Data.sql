@@ -12,12 +12,11 @@ CREATE TABLE lab2data (
   /**
   *Блок свойств лабы
   */
-  barometric_Pressure                  DOUBLE,
-  indoors_Temperature                  DOUBLE,
-  room_Size                            DOUBLE,
-  quantity_Of_Single_Type_Equipment    DOUBLE,
+  barometric_Pressure                  INT,
+  indoors_Temperature                  INT,
+  room_Size                            INT,
+  quantity_Of_Single_Type_Equipment    INT,
   hemisphere_Radius                    DOUBLE,
-  average_Sound_Pressure_Control_Point ARRAY,
   average_Sound_Pressure               ARRAY,
   correction_Factor                    DOUBLE,
   sound_Pressure_Measuring_Surface      ARRAY,
@@ -60,7 +59,6 @@ COMMENT ON COLUMN LAB2DATA.indoors_Temperature IS 'Температура воз
 COMMENT ON COLUMN LAB2DATA.room_Size IS 'Объем помещения с исследуемым объектом';
 COMMENT ON COLUMN LAB2DATA.quantity_Of_Single_Type_Equipment IS 'Количество однотипного оборудования';
 COMMENT ON COLUMN LAB2DATA.hemisphere_Radius IS 'Радиус полусферы';
-COMMENT ON COLUMN LAB2DATA.average_Sound_Pressure_Control_Point IS 'Результаты измерений уровня звукового давления, дБ, для каждой точки';
 COMMENT ON COLUMN LAB2DATA.average_Sound_Pressure IS 'Средний уровень звукового давления';
 COMMENT ON COLUMN LAB2DATA.correction_Factor IS 'Корректирующая поправка';
 COMMENT ON COLUMN LAB2DATA.sound_Pressure_Measuring_Surface IS 'Уровень звукового давления на измерительной поверхности';
@@ -78,12 +76,12 @@ CREATE TABLE LAB2_RANDOM_VARIANT (
   /**
   *Блок свойств лабы
   */
-  barometric_Pressure                  DOUBLE,
-  indoors_Temperature                  DOUBLE,
-  room_Size                            DOUBLE,
-  quantity_Of_Single_Type_Equipment    DOUBLE,
+  name                                 VARCHAR(256),
+  barometric_Pressure                  INT,
+  indoors_Temperature                  INT,
+  room_Size                            INT,
+  quantity_Of_Single_Type_Equipment    INT,
   hemisphere_Radius                    DOUBLE,
-  average_Sound_Pressure_Control_Point ARRAY,
   average_Sound_Pressure               ARRAY,
 );
 
@@ -97,12 +95,12 @@ CREATE UNIQUE INDEX ix_LAB2_RANDOM_VARIANT_id
 * Добавим комментарии
 */
 COMMENT ON TABLE LAB2_RANDOM_VARIANT IS 'Вариант лабораторной №2';
+COMMENT ON COLUMN LAB2_RANDOM_VARIANT.name IS 'Название объекта';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.barometric_Pressure IS 'Барометрическое давление';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.indoors_Temperature IS 'Температура воздуха в помещении';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.room_Size IS 'Объем помещения с исследуемым объектом';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.quantity_Of_Single_Type_Equipment IS 'Количество однотипного оборудования';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.hemisphere_Radius IS 'Радиус полусферы';
-COMMENT ON COLUMN LAB2_RANDOM_VARIANT.average_Sound_Pressure_Control_Point IS 'Результаты измерений уровня звукового давления, дБ, для каждой точки';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.average_Sound_Pressure IS 'Средний уровень звукового давления';
 
 CREATE TABLE lab2_experiment_log (
@@ -112,12 +110,11 @@ CREATE TABLE lab2_experiment_log (
   *Блок свойств лабы
   */
   name                                 VARCHAR(256),
-  barometric_Pressure                  DOUBLE,
-  indoors_Temperature                  DOUBLE,
-  room_Size                            DOUBLE,
-  quantity_Of_Single_Type_Equipment    DOUBLE,
+  barometric_Pressure                  INT,
+  indoors_Temperature                  INT,
+  room_Size                            INT,
+  quantity_Of_Single_Type_Equipment    INT,
   hemisphere_Radius                    DOUBLE,
-  average_Sound_Pressure_Control_Point ARRAY,
   average_Sound_Pressure               ARRAY,
 );
 
@@ -137,6 +134,5 @@ COMMENT ON COLUMN lab2_experiment_log.indoors_Temperature IS 'Температу
 COMMENT ON COLUMN lab2_experiment_log.room_Size IS 'Объем помещения с исследуемым объектом';
 COMMENT ON COLUMN lab2_experiment_log.quantity_Of_Single_Type_Equipment IS 'Количество однотипного оборудования';
 COMMENT ON COLUMN lab2_experiment_log.hemisphere_Radius IS 'Радиус полусферы';
-COMMENT ON COLUMN lab2_experiment_log.average_Sound_Pressure_Control_Point IS 'Результаты измерений уровня звукового давления, дБ, для каждой точки';
 COMMENT ON COLUMN lab2_experiment_log.average_Sound_Pressure IS 'Средний уровень звукового давления';
 

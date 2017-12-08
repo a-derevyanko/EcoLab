@@ -1,5 +1,6 @@
 package org.ekolab.client.vaadin.server.ui.windows;
 
+import com.google.common.collect.Lists;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.StreamResource;
@@ -16,12 +17,14 @@ import com.vaadin.ui.renderers.HtmlRenderer;
 import org.apache.commons.io.FilenameUtils;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.DownloadStreamResource;
+import org.ekolab.client.vaadin.server.ui.common.UIUtils;
+import org.ekolab.client.vaadin.server.ui.customcomponents.ListField;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.common.Profiles;
+import org.ekolab.server.model.content.DataValue;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.LabService;
-import org.ekolab.server.model.content.DataValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 
@@ -29,9 +32,11 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,6 +54,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
     protected final HorizontalLayout imagesLayout = new HorizontalLayout();
     protected final Button printDataButton = new Button("Print initial data", VaadinIcons.PRINT);
     protected final Grid<DataValue> valuesGrid = new Grid<>();
+    protected final VerticalLayout additionalFields = new VerticalLayout();
 
     protected final I18N i18N;
 
@@ -68,6 +74,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
         content.addComponent(topLayout);
         content.addComponent(imagesLayout);
         content.addComponent(valuesGrid);
+        content.addComponent(additionalFields);
         content.setExpandRatio(valuesGrid, 1.0F);
         topLayout.addComponent(printDataButton);
         imagesLayout.setSpacing(true);
@@ -94,11 +101,21 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
 
         Map<String, URL> images = new LinkedHashMap<>();
 
+        List<Component> additionalComponents = new ArrayList<>();
+
         for (DataValue dataValue : settings.labService.getInitialDataValues(settings.variant, UI.getCurrent().getLocale())) {
             // Т. к. Grid до сих пор не поддерживает ячейки из нескольких строк, заменяем на пробелы все переходы на новую строку
             dataValue.setName(dataValue.getName().replaceAll("<br>", " "));
             if (dataValue.getValue() instanceof URL) {
                 images.put(dataValue.getName(), (URL) dataValue.getValue());
+            } else if (dataValue.getValue() instanceof Map) {
+                ListField<?> field = new ListField<>(null);
+                Map<String, ?> val = (Map) dataValue.getValue();
+                field.createColumns(i18N, UIUtils.getStringConverter((Class) val.values().iterator().next().getClass(), i18N),
+                        Lists.newArrayList(val.keySet()));
+                field.setValue(Lists.newArrayList(((Map) val).values()));
+                field.setReadOnly(true);
+                additionalComponents.add(field);
             } else {
                 values.add(dataValue);
             }
@@ -120,6 +137,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
             }
         }
         valuesGrid.setItems(values);
+        additionalComponents.forEach(additionalFields::addComponent);
     }
 
     @Override
@@ -127,6 +145,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
         super.clear();
         imagesLayout.removeAllComponents();
         valuesGrid.setItems(Collections.emptyList());
+        additionalFields.removeAllComponents();
     }
 
     public static class InitialDataWindowSettings<T extends LabData<V>, V extends LabVariant> implements WindowSettings {

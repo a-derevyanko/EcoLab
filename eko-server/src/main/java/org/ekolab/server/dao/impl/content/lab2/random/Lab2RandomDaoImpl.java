@@ -5,13 +5,13 @@ import org.ekolab.server.dao.api.content.lab2.random.Lab2RandomDao;
 import org.ekolab.server.dao.impl.DaoUtils;
 import org.ekolab.server.dao.impl.content.lab2.Lab2DaoImpl;
 import org.ekolab.server.model.content.lab2.Lab2Data;
+import org.ekolab.server.model.content.lab2.ObjectType;
 import org.ekolab.server.model.content.lab2.random.Lab2RandomVariant;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.ekolab.server.db.h2.public_.Tables.LAB2DATA;
@@ -29,13 +29,13 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
         public Lab2Data<Lab2RandomVariant> map(Record record) {
             Lab2Data<Lab2RandomVariant> data = super.map(record);
             data.getVariant().setId(record.get(LAB2_RANDOM_VARIANT.ID));
-            data.setBarometricPressure(record.get(LAB2_RANDOM_VARIANT.BAROMETRIC_PRESSURE));
-            data.setIndoorsTemperature(record.get(LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE));
-            data.setRoomSize(record.get(LAB2_RANDOM_VARIANT.ROOM_SIZE));
-            data.setQuantityOfSingleTypeEquipment(record.get(LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
-            data.setHemisphereRadius(record.get(LAB2_RANDOM_VARIANT.HEMISPHERE_RADIUS));
-            data.setAverageSoundPressureControlPoint(record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE_CONTROL_POINT) == null ? null : Arrays.asList((Double[]) record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE_CONTROL_POINT)));
-            data.setAverageSoundPressure(record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE) == null ? null : Arrays.asList((Double[]) record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE)));
+            data.getVariant().setName(record.get(LAB2_RANDOM_VARIANT.NAME) == null ? null : ObjectType.valueOf(record.get(LAB2_RANDOM_VARIANT.NAME)));
+            data.getVariant().setBarometricPressure(record.get(LAB2_RANDOM_VARIANT.BAROMETRIC_PRESSURE));
+            data.getVariant().setIndoorsTemperature(record.get(LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE));
+            data.getVariant().setRoomSize(record.get(LAB2_RANDOM_VARIANT.ROOM_SIZE));
+            data.getVariant().setQuantityOfSingleTypeEquipment(record.get(LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
+            data.getVariant().setHemisphereRadius(record.get(LAB2_RANDOM_VARIANT.HEMISPHERE_RADIUS));
+            data.getVariant().setAverageSoundPressure(toList(record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE)));
             return data;
         }
 
@@ -71,21 +71,21 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
     protected void saveVariant(Lab2RandomVariant variant) {
         dsl.insertInto(LAB2_RANDOM_VARIANT,
                 LAB2_RANDOM_VARIANT.ID,
+                LAB2_RANDOM_VARIANT.NAME,
                 LAB2_RANDOM_VARIANT.BAROMETRIC_PRESSURE,
                 LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE,
                 LAB2_RANDOM_VARIANT.ROOM_SIZE,
                 LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
                 LAB2_RANDOM_VARIANT.HEMISPHERE_RADIUS,
-                LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE_CONTROL_POINT,
                 LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE).
                 values(
                         variant.getId(),
+                        variant.getName() == null ? null : variant.getName().name(),
                         variant.getBarometricPressure(),
                         variant.getIndoorsTemperature(),
                         variant.getRoomSize(),
                         variant.getQuantityOfSingleTypeEquipment(),
                         variant.getHemisphereRadius(),
-                        toArray(variant.getAverageSoundPressureControlPoint()),
                         toArray(variant.getAverageSoundPressure())
                 ).execute();
     }

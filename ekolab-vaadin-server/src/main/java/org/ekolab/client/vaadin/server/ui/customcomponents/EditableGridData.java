@@ -40,7 +40,6 @@ public class EditableGridData<T> {
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(number, values);
+        return Objects.hash(number, System.identityHashCode(values));
     }
 }

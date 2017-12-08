@@ -5,6 +5,7 @@ import com.vaadin.data.HasValue;
 import com.vaadin.shared.Registration;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,6 +24,9 @@ public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
 
     @Override
     public void setValue(List<T> value) {
+        if (value == null) {
+            value = new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue));
+        }
         setItems(Collections.singleton(new EditableGridData<>(0, value)));
     }
 
@@ -33,7 +37,6 @@ public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
 
     @Override
     public void setRequiredIndicatorVisible(boolean requiredIndicatorVisible) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -43,7 +46,7 @@ public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
 
     @Override
     public void setReadOnly(boolean readOnly) {
-        throw new UnsupportedOperationException();
+        getEditor().setEnabled(!readOnly);
     }
 
     @Override

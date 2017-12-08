@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Profile;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.ekolab.server.db.h2.public_.Tables.LAB2DATA;
 
@@ -39,17 +40,16 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
             data.setRoomSize(record.get(LAB2DATA.ROOM_SIZE));
             data.setQuantityOfSingleTypeEquipment(record.get(LAB2DATA.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
             data.setHemisphereRadius(record.get(LAB2DATA.HEMISPHERE_RADIUS));
-            data.setAverageSoundPressureControlPoint(record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE_CONTROL_POINT) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE_CONTROL_POINT)));
-            data.setAverageSoundPressure(record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE)));
+            data.setAverageSoundPressure(toList(record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE)));
             data.setCorrectionFactor(record.get(LAB2DATA.CORRECTION_FACTOR));
-            data.setSoundPressureMeasuringSurface(record.get(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE)));
+            data.setSoundPressureMeasuringSurface(toList(record.get(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE)));
             data.setHemisphereSurface(record.get(LAB2DATA.HEMISPHERE_SURFACE));
             data.setMeasuringFactor(record.get(LAB2DATA.MEASURING_FACTOR));
-            data.setSoundPowerLevel(record.get(LAB2DATA.SOUND_POWER_LEVEL) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.SOUND_POWER_LEVEL)));
+            data.setSoundPowerLevel(toList(record.get(LAB2DATA.SOUND_POWER_LEVEL)));
             data.setRoomConstant1000(record.get(LAB2DATA.ROOM_CONSTANT_1000));
-            data.setFrequencyCoefficient(record.get(LAB2DATA.FREQUENCY_COEFFICIENT) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.FREQUENCY_COEFFICIENT)));
+            data.setFrequencyCoefficient(toList(record.get(LAB2DATA.FREQUENCY_COEFFICIENT)));
             data.setRoomConstant(record.get(LAB2DATA.ROOM_CONSTANT));
-            data.setReflectedSoundPower(record.get(LAB2DATA.REFLECTED_SOUND_POWER) == null ? null : Arrays.asList((Double[]) record.get(LAB2DATA.REFLECTED_SOUND_POWER)));
+            data.setReflectedSoundPower(toList(record.get(LAB2DATA.REFLECTED_SOUND_POWER)));
 
             V variant = createVariant();
             data.setVariant(variant);
@@ -72,7 +72,6 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
                 LAB2DATA.ROOM_SIZE,
                 LAB2DATA.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
                 LAB2DATA.HEMISPHERE_RADIUS,
-                LAB2DATA.AVERAGE_SOUND_PRESSURE_CONTROL_POINT,
                 LAB2DATA.AVERAGE_SOUND_PRESSURE,
                 LAB2DATA.CORRECTION_FACTOR,
                 LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE,
@@ -93,7 +92,6 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
                                 data.getRoomSize(),
                                 data.getQuantityOfSingleTypeEquipment(),
                                 data.getHemisphereRadius(),
-                                data.getAverageSoundPressureControlPoint(),
                                 data.getAverageSoundPressure(),
                                 data.getCorrectionFactor(),
                                 data.getSoundPressureMeasuringSurface(),
@@ -121,7 +119,6 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
                 .set(LAB2DATA.ROOM_SIZE, data.getRoomSize())
                 .set(LAB2DATA.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT, data.getQuantityOfSingleTypeEquipment())
                 .set(LAB2DATA.HEMISPHERE_RADIUS, data.getHemisphereRadius())
-                .set(LAB2DATA.AVERAGE_SOUND_PRESSURE_CONTROL_POINT, toArray(data.getAverageSoundPressureControlPoint()))
                 .set(LAB2DATA.AVERAGE_SOUND_PRESSURE, toArray(data.getAverageSoundPressure()))
                 .set(LAB2DATA.CORRECTION_FACTOR, data.getCorrectionFactor())
                 .set(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE, toArray(data.getSoundPressureMeasuringSurface()))
@@ -151,8 +148,12 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
         return 2;
     }
 
-    protected Object[] toArray(List<?> list) {
+    protected static Object[] toArray(List<?> list) {
         return list == null ? null : list.toArray(new Object[0]);
+    }
+
+    protected static <T> List<T> toList(Object[] array) {
+        return array == null ? null : Arrays.stream(array).map(o -> (T) o).collect(Collectors.toList());
     }
 
     protected abstract Lab2DataMapper<V> getLabMapper();

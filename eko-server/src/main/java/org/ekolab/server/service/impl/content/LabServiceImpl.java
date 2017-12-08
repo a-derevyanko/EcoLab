@@ -51,7 +51,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
-import java.awt.Image;
+import java.awt.*;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
@@ -60,6 +60,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -68,6 +69,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.col;
@@ -276,7 +278,14 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     protected Map<String, Object> getInitialDataWithLocalizedValues(V data, Locale locale) {
         Map<String, Object> printData = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : getValuesFromModel(data).entrySet()) {
-            printData.put(entry.getKey(), getFieldValueForPrint(entry.getValue(), locale));
+            if (entry.getValue() instanceof List) {
+                List<String> captions = Arrays.asList(messageSource.getMessage(entry.getKey() + "-columns", null, locale).split(";"));
+                Map<String, Object> valueMap = IntStream.range(0, captions.size()).boxed().
+                        collect(Collectors.toMap(captions::get, i -> getFieldValueForPrint(((List) entry.getValue()).get(i), locale), (a, b) -> b));
+                printData.put(entry.getKey(), valueMap);
+            } else {
+                printData.put(entry.getKey(), getFieldValueForPrint(entry.getValue(), locale));
+            }
         }
         return printData;
     }

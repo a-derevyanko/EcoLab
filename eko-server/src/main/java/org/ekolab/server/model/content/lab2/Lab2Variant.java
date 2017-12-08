@@ -1,8 +1,6 @@
 package org.ekolab.server.model.content.lab2;
 
 import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.ValidatedBy;
-import org.ekolab.server.model.content.lab2.validators.AverageSoundPressureControlPointValidator;
 
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -13,26 +11,31 @@ import java.util.Objects;
  */
 public abstract class Lab2Variant extends LabVariant {
     /**
+     * Название объекта
+     */
+    private ObjectType name;
+
+    /**
      * Барометрическое давление
      */
-    private Double barometricPressure;
+    private Integer barometricPressure;
 
     /**
      * Температура воздуха в помещении
      */
 
-    private Double indoorsTemperature;
+    private Integer indoorsTemperature;
 
     /**
      * Объем помещения с исследуемым объектом
      */
 
-    private Double roomSize;
+    private Integer roomSize;
     /**
      * Количество однотипного оборудования
      */
 
-    private Double quantityOfSingleTypeEquipment;
+    private Integer quantityOfSingleTypeEquipment;
 
     /**
      * Радиус полусферы
@@ -40,47 +43,48 @@ public abstract class Lab2Variant extends LabVariant {
     private Double hemisphereRadius;
 
     /**
-     * Результаты измерений уровня звукового давления, дБ, для каждой точки
-     */
-    @Size(min = 9, max = 9)
-    @ValidatedBy(AverageSoundPressureControlPointValidator.class)
-    private List<Double> averageSoundPressureControlPoint;
-
-    /**
      * Средний уровень звукового давления
      */
     @Size(min = 9, max = 9)
     private List<Double> averageSoundPressure;
 
-    public Double getBarometricPressure() {
+    public ObjectType getName() {
+        return name;
+    }
+
+    public void setName(ObjectType name) {
+        this.name = name;
+    }
+
+    public Integer getBarometricPressure() {
         return barometricPressure;
     }
 
-    public void setBarometricPressure(Double barometricPressure) {
+    public void setBarometricPressure(Integer barometricPressure) {
         this.barometricPressure = barometricPressure;
     }
 
-    public Double getIndoorsTemperature() {
+    public Integer getIndoorsTemperature() {
         return indoorsTemperature;
     }
 
-    public void setIndoorsTemperature(Double indoorsTemperature) {
+    public void setIndoorsTemperature(Integer indoorsTemperature) {
         this.indoorsTemperature = indoorsTemperature;
     }
 
-    public Double getRoomSize() {
+    public Integer getRoomSize() {
         return roomSize;
     }
 
-    public void setRoomSize(Double roomSize) {
+    public void setRoomSize(Integer roomSize) {
         this.roomSize = roomSize;
     }
 
-    public Double getQuantityOfSingleTypeEquipment() {
+    public Integer getQuantityOfSingleTypeEquipment() {
         return quantityOfSingleTypeEquipment;
     }
 
-    public void setQuantityOfSingleTypeEquipment(Double quantityOfSingleTypeEquipment) {
+    public void setQuantityOfSingleTypeEquipment(Integer quantityOfSingleTypeEquipment) {
         this.quantityOfSingleTypeEquipment = quantityOfSingleTypeEquipment;
     }
 
@@ -90,14 +94,6 @@ public abstract class Lab2Variant extends LabVariant {
 
     public void setHemisphereRadius(Double hemisphereRadius) {
         this.hemisphereRadius = hemisphereRadius;
-    }
-
-    public List<Double> getAverageSoundPressureControlPoint() {
-        return averageSoundPressureControlPoint;
-    }
-
-    public void setAverageSoundPressureControlPoint(List<Double> averageSoundPressureControlPoint) {
-        this.averageSoundPressureControlPoint = averageSoundPressureControlPoint;
     }
 
     public List<Double> getAverageSoundPressure() {
@@ -113,17 +109,18 @@ public abstract class Lab2Variant extends LabVariant {
         if (this == o) return true;
         if (!(o instanceof Lab2Variant)) return false;
         Lab2Variant that = (Lab2Variant) o;
-        return Objects.equals(barometricPressure, that.barometricPressure) &&
+        return name == that.name &&
+                Objects.equals(barometricPressure, that.barometricPressure) &&
                 Objects.equals(indoorsTemperature, that.indoorsTemperature) &&
                 Objects.equals(roomSize, that.roomSize) &&
                 Objects.equals(quantityOfSingleTypeEquipment, that.quantityOfSingleTypeEquipment) &&
                 Objects.equals(hemisphereRadius, that.hemisphereRadius) &&
-                Objects.equals(averageSoundPressureControlPoint, that.averageSoundPressureControlPoint) &&
                 Objects.equals(averageSoundPressure, that.averageSoundPressure);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(barometricPressure, indoorsTemperature, roomSize, quantityOfSingleTypeEquipment, hemisphereRadius, averageSoundPressureControlPoint, averageSoundPressure);
+
+        return Objects.hash(name, barometricPressure, indoorsTemperature, roomSize, quantityOfSingleTypeEquipment, hemisphereRadius, averageSoundPressure);
     }
 }

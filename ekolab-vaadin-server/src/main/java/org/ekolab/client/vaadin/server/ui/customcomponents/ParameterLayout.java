@@ -28,8 +28,9 @@ import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
 
-import javax.validation.constraints.Size;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -123,6 +124,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
             dataBinder.forField(comboBox).bind(propertyField.getName());
             comboBox.setReadOnly(readOnly);
             comboBox.addStyleName(EkoLabTheme.COMBOBOX_TINY);
+            comboBox.setWidth(130, Unit.PIXELS);
             component = comboBox;
         } else if (propClass == Boolean.class) {
             RadioButtonGroup<Boolean> yesNoComponent = new RadioButtonGroup<>(null, Arrays.asList(Boolean.FALSE, Boolean.TRUE));
@@ -130,6 +132,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
             yesNoComponent.setStyleName(EkoLabTheme.OPTIONGROUP_HORIZONTAL);
             yesNoComponent.setSizeFull();
             dataBinder.forField(yesNoComponent).bind(propertyField.getName());
+            yesNoComponent.setWidth(130, Unit.PIXELS);
             component = yesNoComponent;
         } else if (propClass == String.class || Number.class.isAssignableFrom(propClass)) {
             TextField field = new TextField();
@@ -139,25 +142,29 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
                     .withConverter(converter), dataBinder, validationService, i18N);
             field.setReadOnly(readOnly);
             field.addStyleName(EkoLabTheme.TEXTFIELD_TINY);
+            field.setWidth(130, Unit.PIXELS);
             component = field;
         } else if (propClass == LocalDateTime.class) {
             DateTimeField field = new DateTimeField();
             dataBinder.forField(field).bind(propertyField.getName());
+            field.setWidth(200, Unit.PIXELS);
             component = field;
         }  else if (propClass == List.class) {
-            Size annotation = propertyField.getAnnotation(Size.class);
-            if (annotation == null) {
-                throw new IllegalArgumentException("Unknown size of the field!");
+            Type[] type = ((ParameterizedType) propertyField.getGenericType()).getActualTypeArguments();
+            if (type[0] == Double.class) {
+                ListField<Double> field = new ListField<>(0.0);
+                List<String> columns = Arrays.asList(i18N.get(propertyField.getName() + "-columns").split(";"));
+                field.createColumns(i18N, UIUtils.getStringConverter(Double.class, i18N), columns);
+                dataBinder.forField(field).bind(propertyField.getName());
+                field.setWidth(100 * columns.size(), Unit.PIXELS);
+                component = field;
+            }  else {
+                throw new IllegalArgumentException("Unknown property class: " + propClass);
             }
-            ListField<Double> field = new ListField<>(0.0);
-            field.createColumns(i18N, UIUtils.getStringConverter(Double.class, i18N), Arrays.asList(i18N.get(propertyField.getName() + "-columns").split(",")));
-            dataBinder.forField(field).bind(propertyField.getName());
-            component = field;
         } else {
             throw new IllegalArgumentException("Unknown property class: " + propClass);
         }
         super.addComponent(component, 1, row);
-        component.setWidth(130, Unit.PIXELS);
     }
 
 

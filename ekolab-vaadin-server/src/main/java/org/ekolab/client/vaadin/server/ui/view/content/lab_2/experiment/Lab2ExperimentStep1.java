@@ -87,7 +87,7 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
         averageSoundPressureControlPointGrid.setWidth(700.0F, Unit.PIXELS);
         soundPressureControlPointField.setWidth(700.0F, Unit.PIXELS);
         soundPressureControlPointField.createColumns(i18N, UIUtils.getStringConverter(Double.class, i18N), CAPTIONS);
-        soundPressureControlPointField.setEnabled(false);
+        soundPressureControlPointField.setReadOnly(true);
 
         averageSoundPressureControlPointGrid.getEditor().addSaveListener(event -> {
             List<Double> valuesSum = new ArrayList<>(Collections.nCopies(9, 0.0));
@@ -99,5 +99,7 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
             soundPressureControlPointField.setValue(valuesSum.stream().map(d -> d / editableGridData.size()).collect(Collectors.toList()));
         });
         pointCountComboBox.setSelectedItem(4);
+
+        experimentLogBinder.bind(soundPressureControlPointField, Lab2ExperimentLog::getAverageSoundPressure, Lab2ExperimentLog::setAverageSoundPressure);
     }
 }
