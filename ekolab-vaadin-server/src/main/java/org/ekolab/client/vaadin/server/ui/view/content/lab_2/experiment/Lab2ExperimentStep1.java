@@ -1,6 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_2.experiment;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.BinderValidationStatusHandler;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.ComboBox;
@@ -39,12 +40,13 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
     private final Label averageSoundPressureControlPointLabel = new Label();
     private final Label pointCountLabel = new Label();
     private final Label averageLabel = new Label();
+    private final Label soundPressureValidationLabel = new Label();
     private final ComboBox<Integer> pointCountComboBox = new ComboBox<>();
     private final HorizontalLayout averageSoundPressureControlPointTitle = new HorizontalLayout(pointCountLabel, pointCountComboBox);
     private final EditableGrid<Double> averageSoundPressureControlPointGrid = new EditableGrid<>();
     private final ListField<Double> soundPressureControlPointField = new ListField<>(0.0);
     private final VerticalLayout secondLayout = new VerticalLayout(averageSoundPressureControlPointLabel, averageSoundPressureControlPointTitle
-            , averageSoundPressureControlPointGrid, averageLabel, soundPressureControlPointField);
+            , averageSoundPressureControlPointGrid, averageLabel, soundPressureControlPointField, soundPressureValidationLabel);
 
     public Lab2ExperimentStep1(Binder<Lab2ExperimentLog> experimentLogBinder,
                                Binder<Lab2Data<Lab2ExperimentLog>> dataBinder,
@@ -73,6 +75,7 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
         pointCountLabel.setValue(i18N.get("lab2.step1.experiment-data.point-count"));
         averageLabel.setStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
         averageLabel.setValue(i18N.get("lab2.step1.experiment-data.average"));
+        pointCountComboBox.setStyleName(EkoLabTheme.COMBOBOX_TINY);
         pointCountComboBox.setTextInputAllowed(false);
         pointCountComboBox.setEmptySelectionAllowed(false);
         pointCountComboBox.setItems(IntStream.range(1, 9).boxed());
@@ -84,10 +87,10 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
                 Arrays.asList("31,5", "63", "125", "250", "500", "1000", "2000", "4000", "8000"),
                 UIUtils.getStringConverter(Double.class, i18N));
 
-        averageSoundPressureControlPointGrid.setWidth(700.0F, Unit.PIXELS);
-        soundPressureControlPointField.setWidth(700.0F, Unit.PIXELS);
+        averageSoundPressureControlPointGrid.setWidth(650.0F, Unit.PIXELS);
+        soundPressureControlPointField.setWidth(650.0F, Unit.PIXELS);
         soundPressureControlPointField.createColumns(i18N, UIUtils.getStringConverter(Double.class, i18N), CAPTIONS);
-        soundPressureControlPointField.setReadOnly(true);
+        soundPressureControlPointField.setEnabled(false);
 
         averageSoundPressureControlPointGrid.getEditor().addSaveListener(event -> {
             List<Double> valuesSum = new ArrayList<>(Collections.nCopies(9, 0.0));
@@ -100,6 +103,11 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
         });
         pointCountComboBox.setSelectedItem(4);
 
-        experimentLogBinder.bind(soundPressureControlPointField, Lab2ExperimentLog::getAverageSoundPressure, Lab2ExperimentLog::setAverageSoundPressure);
+        soundPressureValidationLabel.setStyleName(EkoLabTheme.LABEL_FAILURE);
+        Binder.BindingBuilder<Lab2ExperimentLog, List<Double>> bindingBuilder =
+                experimentLogBinder.forField(soundPressureControlPointField).withStatusLabel(soundPressureValidationLabel);
+        soundPressureControlPointField.getEditor().getBinder().setValidationStatusHandler((BinderValidationStatusHandler<EditableGridData<Double>>) statusChange -> soundPressureValidationLabel.setValue(statusChange.getValidationErrors().toString()));
+        UIUtils.bindField(FieldUtils.getField(Lab2ExperimentLog.class, "averageSoundPressure"),
+                bindingBuilder, experimentLogBinder, validationService, i18N);
     }
 }

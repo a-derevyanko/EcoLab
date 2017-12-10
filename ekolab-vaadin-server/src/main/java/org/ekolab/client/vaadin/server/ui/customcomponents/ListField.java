@@ -24,10 +24,7 @@ public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
 
     @Override
     public void setValue(List<T> value) {
-        if (value == null) {
-            value = new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue));
-        }
-        setItems(Collections.singleton(new EditableGridData<>(0, value)));
+        setValue(value, false);
     }
 
     @Override
@@ -50,14 +47,43 @@ public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        getEditor().setEnabled(enabled);
+    }
+
+    @Override
     public boolean isReadOnly() {
         return isEnabled();
     }
 
     @Override
     public Registration addValueChangeListener(ValueChangeListener<List<T>> listener) {
-        return getEditor().addSaveListener(
+        Registration r1 = getEditor().addSaveListener(
                 event -> listener.valueChange(
                         new ValueChangeEvent<>(ListField.this, ListField.this, getValue(), true)));
+        Registration r2 = addListener(ValueChangeEvent.class, listener,
+                ValueChangeListener.VALUE_CHANGE_METHOD);
+        return () -> {
+            r1.remove();
+            r2.remove();
+        };
+    }
+
+    private boolean setValue(List<T> value, boolean userOriginated) {
+        if (value == null) {
+            value = new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue));
+        }
+        if (userOriginated && isReadOnly()) {
+            return false;
+        }
+        List<T> oldValue = getValue();
+        if (value.equals(getValue())) {
+            return false;
+        }
+        setItems(Collections.singleton(new EditableGridData<>(0, value)));
+        fireEvent(new ValueChangeEvent<>(this, oldValue, userOriginated));
+
+        return true;
     }
 }

@@ -1,6 +1,9 @@
 package org.ekolab.server.model.content.lab2;
 
 import org.ekolab.server.model.content.LabVariant;
+import org.ekolab.server.model.content.ValidatedBy;
+import org.ekolab.server.model.content.lab2.validators.AverageSoundPressureControlPointValidator;
+import org.ekolab.server.model.content.lab2.validators.QuantityOfSingleTypeEquipmentValidator;
 
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -31,10 +34,11 @@ public abstract class Lab2Variant extends LabVariant {
      */
 
     private Integer roomSize;
+
     /**
      * Количество однотипного оборудования
      */
-
+    @ValidatedBy(QuantityOfSingleTypeEquipmentValidator.class)
     private Integer quantityOfSingleTypeEquipment;
 
     /**
@@ -46,6 +50,7 @@ public abstract class Lab2Variant extends LabVariant {
      * Средний уровень звукового давления
      */
     @Size(min = 9, max = 9)
+    @ValidatedBy(AverageSoundPressureControlPointValidator.class)
     private List<Double> averageSoundPressure;
 
     public ObjectType getName() {
