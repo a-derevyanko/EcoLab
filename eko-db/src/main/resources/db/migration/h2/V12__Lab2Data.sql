@@ -81,7 +81,6 @@ CREATE TABLE LAB2_RANDOM_VARIANT (
   indoors_Temperature                  INT,
   room_Size                            INT,
   quantity_Of_Single_Type_Equipment    INT,
-  hemisphere_Radius                    DOUBLE,
   average_Sound_Pressure               ARRAY,
 );
 
@@ -100,7 +99,6 @@ COMMENT ON COLUMN LAB2_RANDOM_VARIANT.barometric_Pressure IS 'Барометри
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.indoors_Temperature IS 'Температура воздуха в помещении';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.room_Size IS 'Объем помещения с исследуемым объектом';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.quantity_Of_Single_Type_Equipment IS 'Количество однотипного оборудования';
-COMMENT ON COLUMN LAB2_RANDOM_VARIANT.hemisphere_Radius IS 'Радиус полусферы';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.average_Sound_Pressure IS 'Средний уровень звукового давления';
 
 CREATE TABLE lab2_experiment_log (

@@ -23,10 +23,10 @@ import java.util.List;
 public class Lab2RandomDataView extends LabWizard<Lab2Data<Lab2RandomVariant>, Lab2RandomVariant, Lab2RandomService> {
     public static final String NAME = "lab2randomdata";
 
+    // ----------------------------- Графические компоненты --------------------------------
+
     public Lab2RandomDataView(I18N i18N, Authentication currentUser, InitialDataWindow<Lab2Data<Lab2RandomVariant>, Lab2RandomVariant> initialDataWindow, Lab2RandomService labService, Binder<Lab2Data<Lab2RandomVariant>> binder, LabFinishedWindow<Lab2Data<Lab2RandomVariant>, Lab2RandomVariant> labFinishedWindow, List<LabWizardStep<Lab2Data<Lab2RandomVariant>, Lab2RandomVariant>> labSteps, ConfirmWindow confirmWindow, VaadinUI ui) {
         super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui);
     }
 
-
-    // ----------------------------- Графические компоненты --------------------------------
 }

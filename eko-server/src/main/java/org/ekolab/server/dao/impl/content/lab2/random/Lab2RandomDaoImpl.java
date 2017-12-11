@@ -34,7 +34,6 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
             data.getVariant().setIndoorsTemperature(record.get(LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE));
             data.getVariant().setRoomSize(record.get(LAB2_RANDOM_VARIANT.ROOM_SIZE));
             data.getVariant().setQuantityOfSingleTypeEquipment(record.get(LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
-            data.getVariant().setHemisphereRadius(record.get(LAB2_RANDOM_VARIANT.HEMISPHERE_RADIUS));
             data.getVariant().setAverageSoundPressure(toList(record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE)));
             return data;
         }
@@ -76,7 +75,6 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
                 LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE,
                 LAB2_RANDOM_VARIANT.ROOM_SIZE,
                 LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
-                LAB2_RANDOM_VARIANT.HEMISPHERE_RADIUS,
                 LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE).
                 values(
                         variant.getId(),
@@ -85,7 +83,6 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
                         variant.getIndoorsTemperature(),
                         variant.getRoomSize(),
                         variant.getQuantityOfSingleTypeEquipment(),
-                        variant.getHemisphereRadius(),
                         toArray(variant.getAverageSoundPressure())
                 ).execute();
     }

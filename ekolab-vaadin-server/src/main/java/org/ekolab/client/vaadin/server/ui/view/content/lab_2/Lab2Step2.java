@@ -1,42 +1,58 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_2;
 
-import com.vaadin.ui.Alignment;
-import org.ekolab.client.vaadin.server.service.api.ResourceService;
+import com.vaadin.data.Binder;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
-import org.ekolab.client.vaadin.server.ui.view.content.LabStepWithHelp;
-import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
-import org.ekolab.server.model.content.lab1.Lab1Data;
-import org.ekolab.server.model.content.lab1.Lab1Variant;
+import org.ekolab.server.model.content.lab2.Lab2Data;
+import org.ekolab.server.model.content.lab2.Lab2Variant;
 import org.springframework.security.util.FieldUtils;
 
 /**
  * Created by 777Al on 06.04.2017.
  */
-public abstract class Lab2Step2<V extends Lab1Variant> extends LabStepWithHelp<V> {
+public abstract class Lab2Step2<V extends Lab2Variant> extends HorizontalLayout implements LabWizardStep<Lab2Data<V>, V> {
+    private final I18N i18N;
+
+    private final Binder<Lab2Data<V>> binder;
+
+    private final ParameterWithFormulaeLayout<Lab2Data<V>, V> firstFormLayout;
 
     // ----------------------------- Графические компоненты --------------------------------
-    private final ParameterWithFormulaeLayout<Lab1Data<V>, V> firstFormLayout;
+    private final Label nameLabel = new Label();
 
-    public Lab2Step2(I18N i18N, ResourceWindow resourceWindow, ResourceService resourceService, ParameterWithFormulaeLayout<Lab1Data<V>, V> firstFormLayout) {
-        super(i18N, resourceWindow, resourceService);
+    public Lab2Step2(I18N i18N,
+                     Binder<Lab2Data<V>> binder,
+                     ParameterWithFormulaeLayout<Lab2Data<V>, V> firstFormLayout) {
+        this.i18N = i18N;
+        this.binder = binder;
         this.firstFormLayout = firstFormLayout;
     }
 
     @Override
     public void init() {
-        super.init();
+        LabWizardStep.super.init();
         setSizeFull();
         setMargin(true);
         addComponent(firstFormLayout);
-        setComponentAlignment(firstFormLayout, Alignment.MIDDLE_CENTER);
-        firstFormLayout.setCaption(i18N.get("lab1.step1.data-normalization"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "excessAirRatio"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasNOxConcentrationNC"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "excessOfNorms"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasesRate"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "dryGasesFlowRate"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "massEmissions"));
-        firstFormLayout.addField(FieldUtils.getField(Lab1Data.class, "flueGasesSpeed"));
+        setCaption(i18N.get("lab2.step2.general-data"));
+
+        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "correctionFactor"));
+        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "hemisphereSurface"));
+        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "measuringFactor"));
+        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "roomConstant1000"));
+        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "roomConstant"));
+
+        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "soundPressureMeasuringSurface"));
+        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "soundPowerLevel"));
+        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "frequencyCoefficient"));
+        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "reflectedSoundPower"));
+    }
+
+    @Override
+    public void beforeEnter() {
+        nameLabel.setValue(i18N.get(binder.getBean().getVariant().getName()));
     }
 }

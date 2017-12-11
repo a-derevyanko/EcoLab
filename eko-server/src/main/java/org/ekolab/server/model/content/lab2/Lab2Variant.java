@@ -42,11 +42,6 @@ public abstract class Lab2Variant extends LabVariant {
     private Integer quantityOfSingleTypeEquipment;
 
     /**
-     * Радиус полусферы
-     */
-    private Double hemisphereRadius;
-
-    /**
      * Средний уровень звукового давления
      */
     @Size(min = 9, max = 9)
@@ -92,15 +87,6 @@ public abstract class Lab2Variant extends LabVariant {
     public void setQuantityOfSingleTypeEquipment(Integer quantityOfSingleTypeEquipment) {
         this.quantityOfSingleTypeEquipment = quantityOfSingleTypeEquipment;
     }
-
-    public Double getHemisphereRadius() {
-        return hemisphereRadius;
-    }
-
-    public void setHemisphereRadius(Double hemisphereRadius) {
-        this.hemisphereRadius = hemisphereRadius;
-    }
-
     public List<Double> getAverageSoundPressure() {
         return averageSoundPressure;
     }
@@ -119,13 +105,12 @@ public abstract class Lab2Variant extends LabVariant {
                 Objects.equals(indoorsTemperature, that.indoorsTemperature) &&
                 Objects.equals(roomSize, that.roomSize) &&
                 Objects.equals(quantityOfSingleTypeEquipment, that.quantityOfSingleTypeEquipment) &&
-                Objects.equals(hemisphereRadius, that.hemisphereRadius) &&
                 Objects.equals(averageSoundPressure, that.averageSoundPressure);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, barometricPressure, indoorsTemperature, roomSize, quantityOfSingleTypeEquipment, hemisphereRadius, averageSoundPressure);
+        return Objects.hash(name, barometricPressure, indoorsTemperature, roomSize, quantityOfSingleTypeEquipment, averageSoundPressure);
     }
 }

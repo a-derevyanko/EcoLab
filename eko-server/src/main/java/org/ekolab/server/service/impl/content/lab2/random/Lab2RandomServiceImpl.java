@@ -43,6 +43,7 @@ public class Lab2RandomServiceImpl extends Lab2ServiceImpl<Lab2RandomVariant, La
 
         ObjectType object = ObjectType.values()[RandomUtils.nextInt(ObjectType.values().length)];
         variant.setName(object);
+        variant.setQuantityOfSingleTypeEquipment(RandomUtils.nextInt(2) + 1);
         variant.setBarometricPressure(700 + RandomUtils.nextInt(21) * 5);
         variant.setIndoorsTemperature(5 + RandomUtils.nextInt(4) * 5);
         switch (variant.getName()) {
