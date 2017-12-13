@@ -107,7 +107,7 @@ public class Lab2RandomServiceImpl extends Lab2ServiceImpl<Lab2RandomVariant, La
     private double generateNextValue(double firstValue, double lastValue, double step, double previousValue, boolean down) {
         double r = firstValue + RandomUtils.nextInt((int) ((lastValue - firstValue) / step) + 1) * step;
         if (down && r > previousValue || !down && r < previousValue) {
-            return generateNextValue(firstValue, lastValue, step, previousValue, down);
+            return generateNextValue(firstValue, lastValue, step, r, down);
         } else {
             return r;
         }

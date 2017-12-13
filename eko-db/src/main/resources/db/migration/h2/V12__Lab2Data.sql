@@ -79,7 +79,6 @@ CREATE TABLE LAB2_RANDOM_VARIANT (
   name                                 VARCHAR(256),
   barometric_Pressure                  INT,
   indoors_Temperature                  INT,
-  room_Size                            INT,
   quantity_Of_Single_Type_Equipment    INT,
   average_Sound_Pressure               ARRAY,
 );
@@ -97,7 +96,6 @@ COMMENT ON TABLE LAB2_RANDOM_VARIANT IS 'Вариант лабораторной
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.name IS 'Название объекта';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.barometric_Pressure IS 'Барометрическое давление';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.indoors_Temperature IS 'Температура воздуха в помещении';
-COMMENT ON COLUMN LAB2_RANDOM_VARIANT.room_Size IS 'Объем помещения с исследуемым объектом';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.quantity_Of_Single_Type_Equipment IS 'Количество однотипного оборудования';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.average_Sound_Pressure IS 'Средний уровень звукового давления';
 

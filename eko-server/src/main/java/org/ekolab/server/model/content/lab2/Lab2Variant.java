@@ -30,12 +30,6 @@ public abstract class Lab2Variant extends LabVariant {
     private Integer indoorsTemperature;
 
     /**
-     * Объем помещения с исследуемым объектом
-     */
-
-    private Integer roomSize;
-
-    /**
      * Количество однотипного оборудования
      */
     @ValidatedBy(QuantityOfSingleTypeEquipmentValidator.class)
@@ -72,14 +66,6 @@ public abstract class Lab2Variant extends LabVariant {
         this.indoorsTemperature = indoorsTemperature;
     }
 
-    public Integer getRoomSize() {
-        return roomSize;
-    }
-
-    public void setRoomSize(Integer roomSize) {
-        this.roomSize = roomSize;
-    }
-
     public Integer getQuantityOfSingleTypeEquipment() {
         return quantityOfSingleTypeEquipment;
     }
@@ -103,14 +89,12 @@ public abstract class Lab2Variant extends LabVariant {
         return name == that.name &&
                 Objects.equals(barometricPressure, that.barometricPressure) &&
                 Objects.equals(indoorsTemperature, that.indoorsTemperature) &&
-                Objects.equals(roomSize, that.roomSize) &&
                 Objects.equals(quantityOfSingleTypeEquipment, that.quantityOfSingleTypeEquipment) &&
                 Objects.equals(averageSoundPressure, that.averageSoundPressure);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(name, barometricPressure, indoorsTemperature, roomSize, quantityOfSingleTypeEquipment, averageSoundPressure);
+        return Objects.hash(name, barometricPressure, indoorsTemperature, quantityOfSingleTypeEquipment, averageSoundPressure);
     }
 }

@@ -4,15 +4,15 @@
   }
   .wizard-presentation-panel {
     background: url("../content/presentationStep.svg") no-repeat center;
-    background-size: auto 100%;
+    background-size: contain;
   }
   .wizard-experiment-presentation-panel {
     background: url("../content/experimentPresentationStep.svg") no-repeat center;
-    background-size: auto 100%;
+    background-size: contain;
   }
   .wizard-lab-finished {
     background: url("../content/labFinished.svg") no-repeat center;
-    background-size: auto 100%;
+    background-size: contain;
   }
   .wizard-step-panel {
     background-color: rgba(205, 255, 171, 0.13);

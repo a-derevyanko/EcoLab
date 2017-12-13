@@ -23,6 +23,7 @@ import org.springframework.security.util.FieldUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,7 +95,7 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
 
         averageSoundPressureControlPointGrid.getEditor().addSaveListener(event -> {
             List<Double> valuesSum = new ArrayList<>(Collections.nCopies(9, 0.0));
-            List<EditableGridData<Double>> editableGridData = averageSoundPressureControlPointGrid.getItems();
+            Collection<EditableGridData<Double>> editableGridData = averageSoundPressureControlPointGrid.getDataProvider().getItems();
             for (EditableGridData<Double> data : editableGridData) {
                 List<Double> values = data.getValues();
                 IntStream.range(0, values.size() - 1).forEachOrdered(i -> valuesSum.set(i, valuesSum.get(i) + values.get(i)));

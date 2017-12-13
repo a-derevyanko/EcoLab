@@ -26,6 +26,7 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -43,7 +44,7 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
 
     protected final ParameterCustomizer parameterCustomizer;
 
-    protected float fieldWidth = 250.0F;
+    protected float fieldWidth = 175.0F;
     // ----------------------------- Графические компоненты --------------------------------
     protected final Label objectLabel = new Label("Object");
     protected final GridLayout firstLayout = new GridLayout(5, 2);
@@ -123,7 +124,7 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
     protected void addField(Field field) {
         AbstractField<?> fieldComponent;
         Class<?> propClass = ReflectTools.convertPrimitiveType(field.getType());
-        if (propClass == Date.class) {
+        if (propClass == Date.class || propClass == LocalDateTime.class) {
             fieldComponent = new DateTimeField();
         } else {
             fieldComponent = new TextField();

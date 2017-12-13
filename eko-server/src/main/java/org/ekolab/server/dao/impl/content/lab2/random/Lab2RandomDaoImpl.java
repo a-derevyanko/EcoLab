@@ -32,7 +32,6 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
             data.getVariant().setName(record.get(LAB2_RANDOM_VARIANT.NAME) == null ? null : ObjectType.valueOf(record.get(LAB2_RANDOM_VARIANT.NAME)));
             data.getVariant().setBarometricPressure(record.get(LAB2_RANDOM_VARIANT.BAROMETRIC_PRESSURE));
             data.getVariant().setIndoorsTemperature(record.get(LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE));
-            data.getVariant().setRoomSize(record.get(LAB2_RANDOM_VARIANT.ROOM_SIZE));
             data.getVariant().setQuantityOfSingleTypeEquipment(record.get(LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
             data.getVariant().setAverageSoundPressure(toList(record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE)));
             return data;
@@ -73,7 +72,6 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
                 LAB2_RANDOM_VARIANT.NAME,
                 LAB2_RANDOM_VARIANT.BAROMETRIC_PRESSURE,
                 LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE,
-                LAB2_RANDOM_VARIANT.ROOM_SIZE,
                 LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
                 LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE).
                 values(
@@ -81,7 +79,6 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
                         variant.getName() == null ? null : variant.getName().name(),
                         variant.getBarometricPressure(),
                         variant.getIndoorsTemperature(),
-                        variant.getRoomSize(),
                         variant.getQuantityOfSingleTypeEquipment(),
                         toArray(variant.getAverageSoundPressure())
                 ).execute();

@@ -1,5 +1,6 @@
 package org.ekolab.server.model.content.lab2;
 
+import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.model.content.lab2.validators.QuantityOfSingleTypeEquipmentValidator;
@@ -58,6 +59,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Поверхность полусферы
      */
+    @Calculated
     private Double hemisphereSurface;
 
     /**

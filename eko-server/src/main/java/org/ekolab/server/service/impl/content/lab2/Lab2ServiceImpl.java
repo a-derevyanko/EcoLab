@@ -27,11 +27,14 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
 
     @Override
     public void updateCalculatedFields(Lab2Data labData) {
+        if (labData.getHemisphereRadius() != null) {
+            labData.setHemisphereSurface(2 * Math.PI * Math.pow(labData.getHemisphereRadius(), 2));
+        }
     }
 
 
     @Override
     public int getLabNumber() {
-        return 1;
+        return 2;
     }
 }

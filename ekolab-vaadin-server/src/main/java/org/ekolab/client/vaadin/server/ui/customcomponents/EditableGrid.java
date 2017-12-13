@@ -12,6 +12,7 @@ import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComponent {
@@ -41,7 +42,7 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
     }
 
     public void setRowCount(int rows, T defaultValue) {
-        List<EditableGridData<T>> items = getItems();
+        List<EditableGridData<T>> items = getDataProvider().getItems().stream().limit(rows).collect(Collectors.toList());
 
         IntStream.rangeClosed(items.size() + 1, rows).forEachOrdered(i -> {
             EditableGridData<T> data = new EditableGridData<>(i, new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue)));
@@ -50,7 +51,8 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
         setItems(items);
     }
 
-    public List<EditableGridData<T>> getItems() {
-        return new ArrayList<>(((ListDataProvider<EditableGridData<T>>) getDataProvider()).getItems());
+    @Override
+    public ListDataProvider<EditableGridData<T>> getDataProvider() {
+        return (ListDataProvider<EditableGridData<T>>) super.getDataProvider();
     }
 }

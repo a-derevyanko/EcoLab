@@ -29,7 +29,7 @@ public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
 
     @Override
     public List<T> getValue() {
-        return getItems().get(0).getValues();
+        return getDataProvider().getItems().iterator().next().getValues();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
 
     @Override
     public boolean isReadOnly() {
-        return isEnabled();
+        return getEditor().isEnabled();
     }
 
     @Override
