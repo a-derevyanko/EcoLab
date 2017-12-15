@@ -3,7 +3,11 @@ package org.ekolab.server.model.content.lab2;
 import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.ValidatedBy;
+import org.ekolab.server.model.content.lab2.validators.CorrectionFactorValidator;
+import org.ekolab.server.model.content.lab2.validators.MeasuringFactorValidator;
 import org.ekolab.server.model.content.lab2.validators.QuantityOfSingleTypeEquipmentValidator;
+import org.ekolab.server.model.content.lab2.validators.RoomConstant1000Validator;
+import org.ekolab.server.model.content.lab2.validators.RoomConstantValidator;
 
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -48,6 +52,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Корректирующая поправка
      */
+    @ValidatedBy(CorrectionFactorValidator.class)
     private Double correctionFactor;
 
     /**
@@ -65,6 +70,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Показатель измерительной поверхности
      */
+    @ValidatedBy(MeasuringFactorValidator.class)
     private Double measuringFactor;
 
     /**
@@ -76,6 +82,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Постоянная помещения на среднегеометрической частоте 1000 Гц
      */
+    @ValidatedBy(RoomConstant1000Validator.class)
     private Double roomConstant1000;
 
     /**
@@ -87,6 +94,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Постоянная помещения
      */
+    @ValidatedBy(RoomConstantValidator.class)
     private Double roomConstant;
 
     /**
