@@ -35,6 +35,7 @@ public class Lab2RandomStep1 extends HorizontalLayout implements LabWizardStep<L
 
     // ----------------------------- Графические компоненты --------------------------------
     private final Label nameLabel = new Label();
+    private final Label estimatedGeometricMeanFrequencyLabel = new Label();
 
     @Override
     public void init() {
@@ -51,6 +52,13 @@ public class Lab2RandomStep1 extends HorizontalLayout implements LabWizardStep<L
         firstFormLayout.addInfoButton("name", 0);
         firstFormLayout.insertRow(firstFormLayout.getRows());
 
+        estimatedGeometricMeanFrequencyLabel.addStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
+
+        firstFormLayout.addCaption("estimatedGeometricMeanFrequency", 1);
+        firstFormLayout.addComponent(estimatedGeometricMeanFrequencyLabel, 1, 1, 2, 1);
+        firstFormLayout.addInfoButton("estimatedGeometricMeanFrequency", 1);
+        firstFormLayout.insertRow(firstFormLayout.getRows());
+
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "barometricPressure"));
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "indoorsTemperature"));
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "roomSize"));
@@ -62,5 +70,6 @@ public class Lab2RandomStep1 extends HorizontalLayout implements LabWizardStep<L
     @Override
     public void beforeEnter() {
         nameLabel.setValue(i18N.get(binder.getBean().getVariant().getName()));
+        estimatedGeometricMeanFrequencyLabel.setValue(String.valueOf(binder.getBean().getVariant().getEstimatedGeometricMeanFrequency().value()));
     }
 }

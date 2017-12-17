@@ -4,6 +4,7 @@ import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.content.lab2.experiment.Lab2ExperimentDao;
 import org.ekolab.server.dao.impl.DaoUtils;
 import org.ekolab.server.dao.impl.content.lab2.Lab2DaoImpl;
+import org.ekolab.server.model.content.lab2.EstimatedGeometricMeanFrequency;
 import org.ekolab.server.model.content.lab2.Lab2Data;
 import org.ekolab.server.model.content.lab2.ObjectType;
 import org.ekolab.server.model.content.lab2.experiment.Lab2ExperimentLog;
@@ -37,6 +38,8 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
             data.getVariant().setQuantityOfSingleTypeEquipment(record.get(LAB2_EXPERIMENT_LOG.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
             data.getVariant().setHemisphereRadius(record.get(LAB2_EXPERIMENT_LOG.HEMISPHERE_RADIUS));
             data.getVariant().setAverageSoundPressure(toList(record.get(LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE)));
+            data.getVariant().setEstimatedGeometricMeanFrequency(record.get(LAB2_EXPERIMENT_LOG.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY) == null ?
+                    null : EstimatedGeometricMeanFrequency.valueOf(record.get(LAB2_EXPERIMENT_LOG.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY)));
 
             return data;
         }
@@ -79,6 +82,7 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
                 LAB2_EXPERIMENT_LOG.ROOM_SIZE,
                 LAB2_EXPERIMENT_LOG.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
                 LAB2_EXPERIMENT_LOG.HEMISPHERE_RADIUS,
+                LAB2_EXPERIMENT_LOG.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY,
                 LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE).
                 values(
                         variant.getId(),
@@ -88,6 +92,7 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
                         variant.getRoomSize(),
                         variant.getQuantityOfSingleTypeEquipment(),
                         variant.getHemisphereRadius(),
+                        variant.getEstimatedGeometricMeanFrequency() == null ? null : variant.getEstimatedGeometricMeanFrequency().value(),
                         toArray(variant.getAverageSoundPressure())
                 ).execute();
     }
@@ -102,6 +107,7 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
                 .set(LAB2_EXPERIMENT_LOG.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT, experimentJournal.getQuantityOfSingleTypeEquipment())
                 .set(LAB2_EXPERIMENT_LOG.HEMISPHERE_RADIUS, experimentJournal.getHemisphereRadius())
                 .set(LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE, toArray(experimentJournal.getAverageSoundPressure()))
+                .set(LAB2_EXPERIMENT_LOG.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY, experimentJournal.getEstimatedGeometricMeanFrequency().value())
                 .where(LAB2_EXPERIMENT_LOG.ID.eq(experimentJournal.getId()))
                 .execute();
     }

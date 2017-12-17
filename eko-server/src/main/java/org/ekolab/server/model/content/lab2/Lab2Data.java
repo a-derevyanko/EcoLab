@@ -6,11 +6,14 @@ import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.model.content.lab2.validators.CorrectionFactorValidator;
 import org.ekolab.server.model.content.lab2.validators.MeasuringFactorValidator;
 import org.ekolab.server.model.content.lab2.validators.QuantityOfSingleTypeEquipmentValidator;
+import org.ekolab.server.model.content.lab2.validators.ReflectedSoundPowerValidator;
 import org.ekolab.server.model.content.lab2.validators.RoomConstant1000Validator;
 import org.ekolab.server.model.content.lab2.validators.RoomConstantValidator;
+import org.ekolab.server.model.content.lab2.validators.SoundPowerLevelValidator;
 
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -29,7 +32,6 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Объем помещения с исследуемым объектом
      */
-
     private Integer roomSize;
 
     /**
@@ -58,8 +60,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Уровень звукового давления на измерительной поверхности
      */
-    @Size(min = 9, max = 9)
-    private List<Double> soundPressureMeasuringSurface;
+    private Double soundPressureMeasuringSurface;
 
     /**
      * Поверхность полусферы
@@ -76,8 +77,8 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Уровень звуковой мощности
      */
-    @Size(min = 9, max = 9)
-    private List<Double> soundPowerLevel;
+    @ValidatedBy(SoundPowerLevelValidator.class)
+    private Double soundPowerLevel;
 
     /**
      * Постоянная помещения на среднегеометрической частоте 1000 Гц
@@ -88,8 +89,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Частотный множитель
      */
-    @Size(min = 9, max = 9)
-    private List<Double> frequencyCoefficient;
+    private Double frequencyCoefficient;
 
     /**
      * Постоянная помещения
@@ -100,8 +100,14 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Уровни звукового давления в зоне отраженного звука
      */
-    @Size(min = 9, max = 9)
-    private List<Double> reflectedSoundPower;
+    @ValidatedBy(ReflectedSoundPowerValidator.class)
+    private Double reflectedSoundPower;
+
+    /**
+     * Результаты расчета
+     */
+    @Calculated
+    private Map<String, List<Double>> calculationResult;
 
     public Integer getBarometricPressure() {
         return barometricPressure;
@@ -159,11 +165,11 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
         this.correctionFactor = correctionFactor;
     }
 
-    public List<Double> getSoundPressureMeasuringSurface() {
+    public Double getSoundPressureMeasuringSurface() {
         return soundPressureMeasuringSurface;
     }
 
-    public void setSoundPressureMeasuringSurface(List<Double> soundPressureMeasuringSurface) {
+    public void setSoundPressureMeasuringSurface(Double soundPressureMeasuringSurface) {
         this.soundPressureMeasuringSurface = soundPressureMeasuringSurface;
     }
 
@@ -183,11 +189,11 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
         this.measuringFactor = measuringFactor;
     }
 
-    public List<Double> getSoundPowerLevel() {
+    public Double getSoundPowerLevel() {
         return soundPowerLevel;
     }
 
-    public void setSoundPowerLevel(List<Double> soundPowerLevel) {
+    public void setSoundPowerLevel(Double soundPowerLevel) {
         this.soundPowerLevel = soundPowerLevel;
     }
 
@@ -199,11 +205,11 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
         this.roomConstant1000 = roomConstant1000;
     }
 
-    public List<Double> getFrequencyCoefficient() {
+    public Double getFrequencyCoefficient() {
         return frequencyCoefficient;
     }
 
-    public void setFrequencyCoefficient(List<Double> frequencyCoefficient) {
+    public void setFrequencyCoefficient(Double frequencyCoefficient) {
         this.frequencyCoefficient = frequencyCoefficient;
     }
 
@@ -215,12 +221,20 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
         this.roomConstant = roomConstant;
     }
 
-    public List<Double> getReflectedSoundPower() {
+    public Double getReflectedSoundPower() {
         return reflectedSoundPower;
     }
 
-    public void setReflectedSoundPower(List<Double> reflectedSoundPower) {
+    public void setReflectedSoundPower(Double reflectedSoundPower) {
         this.reflectedSoundPower = reflectedSoundPower;
+    }
+
+    public Map<String, List<Double>> getCalculationResult() {
+        return calculationResult;
+    }
+
+    public void setCalculationResult(Map<String, List<Double>> calculationResult) {
+        this.calculationResult = calculationResult;
     }
 
     @Override
@@ -243,12 +257,16 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
                 Objects.equals(roomConstant1000, lab2Data.roomConstant1000) &&
                 Objects.equals(frequencyCoefficient, lab2Data.frequencyCoefficient) &&
                 Objects.equals(roomConstant, lab2Data.roomConstant) &&
-                Objects.equals(reflectedSoundPower, lab2Data.reflectedSoundPower);
+                Objects.equals(reflectedSoundPower, lab2Data.reflectedSoundPower) &&
+                Objects.equals(calculationResult, lab2Data.calculationResult);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(super.hashCode(), barometricPressure, indoorsTemperature, roomSize, quantityOfSingleTypeEquipment, hemisphereRadius, averageSoundPressure, correctionFactor, soundPressureMeasuringSurface, hemisphereSurface, measuringFactor, soundPowerLevel, roomConstant1000, frequencyCoefficient, roomConstant, reflectedSoundPower);
+        return Objects.hash(super.hashCode(), barometricPressure, indoorsTemperature,
+                roomSize, quantityOfSingleTypeEquipment, hemisphereRadius, averageSoundPressure,
+                correctionFactor, soundPressureMeasuringSurface,
+                hemisphereSurface, measuringFactor, soundPowerLevel, roomConstant1000,
+                frequencyCoefficient, roomConstant, reflectedSoundPower, calculationResult);
     }
 }

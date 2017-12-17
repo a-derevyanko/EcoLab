@@ -26,7 +26,7 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
         getEditor().setSaveCaption(i18N.get("savable.save"));
         getEditor().setCancelCaption(i18N.get("editable.cancel"));
         if (numberCaption != null) {
-            addColumn(EditableGridData::getNumber).setCaption(numberCaption);
+            addColumn(EditableGridData::getCaption).setCaption(numberCaption);
         }
 
         IntStream.range(0, captions.size()).forEachOrdered(i -> {
@@ -45,7 +45,7 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
         List<EditableGridData<T>> items = getDataProvider().getItems().stream().limit(rows).collect(Collectors.toList());
 
         IntStream.rangeClosed(items.size() + 1, rows).forEachOrdered(i -> {
-            EditableGridData<T> data = new EditableGridData<>(i, new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue)));
+            EditableGridData<T> data = new EditableGridData<>(String.valueOf(i), new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue)));
             items.add(data);
         });
         setItems(items);

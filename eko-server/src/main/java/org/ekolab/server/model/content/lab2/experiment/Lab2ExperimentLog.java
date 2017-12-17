@@ -1,5 +1,6 @@
 package org.ekolab.server.model.content.lab2.experiment;
 
+import org.ekolab.server.model.content.lab2.EstimatedGeometricMeanFrequency;
 import org.ekolab.server.model.content.lab2.Lab2Variant;
 
 import java.util.Objects;
@@ -43,7 +44,6 @@ public class Lab2ExperimentLog extends Lab2Variant {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(super.hashCode(), hemisphereRadius, roomSize);
     }
 }

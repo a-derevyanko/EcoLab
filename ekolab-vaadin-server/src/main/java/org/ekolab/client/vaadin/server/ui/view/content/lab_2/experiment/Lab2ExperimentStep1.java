@@ -39,6 +39,7 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
 
     // ----------------------------- Графические компоненты --------------------------------
     private final Label averageSoundPressureControlPointLabel = new Label();
+    private final Label estimatedGeometricMeanFrequencyLabel = new Label();
     private final Label pointCountLabel = new Label();
     private final Label averageLabel = new Label();
     private final Label soundPressureValidationLabel = new Label();
@@ -70,6 +71,8 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
         addField(FieldUtils.getField(Lab2ExperimentLog.class, "roomSize"));
         addField(FieldUtils.getField(Lab2ExperimentLog.class, "quantityOfSingleTypeEquipment"));
         addField(FieldUtils.getField(Lab2ExperimentLog.class, "hemisphereRadius"));
+        firstLayout.addComponent(estimatedGeometricMeanFrequencyLabel, 0, firstLayout.getRows() - 1, 4, firstLayout.getRows() - 1);
+        estimatedGeometricMeanFrequencyLabel.setStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
         averageSoundPressureControlPointLabel.setStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
         averageSoundPressureControlPointLabel.setValue(i18N.get("lab2.step1.experiment-data.average-sound-pressure-control-point"));
         pointCountLabel.setStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
@@ -110,5 +113,10 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
         soundPressureControlPointField.getEditor().getBinder().setValidationStatusHandler((BinderValidationStatusHandler<EditableGridData<Double>>) statusChange -> soundPressureValidationLabel.setValue(statusChange.getValidationErrors().toString()));
         UIUtils.bindField(FieldUtils.getField(Lab2ExperimentLog.class, "averageSoundPressure"),
                 bindingBuilder, experimentLogBinder, validationService, i18N);
+    }
+
+    @Override
+    public void beforeEnter() {
+        estimatedGeometricMeanFrequencyLabel.setValue(i18N.get("lab2.step1.experiment-data.used-estimated-geometric-mean-frequency", experimentLogBinder.getBean().getEstimatedGeometricMeanFrequency().value()));
     }
 }

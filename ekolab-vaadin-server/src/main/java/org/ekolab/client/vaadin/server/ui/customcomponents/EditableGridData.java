@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class EditableGridData<T> {
-    private final int number;
+    private final String caption;
 
     private final List<T> values;
 
-    public EditableGridData(int number, List<T> values) {
-        this.number = number;
+    public EditableGridData(String caption, List<T> values) {
+        this.caption = caption;
         this.values = values;
     }
 
@@ -21,8 +21,8 @@ public class EditableGridData<T> {
         return values.set(index, value);
     }
 
-    public int getNumber() {
-        return number;
+    public String getCaption() {
+        return caption;
     }
 
     public List<T> getValues() {
@@ -34,12 +34,13 @@ public class EditableGridData<T> {
         if (this == o) return true;
         if (!(o instanceof EditableGridData)) return false;
         EditableGridData<?> that = (EditableGridData<?>) o;
-        return number == that.number &&
+        return Objects.equals(caption, that.caption) &&
                 Objects.equals(values, that.values);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(number, System.identityHashCode(values));
+
+        return Objects.hash(caption, values);
     }
 }

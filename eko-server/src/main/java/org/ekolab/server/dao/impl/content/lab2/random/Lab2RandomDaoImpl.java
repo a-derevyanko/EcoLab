@@ -4,6 +4,7 @@ import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.content.lab2.random.Lab2RandomDao;
 import org.ekolab.server.dao.impl.DaoUtils;
 import org.ekolab.server.dao.impl.content.lab2.Lab2DaoImpl;
+import org.ekolab.server.model.content.lab2.EstimatedGeometricMeanFrequency;
 import org.ekolab.server.model.content.lab2.Lab2Data;
 import org.ekolab.server.model.content.lab2.ObjectType;
 import org.ekolab.server.model.content.lab2.random.Lab2RandomVariant;
@@ -34,6 +35,8 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
             data.getVariant().setIndoorsTemperature(record.get(LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE));
             data.getVariant().setQuantityOfSingleTypeEquipment(record.get(LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
             data.getVariant().setAverageSoundPressure(toList(record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE)));
+            data.getVariant().setEstimatedGeometricMeanFrequency(record.get(LAB2_RANDOM_VARIANT.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY) == null ?
+                    null : EstimatedGeometricMeanFrequency.valueOf(record.get(LAB2_RANDOM_VARIANT.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY)));
             return data;
         }
 
@@ -73,6 +76,7 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
                 LAB2_RANDOM_VARIANT.BAROMETRIC_PRESSURE,
                 LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE,
                 LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
+                LAB2_RANDOM_VARIANT.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY,
                 LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE).
                 values(
                         variant.getId(),
@@ -80,6 +84,7 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
                         variant.getBarometricPressure(),
                         variant.getIndoorsTemperature(),
                         variant.getQuantityOfSingleTypeEquipment(),
+                        variant.getEstimatedGeometricMeanFrequency() == null ? null : variant.getEstimatedGeometricMeanFrequency().value(),
                         toArray(variant.getAverageSoundPressure())
                 ).execute();
     }

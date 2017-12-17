@@ -19,14 +19,14 @@ CREATE TABLE lab2data (
   hemisphere_Radius                    DOUBLE,
   average_Sound_Pressure               ARRAY,
   correction_Factor                    DOUBLE,
-  sound_Pressure_Measuring_Surface      ARRAY,
+  sound_Pressure_Measuring_Surface     DOUBLE,
   hemisphere_Surface                   DOUBLE,
   measuring_Factor                     DOUBLE,
-  sound_Power_Level                    ARRAY,
+  sound_Power_Level                    DOUBLE,
   room_Constant_1000                   DOUBLE,
-  frequency_Coefficient                ARRAY,
+  frequency_Coefficient                DOUBLE,
   room_Constant                        DOUBLE,
-  reflected_Sound_Power                ARRAY,
+  reflected_Sound_Power                DOUBLE,
 
   /**
   * Блок ключей
@@ -81,6 +81,7 @@ CREATE TABLE LAB2_RANDOM_VARIANT (
   indoors_Temperature                  INT,
   quantity_Of_Single_Type_Equipment    INT,
   average_Sound_Pressure               ARRAY,
+  estimated_Geometric_Mean_Frequency   DOUBLE
 );
 
 /*
@@ -98,6 +99,7 @@ COMMENT ON COLUMN LAB2_RANDOM_VARIANT.barometric_Pressure IS 'Барометри
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.indoors_Temperature IS 'Температура воздуха в помещении';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.quantity_Of_Single_Type_Equipment IS 'Количество однотипного оборудования';
 COMMENT ON COLUMN LAB2_RANDOM_VARIANT.average_Sound_Pressure IS 'Средний уровень звукового давления';
+COMMENT ON COLUMN LAB2_RANDOM_VARIANT.estimated_Geometric_Mean_Frequency IS 'Расчетная среднегеометрическая частота';
 
 CREATE TABLE lab2_experiment_log (
   id                           BIGINT IDENTITY PRIMARY KEY REFERENCES LAB2DATA (id) ON DELETE CASCADE,
@@ -112,6 +114,7 @@ CREATE TABLE lab2_experiment_log (
   quantity_Of_Single_Type_Equipment    INT,
   hemisphere_Radius                    DOUBLE,
   average_Sound_Pressure               ARRAY,
+  estimated_Geometric_Mean_Frequency   DOUBLE
 );
 
 /*
@@ -131,4 +134,5 @@ COMMENT ON COLUMN lab2_experiment_log.room_Size IS 'Объем помещени�
 COMMENT ON COLUMN lab2_experiment_log.quantity_Of_Single_Type_Equipment IS 'Количество однотипного оборудования';
 COMMENT ON COLUMN lab2_experiment_log.hemisphere_Radius IS 'Радиус полусферы';
 COMMENT ON COLUMN lab2_experiment_log.average_Sound_Pressure IS 'Средний уровень звукового давления';
+COMMENT ON COLUMN lab2_experiment_log.estimated_Geometric_Mean_Frequency IS 'Расчетная среднегеометрическая частота';
 

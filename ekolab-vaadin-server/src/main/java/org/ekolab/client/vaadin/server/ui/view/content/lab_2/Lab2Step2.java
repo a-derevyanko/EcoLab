@@ -23,7 +23,7 @@ public abstract class Lab2Step2<V extends Lab2Variant> extends HorizontalLayout 
     // ----------------------------- Графические компоненты --------------------------------
     private final Label nameLabel = new Label();
 
-    public Lab2Step2(I18N i18N,
+    protected Lab2Step2(I18N i18N,
                      Binder<Lab2Data<V>> binder,
                      ParameterWithFormulaeLayout<Lab2Data<V>, V> firstFormLayout) {
         this.i18N = i18N;

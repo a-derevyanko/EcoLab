@@ -42,14 +42,14 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
             data.setHemisphereRadius(record.get(LAB2DATA.HEMISPHERE_RADIUS));
             data.setAverageSoundPressure(toList(record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE)));
             data.setCorrectionFactor(record.get(LAB2DATA.CORRECTION_FACTOR));
-            data.setSoundPressureMeasuringSurface(toList(record.get(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE)));
+            data.setSoundPressureMeasuringSurface(record.get(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE));
             data.setHemisphereSurface(record.get(LAB2DATA.HEMISPHERE_SURFACE));
             data.setMeasuringFactor(record.get(LAB2DATA.MEASURING_FACTOR));
-            data.setSoundPowerLevel(toList(record.get(LAB2DATA.SOUND_POWER_LEVEL)));
+            data.setSoundPowerLevel(record.get(LAB2DATA.SOUND_POWER_LEVEL));
             data.setRoomConstant1000(record.get(LAB2DATA.ROOM_CONSTANT_1000));
-            data.setFrequencyCoefficient(toList(record.get(LAB2DATA.FREQUENCY_COEFFICIENT)));
+            data.setFrequencyCoefficient(record.get(LAB2DATA.FREQUENCY_COEFFICIENT));
             data.setRoomConstant(record.get(LAB2DATA.ROOM_CONSTANT));
-            data.setReflectedSoundPower(toList(record.get(LAB2DATA.REFLECTED_SOUND_POWER)));
+            data.setReflectedSoundPower(record.get(LAB2DATA.REFLECTED_SOUND_POWER));
 
             V variant = createVariant();
             data.setVariant(variant);
@@ -121,14 +121,14 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
                 .set(LAB2DATA.HEMISPHERE_RADIUS, data.getHemisphereRadius())
                 .set(LAB2DATA.AVERAGE_SOUND_PRESSURE, toArray(data.getAverageSoundPressure()))
                 .set(LAB2DATA.CORRECTION_FACTOR, data.getCorrectionFactor())
-                .set(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE, toArray(data.getSoundPressureMeasuringSurface()))
+                .set(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE, data.getSoundPressureMeasuringSurface())
                 .set(LAB2DATA.HEMISPHERE_SURFACE, data.getHemisphereSurface())
                 .set(LAB2DATA.MEASURING_FACTOR, data.getMeasuringFactor())
-                .set(LAB2DATA.SOUND_POWER_LEVEL, toArray(data.getSoundPowerLevel()))
+                .set(LAB2DATA.SOUND_POWER_LEVEL, data.getSoundPowerLevel())
                 .set(LAB2DATA.ROOM_CONSTANT_1000, data.getRoomConstant1000())
-                .set(LAB2DATA.FREQUENCY_COEFFICIENT, toArray(data.getFrequencyCoefficient()))
+                .set(LAB2DATA.FREQUENCY_COEFFICIENT, data.getFrequencyCoefficient())
                 .set(LAB2DATA.ROOM_CONSTANT, data.getRoomConstant())
-                .set(LAB2DATA.REFLECTED_SOUND_POWER, toArray(data.getReflectedSoundPower()))
+                .set(LAB2DATA.REFLECTED_SOUND_POWER, data.getReflectedSoundPower())
                 .where(LAB2DATA.ID.eq(data.getId()))
                 .execute();
     }

@@ -1,6 +1,8 @@
 package org.ekolab.server.service.impl.content.lab2.experiment;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.ekolab.server.dao.api.content.lab2.experiment.Lab2ExperimentDao;
+import org.ekolab.server.model.content.lab2.EstimatedGeometricMeanFrequency;
 import org.ekolab.server.model.content.lab2.experiment.Lab2ExperimentLog;
 import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.StudentInfoService;
@@ -23,7 +25,10 @@ public class Lab2ExperimentServiceImpl extends Lab2ServiceImpl<Lab2ExperimentLog
 
     @Override
     protected Lab2ExperimentLog generateNewLabVariant() {
-        return new Lab2ExperimentLog();
+        Lab2ExperimentLog variant = new Lab2ExperimentLog();
+        variant.setEstimatedGeometricMeanFrequency(EstimatedGeometricMeanFrequency.
+                values()[RandomUtils.nextInt(EstimatedGeometricMeanFrequency.values().length)]);
+        return variant;
     }
 
     @Override

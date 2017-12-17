@@ -1,5 +1,6 @@
 package org.ekolab.server.model.content.lab2;
 
+import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.model.content.lab2.validators.AverageSoundPressureControlPointValidator;
@@ -42,6 +43,9 @@ public abstract class Lab2Variant extends LabVariant {
     @ValidatedBy(AverageSoundPressureControlPointValidator.class)
     private List<Double> averageSoundPressure;
 
+    @Calculated
+    private EstimatedGeometricMeanFrequency estimatedGeometricMeanFrequency;
+
     public ObjectType getName() {
         return name;
     }
@@ -81,6 +85,14 @@ public abstract class Lab2Variant extends LabVariant {
         this.averageSoundPressure = averageSoundPressure;
     }
 
+    public EstimatedGeometricMeanFrequency getEstimatedGeometricMeanFrequency() {
+        return estimatedGeometricMeanFrequency;
+    }
+
+    public void setEstimatedGeometricMeanFrequency(EstimatedGeometricMeanFrequency estimatedGeometricMeanFrequency) {
+        this.estimatedGeometricMeanFrequency = estimatedGeometricMeanFrequency;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,11 +102,13 @@ public abstract class Lab2Variant extends LabVariant {
                 Objects.equals(barometricPressure, that.barometricPressure) &&
                 Objects.equals(indoorsTemperature, that.indoorsTemperature) &&
                 Objects.equals(quantityOfSingleTypeEquipment, that.quantityOfSingleTypeEquipment) &&
-                Objects.equals(averageSoundPressure, that.averageSoundPressure);
+                Objects.equals(averageSoundPressure, that.averageSoundPressure) &&
+                estimatedGeometricMeanFrequency == that.estimatedGeometricMeanFrequency;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, barometricPressure, indoorsTemperature, quantityOfSingleTypeEquipment, averageSoundPressure);
+        return Objects.hash(name, barometricPressure, indoorsTemperature,
+                quantityOfSingleTypeEquipment, averageSoundPressure, estimatedGeometricMeanFrequency);
     }
 }

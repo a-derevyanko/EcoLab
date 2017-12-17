@@ -1,13 +1,35 @@
 package org.ekolab.server.model.content.lab2;
 
-public enum EstimatedGeometricMeanFrequency {
-    F_315,
-    F_63,
-    F_125,
-    F_250,
-    F_500,
-    F_1000,
-    F_2000,
-    F_4000,
-    F_8000
+import org.ekolab.server.model.content.lab3.Valued;
+
+public enum EstimatedGeometricMeanFrequency implements Valued<Double> {
+    F_315(31.5),
+    F_63(63.0),
+    F_125(125.0),
+    F_250(250.0),
+    F_500(500.0),
+    F_1000(1000.0),
+    F_2000(2000.0),
+    F_4000(4000.0),
+    F_8000(8000.0);
+
+    private final double value;
+
+    EstimatedGeometricMeanFrequency(double value) {
+        this.value = value;
+    }
+
+    @Override
+    public Double value() {
+        return value;
+    }
+
+    public static EstimatedGeometricMeanFrequency valueOf(double value) {
+        for (EstimatedGeometricMeanFrequency e : values()) {
+            if (e.value == value) {
+                return e;
+            }
+        }
+        throw new IllegalArgumentException("Wrong value: " + value);
+    }
 }
