@@ -2,6 +2,8 @@ package org.ekolab.server.service.impl.content.lab2;
 
 
 import org.ekolab.server.dao.api.content.lab2.Lab2Dao;
+import org.ekolab.server.model.content.lab2.CalculationResultType;
+import org.ekolab.server.model.content.lab2.Frequency;
 import org.ekolab.server.model.content.lab2.Lab2Data;
 import org.ekolab.server.model.content.lab2.Lab2Variant;
 import org.ekolab.server.service.api.ReportService;
@@ -11,9 +13,13 @@ import org.ekolab.server.service.api.content.lab2.Lab2Service;
 import org.ekolab.server.service.impl.content.LabServiceImpl;
 import org.springframework.context.MessageSource;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -35,11 +41,62 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
             labData.setHemisphereSurface(2 * Math.PI * Math.pow(labData.getHemisphereRadius(), 2));
         }
 
-        Map<String, List<Double>> calculationResult = new HashMap<>();
+        Map<CalculationResultType, List<Double>> calculationResult = new HashMap<>();
+        if (labData.getAverageSoundPressure() != null) {
+            if (labData.getCorrectionFactor() != null) {
+                calculationResult.put(CalculationResultType.CORRECTION_FACTOR, Collections.nCopies(labData.getAverageSoundPressure().size(), labData.getCorrectionFactor()));
 
+                calculationResult.put(CalculationResultType.SOUND_PRESSURE_MEASURING_SURFACE,
+                        labData.getAverageSoundPressure().stream().
+                                map(a -> a + labData.getCorrectionFactor()).collect(Collectors.toList()));
+
+                if (labData.getMeasuringFactor() != null) {
+                    calculationResult.put(CalculationResultType.MEASURING_FACTOR, Collections.nCopies(labData.getAverageSoundPressure().size(), labData.getMeasuringFactor()));
+
+                    if (labData.getRoomSize() != null) {
+                        calculationResult.put(CalculationResultType.FREQUENCY_COEFFICIENT,
+                                Arrays.stream(Frequency.values()).map(f -> Lab2CalcUtils.getMu(labData.getRoomSize(), f)).collect(Collectors.toList()));
+
+
+                        calculationResult.put(CalculationResultType.SOUND_POWER_LEVEL,
+                                calculationResult.get(CalculationResultType.SOUND_PRESSURE_MEASURING_SURFACE).stream().
+                                        map(a -> a + labData.getMeasuringFactor()).collect(Collectors.toList()));
+
+                        if (labData.getRoomConstant1000() != null && labData.getRoomConstant() != null) {
+                            calculationResult.put(CalculationResultType.ROOM_CONSTANT,
+                                    calculationResult.get(CalculationResultType.FREQUENCY_COEFFICIENT).stream().
+                                            map(f -> f * labData.getRoomConstant1000()).collect(Collectors.toList()));
+
+                            if (labData.getRoomConstant() != null) {
+                                calculationResult.put(CalculationResultType._10_lgB, Collections.nCopies(labData.getAverageSoundPressure().size(), labData.getRoomConstant()));
+
+                                if (labData.getQuantityOfSingleTypeEquipment() != null) {
+                                    calculationResult.put(CalculationResultType._10_lgn, Collections.nCopies(labData.getAverageSoundPressure().size(), Double.valueOf(labData.getQuantityOfSingleTypeEquipment())));
+
+                                    List<Double> reflectedSoundPower =
+                                            calculationResult.get(CalculationResultType.SOUND_POWER_LEVEL).stream().
+                                                    map(a -> a + labData.getSoundPowerLevel() + 10 *
+                                                            Math.log10(labData.getQuantityOfSingleTypeEquipment()) - 10 * Math.log10(labData.getRoomConstant()) + 6).collect(Collectors.toList());
+
+                                    calculationResult.put(CalculationResultType.REFLECTED_SOUND_POWER, reflectedSoundPower);
+
+
+                                    List<Double> allowedSoundPowerLevels = Arrays.stream(Frequency.values()).map(Lab2CalcUtils::getSoundPowerLevelForWorkplace).map(Double::valueOf).collect(Collectors.toList());
+
+                                    calculationResult.put(CalculationResultType.ALLOWED_SOUND_POWER_LEVELS, allowedSoundPowerLevels);
+
+                                    calculationResult.put(CalculationResultType.EXCESS,
+                                            IntStream.range(0, reflectedSoundPower.size()).mapToObj(i -> reflectedSoundPower.get(i) > allowedSoundPowerLevels.get(i) ?
+                                                    reflectedSoundPower.get(i) - allowedSoundPowerLevels.get(i) : null).collect(Collectors.toList()));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         labData.setCalculationResult(calculationResult);
     }
-
 
     @Override
     public int getLabNumber() {

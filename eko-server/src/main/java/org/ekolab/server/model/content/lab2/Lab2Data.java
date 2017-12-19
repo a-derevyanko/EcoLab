@@ -107,7 +107,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
      * Результаты расчета
      */
     @Calculated
-    private Map<String, List<Double>> calculationResult;
+    private Map<CalculationResultType, List<Double>> calculationResult;
 
     public Integer getBarometricPressure() {
         return barometricPressure;
@@ -229,11 +229,11 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
         this.reflectedSoundPower = reflectedSoundPower;
     }
 
-    public Map<String, List<Double>> getCalculationResult() {
+    public Map<CalculationResultType, List<Double>> getCalculationResult() {
         return calculationResult;
     }
 
-    public void setCalculationResult(Map<String, List<Double>> calculationResult) {
+    public void setCalculationResult(Map<CalculationResultType, List<Double>> calculationResult) {
         this.calculationResult = calculationResult;
     }
 

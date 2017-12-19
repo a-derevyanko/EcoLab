@@ -2,7 +2,7 @@ package org.ekolab.server.model.content.lab2;
 
 import org.ekolab.server.model.content.lab3.Valued;
 
-public enum EstimatedGeometricMeanFrequency implements Valued<Double> {
+public enum Frequency implements Valued<Double> {
     F_315(31.5),
     F_63(63.0),
     F_125(125.0),
@@ -15,7 +15,7 @@ public enum EstimatedGeometricMeanFrequency implements Valued<Double> {
 
     private final double value;
 
-    EstimatedGeometricMeanFrequency(double value) {
+    Frequency(double value) {
         this.value = value;
     }
 
@@ -24,8 +24,8 @@ public enum EstimatedGeometricMeanFrequency implements Valued<Double> {
         return value;
     }
 
-    public static EstimatedGeometricMeanFrequency valueOf(double value) {
-        for (EstimatedGeometricMeanFrequency e : values()) {
+    public static Frequency valueOf(double value) {
+        for (Frequency e : values()) {
             if (e.value == value) {
                 return e;
             }

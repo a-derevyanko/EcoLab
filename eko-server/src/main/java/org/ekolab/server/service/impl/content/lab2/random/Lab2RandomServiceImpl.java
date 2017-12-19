@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.ekolab.server.dao.api.content.lab2.random.Lab2RandomDao;
-import org.ekolab.server.model.content.lab2.EstimatedGeometricMeanFrequency;
+import org.ekolab.server.model.content.lab2.Frequency;
 import org.ekolab.server.model.content.lab2.ObjectType;
 import org.ekolab.server.model.content.lab2.random.Lab2RandomVariant;
 import org.ekolab.server.service.api.ReportService;
@@ -44,7 +44,7 @@ public class Lab2RandomServiceImpl extends Lab2ServiceImpl<Lab2RandomVariant, La
 
         ObjectType object = ObjectType.values()[RandomUtils.nextInt(ObjectType.values().length)];
         variant.setName(object);
-        variant.setEstimatedGeometricMeanFrequency(EstimatedGeometricMeanFrequency.values()[RandomUtils.nextInt(EstimatedGeometricMeanFrequency.values().length)]);
+        variant.setEstimatedGeometricMeanFrequency(Frequency.values()[RandomUtils.nextInt(Frequency.values().length)]);
         variant.setQuantityOfSingleTypeEquipment(RandomUtils.nextInt(2) + 1);
         variant.setBarometricPressure(700 + RandomUtils.nextInt(21) * 5);
         variant.setIndoorsTemperature(5 + RandomUtils.nextInt(4) * 5);

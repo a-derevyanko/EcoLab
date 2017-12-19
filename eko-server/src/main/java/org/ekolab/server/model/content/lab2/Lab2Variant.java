@@ -44,7 +44,7 @@ public abstract class Lab2Variant extends LabVariant {
     private List<Double> averageSoundPressure;
 
     @Calculated
-    private EstimatedGeometricMeanFrequency estimatedGeometricMeanFrequency;
+    private Frequency estimatedGeometricMeanFrequency;
 
     public ObjectType getName() {
         return name;
@@ -85,11 +85,11 @@ public abstract class Lab2Variant extends LabVariant {
         this.averageSoundPressure = averageSoundPressure;
     }
 
-    public EstimatedGeometricMeanFrequency getEstimatedGeometricMeanFrequency() {
+    public Frequency getEstimatedGeometricMeanFrequency() {
         return estimatedGeometricMeanFrequency;
     }
 
-    public void setEstimatedGeometricMeanFrequency(EstimatedGeometricMeanFrequency estimatedGeometricMeanFrequency) {
+    public void setEstimatedGeometricMeanFrequency(Frequency estimatedGeometricMeanFrequency) {
         this.estimatedGeometricMeanFrequency = estimatedGeometricMeanFrequency;
     }
 
