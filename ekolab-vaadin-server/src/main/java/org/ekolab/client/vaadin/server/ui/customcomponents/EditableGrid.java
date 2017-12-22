@@ -45,7 +45,7 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
         List<EditableGridData<T>> items = getDataProvider().getItems().stream().limit(rows).collect(Collectors.toList());
 
         IntStream.rangeClosed(items.size() + 1, rows).forEachOrdered(i -> {
-            EditableGridData<T> data = new EditableGridData<>(String.valueOf(i), new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue)));
+            EditableGridData<T> data = new EditableGridData<>(i, new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue)));
             items.add(data);
         });
         setItems(items);

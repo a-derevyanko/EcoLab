@@ -15,6 +15,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.SortedMap;
 
 
 public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
@@ -107,7 +108,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
      * Результаты расчета
      */
     @Calculated
-    private Map<CalculationResultType, List<Double>> calculationResult;
+    private SortedMap<CalculationResultType, List<Double>> calculationResult;
 
     public Integer getBarometricPressure() {
         return barometricPressure;
@@ -229,11 +230,11 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
         this.reflectedSoundPower = reflectedSoundPower;
     }
 
-    public Map<CalculationResultType, List<Double>> getCalculationResult() {
+    public SortedMap<CalculationResultType, List<Double>> getCalculationResult() {
         return calculationResult;
     }
 
-    public void setCalculationResult(Map<CalculationResultType, List<Double>> calculationResult) {
+    public void setCalculationResult(SortedMap<CalculationResultType, List<Double>> calculationResult) {
         this.calculationResult = calculationResult;
     }
 

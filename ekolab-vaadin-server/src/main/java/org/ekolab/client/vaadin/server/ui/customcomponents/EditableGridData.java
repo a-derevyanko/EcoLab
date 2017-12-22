@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class EditableGridData<T> {
-    private final String caption;
+    private final int caption;
 
     private final List<T> values;
 
-    public EditableGridData(String caption, List<T> values) {
+    public EditableGridData(int caption, List<T> values) {
         this.caption = caption;
         this.values = values;
     }
@@ -21,7 +21,7 @@ public class EditableGridData<T> {
         return values.set(index, value);
     }
 
-    public String getCaption() {
+    public int getCaption() {
         return caption;
     }
 

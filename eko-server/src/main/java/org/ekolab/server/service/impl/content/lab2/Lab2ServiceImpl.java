@@ -15,9 +15,9 @@ import org.springframework.context.MessageSource;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -41,14 +41,16 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
             labData.setHemisphereSurface(2 * Math.PI * Math.pow(labData.getHemisphereRadius(), 2));
         }
 
-        Map<CalculationResultType, List<Double>> calculationResult = new HashMap<>();
+        SortedMap<CalculationResultType, List<Double>> calculationResult = new TreeMap<>();
         if (labData.getAverageSoundPressure() != null) {
+            calculationResult.put(CalculationResultType.AVERAGE_SOUND_PRESSURE, labData.getAverageSoundPressure());
+
             if (labData.getCorrectionFactor() != null) {
                 calculationResult.put(CalculationResultType.CORRECTION_FACTOR, Collections.nCopies(labData.getAverageSoundPressure().size(), labData.getCorrectionFactor()));
 
-                calculationResult.put(CalculationResultType.SOUND_PRESSURE_MEASURING_SURFACE,
-                        labData.getAverageSoundPressure().stream().
-                                map(a -> a + labData.getCorrectionFactor()).collect(Collectors.toList()));
+
+                List<Double> soundPressureMeasuringSurface = labData.getAverageSoundPressure().stream().
+                                map(a -> a + labData.getCorrectionFactor()).collect(Collectors.toList());
 
                 if (labData.getMeasuringFactor() != null) {
                     calculationResult.put(CalculationResultType.MEASURING_FACTOR, Collections.nCopies(labData.getAverageSoundPressure().size(), labData.getMeasuringFactor()));
@@ -59,7 +61,7 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
 
 
                         calculationResult.put(CalculationResultType.SOUND_POWER_LEVEL,
-                                calculationResult.get(CalculationResultType.SOUND_PRESSURE_MEASURING_SURFACE).stream().
+                                soundPressureMeasuringSurface.stream().
                                         map(a -> a + labData.getMeasuringFactor()).collect(Collectors.toList()));
 
                         if (labData.getRoomConstant1000() != null && labData.getRoomConstant() != null) {

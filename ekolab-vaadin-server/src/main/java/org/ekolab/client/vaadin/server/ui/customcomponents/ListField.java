@@ -81,7 +81,7 @@ public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
         if (value.equals(getValue())) {
             return false;
         }
-        setItems(Collections.singleton(new EditableGridData<>("", value)));
+        setItems(Collections.singleton(new EditableGridData<>(0, value)));
         fireEvent(new ValueChangeEvent<>(this, oldValue, userOriginated));
 
         return true;

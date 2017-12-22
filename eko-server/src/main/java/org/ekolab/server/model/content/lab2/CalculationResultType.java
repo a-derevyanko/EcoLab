@@ -1,7 +1,7 @@
 package org.ekolab.server.model.content.lab2;
 
 public enum CalculationResultType {
-
+    AVERAGE_SOUND_PRESSURE,
     CORRECTION_FACTOR,
     MEASURING_FACTOR,
     FREQUENCY_COEFFICIENT,
@@ -9,7 +9,6 @@ public enum CalculationResultType {
     ROOM_CONSTANT,
     _10_lgB,
     _10_lgn,
-    SOUND_PRESSURE_MEASURING_SURFACE,
     REFLECTED_SOUND_POWER,
     ALLOWED_SOUND_POWER_LEVELS,
     EXCESS
