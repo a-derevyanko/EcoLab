@@ -51,7 +51,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
-import java.awt.*;
+import java.awt.Image;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
@@ -281,7 +281,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
             if (entry.getValue() instanceof List) {
                 List<String> captions = Arrays.asList(messageSource.getMessage(entry.getKey() + "-columns", null, locale).split(";"));
                 Map<String, Object> valueMap = IntStream.range(0, captions.size()).boxed().
-                        collect(Collectors.toMap(captions::get, i -> getFieldValueForPrint(((List) entry.getValue()).get(i), locale), (a, b) -> b));
+                        collect(Collectors.toMap(captions::get, i -> getFieldValueForPrint(((List) entry.getValue()).get(i), locale), (a, b) -> b, LinkedHashMap::new));
                 printData.put(entry.getKey(), valueMap);
             } else {
                 printData.put(entry.getKey(), getFieldValueForPrint(entry.getValue(), locale));

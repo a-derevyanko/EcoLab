@@ -3,6 +3,7 @@ package org.ekolab.server.model.content.lab2;
 import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.ValidatedBy;
+import org.ekolab.server.model.content.lab2.validators.AverageSoundPressureControlPointValidator;
 import org.ekolab.server.model.content.lab2.validators.CorrectionFactorValidator;
 import org.ekolab.server.model.content.lab2.validators.MeasuringFactorValidator;
 import org.ekolab.server.model.content.lab2.validators.QuantityOfSingleTypeEquipmentValidator;
@@ -13,7 +14,6 @@ import org.ekolab.server.model.content.lab2.validators.SoundPowerLevelValidator;
 
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.SortedMap;
 
@@ -50,6 +50,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
      * Средний уровень звукового давления
      */
     @Size(min = 9, max = 9)
+    @ValidatedBy(AverageSoundPressureControlPointValidator.class)
     private List<Double> averageSoundPressure;
 
     /**
