@@ -1,6 +1,8 @@
 package org.ekolab.server.service.api;
 
+import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.StudentInfo;
+import org.ekolab.server.model.StudentTeam;
 import org.ekolab.server.model.UserInfo;
 
 import java.io.Serializable;
@@ -21,39 +23,38 @@ public interface StudentInfoService extends Serializable {
      * Изменяет данные студента
      * @param userInfo данные пользователя
      * @param group группа студента
-     * @param number бригада студента
+     * @param team бригада студента
      * @return изменённые данные студента
      */
-    StudentInfo updateStudentInfo(UserInfo userInfo, String group, Integer number);
+    StudentInfo updateStudentInfo(UserInfo userInfo, StudentGroup group, StudentTeam team);
 
     /**
      * Создаёт нового студента
      * @param userInfo данные пользователя
      * @param group группа студента
-     * @param number бригада студента
+     * @param team бригада студента
      * @param teacherName преподаватель
      * @return данные студента
      */
-    StudentInfo createStudentInfo(UserInfo userInfo, String group, Integer number, String teacherName);
+    StudentInfo createStudentInfo(UserInfo userInfo, StudentGroup group, StudentTeam team, String teacherName);
 
     /**
      * Создаёт студенческую группу
      * @param name название
      */
-    void createStudentGroup(String name);
+    StudentGroup createStudentGroup(String name);
 
     /**
      * Создаёт студенческую бригаду
      * @param number номер
      */
-    void createStudentTeam(Integer number);
+    StudentTeam createStudentTeam(Integer number);
 
     /**
-     * Переименовывает студенческую группу
-     * @param name название
-     * @param newName новое название
+     * Изменение студенческой группы
+     * @param group группа
      */
-    void renameStudentGroup(String name, String newName);
+    void updateStudentGroup(StudentGroup group);
 
     /**
      *
@@ -63,4 +64,8 @@ public interface StudentInfoService extends Serializable {
     String getStudentTeacher(String studentLogin);
 
     List<String> getTeamMembers(Integer teamNumber);
+
+    List<StudentGroup> getStudentGroups();
+
+    List<StudentTeam> getStudentTeams();
 }

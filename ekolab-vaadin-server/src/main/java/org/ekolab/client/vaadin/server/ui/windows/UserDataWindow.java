@@ -8,7 +8,6 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
-import org.apache.commons.lang3.SerializationUtils;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.UserGroup;
@@ -16,12 +15,11 @@ import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.UserInfoService;
 
 import javax.annotation.PostConstruct;
-import java.util.function.Consumer;
 
 /**
  * Created by 777Al on 20.04.2017.
  */
-public abstract class UserDataWindow extends BaseEkoLabWindow<UserDataWindow.UserDataWindowSettings> {
+public abstract class UserDataWindow<T extends UserDataWindowSettings> extends BaseEkoLabWindow<T> {
     // ---------------------------- Графические компоненты --------------------
     protected final FormLayout content = new FormLayout();
     protected final Button save = new Button("Save", event -> save());
@@ -89,29 +87,15 @@ public abstract class UserDataWindow extends BaseEkoLabWindow<UserDataWindow.Use
     }
 
     protected void save() {
+        settings.getConsumer().accept(userInfoBinder.getBean());
         close();
-        settings.consumer.accept(userInfoBinder.getBean());
     }
 
     @Override
     protected void beforeShow() {
         super.beforeShow();
 
-        userInfoBinder.setBean(settings.userInfo);
+        userInfoBinder.setBean(settings.getUserInfo());
         lastName.focus();
-    }
-
-    public static class UserDataWindowSettings implements WindowSettings {
-        private final UserInfo userInfo;
-        private final Consumer<UserInfo> consumer;
-
-        public UserDataWindowSettings(UserInfo userInfo, Consumer<UserInfo> consumer) {
-            this.userInfo = SerializationUtils.clone(userInfo);
-            this.consumer = consumer;
-        }
-
-        public UserInfo getUserInfo() {
-            return userInfo;
-        }
     }
 }

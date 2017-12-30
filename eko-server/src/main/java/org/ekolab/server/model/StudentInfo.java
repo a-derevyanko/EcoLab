@@ -1,5 +1,6 @@
 package org.ekolab.server.model;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
@@ -9,8 +10,8 @@ import java.util.Objects;
 public class StudentInfo implements DomainModel {
     private StudentTeam team;
 
-    @Size(max = 256)
-    private String group;
+    @NotNull
+    private StudentGroup group;
 
     @Size(max = 256)
     private String teacher;
@@ -23,11 +24,11 @@ public class StudentInfo implements DomainModel {
         this.team = team;
     }
 
-    public String getGroup() {
+    public StudentGroup getGroup() {
         return group;
     }
 
-    public void setGroup(String group) {
+    public void setGroup(StudentGroup group) {
         this.group = group;
     }
 

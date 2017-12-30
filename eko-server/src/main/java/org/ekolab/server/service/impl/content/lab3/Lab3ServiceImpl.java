@@ -359,10 +359,6 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                 throw new IllegalArgumentException("Unknown chart type");
             }
 
-            //todo пока проверки прибиты - нужно вынести их в валидацию полей
-            if (mac > 1) {
-                throw new IllegalArgumentException("Invalid data");
-            }
             return createSplineChart(labData, chartTitle, createDataset(bwdMaxGroundLevelConcentrationDistance,
                     harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
                     backgroundConcentration, windSpeed, mac, locale),

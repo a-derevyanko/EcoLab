@@ -12,7 +12,8 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.AdminManagingView;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
-import org.ekolab.client.vaadin.server.ui.windows.EditUserWindow;
+import org.ekolab.client.vaadin.server.ui.windows.SimpleEditUserWindow;
+import org.ekolab.client.vaadin.server.ui.windows.UserDataWindowSettings;
 import org.ekolab.server.common.Role;
 import org.ekolab.server.common.UserInfoUtils;
 import org.ekolab.server.model.UserInfo;
@@ -40,7 +41,7 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
 
     private final UserInfoService userDetailsManager;
 
-    private final EditUserWindow userDataWindow;
+    private final SimpleEditUserWindow userDataWindow;
 
     // ---------------------- Графические компоненты -----------------------------
     private final HorizontalLayout leftButtonPanel = new HorizontalLayout();
@@ -52,7 +53,8 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
     private MenuItem labChooserItem;
 
     @Autowired
-    public EkoLabMenuBar(I18N i18N, EkoLabNavigator navigator, VaadinSecurity vaadinSecurity, UserInfoService userDetailsManager, EditUserWindow userDataWindow) {
+    public EkoLabMenuBar(I18N i18N, EkoLabNavigator navigator, VaadinSecurity vaadinSecurity, UserInfoService userDetailsManager,
+                         SimpleEditUserWindow userDataWindow) {
         this.i18N = i18N;
         this.navigator = navigator;
         this.vaadinSecurity = vaadinSecurity;
@@ -67,7 +69,7 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
         setStyleName(EkoLabTheme.MENUBAR_BORDERLESS);
         exitItem = addItem(i18N.get("menubar.exit"), VaadinIcons.SIGN_OUT, (Command) selectedItem -> vaadinSecurity.logout());
         userInfoItem = addItem("", VaadinIcons.USER, (Command) selectedItem -> {
-            userDataWindow.show(new EditUserWindow.UserDataWindowSettings(getUI().getCurrentUserInfo(), newUserInfo -> {
+            userDataWindow.show(new UserDataWindowSettings(getUI().getCurrentUserInfo(), newUserInfo -> {
                 getUI().setCurrentUserInfo(newUserInfo);
                 updateUserInfoItem();
             }));

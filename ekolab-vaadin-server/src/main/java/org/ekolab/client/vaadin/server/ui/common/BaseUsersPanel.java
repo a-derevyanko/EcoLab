@@ -1,10 +1,9 @@
 package org.ekolab.client.vaadin.server.ui.common;
 
-import com.vaadin.data.HasValue;
 import com.vaadin.data.provider.ConfigurableFilterDataProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.event.selection.SelectionListener;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -12,36 +11,33 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
-import org.ekolab.client.vaadin.server.dataprovider.UserInfoDataProvider;
+import org.ekolab.client.vaadin.server.dataprovider.UserInfoFilter;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
 import org.ekolab.client.vaadin.server.ui.windows.EditUserWindow;
 import org.ekolab.client.vaadin.server.ui.windows.NewUserWindow;
+import org.ekolab.client.vaadin.server.ui.windows.UserDataWindowSettings;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.service.api.UserInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.annotation.PrototypeScope;
 
-@SpringComponent
-@PrototypeScope
-public class UsersPanel extends VerticalLayout implements UIComponent {
+public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extends UserInfoFilter> extends VerticalLayout implements UIComponent {
 
-    private final EditUserWindow editUserWindow;
+    private final EditUserWindow<S> editUserWindow;
 
-    private final NewUserWindow newUserWindow;
+    private final NewUserWindow<S> newUserWindow;
 
     private final UserInfoService userInfoService;
 
     private final I18N i18N;
 
-    private final UserInfoDataProvider userInfoDataProvider;
+    private final DataProvider<UserInfo, T> userInfoDataProvider;
 
     /**
      * Фильтр по пользователям
      */
-    private final UserInfo filter = new UserInfo();
+    protected T filter;
 
     // ---------------------------- Графические компоненты --------------------
     protected final Grid<UserInfo> users = new Grid<>();
@@ -57,7 +53,7 @@ public class UsersPanel extends VerticalLayout implements UIComponent {
     protected final HorizontalLayout gridPanel = new HorizontalLayout(buttonsPanel, users);
     protected final HorizontalLayout findPanel = new HorizontalLayout(findLastNameTextField, findNameTextField, findMiddleNameTextField, find, clearFind);
 
-    public UsersPanel(EditUserWindow userDataWindow, UserInfoService userInfoService, NewUserWindow newUserWindow, UserInfoDataProvider userInfoDataProvider, I18N i18N) {
+    public BaseUsersPanel(EditUserWindow userDataWindow, UserInfoService userInfoService, NewUserWindow newUserWindow, DataProvider<UserInfo, T> userInfoDataProvider, I18N i18N) {
         this.editUserWindow = userDataWindow;
         this.newUserWindow = newUserWindow;
         this.userInfoService = userInfoService;
@@ -81,20 +77,13 @@ public class UsersPanel extends VerticalLayout implements UIComponent {
         findLastNameTextField.setPlaceholder(i18N.get("userdata.lastname"));
         findMiddleNameTextField.setPlaceholder(i18N.get("userdata.middlename"));
 
-        findNameTextField.addValueChangeListener((HasValue.ValueChangeListener<String>) event -> enableFindButtons());
-        findLastNameTextField.addValueChangeListener((HasValue.ValueChangeListener<String>) event -> enableFindButtons());
-        findMiddleNameTextField.addValueChangeListener((HasValue.ValueChangeListener<String>) event -> enableFindButtons());
-
-        find.setEnabled(false);
         find.setDescription(i18N.get("admin-manage.users.find"));
         find.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         find.addClickListener((Button.ClickListener) event -> {
             searchUsers();
-            enableFindButtons();
             find.setEnabled(false);
         });
 
-        clearFind.setEnabled(false);
         clearFind.setDescription(i18N.get("admin-manage.users.clear-find"));
         clearFind.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         clearFind.addClickListener((Button.ClickListener) event -> {
@@ -102,13 +91,13 @@ public class UsersPanel extends VerticalLayout implements UIComponent {
             findLastNameTextField.clear();
             findMiddleNameTextField.clear();
             searchUsers();
-            enableFindButtons();
         });
 
         findPanel.setSpacing(true);
         findPanel.setMargin(true);
 
-        ConfigurableFilterDataProvider<UserInfo, Void, UserInfo> dataProvider = userInfoDataProvider.withConfigurableFilter();
+        ConfigurableFilterDataProvider<UserInfo, Void, T> dataProvider = userInfoDataProvider.withConfigurableFilter();
+        filter = createFilter();
         dataProvider.setFilter(filter);
         users.setSizeFull();
         users.setSelectionMode(Grid.SelectionMode.SINGLE);
@@ -130,12 +119,8 @@ public class UsersPanel extends VerticalLayout implements UIComponent {
         addUser.setCaption(i18N.get("admin-manage.users.add-user"));
         addUser.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         addUser.setWidth(300.0F, Unit.PIXELS);
-        addUser.addClickListener((Button.ClickListener) event -> {
-            newUserWindow.show(new NewUserWindow.UserDataWindowSettings(filter, userInfo -> {
-                dataProvider.refreshAll();
-                users.select(userInfo);
-            }));
-        });
+        addUser.addClickListener(event ->
+                newUserWindow.show(createSettings(dataProvider)));
 
         removeUser.setCaption(i18N.get("admin-manage.users.remove-user"));
         removeUser.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
@@ -150,26 +135,26 @@ public class UsersPanel extends VerticalLayout implements UIComponent {
         editUser.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         editUser.setEnabled(false);
         editUser.setWidth(300.0F, Unit.PIXELS);
-        editUser.addClickListener((Button.ClickListener) event -> users.getSelectedItems().forEach(userInfo -> editUserWindow.show(new EditUserWindow.UserDataWindowSettings(userInfo, dataProvider::refreshItem))));
+        editUser.addClickListener((Button.ClickListener) event -> users.getSelectedItems().
+                forEach(userInfo -> editUserWindow.show(createSettingsForEdit(userInfo, dataProvider))));
 
         dataProvider.setFilter(filter);
     }
 
+    protected abstract T createFilter();
+
+    protected abstract S createSettings(ConfigurableFilterDataProvider<UserInfo, Void, T> dataProvider);
+
+    protected abstract S createSettingsForEdit(UserInfo userInfo, ConfigurableFilterDataProvider<UserInfo, Void, T> dataProvider);
+
     public void setUserGroup(UserGroup userGroup) {
-        filter.setGroup(userGroup);
+        filter.getUserInfoFilter().setGroup(userGroup);
     }
 
     private void searchUsers() {
-        filter.setFirstName(findNameTextField.getValue());
-        filter.setLastName(findLastNameTextField.getValue());
-        filter.setMiddleName(findMiddleNameTextField.getValue());
+        filter.getUserInfoFilter().setFirstName(findNameTextField.getValue());
+        filter.getUserInfoFilter().setLastName(findLastNameTextField.getValue());
+        filter.getUserInfoFilter().setMiddleName(findMiddleNameTextField.getValue());
         users.getDataProvider().refreshAll();
-    }
-
-    private void enableFindButtons() {
-        boolean textFieldsEmpty = findNameTextField.isEmpty() && findLastNameTextField.isEmpty() && findMiddleNameTextField.isEmpty();
-
-        find.setEnabled(!textFieldsEmpty);
-        clearFind.setEnabled(!textFieldsEmpty);
     }
 }

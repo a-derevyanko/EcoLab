@@ -12,7 +12,6 @@ import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.EkoLabVaadinProperties;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.UIUtils;
-import org.ekolab.client.vaadin.server.ui.common.UsersPanel;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.common.Role;
 import org.ekolab.server.model.UserGroup;
@@ -31,11 +30,11 @@ public class AdminManagingView extends VerticalLayout implements View {
 
     private final EkoLabVaadinProperties systemProperties;
 
-    private final UsersPanel adminsPanel;
+    private final AdminsPanel adminsPanel;
 
-    private final UsersPanel teachersPanel;
+    private final TeachersPanel teachersPanel;
 
-    private final UsersPanel studentsPanel;
+    private final StudentsPanel studentsPanel;
 
     // ---------------------------- Графические компоненты --------------------
     private final TextField autoSaveRate = new TextField();
@@ -48,7 +47,7 @@ public class AdminManagingView extends VerticalLayout implements View {
 
     protected final TabSheet userTabs = new TabSheet();
 
-    public AdminManagingView(I18N i18N, EkoLabVaadinProperties systemProperties, UsersPanel adminsPanel, UsersPanel teachersPanel, UsersPanel studentsPanel) {
+    public AdminManagingView(I18N i18N, EkoLabVaadinProperties systemProperties, AdminsPanel adminsPanel, TeachersPanel teachersPanel, StudentsPanel studentsPanel) {
         this.i18N = i18N;
         this.systemProperties = systemProperties;
         this.adminsPanel = adminsPanel;

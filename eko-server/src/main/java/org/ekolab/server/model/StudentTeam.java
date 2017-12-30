@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Created by 777Al on 22.05.2017.
  */
-public class StudentTeam implements DomainModel {
+public class StudentTeam extends IdentifiedDomainModel {
     private int number;
 
     public int getNumber() {

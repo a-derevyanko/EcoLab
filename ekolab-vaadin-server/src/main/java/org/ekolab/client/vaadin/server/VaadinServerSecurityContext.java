@@ -2,6 +2,7 @@ package org.ekolab.client.vaadin.server;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
+import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
@@ -80,5 +81,10 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     @Bean
     public Binder<UserInfo> userInfoBinder() {
         return new BeanValidationBinder<>(UserInfo.class);
+    }
+
+    @Bean
+    public Binder<StudentInfo> studentInfoBinder() {
+        return new BeanValidationBinder<>(StudentInfo.class);
     }
 }

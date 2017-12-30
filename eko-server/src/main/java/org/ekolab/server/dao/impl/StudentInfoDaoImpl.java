@@ -2,17 +2,23 @@ package org.ekolab.server.dao.impl;
 
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.content.StudentInfoDao;
+import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.StudentTeam;
 import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.Record1;
+import org.jooq.RecordMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.ekolab.server.db.h2.public_.Tables.*;
+import static org.ekolab.server.db.h2.public_.Tables.STUDY_GROUPS;
+import static org.ekolab.server.db.h2.public_.Tables.STUDY_GROUP_MEMBERS;
+import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEACHERS;
+import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEAMS;
+import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEAM_MEMBERS;
+import static org.ekolab.server.db.h2.public_.Tables.USERS;
 
 /**
  * Created by 777Al on 24.05.2017.
@@ -20,6 +26,20 @@ import static org.ekolab.server.db.h2.public_.Tables.*;
 @Service
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
 public class StudentInfoDaoImpl implements StudentInfoDao {
+    private static final RecordMapper<Record, StudentGroup> STUDENT_GROUP_RECORD_MAPPER = record -> {
+        StudentGroup group = new StudentGroup();
+        group.setId(record.get(STUDY_GROUPS.ID));
+        group.setName(record.get(STUDY_GROUPS.NAME));
+        return group;
+    };
+
+    private static final RecordMapper<Record, StudentTeam> STUDENT_TEAM_RECORD_MAPPER = record -> {
+        StudentTeam team = new StudentTeam();
+        team.setId(record.get(STUDY_TEAMS.ID));
+        team.setNumber(record.get(STUDY_TEAMS.NUMBER));
+        return team;
+    };
+
     private final DSLContext dsl;
 
     @Autowired
@@ -28,11 +48,10 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public String getStudentGroup(String userName) {
-        Record1<String> group = dsl.select(STUDY_GROUPS.NAME).from(STUDY_GROUPS).join(STUDY_GROUP_MEMBERS)
+    public StudentGroup getStudentGroup(String userName) {
+        return dsl.select().from(STUDY_GROUPS).join(STUDY_GROUP_MEMBERS)
                 .on(STUDY_GROUP_MEMBERS.GROUP_ID.eq(STUDY_GROUPS.ID)).join(USERS).on(USERS.ID.eq(STUDY_GROUP_MEMBERS.USER_ID))
-                .where(USERS.LOGIN.eq(userName)).fetchOne();
-        return group == null ? null : group.value1();
+                .where(USERS.LOGIN.eq(userName)).fetchOne().map(STUDENT_GROUP_RECORD_MAPPER);
     }
 
     @Override
@@ -59,20 +78,20 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public void updateStudentGroup(String userName, String group) {
+    public void updateStudentGroup(String userName, StudentGroup group) {
         dsl.mergeInto(STUDY_GROUP_MEMBERS, STUDY_GROUP_MEMBERS.USER_ID, STUDY_GROUP_MEMBERS.GROUP_ID)
                 .key(STUDY_GROUP_MEMBERS.USER_ID)
                 .values(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userName)).asField(),
-                        dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)).asField())
+                        dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.ID.eq(group.getId())).asField())
                 .execute();
     }
 
     @Override
-    public void updateStudentTeam(String userName, Integer number) {
+    public void updateStudentTeam(String userName, StudentTeam studentTeam) {
         dsl.mergeInto(STUDY_TEAM_MEMBERS, STUDY_TEAM_MEMBERS.USER_ID, STUDY_TEAM_MEMBERS.TEAM_ID)
                 .key(STUDY_TEAM_MEMBERS.USER_ID)
                 .values(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userName)).asField(),
-                        dsl.select(STUDY_TEAMS.ID).from(STUDY_TEAMS).where(STUDY_TEAMS.NUMBER.eq(number)).asField())
+                        dsl.select(STUDY_TEAMS.ID).from(STUDY_TEAMS).where(STUDY_TEAMS.ID.eq(studentTeam.getId())).asField())
                 .execute();
     }
 
@@ -90,18 +109,28 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public void createStudentGroup(String name) {
-        dsl.insertInto(STUDY_GROUPS, STUDY_GROUPS.NAME).values(name).execute();
+    public StudentGroup createStudentGroup(String name) {
+        return dsl.insertInto(STUDY_GROUPS, STUDY_GROUPS.NAME).values(name).returning().fetchOne().map(STUDENT_GROUP_RECORD_MAPPER);
     }
 
     @Override
-    public void createStudentTeam(Integer number) {
-        dsl.insertInto(STUDY_TEAMS, STUDY_TEAMS.NUMBER).values(number).execute();
+    public StudentTeam createStudentTeam(Integer number) {
+        return dsl.insertInto(STUDY_TEAMS, STUDY_TEAMS.NUMBER).values(number).returning().fetchOne().map(STUDENT_TEAM_RECORD_MAPPER);
     }
 
     @Override
-    public void renameStudentGroup(String name, String newName) {
+    public void updateStudentGroup(StudentGroup group) {
         dsl.update(STUDY_GROUPS)
-                .set(STUDY_GROUPS.NAME, newName).where(STUDY_GROUPS.NAME.eq(name)).execute();
+                .set(STUDY_GROUPS.NAME, group.getName()).where(STUDY_GROUPS.ID.eq(group.getId())).execute();
+    }
+
+    @Override
+    public List<StudentGroup> getStudentGroups() {
+        return dsl.selectFrom(STUDY_GROUPS).fetch().map(STUDENT_GROUP_RECORD_MAPPER);
+    }
+
+    @Override
+    public List<StudentTeam> getStudentTeams() {
+        return dsl.selectFrom(STUDY_TEAMS).fetch().map(STUDENT_TEAM_RECORD_MAPPER);
     }
 }

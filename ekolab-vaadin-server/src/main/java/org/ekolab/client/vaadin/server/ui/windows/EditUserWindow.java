@@ -1,8 +1,6 @@
 package org.ekolab.client.vaadin.server.ui.windows;
 
 import com.vaadin.data.Binder;
-import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
@@ -20,9 +18,7 @@ import javax.annotation.PostConstruct;
 /**
  * Created by 777Al on 20.04.2017.
  */
-@SpringComponent
-@UIScope
-public class EditUserWindow extends UserDataWindow {
+public abstract class EditUserWindow<T extends UserDataWindowSettings> extends UserDataWindow<T> {
     // ---------------------------- Графические компоненты --------------------
     private final TextField login = new TextField("Login");
     private final Label changePassword = new Label("New password");

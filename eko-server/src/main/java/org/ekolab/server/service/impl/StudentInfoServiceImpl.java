@@ -1,6 +1,7 @@
 package org.ekolab.server.service.impl;
 
 import org.ekolab.server.dao.api.content.StudentInfoDao;
+import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.StudentTeam;
 import org.ekolab.server.model.UserInfo;
@@ -39,7 +40,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Cacheable(cacheNames = STUDENT_INFO_CACHE, key = "#userName")
     @Nullable
     public StudentInfo getStudentInfo(String userName) {
-        String group = studentInfoDao.getStudentGroup(userName);
+        StudentGroup group = studentInfoDao.getStudentGroup(userName);
         if (group == null) {
             return null;
         } else {
@@ -55,14 +56,12 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @CachePut(cacheNames = STUDENT_INFO_CACHE, key = "#userInfo.login")
     @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, allEntries = true)
     @Deprecated // todo подумать, нужен ли этот метод. кэш для getTeamMembers() плохо будет работаь
-    public StudentInfo updateStudentInfo(UserInfo userInfo, String group, Integer number) {
+    public StudentInfo updateStudentInfo(UserInfo userInfo, StudentGroup group, StudentTeam team) {
         userInfoService.updateUserInfo(userInfo);
         studentInfoDao.updateStudentGroup(userInfo.getLogin(), group);
-        studentInfoDao.updateStudentTeam(userInfo.getLogin(), number);
+        studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
         StudentInfo studentInfo = new StudentInfo();
         studentInfo.setGroup(group);
-        StudentTeam team = new StudentTeam();
-        team.setNumber(number);
         studentInfo.setTeam(team);
         return studentInfo;
     }
@@ -70,40 +69,39 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Override
     @Transactional
     @CachePut(cacheNames = {STUDENT_INFO_CACHE, STUDENT_TEACHERS_CACHE}, key = "#userInfo.login")
-    @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, key = "#number")
+    @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, key = "#team")
     @NotNull
-    public StudentInfo createStudentInfo(@NotNull UserInfo userInfo, @NotNull String group, @NotNull Integer number, @NotNull String teacherName) {
+    public StudentInfo createStudentInfo(@NotNull UserInfo userInfo, @NotNull StudentGroup group,
+                                         @NotNull StudentTeam team, @NotNull String teacherName) {
         if (userInfo.getId() == null) {
             userInfoService.createUserInfo(userInfo);
         }
         studentInfoDao.addTeacherToStudent(userInfo.getLogin(), teacherName);
         studentInfoDao.updateStudentGroup(userInfo.getLogin(), group);
-        studentInfoDao.updateStudentTeam(userInfo.getLogin(), number);
+        studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
         StudentInfo studentInfo = new StudentInfo();
         studentInfo.setGroup(group);
-        StudentTeam team = new StudentTeam();
-        team.setNumber(number);
         studentInfo.setTeam(team);
         return studentInfo;
     }
 
     @Override
     @Transactional
-    public void createStudentGroup(String name) {
-        studentInfoDao.createStudentGroup(name);
+    public StudentGroup createStudentGroup(String name) {
+        return studentInfoDao.createStudentGroup(name);
     }
 
     @Override
     @Transactional
-    public void createStudentTeam(Integer number) {
-        studentInfoDao.createStudentTeam(number);
+    public StudentTeam createStudentTeam(Integer number) {
+        return studentInfoDao.createStudentTeam(number);
     }
 
     @Override
     @Transactional
     @CacheEvict(cacheNames = STUDENT_INFO_CACHE, allEntries = true)
-    public void renameStudentGroup(String name, String newName) {
-        studentInfoDao.renameStudentGroup(name, newName);
+    public void updateStudentGroup(StudentGroup group) {
+        studentInfoDao.updateStudentGroup(group);
     }
 
     @Override
@@ -118,5 +116,16 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Transactional(readOnly = true)
     public List<String> getTeamMembers(Integer teamNumber) {
         return studentInfoDao.getTeamMembers(teamNumber);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<StudentGroup> getStudentGroups() {
+        return studentInfoDao.getStudentGroups();
+    }
+
+    @Override
+    public List<StudentTeam> getStudentTeams() {
+        return studentInfoDao.getStudentTeams();
     }
 }
