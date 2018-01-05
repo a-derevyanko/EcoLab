@@ -6,8 +6,6 @@ import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.model.content.lab3.validators.StacksDiameterValidator;
 
 import javax.validation.Valid;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -144,43 +142,36 @@ public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * Теоретический объем продуктов сгорания
      */
-    @Digits(integer = 100000, fraction = 2)
     private Double combustionProductsVolume;
 
     /**
      * Теоретический объем паров воды
      */
-    @Digits(integer = 100000, fraction = 2)
     private Double waterVaporVolume;
 
     /**
      * Теоретический объем воздуха
      */
-    @Digits(integer = 100000, fraction = 2)
     private Double airVolume;
 
     /**
      * Фоновая концентрация NO2
      */
-    @Digits(integer = 100000, fraction = 3)
     private Double no2BackgroundConcentration;
 
     /**
      * Фоновая концентрация NO
      */
-    @Digits(integer = 100000, fraction = 3)
     private Double noBackgroundConcentration;
 
     /**
      * Фоновая концентрация SO2
      */
-    @Digits(integer = 100000, fraction = 3)
     private Double so2BackgroundConcentration;
 
     /**
      * Фоновая концентрация золы
      */
-    @Digits(integer = 100000, fraction = 3)
     private Double ashBackgroundConcentration;
 
     /**
@@ -272,29 +263,37 @@ public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * ПДК NO2
      */
-    @DecimalMax("0.085")
-    @DecimalMin("0.085")
+    /*@DecimalMax("0.085")
+    @DecimalMin("0.085")*/
+    @Min(0L)
+    @Max(1L)
     private Double no2MAC;
 
     /**
      * ПДК NO
      */
-    @DecimalMax("0.4")
-    @DecimalMin("0.4")
+    /*@DecimalMax("0.4")
+    @DecimalMin("0.4")*/
+    @Min(0L)
+    @Max(1L)
     private Double noMAC;
 
     /**
      * ПДК SO2
      */
-    @DecimalMax("0.5")
-    @DecimalMin("0.5")
+    /*@DecimalMax("0.5")
+    @DecimalMin("0.5")*/
+    @Min(0L)
+    @Max(1L)
     private Double so2MAC;
 
     /**
      * ПДК золы
      */
-    @DecimalMax("0.05")
-    @DecimalMin("0.05")
+    /*@DecimalMax("0.05")
+    @DecimalMin("0.05")*/
+    @Min(0L)
+    @Max(1L)
     private Double ashMAC;
 
     /**

@@ -31,6 +31,7 @@ import static org.ekolab.server.db.h2.public_.tables.Lab3variant.LAB3VARIANT;
 public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     private static final RecordMapper<Record, Lab3Data> LAB3DATA_MAPPER = record -> {
         Lab3Data data = new Lab3Data();
+        data.setId(record.get(LAB3DATA.ID));
         data.setStartDate(record.get(LAB3DATA.START_DATE));
         data.setSaveDate(record.get(LAB3DATA.SAVE_DATE));
         data.setCompleted(record.get(LAB3DATA.COMPLETED));
@@ -325,7 +326,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 .set(LAB3DATA.NO_MAC, data.getNoMAC())
                 .set(LAB3DATA.SO2_MAC, data.getSo2MAC())
                 .set(LAB3DATA.ASH_MAC, data.getAshMAC())
-                .where(LAB3DATA.USER_ID.eq(data.getId()))
+                .where(LAB3DATA.ID.eq(data.getId()))
                 .execute();
     }
 

@@ -45,14 +45,12 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
     @Test
     public void testSaveStudentInfo() {
         String newGroupName = GROUPNAME + RandomStringUtils.randomAlphabetic(5);
-        int newTeamNumber = TEAMNUMBER + 1;
         testGroup.setName(newGroupName);
-        studentInfoService.createStudentTeam(newTeamNumber);
         studentInfoService.updateStudentGroup(testGroup);
         studentInfoService.updateStudentInfo(userInfoService.getUserInfo(USERNAME), testGroup, testTeam);
         StudentInfo studentInfo = studentInfoService.getStudentInfo(USERNAME);
         Assert.assertEquals(studentInfo.getGroup(), testGroup);
-        Assert.assertEquals(studentInfo.getTeam().getNumber(), newTeamNumber);
+        Assert.assertEquals(studentInfo.getTeam().getNumber(), TEAMNUMBER);
     }
 
 }
