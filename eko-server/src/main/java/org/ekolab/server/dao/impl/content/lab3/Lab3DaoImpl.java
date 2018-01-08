@@ -128,7 +128,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
 
     @Override
     public void saveLab(Lab3Data data) {
-        long id = dsl.insertInto(LAB3DATA,
+        data.setId(dsl.insertInto(LAB3DATA,
                 LAB3DATA.USER_ID,
                 LAB3DATA.START_DATE,
                 LAB3DATA.SAVE_DATE,
@@ -218,7 +218,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         data.getNoMAC(),
                         data.getSo2MAC(),
                         data.getAshMAC()
-                ).returning(LAB3DATA.ID).fetchOne().getId();
+                ).returning(LAB3DATA.ID).fetchOne().getId());
 
         Lab3Variant variant = data.getVariant();
         dsl.insertInto(LAB3VARIANT,
@@ -250,7 +250,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3VARIANT.SO2_BACKGROUND_CONCENTRATION,
                 LAB3VARIANT.ASH_BACKGROUND_CONCENTRATION).
                 values(
-                        id,
+                        data.getId(),
                         variant.getTppOutput(),
                         variant.getNumberOfUnits() == null ? null : variant.getNumberOfUnits().value(),
                         variant.getFuelType() == null ? null : variant.getFuelType().name(),

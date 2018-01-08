@@ -359,10 +359,20 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                 throw new IllegalArgumentException("Unknown chart type");
             }
 
-            return createSplineChart(labData, chartTitle, createDataset(bwdMaxGroundLevelConcentrationDistance,
-                    harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-                    backgroundConcentration, windSpeed, mac, locale),
-                    bwdMaxGroundLevelConcentrationDistance, groundLevelConcentration, locale);
+            // Размеры графиков золы и серы зависят от размера графика NOx
+            JFreeChart noxDataChart = createSplineChart(labData, chartTitle, createDataset(bwdMaxGroundLevelConcentrationDistance,
+                    harmfulSubstancesDepositionCoefficient, labData.getBwdNoxGroundLevelConcentration(),
+                    labData.getNo2BackgroundConcentration(), windSpeed, labData.getNo2MAC(), Integer.MAX_VALUE, locale),
+                    bwdMaxGroundLevelConcentrationDistance, groundLevelConcentration, Integer.MAX_VALUE, locale);
+            if (chartType == Lab3ChartType.ISOLINE) {
+                return noxDataChart;
+            } else {
+                int rightBorder = (int) ((XYPlot) noxDataChart.getPlot()).getDomainAxis().getRange().getUpperBound();
+                return createSplineChart(labData, chartTitle, createDataset(bwdMaxGroundLevelConcentrationDistance,
+                        harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
+                        backgroundConcentration, windSpeed, mac, rightBorder, locale),
+                        bwdMaxGroundLevelConcentrationDistance, groundLevelConcentration, rightBorder, locale);
+            }
         }
         throw new IllegalArgumentException("Invalid data");
     }
@@ -434,7 +444,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     private XYSeriesCollection createDataset(double bwdMaxGroundLevelConcentrationDistance,
                                              double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration,
-                                             double backgroundConcentration, double windSpeed, double mac, Locale locale) {
+                                             double backgroundConcentration, double windSpeed, double mac, int maxX,  Locale locale) {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
         int Xm = Math.toIntExact(Math.round(bwdMaxGroundLevelConcentrationDistance));
@@ -447,12 +457,12 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                 series.setDescription(description);
                 dataset.addSeries(series);
                 fillIsoLineSeries(series, CyCoefficient, Xm, bwdMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-                        windSpeed, Integer.MAX_VALUE);
+                        windSpeed, maxX);
             }
         }
 
         // Найдём максимальный X, для которого будем производить расчёт
-        int maxX = findMaxX(dataset) + BORDER;
+        maxX = findMaxXWithBorder(dataset);
 
         String backgroundName = messageSource.getMessage("lab3.isoline-background-name", new Object[]{backgroundConcentration}, locale);
         XYSeries borderSeries = new XYSeries(backgroundName, false);
@@ -474,8 +484,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
         return dataset;
     }
 
-    private int findMaxX(XYSeriesCollection dataset) {
-        int maxX = 0;
+    private int findMaxXWithBorder(XYSeriesCollection dataset) {
+        int maxX = BORDER;
 
         for (XYSeries series : (List<XYSeries>) dataset.getSeries()) {
             XYDataItem item = series.getDataItem(0);
@@ -483,7 +493,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                 maxX = item.getX().intValue();
             }
         }
-        return maxX;
+        return maxX + BORDER;
     }
 
     private void fillIsoLineSeries(XYSeries series, double CyCoefficient, int Xm, double windSpeedMaxGroundLevelConcentrationDistance,
@@ -562,6 +572,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                                          XYSeriesCollection dataSet,
                                          double Xm,
                                          double Cm,
+                                         int rightBorder,
                                          Locale locale) {
         NumberAxis xAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-x-axis", null, locale));
         NumberAxis yAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-y-axis", null, locale));
@@ -648,6 +659,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
             renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f));
         }
 
+        if (rightBorder < Integer.MAX_VALUE) {
+            plot.getDomainAxis().setUpperBound(rightBorder);
+        }
         return chart;
     }
 }
