@@ -40,6 +40,7 @@ public class Lab3Step3 extends HorizontalLayout implements LabWizardStep<Lab3Dat
         addComponent(secondFormLayout);
         firstFormLayout.setCaption(i18N.get("lab3.step3.calc-results"));
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "stackAverageGasesSpeed"));
+        firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "oneBoilerFuelConsumption"));
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "noxMassiveInjection"));
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "no2MassiveInjection"));
         firstFormLayout.addField(FieldUtils.getField(Lab3Data.class, "noMassiveInjection"));

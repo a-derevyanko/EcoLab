@@ -130,10 +130,12 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     @Override
     public void updateCalculatedFields(Lab3Data labData) {
-        if (labData.getCombustionProductsVolume() != null && labData.getFuelConsumer() != null
-                && labData.getStacksDiameter() != null) {
-            labData.setStackAverageGasesSpeed((4 * labData.getCombustionProductsVolume() * labData.getFuelConsumer() * labData.getNumberOfUnits().value()) /
-                    (3.6 * Math.PI * Math.pow(labData.getStacksDiameter(), 2) * labData.getNumberOfStacks().value()));
+        if (labData.getCombustionProductsVolume() != null && labData.getFuelConsumer() != null) {
+            labData.setOneBoilerFuelConsumption(labData.getCombustionProductsVolume() * labData.getFuelConsumer() / 3.6);
+            if (labData.getStacksDiameter() != null) {
+                labData.setStackAverageGasesSpeed((4 * labData.getCombustionProductsVolume() * labData.getFuelConsumer() * labData.getNumberOfUnits().value()) /
+                        (3.6 * Math.PI * Math.pow(labData.getStacksDiameter(), 2) * labData.getNumberOfStacks().value()));
+            }
         }
 
         if (labData.getCombustionProductsVolume() != null && labData.getWaterVaporVolume() != null &&

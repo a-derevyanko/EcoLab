@@ -410,6 +410,12 @@ public class Lab3Data extends LabData<Lab3Variant> {
     @Calculated
     private Double n;
 
+    /**
+     * Расход дымовых газов от одного котла
+     */
+    @Calculated
+    private Double oneBoilerFuelConsumption;
+
     public Integer getTppOutput() {
         return tppOutput;
     }
@@ -930,6 +936,14 @@ public class Lab3Data extends LabData<Lab3Variant> {
         this.n = n;
     }
 
+    public Double getOneBoilerFuelConsumption() {
+        return oneBoilerFuelConsumption;
+    }
+
+    public void setOneBoilerFuelConsumption(Double oneBoilerFuelConsumption) {
+        this.oneBoilerFuelConsumption = oneBoilerFuelConsumption;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -996,15 +1010,16 @@ public class Lab3Data extends LabData<Lab3Variant> {
                 Objects.equals(windSpeedMaxSo2GroundLevelConcentration, lab3Data.windSpeedMaxSo2GroundLevelConcentration) &&
                 Objects.equals(windSpeedMaxAshGroundLevelConcentration, lab3Data.windSpeedMaxAshGroundLevelConcentration) &&
                 Objects.equals(windSpeedMaxGroundLevelConcentrationDistance, lab3Data.windSpeedMaxGroundLevelConcentrationDistance) &&
-                Objects.equals(m, lab3Data.m) &&
                 Objects.equals(f, lab3Data.f) &&
+                Objects.equals(m, lab3Data.m) &&
                 Objects.equals(d, lab3Data.d) &&
                 Objects.equals(VM, lab3Data.VM) &&
-                Objects.equals(n, lab3Data.n);
+                Objects.equals(n, lab3Data.n) &&
+                Objects.equals(oneBoilerFuelConsumption, lab3Data.oneBoilerFuelConsumption);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), tppOutput, numberOfUnits, city, steamProductionCapacity, numberOfStacks, stacksHeight, stacksDiameter, windDirection, windSpeed, lowHeatValue, fuelConsumer, carbonInFlyAsh, sulphurContent, ashContent, waterContent, ashRecyclingFactor, flueGasNOxConcentration, stackExitTemperature, outsideAirTemperature, excessAirRatio, combustionProductsVolume, waterVaporVolume, airVolume, no2BackgroundConcentration, noBackgroundConcentration, so2BackgroundConcentration, ashBackgroundConcentration, sulphurOxidesFractionAssociatedByFlyAsh, sulphurOxidesFractionAssociatedInWetDustCollector, sulphurOxidesFractionAssociatedInDesulphurizationSystem, desulphurizationSystemRunningTime, boilerRunningTime, ashProportionEntrainedGases, stackAverageGasesSpeed, noxMassiveInjection, no2MassiveInjection, noMassiveInjection, so2MassiveInjection, ashMassiveInjection, temperatureCoefficient, terrainCoefficient, harmfulSubstancesDepositionCoefficient, no2MAC, noMAC, so2MAC, ashMAC, breakdownWindSpeed, bwdNo2GroundLevelConcentration, bwdNoxGroundLevelConcentration, bwdNoGroundLevelConcentration, bwdSo2GroundLevelConcentration, bwdAshGroundLevelConcentration, no2AndSo2SummationGroup, noAndSo2SummationGroup, bwdMaxGroundLevelConcentrationDistance, windSpeedMaxNo2GroundLevelConcentration, windSpeedMaxNoGroundLevelConcentration, windSpeedMaxSo2GroundLevelConcentration, windSpeedMaxAshGroundLevelConcentration, windSpeedMaxGroundLevelConcentrationDistance, m, f, d, VM, n);
+        return Objects.hash(super.hashCode(), tppOutput, numberOfUnits, city, steamProductionCapacity, numberOfStacks, stacksHeight, stacksDiameter, windDirection, windSpeed, lowHeatValue, fuelConsumer, carbonInFlyAsh, sulphurContent, ashContent, waterContent, ashRecyclingFactor, flueGasNOxConcentration, stackExitTemperature, outsideAirTemperature, excessAirRatio, combustionProductsVolume, waterVaporVolume, airVolume, no2BackgroundConcentration, noBackgroundConcentration, so2BackgroundConcentration, ashBackgroundConcentration, sulphurOxidesFractionAssociatedByFlyAsh, sulphurOxidesFractionAssociatedInWetDustCollector, sulphurOxidesFractionAssociatedInDesulphurizationSystem, desulphurizationSystemRunningTime, boilerRunningTime, ashProportionEntrainedGases, stackAverageGasesSpeed, noxMassiveInjection, no2MassiveInjection, noMassiveInjection, so2MassiveInjection, ashMassiveInjection, temperatureCoefficient, terrainCoefficient, harmfulSubstancesDepositionCoefficient, no2MAC, noMAC, so2MAC, ashMAC, breakdownWindSpeed, bwdNo2GroundLevelConcentration, bwdNoxGroundLevelConcentration, bwdNoGroundLevelConcentration, bwdSo2GroundLevelConcentration, bwdAshGroundLevelConcentration, no2AndSo2SummationGroup, noAndSo2SummationGroup, bwdMaxGroundLevelConcentrationDistance, windSpeedMaxNo2GroundLevelConcentration, windSpeedMaxNoGroundLevelConcentration, windSpeedMaxSo2GroundLevelConcentration, windSpeedMaxAshGroundLevelConcentration, windSpeedMaxGroundLevelConcentrationDistance, f, m, d, VM, n, oneBoilerFuelConsumption);
     }
 }

@@ -143,7 +143,10 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
             }
         }
         valuesGrid.setItems(values);
-        additionalComponents.forEach(additionalFields::addComponent);
+        if (!additionalComponents.isEmpty()) {
+            additionalFields.setVisible(true);
+            additionalComponents.forEach(additionalFields::addComponent);
+        }
     }
 
     @Override
@@ -152,6 +155,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
         imagesLayout.removeAllComponents();
         valuesGrid.setItems(Collections.emptyList());
         additionalFields.removeAllComponents();
+        additionalFields.setVisible(false);
     }
 
     public static class InitialDataWindowSettings<T extends LabData<V>, V extends LabVariant> implements WindowSettings {

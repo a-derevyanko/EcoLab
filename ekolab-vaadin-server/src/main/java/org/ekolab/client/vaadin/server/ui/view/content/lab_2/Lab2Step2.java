@@ -43,11 +43,11 @@ public abstract class Lab2Step2<V extends Lab2Variant> extends HorizontalLayout 
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "hemisphereSurface"));
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "measuringFactor"));
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "roomConstant1000"));
+        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "frequencyCoefficient"));
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "roomConstant"));
 
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "soundPressureMeasuringSurface"));
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "soundPowerLevel"));
-        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "frequencyCoefficient"));
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "reflectedSoundPower"));
     }
 
