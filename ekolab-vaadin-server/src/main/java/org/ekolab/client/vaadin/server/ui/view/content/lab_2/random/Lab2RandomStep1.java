@@ -24,13 +24,16 @@ public class Lab2RandomStep1 extends HorizontalLayout implements LabWizardStep<L
     private final Binder<Lab2Data<Lab2RandomVariant>> binder;
 
     private final ParameterWithFormulaeLayout<Lab2Data<Lab2RandomVariant>, Lab2RandomVariant> firstFormLayout;
+    private final ParameterWithFormulaeLayout<Lab2Data<Lab2RandomVariant>, Lab2RandomVariant> secondFormLayout;
 
     public Lab2RandomStep1(I18N i18N,
                            Binder<Lab2Data<Lab2RandomVariant>> binder,
-                           ParameterWithFormulaeLayout<Lab2Data<Lab2RandomVariant>, Lab2RandomVariant> firstFormLayout) {
+                           ParameterWithFormulaeLayout<Lab2Data<Lab2RandomVariant>, Lab2RandomVariant> firstFormLayout,
+                           ParameterWithFormulaeLayout<Lab2Data<Lab2RandomVariant>, Lab2RandomVariant> secondFormLayout) {
         this.i18N = i18N;
         this.binder = binder;
         this.firstFormLayout = firstFormLayout;
+        this.secondFormLayout = secondFormLayout;
     }
 
     // ----------------------------- Графические компоненты --------------------------------
@@ -43,6 +46,7 @@ public class Lab2RandomStep1 extends HorizontalLayout implements LabWizardStep<L
         setSizeFull();
         setMargin(true);
         addComponent(firstFormLayout);
+        addComponent(secondFormLayout);
         setCaption(i18N.get("lab2.step1.general-data"));
 
         nameLabel.addStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
@@ -61,10 +65,10 @@ public class Lab2RandomStep1 extends HorizontalLayout implements LabWizardStep<L
 
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "barometricPressure"));
         firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "indoorsTemperature"));
-        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "roomSize"));
-        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "quantityOfSingleTypeEquipment"));
-        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "hemisphereRadius"));
-        firstFormLayout.addField(FieldUtils.getField(Lab2Data.class, "averageSoundPressure"));
+        secondFormLayout.addField(FieldUtils.getField(Lab2Data.class, "roomSize"));
+        secondFormLayout.addField(FieldUtils.getField(Lab2Data.class, "quantityOfSingleTypeEquipment"));
+        secondFormLayout.addField(FieldUtils.getField(Lab2Data.class, "hemisphereRadius"));
+        secondFormLayout.addField(FieldUtils.getField(Lab2Data.class, "averageSoundPressure"));
     }
 
     @Override

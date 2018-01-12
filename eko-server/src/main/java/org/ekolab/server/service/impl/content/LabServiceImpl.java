@@ -137,6 +137,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         T labData = createBaseLabData(userName);
         labData.setVariant(generateNewLabVariant());
         labDao.saveLab(labData);
+        updateCalculatedFields(labData);
         return labData;
     }
 
@@ -291,7 +292,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     }
 
     protected Object getFieldValueForPrint(Object value, Locale locale) {
-        if (value instanceof Integer) {
+        if (value instanceof Integer || value instanceof Map) {
             return value;
         } else if (value instanceof Double) {
             return Precision.round((double) value, (double) value > 2.0 ? 2 : 3);

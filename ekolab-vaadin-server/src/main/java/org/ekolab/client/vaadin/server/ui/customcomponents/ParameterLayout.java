@@ -14,6 +14,8 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.RadioButtonGroup;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.Window;
 import com.vaadin.util.ReflectTools;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
@@ -157,7 +159,19 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
                 field.createColumns(i18N, UIUtils.getStringConverter(Double.class, i18N), columns);
                 dataBinder.forField(field).bind(propertyField.getName());
                 field.setWidth(100 * columns.size(), Unit.PIXELS);
-                component = field;
+                /*PopupView view = new PopupView(null, field);
+                view.setHideOnMouseOut(false);
+                field.addValueChangeListener(e -> view.setPopupVisible(false));
+                Button button = new Button(i18N.get("labwizard.input-values"), event -> view.setPopupVisible(true));*/
+                Window view = new Window(i18N.get("labwizard.input-values"), field);
+                view.setResizable(false);
+                field.addValueChangeListener(e -> UI.getCurrent().removeWindow(view));
+                Button button = new Button(i18N.get("labwizard.input-values"), event -> {
+                    view.center();
+                    UI.getCurrent().addWindow(view);
+                });
+                button.setStyleName(EkoLabTheme.BUTTON_SMALL);
+                component = button;
             }  else {
                 throw new IllegalArgumentException("Unknown property class: " + propClass);
             }
