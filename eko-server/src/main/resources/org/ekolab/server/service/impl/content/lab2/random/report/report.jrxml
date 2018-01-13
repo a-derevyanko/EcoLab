@@ -6,6 +6,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 
 	<import value="org.ekolab.server.model.content.lab2.CalculationResultType" />
+	<import value="org.ekolab.server.common.ReportUtils" />
 	<style name="Style1" isDefault="true" hTextAlign="Left" vTextAlign="Top" markup="html" pattern="" fontName="Times New Roman" fontSize="11"/>
 	<style name="Style1Bold" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontSize="12" isBold="true"/>
 	<style name="StyleFortableCells" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12"/>
@@ -25,7 +26,7 @@
 	<parameter name="objectName">
 		<parameterDescription><![CDATA[Имя рассматриваемого объекта]]></parameterDescription>
 	</parameter>
-	<parameter name="calculationResult" class="java.util.Map">
+	<parameter name="calculationResult" class="java.util.SortedMap">
 		<parameterDescription><![CDATA[Значения для таблицы среднегеометрических частот]]></parameterDescription>
 	</parameter>
 
@@ -2058,8 +2059,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{calculationResult}.containsKey(CalculationResultType.CORRECTION_FACTOR) ?
-				((List<Double>)$P{calculationResult}.get(CalculationResultType.CORRECTION_FACTOR)).get(0) : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromMap($P{calculationResult}, CalculationResultType.CORRECTION_FACTOR, 0, "")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" style="Style1Bold" mode="Opaque" x="85" y="300" width="20" height="40" backcolor="#CFE3FC" uuid="02cd3f00-e59d-45ac-9276-2511b8c4cf1e">
@@ -2076,7 +2076,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[31,5]]></text>
+				<text><![CDATA[63]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="105" y="300" width="30" height="40" backcolor="#FFFFFF" uuid="d54a0fd1-ebd4-4244-bc7d-16c116c1f999">
@@ -2110,7 +2110,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[31,5]]></text>
+				<text><![CDATA[125]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="105" y="260" width="30" height="40" backcolor="#FFFFFF" uuid="5be544d0-96b8-4a24-80be-1364abf4d0c7">
@@ -2144,7 +2144,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[31,5]]></text>
+				<text><![CDATA[250]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="105" y="220" width="30" height="40" backcolor="#FFFFFF" uuid="77cfdd1b-0fbd-4d2a-ab83-159f85956168">
@@ -2178,7 +2178,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[31,5]]></text>
+				<text><![CDATA[500]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="105" y="180" width="30" height="40" backcolor="#FFFFFF" uuid="0fe10968-9564-45c2-9487-8c249c661295">
@@ -2212,7 +2212,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[31,5]]></text>
+				<text><![CDATA[1000]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="105" y="140" width="30" height="40" backcolor="#FFFFFF" uuid="d7fa70b5-7baf-4556-aa69-4f183d7dc95f">
@@ -2246,7 +2246,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[31,5]]></text>
+				<text><![CDATA[2000]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="105" y="100" width="30" height="40" backcolor="#FFFFFF" uuid="07681fa8-96c6-4a4e-9816-3859ff57ac94">
@@ -2280,7 +2280,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[31,5]]></text>
+				<text><![CDATA[4000]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="105" y="60" width="30" height="40" backcolor="#FFFFFF" uuid="0ded3588-08b4-4ab7-9577-9878e32a8dd2">
@@ -2314,7 +2314,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[31,5]]></text>
+				<text><![CDATA[8000]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="105" y="20" width="30" height="40" backcolor="#FFFFFF" uuid="7c0eefb1-3363-4d9f-8bff-20df263db300">
@@ -2476,8 +2476,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{calculationResult}.containsKey(CalculationResultType.CORRECTION_FACTOR) ?
-				((List<Double>)$P{calculationResult}.get(CalculationResultType.CORRECTION_FACTOR)).get(0) : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromMap($P{calculationResult}, CalculationResultType.AVERAGE_SOUND_PRESSURE, 0, "")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="135" y="300" width="30" height="40" backcolor="#FFFFFF" uuid="c0d3fa97-db8e-4fdc-902e-947b5a843ff3">
@@ -2494,8 +2493,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{calculationResult}.containsKey(CalculationResultType.CORRECTION_FACTOR) ?
-				((List<Double>)$P{calculationResult}.get(CalculationResultType.CORRECTION_FACTOR)).get(1) : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromMap($P{calculationResult}, CalculationResultType.CORRECTION_FACTOR, 1, "")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="135" y="260" width="30" height="40" backcolor="#FFFFFF" uuid="3290880a-433f-4fcd-8e6f-a2797f0df925">
