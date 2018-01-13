@@ -2059,7 +2059,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[ReportUtils.getFromMap($P{calculationResult}, CalculationResultType.CORRECTION_FACTOR, 0, "")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromMap($P{calculationResult}, CalculationResultType.CORRECTION_FACTOR, 0)]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" style="Style1Bold" mode="Opaque" x="85" y="300" width="20" height="40" backcolor="#CFE3FC" uuid="02cd3f00-e59d-45ac-9276-2511b8c4cf1e">
@@ -2476,7 +2476,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[ReportUtils.getFromMap($P{calculationResult}, CalculationResultType.AVERAGE_SOUND_PRESSURE, 0, "")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromMap($P{calculationResult}, CalculationResultType.AVERAGE_SOUND_PRESSURE, 0)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="135" y="300" width="30" height="40" backcolor="#FFFFFF" uuid="c0d3fa97-db8e-4fdc-902e-947b5a843ff3">
@@ -2493,7 +2493,7 @@
 				<textElement rotation="Left">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[ReportUtils.getFromMap($P{calculationResult}, CalculationResultType.CORRECTION_FACTOR, 1, "")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromMap($P{calculationResult}, CalculationResultType.CORRECTION_FACTOR, 1)]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="135" y="260" width="30" height="40" backcolor="#FFFFFF" uuid="3290880a-433f-4fcd-8e6f-a2797f0df925">
