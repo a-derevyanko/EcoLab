@@ -64,6 +64,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.IntStream;
 
 import static java.lang.Math.pow;
 
@@ -641,9 +642,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
         chart.addSubtitle(title);
 
         // Все линии, кроме граничной и ПДК делаем серого цвета
-        for (int i = 0; i < seriesWithLabels.size(); i++) {
-            renderer.setSeriesPaint(i, Color.BLACK);
-        }
+        IntStream.range(0, dataSet.getSeries().size()).forEach(i -> renderer.setSeriesPaint(i, Color.BLACK));
 
         if (macSeriesExists) {
             if (bigSeriesExists) {
@@ -653,6 +652,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
             renderer.setSeriesStroke(dataSet.getSeriesCount() - 2, new BasicStroke(2.0f));
             dataSet.getSeries(dataSet.getSeriesCount() - 1).setDescription(null);
             renderer.setSeriesStroke(dataSet.getSeriesCount() - 1, new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2.0f}, 0));
+            renderer.setSeriesPaint(dataSet.getSeriesCount() - 1, Color.RED);
         } else {
             if (bigSeriesExists) {
                 xAxis.setUpperBound(dataSet.getSeries(dataSet.getSeriesCount() - 1).getDataItem(0).getX().doubleValue());

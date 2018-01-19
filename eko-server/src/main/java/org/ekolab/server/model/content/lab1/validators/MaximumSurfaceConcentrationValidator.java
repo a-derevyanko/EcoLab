@@ -20,9 +20,9 @@ public class MaximumSurfaceConcentrationValidator implements FieldValidator<Doub
         }
         double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
         return FieldValidationResult.of(MathUtils.roundedCheckEquals(value,
-                1000 * labData.getTemperatureCoefficient() * labData.getMassEmissions() * 1000 *
+                labData.getTemperatureCoefficient() * labData.getMassEmissions() * 1000 *
                         labData.getHarmfulSubstancesDepositionCoefficient() * labData.getM() * labData.getN() *
                         labData.getTerrainCoefficient() / Math.pow(labData.getStacksHeight(), 2) *
-                        Math.cbrt(1.0 / (labData.getFlueGasesRate() * dT)), 3));
+                        Math.cbrt(2.0 / (labData.getFlueGasesRate() * dT)), 3));
     }
 }

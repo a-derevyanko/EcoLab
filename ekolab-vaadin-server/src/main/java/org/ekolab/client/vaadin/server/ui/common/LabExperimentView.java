@@ -78,7 +78,7 @@ public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S ext
 
 
     @Override
-    public boolean saveData() {
+    public boolean saveData(boolean showErrors) {
         if (isExperimentJournalStep() && hasVariantChanges) {
             BinderValidationStatus<V> validationStatus = variantBinder.validate();
             if (validationStatus.isOk()) {
@@ -88,13 +88,13 @@ public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S ext
                     saveButton.setVisible(false);
                 });
             } else {
-                if (Page.getCurrent() != null) {
+                if (showErrors && Page.getCurrent() != null) {
                     ComponentErrorNotification.show(i18N.get("savable.save-exception-caption"), i18N.get("savable.save-exception"));
                 }
                 return false;
             }
         }
-        return super.saveData();
+        return super.saveData(showErrors);
     }
 
     private boolean isExperimentJournalStep() {

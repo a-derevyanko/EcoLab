@@ -130,7 +130,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
             hasChanges = true;
         });
 
-        saveButton.addClickListener(event -> saveData());
+        saveButton.addClickListener(event -> saveData(true));
         initialDataButton.addClickListener(event -> showInitialData());
 
         labSteps.forEach(this::addStep);
@@ -139,11 +139,11 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
     @Override
     @Scheduled(fixedRateString = "${ekolab.lab.autoSaveRate:#{60000}}", initialDelayString = "${ekolab.lab.autoSaveRate:#{60000}}")
     public void autoSave() {
-        saveData();
+        saveData(false);
     }
 
     @Override
-    public boolean saveData() {
+    public boolean saveData(boolean showErrors) {
         if (hasUnsavedData()) {
             BinderValidationStatus<T> validationStatus = binder.validate();
             if (validationStatus.isOk()) {
@@ -153,7 +153,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
                     saveButton.setVisible(false);
                 });
             } else {
-                if (Page.getCurrent() != null) {
+                if (showErrors && Page.getCurrent() != null) {
                     ComponentErrorNotification.show(i18N.get("savable.save-exception-caption"), i18N.get("savable.save-exception"));
                 }
                 return false;
@@ -187,30 +187,28 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     @Override
     public void wizardCompleted(WizardCompletedEvent event) {
-        confirmWindow.show(new ConfirmWindow.ConfirmWindowSettings("labwizard.lab-finished.confirm", () -> {
-            binder.getBean().setCompleted(true);
-            hasChanges = true;
-            if (saveData()) {
-                removeAllWindows();
-            }
-            labFinishedWindow.show(new LabFinishedWindow.LabFinishedWindowSettings<>(binder.getBean(), labService));
-        }));
+        binder.getBean().setCompleted(true);
+        hasChanges = true;
+        if (saveData(true)) {
+            removeAllWindows();
+            confirmWindow.show(new ConfirmWindow.ConfirmWindowSettings("labwizard.lab-finished.confirm", () -> {
+                labFinishedWindow.show(new LabFinishedWindow.LabFinishedWindowSettings<>(binder.getBean(), labService));
+            }));
+        }
     }
 
     @Override
     public void next() {
-        if (saveData()) {
-            removeAllWindows();
-            super.next();
-        }
+        saveData(false);
+        removeAllWindows();
+        super.next();
     }
 
     @Override
     public void back() {
-        if (saveData()) {
-            removeAllWindows();
-            super.back();
-        }
+        saveData(false);
+        removeAllWindows();
+        super.back();
     }
 
     private void showInitialData() {
