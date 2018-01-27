@@ -14,6 +14,6 @@ public class ReflectedSoundPowerValidator implements FieldValidator<Double, Lab2
         return FieldValidationResult.of(data.getSoundPowerLevel() == null ||
                 data.getQuantityOfSingleTypeEquipment() == null || data.getRoomConstant() == null ||
                 MathUtils.roundedCheckEquals(value, data.getSoundPowerLevel() + 10 *
-                        Math.log10(data.getQuantityOfSingleTypeEquipment()) - 10 * Math.log10(data.getRoomConstant()) + 6, 1));
+                        Math.log10(data.getQuantityOfSingleTypeEquipment()) - 10 * Math.log10(data.getRoomConstant()) + 6, 2));
     }
 }

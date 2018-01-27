@@ -1,6 +1,7 @@
 package org.ekolab.server.service.impl.content.lab2;
 
 
+import org.apache.commons.math3.util.Precision;
 import org.ekolab.server.dao.api.content.lab2.Lab2Dao;
 import org.ekolab.server.model.content.lab2.CalculationResultType;
 import org.ekolab.server.model.content.lab2.Frequency;
@@ -75,21 +76,23 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
                                 if (labData.getQuantityOfSingleTypeEquipment() != null) {
                                     calculationResult.put(CalculationResultType._10_lgn, Collections.nCopies(labData.getAverageSoundPressure().size(), Double.valueOf(labData.getQuantityOfSingleTypeEquipment())));
 
-                                    List<Double> reflectedSoundPower =
-                                            calculationResult.get(CalculationResultType.SOUND_POWER_LEVEL).stream().
-                                                    map(a -> a + labData.getSoundPowerLevel() + 10 *
-                                                            Math.log10(labData.getQuantityOfSingleTypeEquipment()) - 10 * Math.log10(labData.getRoomConstant()) + 6).collect(Collectors.toList());
+                                    if (labData.getReflectedSoundPower() != null) {
+                                        List<Double> reflectedSoundPower =
+                                                calculationResult.get(CalculationResultType.SOUND_POWER_LEVEL).stream().
+                                                        map(a -> Precision.round(a + labData.getSoundPowerLevel() + 10 *
+                                                                Math.log10(labData.getQuantityOfSingleTypeEquipment()) - 10 * Math.log10(labData.getRoomConstant()) + 6, 3)).collect(Collectors.toList());
 
-                                    calculationResult.put(CalculationResultType.REFLECTED_SOUND_POWER, reflectedSoundPower);
+                                        calculationResult.put(CalculationResultType.REFLECTED_SOUND_POWER, reflectedSoundPower);
 
 
-                                    List<Double> allowedSoundPowerLevels = Arrays.stream(Frequency.values()).map(Lab2CalcUtils::getSoundPowerLevelForWorkplace).map(Double::valueOf).collect(Collectors.toList());
+                                        List<Double> allowedSoundPowerLevels = Arrays.stream(Frequency.values()).map(Lab2CalcUtils::getSoundPowerLevelForWorkplace).map(Double::valueOf).collect(Collectors.toList());
 
-                                    calculationResult.put(CalculationResultType.ALLOWED_SOUND_POWER_LEVELS, allowedSoundPowerLevels);
+                                        calculationResult.put(CalculationResultType.ALLOWED_SOUND_POWER_LEVELS, allowedSoundPowerLevels);
 
-                                    calculationResult.put(CalculationResultType.EXCESS,
-                                            IntStream.range(0, reflectedSoundPower.size()).mapToObj(i -> reflectedSoundPower.get(i) > allowedSoundPowerLevels.get(i) ?
-                                                    reflectedSoundPower.get(i) - allowedSoundPowerLevels.get(i) : null).collect(Collectors.toList()));
+                                        calculationResult.put(CalculationResultType.EXCESS,
+                                                IntStream.range(0, reflectedSoundPower.size()).mapToObj(i -> reflectedSoundPower.get(i) > allowedSoundPowerLevels.get(i) ?
+                                                        Precision.round(reflectedSoundPower.get(i) - allowedSoundPowerLevels.get(i), 3) : null).collect(Collectors.toList()));
+                                    }
                                 }
                             }
                         }

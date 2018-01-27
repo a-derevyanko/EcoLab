@@ -12,6 +12,6 @@ public class RoomConstantValidator implements FieldValidator<Double, Lab2Data<La
     @Override
     public FieldValidationResult validate(Double value, Lab2Data<Lab2Variant> data) {
         return FieldValidationResult.of(data.getRoomConstant1000() == null || data.getFrequencyCoefficient() == null ||
-                MathUtils.roundedCheckEquals(value, data.getRoomConstant1000() + data.getFrequencyCoefficient(), 1));
+                MathUtils.roundedCheckEquals(value, data.getRoomConstant1000() * data.getFrequencyCoefficient(), 1));
     }
 }

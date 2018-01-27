@@ -14,7 +14,7 @@ public class CorrectionFactorValidator implements FieldValidator<Double, Lab2Dat
         return FieldValidationResult.of(data.getHemisphereSurface() == null || MathUtils.roundedCheckEquals(value,
                 -10 *
                         Math.log10(1.02 *
-                                (data.getBarometricPressure() * 133 / 100000) *
-                                Math.sqrt(293 / (273 + data.getIndoorsTemperature()))), 1));
+                                (data.getBarometricPressure() * 133.0 / 100000.0) *
+                                Math.sqrt(293.0 / (273.0 + data.getIndoorsTemperature()))), 1));
     }
 }
