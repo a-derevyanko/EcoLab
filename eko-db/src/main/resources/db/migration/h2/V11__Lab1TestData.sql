@@ -303,7 +303,7 @@ VALUES
    'Ответ округлить до целых.<br>' ||
    '<i>Пример: 24 м<sup>3</sup>/с</i>', 1,
    'int', 'м<sup>3</sup>/с',
-   'null'),
+   'fuelConsumerNormalized*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 5) / 273.0'),
   (17, 0, NULL,
    'Для исследуемого в лабораторной работе объекта определить' ||
    'расход дымовых газов, выбрасываемых в атмосферу' ||
@@ -311,7 +311,7 @@ VALUES
    'Ответ округлить до целых.<br>' ||
    '<i>Пример: 24 м<sup>3</sup>/с</i>', 2,
    'int', 'м<sup>3</sup>/с',
-   'null'),
+   'fuelConsumerNormalized*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 10) / 273.0'),
   (17, 0, NULL,
    'Для исследуемого в лабораторной работе объекта определить' ||
    'расход дымовых газов, выбрасываемых в атмосферу' ||
@@ -319,7 +319,7 @@ VALUES
    'Ответ округлить до целых.<br>' ||
    '<i>Пример: 24 м<sup>3</sup>/с</i>', 3,
    'int', 'м<sup>3</sup>/с',
-   'null'),
+   'fuelConsumerNormalized*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 15) / 273.0'),
   (17, 0, NULL,
    'Для исследуемого в лабораторной работе объекта определить' ||
    'расход дымовых газов, выбрасываемых в атмосферу' ||
@@ -327,7 +327,7 @@ VALUES
    'Ответ округлить до целых.<br>' ||
    '<i>Пример: 24 м<sup>3</sup>/с</i>', 4,
    'int', 'м<sup>3</sup>/с',
-   'null'),
+   'fuelConsumerNormalized*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 20) / 273.0'),
 
  -- 9 вопрос
  (18, 0, NULL,
@@ -338,7 +338,10 @@ VALUES
   'Ответ округлить до целых.<br>' ||
   '<i>Пример: 1224 м</i>', 1,
   'int', 'м',
-  'null'),
+  '(5-harmfulSubstancesDepositionCoefficient) / 4.0 *' ||
+  ' (10 + stacksHeight) * (7*(1+0.28*Math.cbrt(1000*stacksDiameter*Math.pow(flueGasesSpeed,2)/ ' ||
+  '(stackExitTemperature - outsideTemperature) *(Math.pow(10 + stacksHeight,2)))) * ' ||
+  '(0.65 * Math.cbrt(flueGasesRate*(stackExitTemperature - outsideTemperature) / (10 + stacksHeight)))'),
 
  -- 10 вопрос
  (19, 0, NULL,
@@ -348,5 +351,8 @@ VALUES
   'Ответ округлить до тысячных.<br>' ||
   '<i>Пример: 0,064 мг/м<sup>3</sup></i>', 1,
   'double', 'мг/м<sup>3</sup>',
-  'noxMassiveInjection - noxMassiveInjection/numberOfUnits')
+  'temperatureCoefficient * massEmissions *
+                        harmfulSubstancesDepositionCoefficient * m * n *
+                        terrainCoefficient / Math.pow(stacksHeight + 10, 2) *
+                        Math.cbrt(1.0 / (flueGasesRate * dT))') //todo
 ;
