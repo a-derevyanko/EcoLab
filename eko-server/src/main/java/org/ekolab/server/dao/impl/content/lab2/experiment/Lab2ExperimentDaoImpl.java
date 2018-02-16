@@ -55,7 +55,7 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
             data.getVariant().setRoomSize(record.get(LAB2_EXPERIMENT_LOG.ROOM_SIZE));
             data.getVariant().setQuantityOfSingleTypeEquipment(record.get(LAB2_EXPERIMENT_LOG.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
             data.getVariant().setHemisphereRadius(record.get(LAB2_EXPERIMENT_LOG.HEMISPHERE_RADIUS));
-            data.getVariant().setAverageSoundPressure(toList(record.get(LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE)));
+            data.getVariant().setAverageSoundPressure(toDoubleList(record.get(LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE)));
             data.getVariant().setEstimatedGeometricMeanFrequency(record.get(LAB2_EXPERIMENT_LOG.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY) == null ?
                     null : Frequency.valueOf(record.get(LAB2_EXPERIMENT_LOG.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY)));
 

@@ -40,7 +40,7 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
             data.setRoomSize(record.get(LAB2DATA.ROOM_SIZE));
             data.setQuantityOfSingleTypeEquipment(record.get(LAB2DATA.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
             data.setHemisphereRadius(record.get(LAB2DATA.HEMISPHERE_RADIUS));
-            data.setAverageSoundPressure(toList(record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE)));
+            data.setAverageSoundPressure(toDoubleList(record.get(LAB2DATA.AVERAGE_SOUND_PRESSURE)));
             data.setCorrectionFactor(record.get(LAB2DATA.CORRECTION_FACTOR));
             data.setSoundPressureMeasuringSurface(record.get(LAB2DATA.SOUND_PRESSURE_MEASURING_SURFACE));
             data.setHemisphereSurface(record.get(LAB2DATA.HEMISPHERE_SURFACE));
@@ -152,8 +152,8 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
         return list == null ? null : list.toArray(new Object[0]);
     }
 
-    protected static <T> List<T> toList(Object[] array) {
-        return array == null ? null : Arrays.stream(array).map(o -> (T) o).collect(Collectors.toList());
+    protected static List<Double> toDoubleList(Object[] array) {
+        return array == null ? null : Arrays.stream(array).map(o -> ((Number) o).doubleValue()).collect(Collectors.toList());
     }
 
     protected abstract Lab2DataMapper<V> getLabMapper();

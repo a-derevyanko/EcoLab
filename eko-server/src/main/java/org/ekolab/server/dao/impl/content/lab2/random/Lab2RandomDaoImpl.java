@@ -32,7 +32,7 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
             data.getVariant().setBarometricPressure(record.get(LAB2_RANDOM_VARIANT.BAROMETRIC_PRESSURE));
             data.getVariant().setIndoorsTemperature(record.get(LAB2_RANDOM_VARIANT.INDOORS_TEMPERATURE));
             data.getVariant().setQuantityOfSingleTypeEquipment(record.get(LAB2_RANDOM_VARIANT.QUANTITY_OF_SINGLE_TYPE_EQUIPMENT));
-            data.getVariant().setAverageSoundPressure(toList(record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE)));
+            data.getVariant().setAverageSoundPressure(toDoubleList(record.get(LAB2_RANDOM_VARIANT.AVERAGE_SOUND_PRESSURE)));
             data.getVariant().setEstimatedGeometricMeanFrequency(record.get(LAB2_RANDOM_VARIANT.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY) == null ?
                     null : Frequency.valueOf(record.get(LAB2_RANDOM_VARIANT.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY)));
             return data;
