@@ -13,6 +13,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * Created by 777Al on 26.04.2017.
  */
@@ -28,6 +31,7 @@ public class Lab2ExperimentServiceImpl extends Lab2ServiceImpl<Lab2ExperimentLog
         Lab2ExperimentLog variant = new Lab2ExperimentLog();
         variant.setEstimatedGeometricMeanFrequency(Frequency.
                 values()[RandomUtils.nextInt(Frequency.values().length)]);
+        variant.setSoundPressure(Collections.nCopies(8, new ArrayList<>(Collections.nCopies(9, 0.0))));
         return variant;
     }
 

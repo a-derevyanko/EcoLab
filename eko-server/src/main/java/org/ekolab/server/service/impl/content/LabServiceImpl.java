@@ -119,18 +119,6 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     }
 
     @Override
-    @Transactional(readOnly = true)
-    //@Cacheable(cacheNames = "LABDATA", key = "#userName")
-    public List<T> getAllLabsByUser(String userName) {
-        List<T> labs = labDao.getAllLabsByUser(userName);
-        labs.forEach(item -> {
-            item.setUserLogin(userName);
-            updateCalculatedFields(item);
-        });
-        return labs;
-    }
-
-    @Override
     @Transactional
     //@CachePut(cacheNames = "LABDATA", key = "#userName")
     public T startNewLab(String userName) {

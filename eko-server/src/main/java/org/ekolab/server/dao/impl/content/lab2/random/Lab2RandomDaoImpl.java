@@ -13,8 +13,6 @@ import org.jooq.Record;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import static org.ekolab.server.db.h2.public_.Tables.LAB2DATA;
 import static org.ekolab.server.db.h2.public_.Tables.LAB2_RANDOM_VARIANT;
 
@@ -55,12 +53,6 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
         return dsl.select().from(LAB2DATA).join(LAB2_RANDOM_VARIANT).on(LAB2_RANDOM_VARIANT.ID.eq(LAB2DATA.ID)).
                 where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB2DATA.COMPLETED.eq(completed)).
                 orderBy(LAB2DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
-    }
-
-    @Override
-    public List<Lab2Data<Lab2RandomVariant>> getAllLabsByUser(String userName) {
-        return dsl.select().from(LAB2DATA).join(LAB2_RANDOM_VARIANT).on(LAB2_RANDOM_VARIANT.ID.eq(LAB2DATA.ID))
-                .where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(getLabMapper());
     }
 
     @Override

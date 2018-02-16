@@ -49,11 +49,6 @@ public abstract class Lab1ServiceTest<V extends Lab1Variant> extends AbstractTes
     }
 
     @Test
-    public void testGetAllLabsByUser() {
-        Assert.assertEquals(lab1Service.getAllLabsByUser(USERNAME).size(), 1);
-    }
-
-    @Test
     public void testRemoveOldLabs() throws InterruptedException {
         LocalDateTime startDate = LocalDateTime.now();
         Thread.sleep(1000L);

@@ -27,8 +27,6 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
 
     T getCompletedLabByUser(String userName);
 
-    List<T> getAllLabsByUser(String userName);
-
     T startNewLab(String userName);
 
     T updateLab(@Valid T labData);

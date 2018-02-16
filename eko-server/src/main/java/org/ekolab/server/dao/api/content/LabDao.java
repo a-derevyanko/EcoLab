@@ -14,8 +14,6 @@ import java.util.Locale;
 public interface LabDao<T extends LabData> {
     T getLastLabByUser(String userName, boolean completed);
 
-    List<T> getAllLabsByUser(String userName);
-
     void saveLab(T labData);
 
     int updateLab(T labData);

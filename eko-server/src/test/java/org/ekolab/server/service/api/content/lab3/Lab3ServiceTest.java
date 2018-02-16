@@ -46,11 +46,6 @@ public class Lab3ServiceTest extends AbstractTestWithUser {
     }
 
     @Test
-    public void testGetAllLabsByUser() {
-        Assert.assertEquals(lab3Service.getAllLabsByUser(USERNAME).size(), 1);
-    }
-
-    @Test
     public void testRemoveOldLabs() throws InterruptedException {
         LocalDateTime startDate = LocalDateTime.now();
         Thread.sleep(1000L);

@@ -8,6 +8,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import org.apache.commons.math3.util.Precision;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabExperimentJournalStep;
@@ -99,13 +100,14 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
         averageSoundPressureControlPointGrid.getEditor().addSaveListener(event -> {
             List<Double> valuesSum = new ArrayList<>(Collections.nCopies(9, 0.0));
             Collection<EditableGridData<Double>> editableGridData = averageSoundPressureControlPointGrid.getDataProvider().getItems();
+            experimentLogBinder.getBean().setSoundPressure(new ArrayList<>());
             for (EditableGridData<Double> data : editableGridData) {
                 List<Double> values = data.getValues();
+                experimentLogBinder.getBean().getSoundPressure().add(values);
                 IntStream.range(0, values.size() - 1).forEachOrdered(i -> valuesSum.set(i, valuesSum.get(i) + values.get(i)));
             }
-            soundPressureControlPointField.setValue(valuesSum.stream().map(d -> d / editableGridData.size()).collect(Collectors.toList()));
+            soundPressureControlPointField.setValue(valuesSum.stream().map(d -> Precision.round(d / editableGridData.size(), 3)).collect(Collectors.toList()));
         });
-        pointCountComboBox.setSelectedItem(4);
 
         soundPressureValidationLabel.setStyleName(EkoLabTheme.LABEL_FAILURE);
         Binder.BindingBuilder<Lab2ExperimentLog, List<Double>> bindingBuilder =
@@ -117,6 +119,11 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
 
     @Override
     public void beforeEnter() {
+        List<List<Double>> soundPressure = experimentLogBinder.getBean().getSoundPressure();
+        List<EditableGridData<Double>> values = IntStream.range(0, soundPressure.size())
+                .mapToObj(i -> new EditableGridData<>(i + 1, new ArrayList<>(soundPressure.get(i)))).collect(Collectors.toList());
+        pointCountComboBox.setSelectedItem(soundPressure.size());
+        averageSoundPressureControlPointGrid.setItems(values);
         estimatedGeometricMeanFrequencyLabel.setValue(i18N.get("lab2.step1.experiment-data.used-estimated-geometric-mean-frequency", experimentLogBinder.getBean().getEstimatedGeometricMeanFrequency().value()));
     }
 }

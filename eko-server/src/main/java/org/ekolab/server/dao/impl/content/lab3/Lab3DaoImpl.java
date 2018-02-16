@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.ekolab.server.db.h2.public_.tables.Lab3data.LAB3DATA;
 import static org.ekolab.server.db.h2.public_.tables.Lab3variant.LAB3VARIANT;
@@ -118,12 +117,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         return dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID)).
                 where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB3DATA.COMPLETED.eq(completed)).
                 orderBy(LAB3DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB3DATA_MAPPER);
-    }
-
-    @Override
-    public List<Lab3Data> getAllLabsByUser(String userName) {
-        return dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID))
-                .where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(LAB3DATA_MAPPER);
     }
 
     @Override

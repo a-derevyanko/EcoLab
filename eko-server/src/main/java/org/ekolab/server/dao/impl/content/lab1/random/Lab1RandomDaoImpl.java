@@ -57,12 +57,6 @@ public class Lab1RandomDaoImpl extends Lab1DaoImpl<Lab1RandomVariant> implements
     }
 
     @Override
-    public List<Lab1Data<Lab1RandomVariant>> getAllLabsByUser(String userName) {
-        return dsl.select().from(LAB1DATA).join(LAB1_RANDOM_VARIANT).on(LAB1_RANDOM_VARIANT.ID.eq(LAB1DATA.ID))
-                .where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(getLabMapper());
-    }
-
-    @Override
     protected Lab1DataMapper<Lab1RandomVariant> getLabMapper() {
         return RECORD_MAPPER;
     }

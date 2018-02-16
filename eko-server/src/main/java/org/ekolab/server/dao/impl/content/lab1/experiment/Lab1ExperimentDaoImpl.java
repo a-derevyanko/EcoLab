@@ -11,8 +11,6 @@ import org.jooq.Record;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
 import static org.ekolab.server.db.h2.public_.Tables.LAB1_EXPERIMENT_LOG;
 
@@ -56,12 +54,6 @@ public class Lab1ExperimentDaoImpl extends Lab1DaoImpl<Lab1ExperimentLog> implem
         return dsl.select().from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1_EXPERIMENT_LOG.ID.eq(LAB1DATA.ID)).
                 where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB1DATA.COMPLETED.eq(completed)).
                 orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
-    }
-
-    @Override
-    public List<Lab1Data<Lab1ExperimentLog>> getAllLabsByUser(String userName) {
-        return dsl.select().from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1_EXPERIMENT_LOG.ID.eq(LAB1DATA.ID))
-                .where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(getLabMapper());
     }
 
     @Override

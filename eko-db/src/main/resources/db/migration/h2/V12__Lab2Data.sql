@@ -136,3 +136,31 @@ COMMENT ON COLUMN lab2_experiment_log.hemisphere_Radius IS 'Радиус пол�
 COMMENT ON COLUMN lab2_experiment_log.average_Sound_Pressure IS 'Средний уровень звукового давления';
 COMMENT ON COLUMN lab2_experiment_log.estimated_Geometric_Mean_Frequency IS 'Расчетная среднегеометрическая частота';
 
+
+CREATE TABLE lab2_experiment_log_sound_pressure (
+  id      BIGINT IDENTITY PRIMARY KEY,
+  LAB_ID  BIGINT REFERENCES lab2_experiment_log (id) ON DELETE CASCADE,
+  version INT,
+  F_315   DOUBLE,
+  F_63    DOUBLE,
+  F_125   DOUBLE,
+  F_250   DOUBLE,
+  F_500   DOUBLE,
+  F_1000  DOUBLE,
+  F_2000  DOUBLE,
+  F_4000  DOUBLE,
+  F_8000  DOUBLE
+);
+
+COMMENT ON TABLE lab2_experiment_log_sound_pressure IS 'Звуковое давление для режима эксперимента лабораторной №2';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.id is 'Идентификатор';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.LAB_ID is 'Идентификатор лабораторной';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.F_315 is 'Давление';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.F_63 is 'Давление';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.F_125 is 'Давление';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.F_250 is 'Давление';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.F_500 is 'Давление';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.F_1000 is 'Давление';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.F_2000 is 'Давление';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.F_4000 is 'Давление';
+COMMENT ON COLUMN lab2_experiment_log_sound_pressure.F_8000 is 'Давление';

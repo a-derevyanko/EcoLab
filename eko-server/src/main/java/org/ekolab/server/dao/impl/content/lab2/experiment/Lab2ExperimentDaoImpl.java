@@ -9,14 +9,18 @@ import org.ekolab.server.model.content.lab2.Lab2Data;
 import org.ekolab.server.model.content.lab2.ObjectType;
 import org.ekolab.server.model.content.lab2.experiment.Lab2ExperimentLog;
 import org.jooq.DSLContext;
+import org.jooq.Query;
 import org.jooq.Record;
+import org.jooq.RecordMapper;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.ekolab.server.db.h2.public_.Tables.LAB2DATA;
 import static org.ekolab.server.db.h2.public_.Tables.LAB2_EXPERIMENT_LOG;
+import static org.ekolab.server.db.h2.public_.Tables.LAB2_EXPERIMENT_LOG_SOUND_PRESSURE;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -24,6 +28,20 @@ import static org.ekolab.server.db.h2.public_.Tables.LAB2_EXPERIMENT_LOG;
 @Service
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
 public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implements Lab2ExperimentDao {
+    private static final RecordMapper<Record, List<Double>> LAB2_EXPERIMENT_LOG_SOUND_PRESSURE_RECORD_MAPPER = record -> {
+        List<Double> values = new ArrayList<>();
+        values.add(record.get(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_315));
+        values.add(record.get(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_63));
+        values.add(record.get(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_125));
+        values.add(record.get(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_250));
+        values.add(record.get(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_500));
+        values.add(record.get(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_1000));
+        values.add(record.get(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_2000));
+        values.add(record.get(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_4000));
+        values.add(record.get(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_8000));
+        return values;
+    };
+
     private static final Lab2DataMapper<Lab2ExperimentLog> RECORD_MAPPER = new Lab2DataMapper<Lab2ExperimentLog>() {
 
         @Override
@@ -56,15 +74,19 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
 
     @Override
     public Lab2Data<Lab2ExperimentLog> getLastLabByUser(String userName, boolean completed) {
-        return dsl.select().from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2_EXPERIMENT_LOG.ID.eq(LAB2DATA.ID)).
+        Lab2Data<Lab2ExperimentLog> data = dsl.select().from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2_EXPERIMENT_LOG.ID.eq(LAB2DATA.ID)).
                 where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB2DATA.COMPLETED.eq(completed)).
                 orderBy(LAB2DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
-    }
 
-    @Override
-    public List<Lab2Data<Lab2ExperimentLog>> getAllLabsByUser(String userName) {
-        return dsl.select().from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2_EXPERIMENT_LOG.ID.eq(LAB2DATA.ID))
-                .where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(getLabMapper());
+        if (data == null) {
+            return null;
+        } else {
+            data.getVariant().setSoundPressure(dsl.selectFrom(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE)
+                    .where(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.LAB_ID.eq(data.getId()))
+                    .orderBy(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.ID)
+                    .fetch(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE_RECORD_MAPPER));
+        }
+        return data;
     }
 
     @Override
@@ -74,7 +96,8 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
 
     @Override
     protected void saveVariant(Lab2ExperimentLog variant) {
-        dsl.insertInto(LAB2_EXPERIMENT_LOG,
+        List<Query> queries = new ArrayList<>();
+        queries.add(dsl.insertInto(LAB2_EXPERIMENT_LOG,
                 LAB2_EXPERIMENT_LOG.ID,
                 LAB2_EXPERIMENT_LOG.NAME,
                 LAB2_EXPERIMENT_LOG.BAROMETRIC_PRESSURE,
@@ -94,12 +117,31 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
                         variant.getHemisphereRadius(),
                         variant.getEstimatedGeometricMeanFrequency() == null ? null : variant.getEstimatedGeometricMeanFrequency().value(),
                         toArray(variant.getAverageSoundPressure())
-                ).execute();
+                ));
+
+        List<List<Double>> soundPressure1 = variant.getSoundPressure();
+        for (int i = 0; i < soundPressure1.size(); i++) {
+            List<Double> soundPressure = soundPressure1.get(i);
+            queries.add(dsl.insertInto(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.ID, Long.valueOf(i)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.LAB_ID, variant.getId()).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_315, soundPressure.get(0)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_63, soundPressure.get(1)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_125, soundPressure.get(2)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_250, soundPressure.get(3)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_500, soundPressure.get(4)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_1000, soundPressure.get(5)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_2000, soundPressure.get(6)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_4000, soundPressure.get(7)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_8000, soundPressure.get(8)));
+        }
+        dsl.batch(queries).execute();
     }
 
     @Override
     public void updateExperimentJournal(Lab2ExperimentLog experimentJournal) {
-        dsl.update(LAB2_EXPERIMENT_LOG)
+        List<Query> queries = new ArrayList<>();
+        queries.add(dsl.update(LAB2_EXPERIMENT_LOG)
                 .set(LAB2_EXPERIMENT_LOG.NAME, experimentJournal.getName() == null ? null : experimentJournal.getName().name())
                 .set(LAB2_EXPERIMENT_LOG.BAROMETRIC_PRESSURE, experimentJournal.getBarometricPressure())
                 .set(LAB2_EXPERIMENT_LOG.INDOORS_TEMPERATURE, experimentJournal.getIndoorsTemperature())
@@ -108,7 +150,25 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
                 .set(LAB2_EXPERIMENT_LOG.HEMISPHERE_RADIUS, experimentJournal.getHemisphereRadius())
                 .set(LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE, toArray(experimentJournal.getAverageSoundPressure()))
                 .set(LAB2_EXPERIMENT_LOG.ESTIMATED_GEOMETRIC_MEAN_FREQUENCY, experimentJournal.getEstimatedGeometricMeanFrequency().value())
-                .where(LAB2_EXPERIMENT_LOG.ID.eq(experimentJournal.getId()))
-                .execute();
+                .where(LAB2_EXPERIMENT_LOG.ID.eq(experimentJournal.getId())));
+
+        queries.add(dsl.deleteFrom(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE)
+                .where(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.LAB_ID.eq(experimentJournal.getId())));
+        for (int i = 0; i < experimentJournal.getSoundPressure().size(); i++) {
+            List<Double> soundPressure = experimentJournal.getSoundPressure().get(i);
+            queries.add(dsl.insertInto(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.ID, Long.valueOf(i)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.LAB_ID, experimentJournal.getId()).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_315, soundPressure.get(0)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_63, soundPressure.get(1)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_125, soundPressure.get(2)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_250, soundPressure.get(3)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_500, soundPressure.get(4)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_1000, soundPressure.get(5)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_2000, soundPressure.get(6)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_4000, soundPressure.get(7)).
+                    set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.F_8000, soundPressure.get(8)));
+        }
+        dsl.batch(queries).execute();
     }
 }

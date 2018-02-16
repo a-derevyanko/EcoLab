@@ -47,7 +47,7 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
             calculationResult.put(CalculationResultType.AVERAGE_SOUND_PRESSURE, labData.getAverageSoundPressure());
 
             if (labData.getCorrectionFactor() != null) {
-                calculationResult.put(CalculationResultType.CORRECTION_FACTOR, Collections.nCopies(labData.getAverageSoundPressure().size(), labData.getCorrectionFactor()));
+                calculationResult.put(CalculationResultType.CORRECTION_FACTOR, Collections.nCopies(labData.getAverageSoundPressure().size(), Precision.round(labData.getCorrectionFactor(), 4)));
 
 
                 List<Double> soundPressureMeasuringSurface = labData.getAverageSoundPressure().stream().
@@ -63,7 +63,7 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
 
                         calculationResult.put(CalculationResultType.SOUND_POWER_LEVEL,
                                 soundPressureMeasuringSurface.stream().
-                                        map(a -> a + labData.getMeasuringFactor()).collect(Collectors.toList()));
+                                        map(a -> Precision.round(a + labData.getMeasuringFactor(), 3)).collect(Collectors.toList()));
 
                         if (labData.getRoomConstant1000() != null && labData.getRoomConstant() != null) {
                             calculationResult.put(CalculationResultType.ROOM_CONSTANT,
