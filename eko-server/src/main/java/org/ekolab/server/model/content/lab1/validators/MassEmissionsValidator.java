@@ -14,6 +14,6 @@ public class MassEmissionsValidator implements FieldValidator<Double, Lab1Data<L
         return value < 0.1 ? FieldValidationResult.error("lab1.error.massEmissions") :
                 FieldValidationResult.of(labData.getFlueGasNOxConcentration() == null || labData.getDryGasesFlowRate() == null ||
                 MathUtils.roundedCheckEquals(value,
-                        labData.getFlueGasNOxConcentration() / 1000.0 * labData.getDryGasesFlowRate(), 3));
+                        labData.getFlueGasNOxConcentration() / 1000.0 * labData.getDryGasesFlowRate(), 1));
     }
 }

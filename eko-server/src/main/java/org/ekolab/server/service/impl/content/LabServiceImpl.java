@@ -280,7 +280,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     }
 
     protected Object getFieldValueForPrint(Object value, Locale locale) {
-        if (value instanceof Integer || value instanceof Map) {
+        if (value instanceof Integer || value instanceof Map || value instanceof List) {
             return value;
         } else if (value instanceof Double) {
             return Precision.round((double) value, (double) value > 2.0 ? 2 : 3);

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends LabVariant> extends VerticalLayout implements LabWizardStep<T, V> {
@@ -101,7 +102,7 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
 
         HasValue.ValueChangeListener<String> listener = event -> {
             if (measurementComponents.stream().noneMatch(HasValue::isEmpty)) {
-                double value = measurementComponents.stream()
+                double value = measurementComponents.stream().filter(Objects::nonNull)
                         .mapToDouble(x -> Double.valueOf(x.getValue()))
                         .average().orElseThrow(IllegalStateException::new);
                 Class<?> propClass = ReflectTools.convertPrimitiveType(field.getType());

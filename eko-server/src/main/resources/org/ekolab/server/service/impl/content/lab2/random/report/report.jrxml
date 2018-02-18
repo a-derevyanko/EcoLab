@@ -28,13 +28,13 @@
 	<parameter name="calculationResult" class="java.util.SortedMap">
 		<parameterDescription><![CDATA[Значения для таблицы среднегеометрических частот]]></parameterDescription>
 	</parameter>
-
 	<parameter name="barometricPressure" class="java.lang.Integer"/>
 	<parameter name="indoorsTemperature" class="java.lang.Integer"/>
 	<parameter name="roomSize" class="java.lang.Integer"/>
 	<parameter name="quantityOfSingleTypeEquipment" class="java.lang.Integer"/>
 	<parameter name="hemisphereRadius" class="java.lang.Double"/>
 	<parameter name="name"/>
+	<parameter name="averageSoundPressure" class="java.util.List"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -635,105 +635,7 @@
 				<textElement>
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="0" y="550" width="54" height="20" backcolor="#FFFFFF" uuid="0f4435f7-9173-42d4-bdd6-298061c1d9e4"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[2]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="0" y="570" width="54" height="20" backcolor="#FFFFFF" uuid="a53526c7-b587-4ecd-bcee-73ef4f421a7b"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[3]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="0" y="630" width="54" height="20" backcolor="#FFFFFF" uuid="abec955c-2bdc-463e-a159-a57ff346619e"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[6]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="0" y="590" width="54" height="20" backcolor="#FFFFFF" uuid="c3090ad0-be1c-4bc4-ac33-171d97691536"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[4]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="0" y="610" width="54" height="20" backcolor="#FFFFFF" uuid="5db6a890-6cf3-4c84-8993-9fbe5afd78ee"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[5]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="0" y="650" width="54" height="20" backcolor="#FFFFFF" uuid="06768072-d923-418e-957d-05812542c03b"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[7]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="0" y="670" width="54" height="20" backcolor="#FFFFFF" uuid="a601bc87-ce49-4222-8d0f-7dd227e54a32"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[8]]></text>
+				<text><![CDATA[Среднее]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="Style1Bold" mode="Opaque" x="54" y="510" width="49" height="20" backcolor="#CFE3FC" uuid="41d9675c-a974-4e78-a1e6-016fe81ecef0"/>
@@ -848,1028 +750,6 @@
 				<text><![CDATA[2000]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="41a13798-2dcf-43cf-b422-3b366ee38d1c"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="4a15cc6b-09e6-47c7-b6db-aa69d791e73e"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="96eef380-be35-495c-903b-73fef7528b57"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="b519c8b3-1672-4969-8770-df30da5182cb"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="67f1bcd5-4257-4513-8049-a76f2b7ede18"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="269c501b-736f-4418-9c4e-3a54af932b07"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="02d302c6-78ad-4974-86ec-fe6a13eb2f9e"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="5c97e495-902d-4a39-92a0-86bb5314e1b8"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="8f7056b9-e57f-448f-9796-300d4a1b65b4"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="b4489791-ba65-446a-857d-2f93d7ace8a7"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="ace410c2-49aa-46f3-baaa-e1ce9f5ab8b9"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="982310c9-9d73-449a-9c8b-a787824888d9"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="e56c269b-2269-404c-be8a-82864e4b3eca"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="2e3820b3-d821-4458-af59-50242c35913c"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="aeb54910-fc97-4db8-9c4d-acb0ecf9f146"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="8c9b9988-7756-4a97-8af7-b6660ae645e8"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="55c09f8b-4723-4f67-b776-583c4ba5f1a2"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="96cbfb96-954a-479e-862c-5c8c4861b9f1"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="e59bb548-d626-4bfa-a013-23abaf11a904"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="b2b558ea-61a9-425e-ad79-8b78cb38c2a7"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="a350872e-c49d-45bc-9c19-2083a14a1541"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="36077c0c-da24-4f4c-9bc1-4c8f3153b9d1"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="2056d3d1-9aa8-4869-9440-a0db775f6f0f"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="3977c679-ea94-4e75-afb3-8a8049a1748b"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="54519e66-3be7-4d42-8d43-3f485a826c0d"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="700be519-5f8e-4106-86f0-3064bd8a2c35"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="514562a2-5cf6-42de-a502-8b9c07d73bc8"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="da9cd470-32cb-47bb-b881-01b70738a6e4"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="09afd29d-8eb4-407d-ab6b-11c68223bbae"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="4c47b3ec-07c9-41dc-8426-67827ec63241"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="0de2c827-2d29-4214-8de3-a708cddedd81"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="b4f49e57-8c7d-46e7-8240-b51d6bcf7e14"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="8ad26f45-7e9a-4da8-8c9c-98dd86405c82"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="352dcd5f-9ca2-4bc7-9b47-3eb285909b05"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="782dfde1-1534-47d1-a911-8674d5352773"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="5de396f2-ef4f-460a-a379-9fee72c83646"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="e13ccd45-6c23-475e-95a6-07472a7629d5"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="fbaa7934-8f19-4683-86e0-d0ab45ed4e9e"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="57e04d6f-01c0-4b78-b153-6f7f40d44046"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="4d2ab806-59b1-41c7-91ea-09516c117d92"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="87003bf6-197c-48ca-9e38-27a951e0fdc6"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="32623742-5922-459a-926a-37be814b0b10"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="cb645a9b-3bb4-4bbd-968d-fb9aa31e0dc8"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="4b8a725d-7a78-4eff-96a2-59f05bf9e93a"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="984d0dfd-45dc-4919-ac7e-e2ce60902a57"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="638b400f-fa50-4421-8d15-32db5ce7d2ed"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="fa09a562-bf6f-4af7-8bdf-cf8c84d8116e"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="acef824b-38a1-4995-97ea-fa6c63862783"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="d1ef6558-bc96-4935-9c74-561c239997c9"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="031e33e5-2f23-4390-9b1b-e3ca29cf1250"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="0a0fd40e-dfc2-44e2-b093-924f6435ebca"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="6c79b3bf-5a75-42ec-9baa-727a5b020c47"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="2b4e2579-7df7-4e45-af1c-44aa5ac5a3f9"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="91ec96b3-687f-4ae7-8f68-9f9b38e96635"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="78e57a38-5b57-4562-ac0e-509af128a36a"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="31eeb360-22c5-4200-a76f-46636e125a06"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="e35a65ad-ffe7-4f9e-9f81-c6fa9fac331b"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="6b5bd879-0c25-4ae5-beed-50a268776c95"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="296a2208-ca69-4e88-91f2-4bb197f681a4"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="be057c5c-750e-474a-a0e3-a369cdbae4ea"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="48454d64-0665-4426-a071-93846dcafead"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="a55afd97-524a-468b-b594-eecbc40bce47"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="2b56070a-9bb9-42f9-b20d-71c1cbf63f93"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="fdc589f6-63a4-4463-be1a-57df916e2848"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="7ee3239e-c884-4e6d-a752-618536539d32"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="494ee9bb-5e7b-4f5c-9976-9de254d683a6"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="b23ef1aa-af7a-42dc-876d-82febe8c067c"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="ff83cfb7-d104-48c5-9590-f9a8b0008d09"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="0" y="690" width="54" height="20" backcolor="#FFFFFF" uuid="f962c17c-d249-476b-ba81-7be0e8a2f1b2"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[среднее]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="48177228-f36a-4203-a08d-edf2f15497af"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="846f7a82-9330-49cf-a866-c3cb7d93e5d7"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="dd59ee93-7527-46e1-8641-ab17459974b4"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="38e835c0-5691-4700-928c-00dc7ac1b888"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
 				<reportElement key="" style="Style1Bold" mode="Opaque" x="446" y="510" width="49" height="20" backcolor="#CFE3FC" uuid="4b085291-a0f7-4b78-8c0e-3b4a7a73b933"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
@@ -1883,8 +763,12 @@
 				</textElement>
 				<text><![CDATA[8000]]></text>
 			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="1175b89e-8f90-4e69-b751-bf1d6f51462f"/>
+			<textField>
+				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="9d64e860-9bdd-4cf2-98da-79275d4b74a4">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1892,13 +776,17 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="ffe7877b-29a9-4957-939a-5374435c72a8"/>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(0)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="05641743-d2a3-41a2-825d-9c42225c2d1a">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1906,13 +794,17 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="4ccf1def-1390-4591-a2ca-978e120eccea"/>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(1)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="d6238f41-0eba-4f6c-81a7-ad296b8c7692">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1920,13 +812,17 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="0f2b1978-2bcf-4366-a8ab-fb621eb82ac4"/>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(2)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="8f6bf0e6-d654-4f99-9ed8-1ce6f96836e9">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1934,13 +830,17 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="e0878491-41e9-4440-8b81-b799b4a890f4"/>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(3)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="7e9f499d-370b-4e39-ab7a-c5ac3736b340">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1948,13 +848,17 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="76ca96d8-9eda-43ac-92f4-e0e8b5e0102d"/>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(4)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="d6d80650-ed2b-413c-b62a-509929daae53">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1962,13 +866,17 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="155c88b7-c65f-4143-bac2-70a26adf65ee"/>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(5)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="861f5a1f-c22d-4154-8917-25d416d7de96">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1976,13 +884,17 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="bc95209e-3aa2-4147-8263-3a25af724a90"/>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(6)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="7b328070-846d-4550-ad36-4e6ac0eb394e">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1990,13 +902,17 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="d84850dd-47bb-43f8-b698-bd69b67adac7"/>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(7)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="f89884d0-3e8f-4b57-bbcb-03bb16a83916">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2004,11 +920,11 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[1]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(8)]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="758">
 			<property name="com.jaspersoft.studio.unit.height" value="mm"/>
