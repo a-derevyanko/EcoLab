@@ -13,7 +13,7 @@ import org.springframework.security.util.FieldUtils;
 /**
  * Created by 777Al on 06.04.2017.
  */
-public abstract class Lab1Step2<V extends Lab1Variant> extends LabStepWithHelp<V> {
+public abstract class Lab1Step2<V extends Lab1Variant> extends LabStepWithHelp<V, Lab1Data<V>> {
 
     // ----------------------------- Графические компоненты --------------------------------
     private final ParameterWithFormulaeLayout<Lab1Data<V>, V> firstFormLayout;

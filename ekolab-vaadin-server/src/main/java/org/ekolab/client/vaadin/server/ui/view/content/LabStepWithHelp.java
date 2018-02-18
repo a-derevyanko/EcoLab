@@ -5,13 +5,13 @@ import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
-import org.ekolab.server.model.content.lab1.Lab1Data;
-import org.ekolab.server.model.content.lab1.Lab1Variant;
+import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.LabVariant;
 
 /**
  * Created by 777Al on 06.04.2017.
  */
-public abstract class LabStepWithHelp<V extends Lab1Variant> extends HorizontalLayout implements LabWizardStep<Lab1Data<V>, V> {
+public abstract class LabStepWithHelp<V extends LabVariant, D extends LabData<V>> extends HorizontalLayout implements LabWizardStep<D, V> {
     protected boolean needShowHelp = true;
 
     protected final I18N i18N;

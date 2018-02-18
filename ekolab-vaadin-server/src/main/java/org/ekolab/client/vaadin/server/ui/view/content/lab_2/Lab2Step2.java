@@ -1,11 +1,12 @@
 package org.ekolab.client.vaadin.server.ui.view.content.lab_2;
 
 import com.vaadin.data.Binder;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import org.ekolab.client.vaadin.server.service.api.ResourceService;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
-import org.ekolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ParameterWithFormulaeLayout;
+import org.ekolab.client.vaadin.server.ui.view.content.LabStepWithHelp;
+import org.ekolab.client.vaadin.server.ui.windows.ResourceWindow;
 import org.ekolab.server.model.content.lab2.Lab2Data;
 import org.ekolab.server.model.content.lab2.Lab2Variant;
 import org.springframework.security.util.FieldUtils;
@@ -13,7 +14,7 @@ import org.springframework.security.util.FieldUtils;
 /**
  * Created by 777Al on 06.04.2017.
  */
-public abstract class Lab2Step2<V extends Lab2Variant> extends HorizontalLayout implements LabWizardStep<Lab2Data<V>, V> {
+public abstract class Lab2Step2<V extends Lab2Variant> extends LabStepWithHelp<V, Lab2Data<V>> {
     private final I18N i18N;
 
     private final Binder<Lab2Data<V>> binder;
@@ -23,17 +24,18 @@ public abstract class Lab2Step2<V extends Lab2Variant> extends HorizontalLayout 
     // ----------------------------- Графические компоненты --------------------------------
     private final Label nameLabel = new Label();
 
-    protected Lab2Step2(I18N i18N,
-                     Binder<Lab2Data<V>> binder,
-                     ParameterWithFormulaeLayout<Lab2Data<V>, V> firstFormLayout) {
+    public Lab2Step2(I18N i18N, ResourceWindow resourceWindow, ResourceService resourceService,
+                     Binder<Lab2Data<V>> binder, ParameterWithFormulaeLayout<Lab2Data<V>, V> firstFormLayout) {
+        super(i18N, resourceWindow, resourceService);
         this.i18N = i18N;
         this.binder = binder;
         this.firstFormLayout = firstFormLayout;
     }
 
+
     @Override
     public void init() {
-        LabWizardStep.super.init();
+        super.init();
         setSizeFull();
         setMargin(true);
         addComponent(firstFormLayout);
@@ -53,6 +55,7 @@ public abstract class Lab2Step2<V extends Lab2Variant> extends HorizontalLayout 
 
     @Override
     public void beforeEnter() {
+        super.beforeEnter();
         nameLabel.setValue(i18N.get(binder.getBean().getVariant().getName()));
     }
 }

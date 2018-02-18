@@ -1785,7 +1785,7 @@
 				<textElement rotation="Left">
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Уровни звукового давления в зоне отраженного звука]]></text>
+				<text><![CDATA[Уровень звукового давления в зоне отраженного звука]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="345" y="708" width="30" height="33" backcolor="#FFFFFF" uuid="af53703b-9de3-4693-8516-cfe9f1571831">

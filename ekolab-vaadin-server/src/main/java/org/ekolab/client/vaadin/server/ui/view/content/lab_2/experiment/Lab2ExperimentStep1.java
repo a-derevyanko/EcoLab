@@ -7,6 +7,7 @@ import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.math3.util.Precision;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
@@ -50,6 +51,7 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
     private final ListField<Double> soundPressureControlPointField = new ListField<>(0.0);
     private final VerticalLayout secondLayout = new VerticalLayout(averageSoundPressureControlPointLabel, averageSoundPressureControlPointTitle
             , averageSoundPressureControlPointGrid, averageLabel, soundPressureControlPointField, soundPressureValidationLabel);
+    private final Panel secondLayoutPanel = new Panel(secondLayout);
 
     public Lab2ExperimentStep1(Binder<Lab2ExperimentLog> experimentLogBinder,
                                Binder<Lab2Data<Lab2ExperimentLog>> dataBinder,
@@ -62,9 +64,13 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
     @Override
     public void init() {
         super.init();
-        centerLayout.addComponent(secondLayout);
+        centerLayout.addComponent(secondLayoutPanel);
+        centerLayout.setWidth(1200.0f, Unit.PIXELS);
         secondLayout.setMargin(true);
         secondLayout.setSpacing(true);
+        secondLayout.setSizeUndefined();
+        secondLayoutPanel.setStyleName(EkoLabTheme.PANEL_BORDERLESS);
+        secondLayoutPanel.setSizeFull();
         fieldWidth = 150.0F;
         addField(FieldUtils.getField(Lab2ExperimentLog.class, "name"));
         addField(FieldUtils.getField(Lab2ExperimentLog.class, "barometricPressure"));

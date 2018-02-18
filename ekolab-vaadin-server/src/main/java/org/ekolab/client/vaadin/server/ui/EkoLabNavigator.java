@@ -3,6 +3,7 @@ package org.ekolab.client.vaadin.server.ui;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.navigator.SpringNavigator;
+import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.client.vaadin.server.ui.view.LoginView;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Profile;
 import org.vaadin.spring.security.VaadinSecurity;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 
 /**
  * Created by 777Al on 23.11.2016.
@@ -51,6 +53,7 @@ public class EkoLabNavigator extends SpringNavigator {
     }
 
     public void redirectToView(String viewName) {
+        new ArrayList<>(UI.getCurrent().getWindows()).forEach(UI.getCurrent()::removeWindow);
         if (getCurrentView() instanceof SavableView && ((SavableView) getCurrentView()).hasUnsavedData()) {
             confirmWindow.show(new ConfirmWindow.ConfirmWindowSettings("savable.unsaved-data-missing",
             () -> EkoLabNavigator.super.navigateTo(viewName)));

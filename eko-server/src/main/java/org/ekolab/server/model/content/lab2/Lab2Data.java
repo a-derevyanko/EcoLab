@@ -100,7 +100,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     private Double roomConstant;
 
     /**
-     * Уровни звукового давления в зоне отраженного звука
+     * Уровень звукового давления в зоне отраженного звука
      */
     @ValidatedBy(ReflectedSoundPowerValidator.class)
     private Double reflectedSoundPower;

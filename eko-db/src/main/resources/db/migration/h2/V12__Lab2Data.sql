@@ -67,7 +67,7 @@ COMMENT ON COLUMN LAB2DATA.measuring_Factor IS 'Показатель измер�
 COMMENT ON COLUMN LAB2DATA.sound_Power_Level IS 'Уровень звуковой мощности';
 COMMENT ON COLUMN LAB2DATA.room_Constant_1000 IS 'Постоянная помещения на среднегеометрической частоте 1000 Гц';
 COMMENT ON COLUMN LAB2DATA.room_Constant IS 'Постоянная помещения';
-COMMENT ON COLUMN LAB2DATA.reflected_Sound_Power IS 'Уровни звукового давления в зоне отраженного звука';
+COMMENT ON COLUMN LAB2DATA.reflected_Sound_Power IS 'Уровень звукового давления в зоне отраженного звука';
 
 
 CREATE TABLE LAB2_RANDOM_VARIANT (

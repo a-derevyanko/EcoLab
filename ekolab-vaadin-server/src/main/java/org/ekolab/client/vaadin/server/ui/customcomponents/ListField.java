@@ -60,8 +60,11 @@ public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
     @Override
     public Registration addValueChangeListener(ValueChangeListener<List<T>> listener) {
         Registration r1 = getEditor().addSaveListener(
-                event -> listener.valueChange(
-                        new ValueChangeEvent<>(ListField.this, ListField.this, getValue(), true)));
+                event -> {
+                    listener.valueChange(
+                            new ValueChangeEvent<>(ListField.this, ListField.this, getValue(), true));
+                    getEditor().cancel();
+                });
         Registration r2 = addListener(ValueChangeEvent.class, listener,
                 ValueChangeListener.VALUE_CHANGE_METHOD);
         return () -> {
