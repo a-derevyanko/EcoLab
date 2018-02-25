@@ -276,7 +276,7 @@ VALUES
   '(5.0-harmfulSubstancesDepositionCoefficient) / 4.0 *' ||
   ' (10 + stacksHeight) * 7*(1+0.28*Math.pow(1000*stacksDiameter*Math.pow(flueGasesSpeed,2)/ ' ||
   '(stackExitTemperature - outsideAirTemperature) *(Math.pow(10 + stacksHeight,2)), 1/3.0)) * ' ||
-  '(0.65 * Math.pow(flueGasesRate*(stackExitTemperature - outsideAirTemperature) / (10 + stacksHeight), 1/3))'),
+  'Math.sqrt(0.65 * Math.pow(flueGasesRate*(stackExitTemperature - outsideAirTemperature) / (10 + stacksHeight), 1/3))'),
 
  -- 10 вопрос
  (19, 0, NULL,
@@ -287,8 +287,9 @@ VALUES
   '<i>Пример: 0,064 мг/м<sup>3</sup></i>', 1,
   'double', 'мг/м<sup>3</sup>',
   'temperatureCoefficient * massEmissions *harmfulSubstancesDepositionCoefficient *' ||
-  '(1.0/(0.67+0.1*Math.sqrt((Math.pow(1000*stacksDiameter*Math.pow(flueGasesSpeed, 2)/ (stackExitTemperature - outsideAirTemperature) *' ||
-  '(Math.pow(10 + stacksHeight, 2)), 1.0/3.0)) * (0.65 * Math.pow(flueGasesRate*(stackExitTemperature - outsideAirTemperature) / (10 + stacksHeight), 1.0/3.0)))+0.34*Math.pow((Math.pow(1000*stacksDiameter*Math.pow(flueGasesSpeed, 2)/ (stackExitTemperature - outsideAirTemperature) *
-(Math.pow(10 + stacksHeight, 2)), 1.0/3.0)) * (0.65 * Math.pow(flueGasesRate*(stackExitTemperature - outsideAirTemperature) /' ||
-  ' (10 + stacksHeight), 1.0/3.0)), 1.0/3.0))) *terrainCoefficient / ' ||
-  'Math.pow(stacksHeight + 10, 2) *Math.pow(1.0 / (flueGasesRate * (stackExitTemperature - outsideAirTemperature)), 1.0/3.0)');
+  'temperatureCoefficient * massEmissions *harmfulSubstancesDepositionCoefficient *
+(1.0/(0.67+0.1*Math.sqrt(1000*stacksDiameter*Math.pow(flueGasesSpeed, 2)/ (stackExitTemperature - outsideAirTemperature) *
+(Math.pow(10 + stacksHeight, 2)))+0.34*
+Math.pow(1000*stacksDiameter*Math.pow(flueGasesSpeed, 2)/ (stackExitTemperature - outsideAirTemperature) *
+(Math.pow(10 + stacksHeight, 2)), 1.0/3.0))) *
+terrainCoefficient / Math.pow(stacksHeight + 10, 2) *Math.pow(1.0 / (flueGasesRate * (stackExitTemperature - outsideAirTemperature)), 1.0/3.0)');
