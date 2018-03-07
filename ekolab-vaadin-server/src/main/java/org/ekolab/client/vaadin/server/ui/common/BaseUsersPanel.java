@@ -2,13 +2,16 @@ package org.ekolab.client.vaadin.server.ui.common;
 
 import com.vaadin.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.event.selection.SelectionListener;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import org.ekolab.client.vaadin.server.dataprovider.UserInfoFilter;
@@ -28,7 +31,7 @@ public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extend
 
     private final NewUserWindow<S> newUserWindow;
 
-    private final UserInfoService userInfoService;
+    protected final UserInfoService userInfoService;
 
     private final I18N i18N;
 
@@ -49,11 +52,12 @@ public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extend
     protected final Button addUser = new Button("Add user", VaadinIcons.PLUS_CIRCLE);
     protected final Button removeUser = new Button("Remove user", VaadinIcons.MINUS_CIRCLE);
     protected final Button editUser = new Button("Edit user", VaadinIcons.EDIT);
-    protected final VerticalLayout buttonsPanel = new VerticalLayout(editUser, addUser, removeUser);
+    protected final Button printUserLogins = new Button("Print users", VaadinIcons.PRINT);
+    protected final VerticalLayout buttonsPanel = new VerticalLayout(editUser, addUser, removeUser, printUserLogins);
     protected final HorizontalLayout gridPanel = new HorizontalLayout(buttonsPanel, users);
     protected final HorizontalLayout findPanel = new HorizontalLayout(findLastNameTextField, findNameTextField, findMiddleNameTextField, find, clearFind);
 
-    public BaseUsersPanel(EditUserWindow userDataWindow, UserInfoService userInfoService, NewUserWindow newUserWindow, DataProvider<UserInfo, T> userInfoDataProvider, I18N i18N) {
+    public BaseUsersPanel(EditUserWindow<S> userDataWindow, UserInfoService userInfoService, NewUserWindow<S> newUserWindow, DataProvider<UserInfo, T> userInfoDataProvider, I18N i18N) {
         this.editUserWindow = userDataWindow;
         this.newUserWindow = newUserWindow;
         this.userInfoService = userInfoService;
@@ -138,7 +142,15 @@ public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extend
         editUser.addClickListener((Button.ClickListener) event -> users.getSelectedItems().
                 forEach(userInfo -> editUserWindow.show(createSettingsForEdit(userInfo, dataProvider))));
 
+        printUserLogins.setCaption(i18N.get("admin-manage.users.print-table"));
+        printUserLogins.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        printUserLogins.setWidth(300.0F, Unit.PIXELS);
+
         dataProvider.setFilter(filter);
+
+        new BrowserWindowOpener(new DownloadStreamResource(
+                () -> userInfoService.printUsersData(dataProvider.fetch(new Query<>(null)), UI.getCurrent().getLocale()),
+                "users.pdf")).extend(printUserLogins);
     }
 
     protected abstract T createFilter();

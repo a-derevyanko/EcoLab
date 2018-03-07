@@ -1,8 +1,15 @@
 package org.ekolab.server.service.impl;
 
 import com.ibm.icu.text.Transliterator;
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
+import net.sf.dynamicreports.report.datasource.DRDataSource;
+import org.apache.commons.lang3.time.FastDateFormat;
+import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
+import org.ekolab.server.service.api.ReportService;
 import org.ekolab.server.service.api.UserInfoService;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -11,6 +18,7 @@ import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -24,8 +32,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Stream;
 
+import static net.sf.dynamicreports.report.builder.DynamicReports.col;
+import static net.sf.dynamicreports.report.builder.DynamicReports.report;
+import static net.sf.dynamicreports.report.builder.DynamicReports.type;
 import static org.ekolab.server.db.h2.public_.Tables.AUTHORITIES;
 import static org.ekolab.server.db.h2.public_.Tables.GROUPS;
 import static org.ekolab.server.db.h2.public_.Tables.GROUP_AUTHORITIES;
@@ -61,12 +75,18 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
     private final PasswordEncoder passwordEncoder;
 
+    private final ReportService reportService;
+
+    private final MessageSource messageSource;
+
     @Autowired
-    public UserDetailsManagerImpl(UserCache userCache, JdbcTemplate jdbcTemplate, DSLContext dsl, PasswordEncoder passwordEncoder) {
+    public UserDetailsManagerImpl(UserCache userCache, JdbcTemplate jdbcTemplate, DSLContext dsl, PasswordEncoder passwordEncoder, ReportService reportService, MessageSource messageSource) {
         this.userCache = userCache;
         this.jdbcTemplate = jdbcTemplate;
         this.dsl = dsl;
         this.passwordEncoder = passwordEncoder;
+        this.reportService = reportService;
+        this.messageSource = messageSource;
     }
 
     @PostConstruct
@@ -211,5 +231,35 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
                 .set(GROUP_MEMBERS.GROUP_ID, dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq(userInfo.getGroup().name())))
                 .set(GROUP_MEMBERS.USER_ID, userInfo.getId()).execute();
         return userInfo;
+    }
+
+    @LogExecutionTime(500)
+    @Override
+    public byte[] printUsersData(Stream<UserInfo> users, Locale locale) {
+        DRDataSource dataSource = new DRDataSource("firstName", "lastName", "login", "password");
+
+        users.forEach(value -> dataSource.add(value.getFirstName(), value.getLastName(), value.getLogin()));
+
+        JasperReportBuilder builder = report()
+                .setTemplate(reportService.getReportTemplate(locale)).
+                        title(reportService.createTitleComponent(
+                                messageSource.getMessage("report.user.title", null, locale) + " (" +
+                                        FastDateFormat.getInstance("dd.MM.yyyy HH:mm").format(new Date()) +')'));
+
+        TextColumnBuilder<String> firstNameColumn = col.column(messageSource.
+                getMessage("report.user.firstName", null, locale), "firstName", type.stringType());
+        TextColumnBuilder<String> lastNameColumn = col.column(messageSource.
+                getMessage("report.user.lastName", null, locale), "lastName", type.stringType())
+                .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
+        TextColumnBuilder<String> loginColumn = col.column(messageSource.
+                getMessage("report.user.login", null, locale), "login", type.stringType())
+                .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
+        TextColumnBuilder<String> passwordColumn = col.column(messageSource.
+                getMessage("report.user.password", null, locale), "login", type.stringType())
+                .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
+
+        return reportService.printReport(
+                builder.columns(firstNameColumn, lastNameColumn, loginColumn, passwordColumn)
+                        .setDataSource(dataSource));
     }
 }

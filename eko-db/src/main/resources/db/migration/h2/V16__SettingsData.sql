@@ -1,0 +1,1 @@
+insert into COMMON_SETTINGS(name, value, type) VALUES ('lab.autoSaveRate', '120000', 'int')

@@ -12,7 +12,7 @@ import org.ekolab.server.service.api.UserInfoService;
  */
 @SpringComponent
 @UIScope
-public class NewStudentWindow extends NewUserWindow<UserDataWindowSettings> {
+public class NewStudentWindow extends NewUserWindow<StudentDataWindowSettings> {
     // ---------------------------- Графические компоненты --------------------
 
     // ------------------------------------ Данные экземпляра -------------------------------------

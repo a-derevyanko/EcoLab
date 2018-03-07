@@ -26,7 +26,6 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
     private final ComboBox<StudentGroup> studentGroupComboBox = new ComboBox<>();
     private final ComboBox<StudentTeam> studentTeamComboBox = new ComboBox<>();
 
-
     public StudentsPanel(EditStudentWindow userDataWindow, UserInfoService userInfoService, NewStudentWindow newUserWindow,
                          StudentInfoDataProvider userInfoDataProvider, I18N i18N, StudentInfoService studentInfoService) {
         super(userDataWindow, userInfoService, newUserWindow, userInfoDataProvider, i18N);
