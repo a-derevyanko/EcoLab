@@ -11,8 +11,12 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.server.model.DomainModel;
 import org.ekolab.server.model.content.FieldValidationResult;
 import org.ekolab.server.service.api.content.ValidationService;
+import org.omg.CORBA.portable.UnknownException;
+import org.springframework.beans.BeanUtils;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -70,5 +74,20 @@ public abstract class UIUtils {
             });
         }
         builder.bind(propertyField.getName());
+    }
+
+    public static boolean isModelFull(DomainModel model) {
+        PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(model.getClass());
+        try {
+            for (PropertyDescriptor descriptor : propertyDescriptors) {
+                Method readMethod = descriptor.getReadMethod();
+                if (readMethod.invoke(model) == null) {
+                    return false;
+                }
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new UnknownException(e);
+        }
+        return true;
     }
 }

@@ -6,6 +6,8 @@ import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.model.content.lab2.validators.AverageSoundPressureControlPointValidator;
 import org.ekolab.server.model.content.lab2.validators.QuantityOfSingleTypeEquipmentValidator;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
@@ -14,26 +16,24 @@ import java.util.Objects;
  * Created by Андрей on 24.06.2017.
  */
 public abstract class Lab2Variant extends LabVariant {
-    /**
-     * Название объекта
-     */
-    private ObjectType name;
 
     /**
      * Барометрическое давление
      */
+    @NotNull
     private Integer barometricPressure;
 
     /**
      * Температура воздуха в помещении
      */
-
+    @NotNull
     private Integer indoorsTemperature;
 
     /**
      * Количество однотипного оборудования
      */
     @ValidatedBy(QuantityOfSingleTypeEquipmentValidator.class)
+    @Min(1)
     private Integer quantityOfSingleTypeEquipment;
 
     /**
@@ -41,18 +41,11 @@ public abstract class Lab2Variant extends LabVariant {
      */
     @Size(min = 9, max = 9)
     @ValidatedBy(AverageSoundPressureControlPointValidator.class)
+    @NotNull
     private List<Double> averageSoundPressure;
 
     @Calculated
     private Frequency estimatedGeometricMeanFrequency;
-
-    public ObjectType getName() {
-        return name;
-    }
-
-    public void setName(ObjectType name) {
-        this.name = name;
-    }
 
     public Integer getBarometricPressure() {
         return barometricPressure;
@@ -98,8 +91,7 @@ public abstract class Lab2Variant extends LabVariant {
         if (this == o) return true;
         if (!(o instanceof Lab2Variant)) return false;
         Lab2Variant that = (Lab2Variant) o;
-        return name == that.name &&
-                Objects.equals(barometricPressure, that.barometricPressure) &&
+        return Objects.equals(barometricPressure, that.barometricPressure) &&
                 Objects.equals(indoorsTemperature, that.indoorsTemperature) &&
                 Objects.equals(quantityOfSingleTypeEquipment, that.quantityOfSingleTypeEquipment) &&
                 Objects.equals(averageSoundPressure, that.averageSoundPressure) &&
@@ -108,7 +100,7 @@ public abstract class Lab2Variant extends LabVariant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, barometricPressure, indoorsTemperature,
+        return Objects.hash(barometricPressure, indoorsTemperature,
                 quantityOfSingleTypeEquipment, averageSoundPressure, estimatedGeometricMeanFrequency);
     }
 }

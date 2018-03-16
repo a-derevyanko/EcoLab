@@ -38,7 +38,7 @@ public abstract class Lab2Step3<V extends Lab2Variant> extends VerticalLayout im
         setSizeFull();
         setMargin(true);
         addComponent(resultGrid);
-        //setCaption(i18N.get("lab2.step3.general-data"));
+        setCaption(i18N.get("lab2.step3.general-data"));
 
         resultGrid.setSizeFull();
         resultGrid.setSelectionMode(Grid.SelectionMode.SINGLE);

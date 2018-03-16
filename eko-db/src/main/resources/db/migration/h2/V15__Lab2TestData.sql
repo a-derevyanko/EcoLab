@@ -362,7 +362,7 @@ VALUES
    '<i>Пример: 117 Дб</sup></i>',
    6,
    'int', NULL,
-   'soundPowerLevel + 10*Math.log(quantityOfSingleTypeEquipment)/Math.log(10) - 10*Math.log(1.5*frequencyCoefficient*roomSize/20.0)/Math.log(10) + 6'),
+   'soundPowerLevel + 10.0*Math.log(quantityOfSingleTypeEquipment)/Math.log(10) - 10.0*Math.log(1.5*frequencyCoefficient*roomSize/20.0)/Math.log(10) + 6'),
 
   -- 10 вопрос
   (29, 0, NULL,
@@ -372,4 +372,4 @@ VALUES
    '<i>Пример: 117 Дб</sup></i>',
    6,
    'int', NULL,
-   'soundPowerLevel + 10*Math.log(quantityOfSingleTypeEquipment)/Math.log(10) - 10*Math.log(0.85*frequencyCoefficient*roomSize/20.0)/Math.log(10) + 6');
+   'soundPowerLevel + 10.0*Math.log(quantityOfSingleTypeEquipment)/Math.log(10) - 10.0*Math.log(0.85*frequencyCoefficient*roomSize/20.0)/Math.log(10) + 6');

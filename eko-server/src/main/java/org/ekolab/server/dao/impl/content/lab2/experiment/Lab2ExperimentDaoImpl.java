@@ -6,7 +6,6 @@ import org.ekolab.server.dao.impl.DaoUtils;
 import org.ekolab.server.dao.impl.content.lab2.Lab2DaoImpl;
 import org.ekolab.server.model.content.lab2.Frequency;
 import org.ekolab.server.model.content.lab2.Lab2Data;
-import org.ekolab.server.model.content.lab2.ObjectType;
 import org.ekolab.server.model.content.lab2.experiment.Lab2ExperimentLog;
 import org.jooq.DSLContext;
 import org.jooq.Query;
@@ -48,7 +47,7 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
         public Lab2Data<Lab2ExperimentLog> map(Record record) {
             Lab2Data<Lab2ExperimentLog> data = super.map(record);
             data.getVariant().setId(record.get(LAB2_EXPERIMENT_LOG.ID));
-            data.getVariant().setName(record.get(LAB2_EXPERIMENT_LOG.NAME) == null ? null : ObjectType.valueOf(record.get(LAB2_EXPERIMENT_LOG.NAME)));
+            data.getVariant().setName(record.get(LAB2_EXPERIMENT_LOG.NAME));
             data.getVariant().setId(record.get(LAB2_EXPERIMENT_LOG.ID));
             data.getVariant().setBarometricPressure(record.get(LAB2_EXPERIMENT_LOG.BAROMETRIC_PRESSURE));
             data.getVariant().setIndoorsTemperature(record.get(LAB2_EXPERIMENT_LOG.INDOORS_TEMPERATURE));
@@ -109,7 +108,7 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
                 LAB2_EXPERIMENT_LOG.AVERAGE_SOUND_PRESSURE).
                 values(
                         variant.getId(),
-                        variant.getName() == null ? null : variant.getName().name(),
+                        variant.getName(),
                         variant.getBarometricPressure(),
                         variant.getIndoorsTemperature(),
                         variant.getRoomSize(),
@@ -142,7 +141,7 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
     public void updateExperimentJournal(Lab2ExperimentLog experimentJournal) {
         List<Query> queries = new ArrayList<>();
         queries.add(dsl.update(LAB2_EXPERIMENT_LOG)
-                .set(LAB2_EXPERIMENT_LOG.NAME, experimentJournal.getName() == null ? null : experimentJournal.getName().name())
+                .set(LAB2_EXPERIMENT_LOG.NAME, experimentJournal.getName())
                 .set(LAB2_EXPERIMENT_LOG.BAROMETRIC_PRESSURE, experimentJournal.getBarometricPressure())
                 .set(LAB2_EXPERIMENT_LOG.INDOORS_TEMPERATURE, experimentJournal.getIndoorsTemperature())
                 .set(LAB2_EXPERIMENT_LOG.ROOM_SIZE, experimentJournal.getRoomSize())

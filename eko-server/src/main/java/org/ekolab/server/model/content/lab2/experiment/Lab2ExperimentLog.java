@@ -8,6 +8,11 @@ import java.util.Objects;
 
 public class Lab2ExperimentLog extends Lab2Variant {
     /**
+     * Название объекта
+     */
+    private String name;
+
+    /**
      * Радиус полусферы
      */
     private Double hemisphereRadius;
@@ -43,20 +48,28 @@ public class Lab2ExperimentLog extends Lab2Variant {
         this.soundPressure = soundPressure;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Lab2ExperimentLog)) return false;
         if (!super.equals(o)) return false;
         Lab2ExperimentLog that = (Lab2ExperimentLog) o;
-        return Objects.equals(hemisphereRadius, that.hemisphereRadius) &&
+        return Objects.equals(name, that.name) &&
+                Objects.equals(hemisphereRadius, that.hemisphereRadius) &&
                 Objects.equals(roomSize, that.roomSize) &&
                 Objects.equals(soundPressure, that.soundPressure);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(super.hashCode(), hemisphereRadius, roomSize, soundPressure);
+        return Objects.hash(super.hashCode(), name, hemisphereRadius, roomSize, soundPressure);
     }
 }
