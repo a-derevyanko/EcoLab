@@ -38,9 +38,10 @@ public abstract class Lab2Step3<V extends Lab2Variant> extends VerticalLayout im
         setSizeFull();
         setMargin(true);
         addComponent(resultGrid);
-        setCaption(i18N.get("lab2.step3.general-data"));
 
         resultGrid.setSizeFull();
+        resultGrid.setCaptionAsHtml(true);
+        resultGrid.setCaption(i18N.get("lab2.step3.general-data"));
         resultGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
         Grid.Column<Data, ?> nColumn = resultGrid.addColumn(Data::getCaption).setCaption(i18N.get("lab2.step3.table-column-caption"));
         Grid.Column<Data, ?> nameColumn = resultGrid.addColumn(Data::getName).setCaption(i18N.get("lab2.step3.table-column-name"));

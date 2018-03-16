@@ -188,8 +188,6 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
     @Override
     public void wizardCompleted(WizardCompletedEvent event) {
         if (UIUtils.isModelFull(binder.getBean())) {
-            ComponentErrorNotification.show(i18N.get("labwizard.finish.cant-save"), i18N.get("labwizard.finish.not-all-fields-filled"));
-        } else {
             binder.getBean().setCompleted(true);
             hasChanges = true;
             if (saveData(true)) {
@@ -198,6 +196,8 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
                     labFinishedWindow.show(new LabFinishedWindow.LabFinishedWindowSettings<>(binder.getBean(), labService));
                 }));
             }
+        } else {
+            ComponentErrorNotification.show(i18N.get("labwizard.finish.cant-save"), i18N.get("labwizard.finish.not-all-fields-filled"));
         }
     }
 
