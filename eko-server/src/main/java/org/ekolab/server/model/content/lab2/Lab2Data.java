@@ -5,6 +5,7 @@ import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.model.content.lab2.validators.AverageSoundPressureControlPointValidator;
 import org.ekolab.server.model.content.lab2.validators.CorrectionFactorValidator;
+import org.ekolab.server.model.content.lab2.validators.FrequencyCoefficientValidator;
 import org.ekolab.server.model.content.lab2.validators.MeasuringFactorValidator;
 import org.ekolab.server.model.content.lab2.validators.QuantityOfSingleTypeEquipmentValidator;
 import org.ekolab.server.model.content.lab2.validators.ReflectedSoundPowerValidator;
@@ -91,6 +92,7 @@ public class Lab2Data<V extends Lab2Variant> extends LabData<V> {
     /**
      * Частотный множитель
      */
+    @ValidatedBy(FrequencyCoefficientValidator.class)
     private Double frequencyCoefficient;
 
     /**

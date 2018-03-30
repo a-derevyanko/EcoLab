@@ -18,6 +18,8 @@ import org.springframework.util.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -79,14 +81,20 @@ public class DesktopVaadinApplication extends VaadinApplication {
                 trayIcon.displayMessage(RES.getString("ekolab"), RES.getString("trayInfo"), TrayIcon.MessageType.INFO);
             }
         }
-        ctx = super.run(args);
-        openEkoLabInBrowser();
-        if (SystemTray.isSupported()) {
-            openItem.setLabel(RES.getString("open"));
-            openItem.setEnabled(true);
+        try {
+            ctx = super.run(args);
+            openEkoLabInBrowser();
+            if (SystemTray.isSupported()) {
+                openItem.setLabel(RES.getString("open"));
+                openItem.setEnabled(true);
+            }
+            return ctx;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(new JFrame(), "Произошла ошибка: " + ex);
+            throw ex;
+        } finally {
+            SplashScreen.setVisible(false);
         }
-        SplashScreen.setVisible(false);
-        return ctx;
     }
 
 

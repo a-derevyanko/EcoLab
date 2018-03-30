@@ -11,11 +11,13 @@ import java.util.List;
 public class AverageSoundPressureControlPointValidator implements FieldValidator<List<Double>, DomainModel> {
     @Override
     public FieldValidationResult validate(List<Double> value, DomainModel data) {
-        for (int i = 1; i < value.size(); i++) {
+        // Валидатор отключён
+        // "на производстве всякое бывает, могут и не совсем точно снять показания, а потом из-за этого лабу не сделают"
+        /*for (int i = 1; i < value.size(); i++) {
             if (value.get(i) > value.get(i - 1)) {
                 return FieldValidationResult.error("lab2.error.soundPressureControlPointValidator");
             }
-        }
+        }*/
         return FieldValidationResult.ok();
     }
 }

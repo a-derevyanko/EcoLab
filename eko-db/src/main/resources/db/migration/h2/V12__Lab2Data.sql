@@ -138,7 +138,7 @@ COMMENT ON COLUMN lab2_experiment_log.estimated_Geometric_Mean_Frequency IS 'Р�
 
 
 CREATE TABLE lab2_experiment_log_sound_pressure (
-  id      BIGINT IDENTITY PRIMARY KEY,
+  id      BIGINT,
   LAB_ID  BIGINT REFERENCES lab2_experiment_log (id) ON DELETE CASCADE,
   version INT,
   F_315   DOUBLE,
@@ -151,6 +151,9 @@ CREATE TABLE lab2_experiment_log_sound_pressure (
   F_4000  DOUBLE,
   F_8000  DOUBLE
 );
+
+CREATE UNIQUE INDEX ix_lab2_experiment_log_sound_pressure
+  ON lab2_experiment_log_sound_pressure (id, LAB_ID);
 
 COMMENT ON TABLE lab2_experiment_log_sound_pressure IS 'Звуковое давление для режима эксперимента лабораторной №2';
 COMMENT ON COLUMN lab2_experiment_log_sound_pressure.id is 'Идентификатор';

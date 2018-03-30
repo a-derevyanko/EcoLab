@@ -7,7 +7,6 @@ import org.ekolab.server.model.content.lab2.validators.AverageSoundPressureContr
 import org.ekolab.server.model.content.lab2.validators.QuantityOfSingleTypeEquipmentValidator;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
@@ -20,13 +19,11 @@ public abstract class Lab2Variant extends LabVariant {
     /**
      * Барометрическое давление
      */
-    @NotNull
     private Integer barometricPressure;
 
     /**
      * Температура воздуха в помещении
      */
-    @NotNull
     private Integer indoorsTemperature;
 
     /**
@@ -41,7 +38,6 @@ public abstract class Lab2Variant extends LabVariant {
      */
     @Size(min = 9, max = 9)
     @ValidatedBy(AverageSoundPressureControlPointValidator.class)
-    @NotNull
     private List<Double> averageSoundPressure;
 
     @Calculated

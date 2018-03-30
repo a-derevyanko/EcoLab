@@ -110,9 +110,11 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
             for (EditableGridData<Double> data : editableGridData) {
                 List<Double> values = data.getValues();
                 experimentLogBinder.getBean().getSoundPressure().add(values);
-                IntStream.range(0, values.size() - 1).forEachOrdered(i -> valuesSum.set(i, valuesSum.get(i) + values.get(i)));
+                IntStream.range(0, values.size()).forEachOrdered(i -> valuesSum.set(i, valuesSum.get(i) + values.get(i)));
             }
-            soundPressureControlPointField.setValue(valuesSum.stream().map(d -> Precision.round(d / editableGridData.size(), 3)).collect(Collectors.toList()));
+            List<Double> average = valuesSum.stream().map(d -> Precision.round(d / editableGridData.size(), 3)).collect(Collectors.toList());
+            soundPressureControlPointField.setValue(average);
+            experimentLogBinder.getBean().setAverageSoundPressure(average);
         });
 
         soundPressureValidationLabel.setStyleName(EkoLabTheme.LABEL_FAILURE);

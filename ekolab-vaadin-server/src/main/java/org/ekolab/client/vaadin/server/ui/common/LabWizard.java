@@ -164,7 +164,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     @Override
     public boolean hasUnsavedData() {
-        return hasChanges;
+        return hasChanges || currentStep instanceof LabExperimentJournalStep;
     }
 
     @Override

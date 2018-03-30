@@ -2,6 +2,7 @@ package org.ekolab.server.model.content.lab2.experiment;
 
 import org.ekolab.server.model.content.lab2.Lab2Variant;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,6 +11,7 @@ public class Lab2ExperimentLog extends Lab2Variant {
     /**
      * Название объекта
      */
+    @Nullable
     private String name;
 
     /**

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="595" pageHeight="844" columnWidth="497" leftMargin="56" rightMargin="42" topMargin="42" bottomMargin="42" uuid="7197296b-f627-4b87-af63-e54d0144253e">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report"
+			  pageHeight="844" columnWidth="497" leftMargin="56" rightMargin="42" topMargin="42" bottomMargin="42" uuid="7197296b-f627-4b87-af63-e54d0144253e">
 	<property name="com.jaspersoft.studio.unit." value="mm"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<import value="org.ekolab.server.common.ReportUtils"/>
@@ -9,19 +10,19 @@
 	<style name="Style1Bold" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontSize="12" isBold="true"/>
 	<style name="StyleFortableCells" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12"/>
 	<style name="StyleFortableCaption" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12" isBold="true"/>
-	<parameter name="groupNumber" class="java.lang.String">
+	<parameter name="groupNumber">
 		<parameterDescription><![CDATA[номер группы]]></parameterDescription>
 	</parameter>
-	<parameter name="teacherName" class="java.lang.String">
+	<parameter name="teacherName">
 		<parameterDescription><![CDATA[Имя преподавателя]]></parameterDescription>
 	</parameter>
 	<parameter name="teamNumber" class="java.lang.Integer">
 		<parameterDescription><![CDATA[номер бригады]]></parameterDescription>
 	</parameter>
-	<parameter name="studentsList" class="java.lang.String">
+	<parameter name="studentsList">
 		<parameterDescription><![CDATA[список студентов, членов бригады]]></parameterDescription>
 	</parameter>
-	<parameter name="objectName" class="java.lang.String">
+	<parameter name="objectName">
 		<parameterDescription><![CDATA[Имя рассматриваемого объекта]]></parameterDescription>
 	</parameter>
 	<parameter name="calculationResult" class="java.util.SortedMap">
@@ -32,9 +33,9 @@
 	<parameter name="roomSize" class="java.lang.Integer"/>
 	<parameter name="quantityOfSingleTypeEquipment" class="java.lang.Integer"/>
 	<parameter name="hemisphereRadius" class="java.lang.Double"/>
-	<parameter name="name" class="java.lang.String"/>
-	<parameter name="soundPressure" class="java.util.List<List<Double>>"/>
-	<parameter name="averageSoundPressure" class="java.util.List<Double>"/>
+	<parameter name="name"/>
+	<parameter name="soundPressure" class="java.util.List"/>
+	<parameter name="averageSoundPressure" class="java.util.List"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -896,7 +897,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(0).get(1)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},0,1)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="3ea09668-a1b9-480d-9318-45d8f0c8fe5c">
@@ -915,7 +916,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(0).get(3)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},0,3)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="d68eba1f-6f45-4935-91ac-4ea4d8fe0152">
@@ -934,7 +935,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(0).get(0)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},0,0)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="5f6f29e2-f498-4512-a9a1-ed6481b67659">
@@ -953,7 +954,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(0).get(2)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},0,2)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="645a2ea7-cc75-49a0-bda6-9b5431ad5b3f">
@@ -972,7 +973,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(0).get(7)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},0,7)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="f8ff73dd-0ec5-4b1c-a89a-dde33b15d2e0">
@@ -991,7 +992,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(0).get(8)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},0,8)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="2ada4275-2f90-4b61-a06d-2d732c394244">
@@ -1010,7 +1011,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(0).get(4)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},0,4)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="0782ffae-6092-4852-8840-e3361b4b9ebc">
@@ -1029,7 +1030,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(0).get(5)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},0,5)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="530" width="49" height="20" backcolor="#FFFFFF" uuid="00edc9cc-221d-45c6-89df-7fbf40215c47">
@@ -1048,7 +1049,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(0).get(6)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},0,6)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="1017c676-31aa-4b47-a39c-6c3958ab5e3c">
@@ -1066,7 +1067,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{averageSoundPressure.get(2)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(2)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="29a8ee84-21ae-4f3e-9390-3b272c297aff">
@@ -1084,7 +1085,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{averageSoundPressure.get(1)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(1)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="3401ddde-c8c5-4a0a-87c1-079627d70e1d">
@@ -1102,7 +1103,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{averageSoundPressure.get(5)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(5)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="ac53c6b0-89e0-4c37-b559-5aa416f88fc4">
@@ -1120,7 +1121,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{averageSoundPressure.get(3)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(3)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="e0e8b957-3c58-401a-9bce-af67808a4285">
@@ -1138,7 +1139,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{averageSoundPressure.get(8)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(8)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="dbf1e35d-1a1a-4be7-bbe8-55b2b760e9d4">
@@ -1156,7 +1157,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{averageSoundPressure.get(7)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(7)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="929412ec-54dc-436b-a826-c8a3819ad3a7">
@@ -1174,7 +1175,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{averageSoundPressure.get(6)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(6)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="b5a02a65-1013-41fb-b419-831307ec4dbe">
@@ -1192,7 +1193,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{averageSoundPressure.get(0)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(0)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="690" width="49" height="20" backcolor="#FFFFFF" uuid="8bdc87b8-9349-47aa-948a-9905a7f279c4">
@@ -1210,7 +1211,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{averageSoundPressure.get(4)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{averageSoundPressure}.get(4)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="f18197a6-ccad-48ff-98c4-ffe0d24765ba">
@@ -1229,7 +1230,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(1).get(1)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},1,1)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="0efd5033-a9e6-4db5-9c0c-9c17ef02d0b1">
@@ -1248,7 +1249,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(1).get(8)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},1,8)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="1ecf9f05-8954-47f2-9a57-f3159925e5d0">
@@ -1267,7 +1268,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(1).get(3)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},1,3)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="6a08715a-52bc-47c4-9e7a-14af82a2c6b2">
@@ -1286,7 +1287,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(1).get(2)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},1,2)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="fff2acd0-6c4a-4f5e-aab3-fde1535d9153">
@@ -1305,7 +1306,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(1).get(6)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},1,6)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="03d89fb4-7d99-43ee-9a4e-e01b62d6ef2b">
@@ -1324,7 +1325,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(1).get(4)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},1,4)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="0734a877-97f5-41d7-9395-0711d8959473">
@@ -1343,7 +1344,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(1).get(5)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},1,5)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="f26332cb-5eac-4ac6-810a-b1672088d5db">
@@ -1362,7 +1363,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(1).get(0)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},1,0)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="550" width="49" height="20" backcolor="#FFFFFF" uuid="aec82890-2f69-4e9f-bcf3-2cf7fdd05a8c">
@@ -1381,7 +1382,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(1).get(7)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},1,7)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="45e11b09-7394-4a13-99a2-e7dc0119aa83">
@@ -1400,7 +1401,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(2).get(5)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},2,5)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="113ae7d7-77ea-45ce-8d9b-2a78423f131d">
@@ -1419,7 +1420,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(2).get(3)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},2,3)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="8218e648-11db-462d-8f1c-8e100bb99097">
@@ -1438,7 +1439,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(2).get(7)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},2,7)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="0d282a67-f444-4e1e-b488-21914be7dc84">
@@ -1457,7 +1458,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(2).get(2)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},2,2)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="89f34c34-1247-4dc0-b6a1-73fcec5cbf13">
@@ -1476,7 +1477,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(2).get(4)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},2,4)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="c93e1ce8-882e-4cc0-a146-28ef39f25e9b">
@@ -1495,7 +1496,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(2).get(8)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},2,8)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="95c65b47-7a0e-41f0-bd43-886df1b09a5a">
@@ -1514,7 +1515,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(2).get(6)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},2,6)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="cddd1aee-4ceb-4810-a860-f43335c2666b">
@@ -1533,7 +1534,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(2).get(1)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},2,1)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="570" width="49" height="20" backcolor="#FFFFFF" uuid="5d215802-8697-4d4e-8f23-4a06ffe5757b">
@@ -1552,7 +1553,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(2).get(0)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},2,0)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="d615c0b9-7272-49c9-a25d-40e1f6cb3298">
@@ -1571,7 +1572,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(5).get(0)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},5,0)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="5fbf81fd-8c1a-4aed-be86-e14413d8521d">
@@ -1590,7 +1591,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(5).get(2)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},5,2)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="de4c10ed-992c-4608-8197-f2f66063bdfa">
@@ -1609,7 +1610,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(3).get(1)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},3,1)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="9c552137-889c-4c71-bc9f-32ccc5b20caa">
@@ -1628,7 +1629,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(5).get(4)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},5,4)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="152ea7ab-abe1-4556-b99c-4159b7ab3f63">
@@ -1647,7 +1648,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(5).get(6)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},5,6)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="08012f8d-5881-497d-bc86-052f546acff8">
@@ -1666,7 +1667,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(4).get(5)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},4,5)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="2d2fb403-efd1-40be-8572-df4e2760c437">
@@ -1685,7 +1686,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(5).get(8)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},5,8)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="b03a2f08-9be6-47f5-9be4-97fb4e827584">
@@ -1704,7 +1705,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(4).get(3)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},4,3)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="af313272-82bc-461f-b547-a3b83e177d5c">
@@ -1723,7 +1724,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(5).get(5)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},5,5)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="8b96fb82-6d90-45ed-baa4-1a36f985c4b0">
@@ -1742,7 +1743,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(3).get(8)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},3,8)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="d9b2b873-fef0-4329-a11a-10e382c57a47">
@@ -1761,7 +1762,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(5).get(3)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},5,3)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="a124c0f9-4842-4d53-b03b-e20c1aeba9a3">
@@ -1780,7 +1781,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(3).get(3)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},3,3)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="134ec944-a3a4-4239-b4a2-c3b200a03c78">
@@ -1799,7 +1800,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(4).get(7)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},4,7)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="85562112-5340-48ed-971f-485cbf9da0fc">
@@ -1818,7 +1819,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(4).get(2)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},4,2)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="50bcdeaf-8be2-4b19-9dd7-b794c6ed5633">
@@ -1837,7 +1838,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(4).get(4)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},4,4)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="1cc8a383-3971-4649-9621-57db5a61212a">
@@ -1856,7 +1857,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(4).get(8)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},4,8)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="92de7974-ca5d-48db-be77-6287648b6df6">
@@ -1875,7 +1876,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(4).get(6)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},4,6)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="7ae03c04-a542-486d-b7a8-15a404ce1287">
@@ -1894,7 +1895,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(3).get(2)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},3,2)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="1971b923-c82a-4475-a80f-d1cdb8e00400">
@@ -1913,7 +1914,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(3).get(6)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},3,6)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="21382a4c-2dcf-4b8e-a173-918ee9bfd4d4">
@@ -1932,7 +1933,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(3).get(4)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},3,4)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="df9c6454-8926-4eb0-a38e-195b7a93628d">
@@ -1951,7 +1952,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(5).get(7)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},5,7)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="fecae80b-ea06-4544-a367-28f3b52771db">
@@ -1970,7 +1971,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(3).get(5)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},3,5)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="c4f254c7-95a8-42f7-847f-746f3a5469cd">
@@ -1989,7 +1990,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(3).get(0)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},3,0)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="f278c8b7-7b59-47e9-9ea3-7c07e6ca0282">
@@ -2008,7 +2009,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(4).get(1)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},4,1)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="590" width="49" height="20" backcolor="#FFFFFF" uuid="c34045f8-c3af-4eb2-8f68-773f76fc4904">
@@ -2027,7 +2028,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(3).get(7)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},3,7)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="610" width="49" height="20" backcolor="#FFFFFF" uuid="5147f8ad-8a1a-4d04-adbf-3769e1c3244f">
@@ -2046,7 +2047,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(4).get(0)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},4,0)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="630" width="49" height="20" backcolor="#FFFFFF" uuid="494e491c-3e79-4cdc-ba5d-01e50b8fa9d0">
@@ -2065,7 +2066,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(5).get(1)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},5,1)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="8df7870c-dc6b-4ffe-a8f5-2b8665b69334">
@@ -2084,7 +2085,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(7).get(7)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},7,7)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="47265b88-646a-4d90-9f94-ccc1a61a39ba">
@@ -2103,7 +2104,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(7).get(3)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},7,3)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="eb962d2e-85fa-40a2-8e9b-178aff122950">
@@ -2122,7 +2123,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(7).get(6)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},7,6)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="f256472b-3f73-4547-bea0-26d43b5a55c0">
@@ -2141,7 +2142,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(7).get(8)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},7,8)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="c79e7654-4ed7-4a37-8fe8-032e31e9b80e">
@@ -2160,7 +2161,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(7).get(2)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},7,2)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="0c07a3f3-16ed-4512-8105-1734b5057945">
@@ -2179,7 +2180,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(6).get(5)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},6,5)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="201" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="a7453891-90b6-4c09-b898-03d9dd217cac">
@@ -2198,7 +2199,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(6).get(3)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},6,3)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="4107f547-b3fe-448a-a46b-5ea604d096ae">
@@ -2217,7 +2218,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(7).get(1)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},7,1)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="152" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="04fa9ee2-e88a-47ab-8a33-0eabd73e81f2">
@@ -2236,7 +2237,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(6).get(2)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},6,2)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="74822398-8f93-4998-a341-f384d67672e7">
@@ -2255,7 +2256,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(7).get(0)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},7,0)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="299" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="47111ae2-dc97-4a86-b90f-0b990c51caad">
@@ -2274,7 +2275,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(7).get(5)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},7,5)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="670" width="49" height="20" backcolor="#FFFFFF" uuid="56e2e3f6-90e7-47d3-a8b3-cc81d1945899">
@@ -2293,7 +2294,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(7).get(4)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},7,4)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="103" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="45d88b0b-536d-40e3-86d0-bd61fbb3d8d8">
@@ -2312,7 +2313,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(6).get(1)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},6,1)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="54" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="cfc1b081-3cb2-4ddd-8247-a02458485ae7">
@@ -2331,7 +2332,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(6).get(0)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},6,0)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="397" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="c11581d2-bb52-4983-9c3c-d9e472ccb99a">
@@ -2350,7 +2351,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(6).get(7)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},6,7)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="250" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="9d64096a-52e7-43a2-a204-4374c753fac1">
@@ -2369,7 +2370,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(6).get(4)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},6,4)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="446" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="ce2bfba2-f504-4dba-8f3c-a915ed77ba33">
@@ -2388,7 +2389,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(6).get(8)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},6,8)]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" mode="Opaque" x="348" y="650" width="49" height="20" backcolor="#FFFFFF" uuid="ced478d2-91f0-46f8-94c7-121549c0553d">
@@ -2407,7 +2408,7 @@
 				<textElement rotation="None">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{soundPressure.get(6).get(6)}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ReportUtils.getFromListOfList($P{soundPressure},6,6)]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="758">

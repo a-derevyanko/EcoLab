@@ -32,6 +32,7 @@ public class Lab2ExperimentServiceImpl extends Lab2ServiceImpl<Lab2ExperimentLog
         variant.setEstimatedGeometricMeanFrequency(Frequency.
                 values()[RandomUtils.nextInt(Frequency.values().length)]);
         variant.setSoundPressure(Collections.nCopies(8, new ArrayList<>(Collections.nCopies(9, 0.0))));
+        variant.setAverageSoundPressure(new ArrayList<>(Collections.nCopies(9, 0.0)));
         return variant;
     }
 

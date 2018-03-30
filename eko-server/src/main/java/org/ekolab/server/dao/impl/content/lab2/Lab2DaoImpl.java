@@ -153,7 +153,8 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
     }
 
     protected static List<Double> toDoubleList(Object[] array) {
-        return array == null ? null : Arrays.stream(array).map(o -> ((Number) o).doubleValue()).collect(Collectors.toList());
+        //todo
+        return array == null ? null : Arrays.stream(array).map(o -> Double.valueOf(o.toString())).collect(Collectors.toList());
     }
 
     protected abstract Lab2DataMapper<V> getLabMapper();

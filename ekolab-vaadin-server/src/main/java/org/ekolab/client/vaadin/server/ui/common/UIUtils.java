@@ -7,16 +7,15 @@ import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.ui.UI;
 import com.vaadin.util.ReflectTools;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.server.model.DomainModel;
 import org.ekolab.server.model.content.FieldValidationResult;
 import org.ekolab.server.service.api.content.ValidationService;
-import org.omg.CORBA.portable.UnknownException;
-import org.springframework.beans.BeanUtils;
+import org.springframework.util.ReflectionUtils;
 
-import java.beans.PropertyDescriptor;
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -45,6 +44,7 @@ public abstract class UIUtils {
         return getStringConverter(propClass, i18N);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Converter<String, T> getStringConverter(Class<T> propClass, I18N i18N) {
         if (propClass == Integer.class) {
             return (Converter<String, T>) new StringToIntegerConverter(i18N.get("validator.must-be-number"));
@@ -77,17 +77,7 @@ public abstract class UIUtils {
     }
 
     public static boolean isModelFull(DomainModel model) {
-        PropertyDescriptor[] propertyDescriptors = BeanUtils.getPropertyDescriptors(model.getClass());
-        try {
-            for (PropertyDescriptor descriptor : propertyDescriptors) {
-                Method readMethod = descriptor.getReadMethod();
-                if (readMethod.invoke(model) == null) {
-                    return false;
-                }
-            }
-        } catch (ReflectiveOperationException e) {
-            throw new UnknownException(e);
-        }
-        return true;
+        return FieldUtils.getAllFieldsList(model.getClass()).stream()
+                .filter(f -> f.getAnnotation(Nullable.class) == null).noneMatch(field -> ReflectionUtils.getField(field, model) == null);
     }
 }

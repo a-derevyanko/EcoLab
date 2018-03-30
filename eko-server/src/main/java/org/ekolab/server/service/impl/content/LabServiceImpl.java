@@ -268,10 +268,13 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         Map<String, Object> printData = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : getValuesFromModel(data).entrySet()) {
             if (entry.getValue() instanceof List) {
-                List<String> captions = Arrays.asList(messageSource.getMessage(entry.getKey() + "-columns", null, locale).split(";"));
-                Map<String, Object> valueMap = IntStream.range(0, captions.size()).boxed().
-                        collect(Collectors.toMap(captions::get, i -> getFieldValueForPrint(((List) entry.getValue()).get(i), locale), (a, b) -> b, LinkedHashMap::new));
-                printData.put(entry.getKey(), valueMap);
+                List<?> value = (List) entry.getValue();
+                if (value.isEmpty() || !(value.get(0) instanceof List)) {
+                    List<String> captions = Arrays.asList(messageSource.getMessage(entry.getKey() + "-columns", null, locale).split(";"));
+                    Map<String, Object> valueMap = IntStream.range(0, captions.size()).boxed().
+                            collect(Collectors.toMap(captions::get, i -> getFieldValueForPrint(value.get(i), locale), (a, b) -> b, LinkedHashMap::new));
+                    printData.put(entry.getKey(), valueMap);
+                }
             } else {
                 printData.put(entry.getKey(), getFieldValueForPrint(entry.getValue(), locale));
             }

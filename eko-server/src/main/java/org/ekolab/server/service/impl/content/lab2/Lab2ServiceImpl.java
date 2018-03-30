@@ -49,7 +49,6 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
             if (labData.getCorrectionFactor() != null) {
                 calculationResult.put(CalculationResultType.CORRECTION_FACTOR, Collections.nCopies(labData.getAverageSoundPressure().size(), Precision.round(labData.getCorrectionFactor(), 4)));
 
-
                 List<Double> soundPressureMeasuringSurface = labData.getAverageSoundPressure().stream().
                                 map(a -> a + labData.getCorrectionFactor()).collect(Collectors.toList());
 
@@ -68,7 +67,7 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
                         if (labData.getRoomConstant1000() != null && labData.getRoomConstant() != null) {
                             calculationResult.put(CalculationResultType.ROOM_CONSTANT,
                                     calculationResult.get(CalculationResultType.FREQUENCY_COEFFICIENT).stream().
-                                            map(f -> f * labData.getRoomConstant1000()).collect(Collectors.toList()));
+                                            map(f -> Precision.round(f * labData.getRoomConstant1000(), 1)).collect(Collectors.toList()));
 
                             if (labData.getRoomConstant() != null) {
                                 calculationResult.put(CalculationResultType._10_lgB, Collections.nCopies(labData.getAverageSoundPressure().size(), labData.getRoomConstant()));
@@ -79,7 +78,7 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
                                     if (labData.getReflectedSoundPower() != null) {
                                         List<Double> reflectedSoundPower =
                                                 calculationResult.get(CalculationResultType.SOUND_POWER_LEVEL).stream().
-                                                        map(a -> Precision.round(a + labData.getSoundPowerLevel() + 10 *
+                                                        map(a -> Precision.round(a + 10 *
                                                                 Math.log10(labData.getQuantityOfSingleTypeEquipment()) - 10 * Math.log10(labData.getRoomConstant()) + 6, 3)).collect(Collectors.toList());
 
                                         calculationResult.put(CalculationResultType.REFLECTED_SOUND_POWER, reflectedSoundPower);
