@@ -80,6 +80,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
         topLayout.addComponent(printDataButton);
         imagesLayout.setSpacing(true);
         imagesLayout.setWidth(100.0F, Unit.PERCENTAGE);
+        imagesLayout.setHeight(200.0F, Unit.PIXELS);
         imagesLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         printDataButton.setCaption(i18N.get("labwizard.initial-data-print"));
         printDataButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
@@ -99,6 +100,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void beforeShow() {
         Set<DataValue> values = new LinkedHashSet<>();
 
@@ -131,7 +133,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
             imagesLayout.setVisible(false);
         } else {
             for (Map.Entry<String, URL> entry : images.entrySet()) {
-                Component component = new com.vaadin.ui.Image(entry.getKey(), new StreamResource((StreamResource.StreamSource) () -> {
+                Component component = new com.vaadin.ui.Image(entry.getKey(), new StreamResource(() -> {
                     try {
                         return entry.getValue().openStream();
                     } catch (IOException e) {
