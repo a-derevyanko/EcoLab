@@ -78,6 +78,9 @@ public abstract class UIUtils {
 
     public static boolean isModelFull(DomainModel model) {
         return FieldUtils.getAllFieldsList(model.getClass()).stream()
-                .filter(f -> f.getAnnotation(Nullable.class) == null).noneMatch(field -> ReflectionUtils.getField(field, model) == null);
+                .filter(f -> f.getAnnotation(Nullable.class) == null).noneMatch(field -> {
+                    field.setAccessible(true);
+                    return ReflectionUtils.getField(field, model) == null;
+                });
     }
 }

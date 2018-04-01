@@ -15,7 +15,7 @@ VALUES
                                                                                                            100.0, 100.0,
                                                                                                            100.0),
                                                                                                            -0.067244,
-   99.93, 100.53096491487338, 20.02, 119.95, 9, 1.4, 12.6, 114.95);
+   99.93, 100.53096491487338, 20.02, 119.95, 9, 1.0, 9, 116.41);
 
 INSERT INTO LAB2_RANDOM_VARIANT (ID, VERSION, NAME, BAROMETRIC_PRESSURE,
                                         INDOORS_TEMPERATURE, QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,

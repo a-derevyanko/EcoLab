@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report"
-			  pageHeight="844" columnWidth="497" leftMargin="56" rightMargin="42" topMargin="42" bottomMargin="42" uuid="7197296b-f627-4b87-af63-e54d0144253e">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="595" pageHeight="844" columnWidth="497" leftMargin="56" rightMargin="42" topMargin="42" bottomMargin="42" uuid="7197296b-f627-4b87-af63-e54d0144253e">
 	<property name="com.jaspersoft.studio.unit." value="mm"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<import value="org.ekolab.server.common.ReportUtils"/>
@@ -10,19 +9,19 @@
 	<style name="Style1Bold" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontSize="12" isBold="true"/>
 	<style name="StyleFortableCells" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12"/>
 	<style name="StyleFortableCaption" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12" isBold="true"/>
-	<parameter name="groupNumber">
+	<parameter name="groupNumber" class="java.lang.String">
 		<parameterDescription><![CDATA[номер группы]]></parameterDescription>
 	</parameter>
-	<parameter name="teacherName">
+	<parameter name="teacherName" class="java.lang.String">
 		<parameterDescription><![CDATA[Имя преподавателя]]></parameterDescription>
 	</parameter>
 	<parameter name="teamNumber" class="java.lang.Integer">
 		<parameterDescription><![CDATA[номер бригады]]></parameterDescription>
 	</parameter>
-	<parameter name="studentsList">
+	<parameter name="studentsList" class="java.lang.String">
 		<parameterDescription><![CDATA[список студентов, членов бригады]]></parameterDescription>
 	</parameter>
-	<parameter name="objectName">
+	<parameter name="objectName" class="java.lang.String">
 		<parameterDescription><![CDATA[Имя рассматриваемого объекта]]></parameterDescription>
 	</parameter>
 	<parameter name="calculationResult" class="java.util.SortedMap">
@@ -33,7 +32,7 @@
 	<parameter name="roomSize" class="java.lang.Integer"/>
 	<parameter name="quantityOfSingleTypeEquipment" class="java.lang.Integer"/>
 	<parameter name="hemisphereRadius" class="java.lang.Double"/>
-	<parameter name="name"/>
+	<parameter name="name" class="java.lang.String"/>
 	<parameter name="averageSoundPressure" class="java.util.List"/>
 	<queryString>
 		<![CDATA[]]>
@@ -249,14 +248,14 @@
 				<text><![CDATA[Объект: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement key="" style="StyleFortableCells" x="50" y="140" width="109" height="20" uuid="4368e2e9-124e-4888-bfaf-2cdbf27223c3"/>
+				<reportElement key="" style="StyleFortableCells" x="50" y="140" width="400" height="20" uuid="4368e2e9-124e-4888-bfaf-2cdbf27223c3"/>
 				<box>
 					<pen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Left">
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{groupNumber}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{name}==null?"-":$P{name}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" style="Style1Bold" x="430" y="190" width="67" height="20" uuid="c19ec8e0-b68e-4d99-b987-33391b58418a"/>
@@ -3793,16 +3792,6 @@
 				<reportElement key="" style="Style1Bold" x="0" y="50" width="495" height="20" uuid="50b672f4-c691-4bd1-8683-9c2004e29e60"/>
 				<text><![CDATA[Расчетные формулы]]></text>
 			</staticText>
-			<break>
-				<reportElement x="0" y="750" width="99" height="1" uuid="1df0cfc7-5f23-42ca-bf97-0636dcc99ceb"/>
-			</break>
-			<textField>
-				<reportElement key="" x="510" y="740" width="30" height="18" uuid="17147cfc-bd1d-4536-b946-52167b5090a1"/>
-				<textElement>
-					<font fontName="Times New Roman" size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="66" y="100" width="350" height="378" uuid="7bb2d03d-7c76-4b7b-b944-4e0fe9ae5ad5">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -3810,6 +3799,13 @@
 				</reportElement>
 				<imageExpression><![CDATA["org/ekolab/server/service/impl/content/lab2/formulae.png"]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement key="" x="510" y="740" width="30" height="18" uuid="17147cfc-bd1d-4536-b946-52167b5090a1"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
