@@ -268,11 +268,11 @@
 				<text><![CDATA[Журнал наблюдений]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Style1" x="0" y="208" width="49" height="20" uuid="b6ee9915-0fd6-4d51-a77d-46630260c54f"/>
+				<reportElement style="Style1" x="0" y="208" width="400" height="20" uuid="b6ee9915-0fd6-4d51-a77d-46630260c54f"/>
 				<textElement verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
-				<text><![CDATA[Объект:]]></text>
+				<text><![CDATA[Объект: Паровой котел БМ-35 РФ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="" style="Style1" x="0" y="228" width="323" height="22" uuid="aaaf66c0-2722-43d0-955c-2c844dd33731"/>

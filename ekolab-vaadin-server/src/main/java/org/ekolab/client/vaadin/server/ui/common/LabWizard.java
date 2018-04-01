@@ -12,6 +12,7 @@ import com.vaadin.ui.HorizontalLayout;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.VaadinUI;
 import org.ekolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
+import org.ekolab.client.vaadin.server.ui.development.DevUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.AutoSavableView;
 import org.ekolab.client.vaadin.server.ui.windows.ConfirmWindow;
@@ -171,6 +172,9 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         T uncompletedLabData = labService.getLastUncompletedLabByUser(currentUser.getName());
         if (uncompletedLabData == null) {
+            if (!DevUtils.isProductionVersion()) {
+                labService.removeLabsByUser(currentUser.getName());
+            }
             T newLabData = labService.startNewLab(currentUser.getName());
             binder.setBean(newLabData);
         } else {

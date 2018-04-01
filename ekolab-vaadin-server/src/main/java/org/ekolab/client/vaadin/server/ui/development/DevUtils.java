@@ -32,6 +32,6 @@ public class DevUtils {
 
     @Deprecated
     public static boolean isProductionVersion() {
-        return !buildProperties.getVersion().startsWith("0.") || System.getProperty("idea.paths.selector") != null;
+        return !buildProperties.getVersion().startsWith("0.0.2") || System.getProperty("idea.paths.selector") != null;
     }
 }

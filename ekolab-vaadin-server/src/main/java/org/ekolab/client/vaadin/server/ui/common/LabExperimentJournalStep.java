@@ -22,7 +22,6 @@ import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.content.ValidationService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
@@ -170,13 +169,9 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
      */
     @Override
     public boolean onAdvance() {
-        for (Field field : experimentLogBinder.getBean().getClass().getDeclaredFields()) {
-            ReflectionUtils.makeAccessible(field);
-            Object value = ReflectionUtils.getField(field, experimentLogBinder.getBean());
-            if (value == null) {
-                ComponentErrorNotification.show(i18N.get("labwizard.next-step-unavailable"), i18N.get("lab1.step1.fill-variant"));
-                return false;
-            }
+        if (!UIUtils.isModelFull(experimentLogBinder.getBean())) {
+            ComponentErrorNotification.show(i18N.get("labwizard.next-step-unavailable"), i18N.get("lab1.step1.fill-variant"));
+            return false;
         }
         BeanUtils.copyProperties(experimentLogBinder.getBean(), dataBinder.getBean());
 
