@@ -3,6 +3,10 @@ package org.ekolab.client.vaadin.server.ui.common;
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
 import com.vaadin.data.HasValue;
+import com.vaadin.data.Result;
+import com.vaadin.data.ValueContext;
+import com.vaadin.data.ValueProvider;
+import com.vaadin.server.Setter;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Alignment;
@@ -51,6 +55,8 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
     protected final HorizontalLayout centerLayout = new HorizontalLayout(firstLayout);
     protected final Label journalLabel = new Label("Experiment journal");
 
+    protected final Binder<String> averageValuesBinder = new Binder<>();
+
     public LabExperimentJournalStep(Binder<V> experimentLogBinder, Binder<T> dataBinder, I18N i18N, ValidationService validationService, ParameterCustomizer parameterCustomizer) {
         this.experimentLogBinder = experimentLogBinder;
         this.dataBinder = dataBinder;
@@ -91,19 +97,26 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
 
         List<TextField> measurementComponents = new ArrayList<>(3);
 
+        final Converter<String, Double> converter = UIUtils.getStringConverter(Double.class, i18N);
         for (int i = 1; i < 4; i++) {
             TextField iMeasurementTextField = new TextField();
             iMeasurementTextField.setPlaceholder(i18N.get("lab.step-experiment-journal.measurement", i));
             iMeasurementTextField.setWidth(50.0F, Unit.PIXELS);
+
+            averageValuesBinder.forField(iMeasurementTextField).withConverter(converter).bind((ValueProvider<String, Double>) s -> null, (Setter<String, Double>) (s, o) -> { });
             measurementComponents.add(iMeasurementTextField);
         }
         components.addAll(2, measurementComponents);
 
+        ValueContext context = new ValueContext();
         HasValue.ValueChangeListener<String> listener = event -> {
-            if (measurementComponents.stream().noneMatch(HasValue::isEmpty)) {
+            if (averageValuesBinder.isValid()) {
                 double value = measurementComponents.stream().filter(Objects::nonNull)
-                        .mapToDouble(x -> Double.valueOf(x.getValue()))
-                        .average().orElseThrow(IllegalStateException::new);
+                        .map(i -> {
+                                    Result<Double> result = converter.convertToModel(i.getValue(), context);
+                                    return result.isError() ? null : result.getOrThrow(IllegalStateException::new);
+                                }
+                        ).filter(Objects::nonNull).mapToDouble(i -> i).average().orElse(0.0);
                 Class<?> propClass = ReflectTools.convertPrimitiveType(field.getType());
                 if (propClass == Integer.class) {
                     component.setValue(String.valueOf(Math.round(value)));
@@ -112,8 +125,6 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
                 } else {
                     throw new IllegalArgumentException("Unsupported field type: " + propClass);
                 }
-            } else {
-                component.setValue(String.valueOf(0));
             }
         };
         measurementComponents.forEach(x -> x.addValueChangeListener(listener));
