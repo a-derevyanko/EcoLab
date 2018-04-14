@@ -36,6 +36,7 @@ import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
 import org.ekolab.server.model.content.LabTestQuestion;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
+import org.ekolab.server.model.content.LabTestResult;
 import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -113,12 +114,12 @@ public abstract class LabTestWizard extends Wizard implements View {
             }
         }
 
-        List<Integer> errors = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers);
+        LabTestResult result = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers, UI.getCurrent().getLocale());
 
-        if (errors.size() <= 2) {
+        if (result.getCompleted()) {
             userLabService.setTestCompleted(currentUser.getName(), labService.getLabNumber());
         }
-        labTestFinishedWindow.show(new LabTestFinishedWindow.LabFinishedWindowSettings(errors, answers.keySet()));
+        labTestFinishedWindow.show(new LabTestFinishedWindow.LabFinishedWindowSettings(result, answers.keySet()));
     }
 
     /**

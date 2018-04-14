@@ -20,10 +20,10 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
+import org.ekolab.server.model.content.LabTestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -41,7 +41,8 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
     private final Image testCompleted = new Image();
     private final Image testNotCompleted = new Image();
     private final Button toMainMenuButton = new Button("Exit to main menu", VaadinIcons.EXIT);
-    private final VerticalLayout rightPane = new VerticalLayout(testCompleted, testNotCompleted, toMainMenuButton);
+    private final Label result = new Label("Result: {}, {}");
+    private final VerticalLayout rightPane = new VerticalLayout(testCompleted, testNotCompleted, result, toMainMenuButton);
     private final HorizontalLayout content = new HorizontalLayout(testResultAccordion, rightPane);
 
     private final I18N i18N;
@@ -71,6 +72,7 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
 
         rightPane.setComponentAlignment(testCompleted, Alignment.TOP_CENTER);
         rightPane.setComponentAlignment(testNotCompleted, Alignment.TOP_CENTER);
+        rightPane.setComponentAlignment(result, Alignment.BOTTOM_CENTER); //todo съезжает
         rightPane.setComponentAlignment(toMainMenuButton, Alignment.BOTTOM_CENTER);
         testResultAccordion.setSizeFull();
         content.setSizeFull();
@@ -95,10 +97,13 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
     @Override
     protected void beforeShow() {
         super.beforeShow();
-        if (settings.errors.size() > 2) {
-            testNotCompleted.setVisible(true);
-        } else {
+        if (settings.result.getCompleted()) {
             testCompleted.setVisible(true);
+            result.setVisible(true);
+            result.setValue(i18N.get("test.result", settings.result.getPointCount(), settings.result.getMark()));
+        } else {
+            testNotCompleted.setVisible(true);
+            result.setVisible(false);
         }
 
         settings.questions.stream().
@@ -123,7 +128,7 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
                             i18N.get("test.question", questionVariant.getNumber())).setIcon(resourceService.getImage("ok.svg"));
                 });
 
-        settings.errors.forEach(tabIndex -> testResultAccordion.getTab(tabIndex - 1).setIcon(resourceService.getImage("error.svg")));
+        settings.result.getErrors().forEach(tabIndex -> testResultAccordion.getTab(tabIndex - 1).setIcon(resourceService.getImage("error.svg")));
     }
 
     @Override
@@ -135,12 +140,12 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
     }
 
     public static class LabFinishedWindowSettings implements WindowSettings {
-        private final List<Integer> errors;
+        private final LabTestResult result;
         private final Collection<LabTestQuestionVariant> questions;
 
-        public LabFinishedWindowSettings(List<Integer> errors, Collection<LabTestQuestionVariant> questions) {
-            this.errors = errors;
-            this.questions = new ArrayList<>(questions);
+        public LabFinishedWindowSettings(LabTestResult result, Collection<LabTestQuestionVariant> questions) {
+            this.result = result;
+            this.questions = questions;
         }
     }
 }

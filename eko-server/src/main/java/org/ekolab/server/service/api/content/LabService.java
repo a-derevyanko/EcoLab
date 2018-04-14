@@ -1,16 +1,16 @@
 package org.ekolab.server.service.api.content;
 
+import org.ekolab.server.model.content.DataValue;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
+import org.ekolab.server.model.content.LabTestResult;
 import org.ekolab.server.model.content.LabVariant;
-import org.ekolab.server.model.content.DataValue;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -65,9 +65,10 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
      * Проверяет результаты теста.
      * @param data данные лабораторной
      * @param answers ответы
-     * @return номера вопросов, на которые был дан неверный ответ
+     * @param locale локализация
+     * @return оценка и номера вопросов, на которые был дан неверный ответ
      */
-    List<Integer> checkLabTest(@Valid LabData<?> data, Map<LabTestQuestionVariant, Object> answers);
+    LabTestResult checkLabTest(@Valid LabData<?> data, Map<LabTestQuestionVariant, Object> answers, Locale locale);
 
     int getLabNumber();
 }

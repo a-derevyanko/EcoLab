@@ -31,8 +31,10 @@ import org.ekolab.server.model.content.DataValue;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.LabTest;
 import org.ekolab.server.model.content.LabTestHomeWorkQuestion;
+import org.ekolab.server.model.content.LabTestQuestion;
 import org.ekolab.server.model.content.LabTestQuestionVariant;
 import org.ekolab.server.model.content.LabTestQuestionVariantWithAnswers;
+import org.ekolab.server.model.content.LabTestResult;
 import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.model.content.lab3.Valued;
 import org.ekolab.server.service.api.ReportService;
@@ -170,7 +172,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     }
 
     @Override
-    public List<Integer> checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers) {
+    public LabTestResult checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers, Locale locale) {
         List<Integer> errors = new ArrayList<>();
         Bindings values = new SimpleBindings(getValuesFromModel(data));
 
@@ -200,7 +202,30 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
                 }
             }
         }
-        return errors;
+
+        LabTestResult result = new LabTestResult();
+        int pointCount = getLabTest(locale).getQuestions().stream().
+                filter(q -> errors.contains(q.getQuestionNumber())).
+                mapToInt(LabTestQuestion::getPointCount).sum();
+
+        final byte mark;
+        if (pointCount >= 90 && pointCount <=100) {
+            mark = 5;
+        } else if (pointCount >= 70 && pointCount <=89) {
+            mark = 4;
+        } else if (pointCount >= 60 && pointCount <=69) {
+            mark = 3;
+        } else if (pointCount >= 0 && pointCount <=59) {
+            mark = 2;
+        } else {
+            throw new IllegalArgumentException("Unexpected point count: " + pointCount);
+        }
+        result.setErrors(errors);
+        result.setPointCount(pointCount);
+        result.setCompleted(errors.size() <= 2);
+        result.setMark(mark);
+
+        return result;
     }
 
     @LogExecutionTime(500)

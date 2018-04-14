@@ -11,6 +11,8 @@ public class LabTestQuestion implements DomainModel {
 
     private int questionNumber;
 
+    private int pointCount;
+
     public List<LabTestQuestionVariant> getVariants() {
         return variants;
     }
@@ -33,5 +35,13 @@ public class LabTestQuestion implements DomainModel {
 
     public void setQuestionNumber(int questionNumber) {
         this.questionNumber = questionNumber;
+    }
+
+    public int getPointCount() {
+        return pointCount;
+    }
+
+    public void setPointCount(int pointCount) {
+        this.pointCount = pointCount;
     }
 }

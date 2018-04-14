@@ -49,6 +49,7 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
         for (Record record : Iterables.concat(variantRecords, homeWorkRecords)) {
             LabTestQuestion question = new LabTestQuestion();
             question.setQuestionNumber(record.get(LAB_TEST_QUESTION.QUESTION_NUMBER));
+            question.setPointCount(record.get(LAB_TEST_QUESTION.POINT_COUNT));
             question.setTitle(record.get(LAB_TEST_QUESTION.QUESTION_TITLE));
             question.setVariants(new ArrayList<>());
             questions.put(question.getQuestionNumber(), question);
