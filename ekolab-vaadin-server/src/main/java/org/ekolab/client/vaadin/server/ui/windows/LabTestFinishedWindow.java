@@ -42,7 +42,8 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
     private final Image testNotCompleted = new Image();
     private final Button toMainMenuButton = new Button("Exit to main menu", VaadinIcons.EXIT);
     private final Label result = new Label("Result: {}, {}");
-    private final VerticalLayout rightPane = new VerticalLayout(testCompleted, testNotCompleted, result, toMainMenuButton);
+    private final VerticalLayout bottomRightPane = new VerticalLayout(result, toMainMenuButton);
+    private final VerticalLayout rightPane = new VerticalLayout(testCompleted, testNotCompleted, bottomRightPane);
     private final HorizontalLayout content = new HorizontalLayout(testResultAccordion, rightPane);
 
     private final I18N i18N;
@@ -72,12 +73,15 @@ public class LabTestFinishedWindow extends BaseEkoLabWindow<LabTestFinishedWindo
 
         rightPane.setComponentAlignment(testCompleted, Alignment.TOP_CENTER);
         rightPane.setComponentAlignment(testNotCompleted, Alignment.TOP_CENTER);
-        rightPane.setComponentAlignment(result, Alignment.BOTTOM_CENTER); //todo съезжает
-        rightPane.setComponentAlignment(toMainMenuButton, Alignment.BOTTOM_CENTER);
+        rightPane.setComponentAlignment(bottomRightPane, Alignment.BOTTOM_CENTER);
+        bottomRightPane.setComponentAlignment(result, Alignment.MIDDLE_CENTER);
+        bottomRightPane.setComponentAlignment(toMainMenuButton, Alignment.BOTTOM_CENTER);
         testResultAccordion.setSizeFull();
         content.setSizeFull();
         content.setStyleName(EkoLabTheme.PANEL_TEST_FINISHED);
         content.setMargin(true);
+
+        result.setStyleName(EkoLabTheme.LABEL_BOLD_ITALIC);
 
         toMainMenuButton.setCaption(i18N.get("labwizard.lab-finished.go-to-main-menu"));
 
