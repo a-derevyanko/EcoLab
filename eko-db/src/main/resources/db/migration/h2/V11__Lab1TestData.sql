@@ -238,7 +238,7 @@ VALUES
    'Ответ округлить до целых.<br>' ||
    '<i>Пример: 24 м<sup>3</sup>/с</i>', 1,
    'int', 'м<sup>3</sup>/с',
-   'fuelConsumerNormalized*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 5) / 273.0'),
+   'fuelConsumerNormalized/3600.0*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 5) / 273.0'),
   (17, 0, NULL,
    'Для исследуемого в лабораторной работе объекта определить ' ||
    'расход дымовых газов, выбрасываемых в атмосферу ' ||
@@ -246,7 +246,7 @@ VALUES
    'Ответ округлить до целых.<br>' ||
    '<i>Пример: 24 м<sup>3</sup>/с</i>', 2,
    'int', 'м<sup>3</sup>/с',
-   'fuelConsumerNormalized*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 10) / 273.0'),
+   'fuelConsumerNormalized/3600.0*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 10) / 273.0'),
   (17, 0, NULL,
    'Для исследуемого в лабораторной работе объекта определить ' ||
    'расход дымовых газов, выбрасываемых в атмосферу ' ||
@@ -254,7 +254,7 @@ VALUES
    'Ответ округлить до целых.<br>' ||
    '<i>Пример: 24 м<sup>3</sup>/с</i>', 3,
    'int', 'м<sup>3</sup>/с',
-   'fuelConsumerNormalized*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 15) / 273.0'),
+   'fuelConsumerNormalized/3600.0*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 15) / 273.0'),
   (17, 0, NULL,
    'Для исследуемого в лабораторной работе объекта определить ' ||
    'расход дымовых газов, выбрасываемых в атмосферу ' ||
@@ -262,7 +262,7 @@ VALUES
    'Ответ округлить до целых.<br>' ||
    '<i>Пример: 24 м<sup>3</sup>/с</i>', 4,
    'int', 'м<sup>3</sup>/с',
-   'fuelConsumerNormalized*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 20) / 273.0'),
+   'fuelConsumerNormalized/3600.0*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature + 20) / 273.0'),
 
  -- 9 вопрос
  (18, 0, NULL,
@@ -273,10 +273,11 @@ VALUES
   'Ответ округлить до целых.<br>' ||
   '<i>Пример: 1224 м</i>', 1,
   'int', 'м',
-  '(5.0-harmfulSubstancesDepositionCoefficient) / 4.0 *' ||
-  ' (10 + stacksHeight) * 7*(1+0.28*Math.pow(1000*stacksDiameter*Math.pow(flueGasesSpeed,2)/ ' ||
-  '(stackExitTemperature - outsideAirTemperature) *(Math.pow(10 + stacksHeight,2)), 1/3.0)) * ' ||
-  'Math.sqrt(0.65 * Math.pow(flueGasesRate*(stackExitTemperature - outsideAirTemperature) / (10 + stacksHeight), 1/3))'),
+  '(5.0 - harmfulSubstancesDepositionCoefficient) / 4.0 * (10 + stacksHeight) * 7*
+(1+0.28*Math.pow(1000*stacksDiameter*Math.pow(flueGasesSpeed, 2)/ ((stackExitTemperature - outsideAirTemperature) *
+(Math.pow(10 + stacksHeight, 2))), 1/3.0)) *
+Math.sqrt(0.65 * Math.pow((fuelConsumerNormalized/3600.0*(10.88+1.016*0.4*9.68)*(273.0 + stackExitTemperature) / 273.0)*' ||
+  '(stackExitTemperature - outsideAirTemperature) / (10 + stacksHeight), 1/3))'),
 
  -- 10 вопрос
  (19, 0, NULL,

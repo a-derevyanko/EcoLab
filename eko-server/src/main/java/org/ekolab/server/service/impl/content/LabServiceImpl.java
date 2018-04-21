@@ -83,6 +83,7 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.type;
  */
 public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant, D extends LabDao<T>> implements LabService<T, V> {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(FixedTimestamp.TIMESTAMP_PATTERN);
+    private static final ScriptEngine JAVASCRIPT_ENGINE = new ScriptEngineManager().getEngineByName(Language.JAVA_SCRIPT);
 
     protected final UserInfoService userInfoService;
 
@@ -184,10 +185,8 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
                 }
             } else {
                 LabTestHomeWorkQuestion question = (LabTestHomeWorkQuestion) entry.getKey();
-                ScriptEngineManager mgr = new ScriptEngineManager();
-                ScriptEngine engine = mgr.getEngineByName(Language.JAVA_SCRIPT);
                 try {
-                    Object value = engine.eval(question.getFormulae(), values);
+                    Object value = JAVASCRIPT_ENGINE.eval(question.getFormulae(), values);
                     if (Number.class.isAssignableFrom(question.getValueType())) {
                         if (!MathUtils.checkEquals(((Number) entry.getValue()).doubleValue(), ((Number) value).doubleValue(), 1.5)) {
                             errors.add(question.getNumber());
@@ -205,7 +204,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
 
         LabTestResult result = new LabTestResult();
         int pointCount = getLabTest(locale).getQuestions().stream().
-                filter(q -> errors.contains(q.getQuestionNumber())).
+                filter(q -> !errors.contains(q.getQuestionNumber())).
                 mapToInt(LabTestQuestion::getPointCount).sum();
 
         final byte mark;
