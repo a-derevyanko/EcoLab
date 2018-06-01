@@ -33,7 +33,7 @@ public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extend
 
     protected final UserInfoService userInfoService;
 
-    private final I18N i18N;
+    protected final I18N i18N;
 
     private final DataProvider<UserInfo, T> userInfoDataProvider;
 
@@ -85,7 +85,6 @@ public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extend
         find.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         find.addClickListener((Button.ClickListener) event -> {
             searchUsers();
-            find.setEnabled(false);
         });
 
         clearFind.setDescription(i18N.get("admin-manage.users.clear-find"));
@@ -163,7 +162,7 @@ public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extend
         filter.getUserInfoFilter().setGroup(userGroup);
     }
 
-    private void searchUsers() {
+    protected void searchUsers() {
         filter.getUserInfoFilter().setFirstName(findNameTextField.getValue());
         filter.getUserInfoFilter().setLastName(findLastNameTextField.getValue());
         filter.getUserInfoFilter().setMiddleName(findMiddleNameTextField.getValue());
