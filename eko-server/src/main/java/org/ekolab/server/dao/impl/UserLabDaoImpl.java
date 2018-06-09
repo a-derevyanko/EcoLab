@@ -50,7 +50,7 @@ public class UserLabDaoImpl implements UserLabDao {
     }
 
     @Override
-    public void setTestCompleted(String userName, int labNumber) {
-        dsl.insertInto(USER_TEST_HISTORY, USER_TEST_HISTORY.LAB_NUMBER, USER_TEST_HISTORY.USER_ID).values(Arrays.asList(labNumber, DaoUtils.getFindUserIdSelect(dsl, userName)));
+    public void setTestCompleted(String userName, int labNumber, int mark) {
+        dsl.insertInto(USER_TEST_HISTORY, USER_TEST_HISTORY.LAB_NUMBER, USER_TEST_HISTORY.USER_ID, USER_TEST_HISTORY.MARK).values(Arrays.asList(labNumber, DaoUtils.getFindUserIdSelect(dsl, userName), mark));
     }
 }

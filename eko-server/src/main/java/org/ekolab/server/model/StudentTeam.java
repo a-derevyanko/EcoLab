@@ -6,14 +6,14 @@ import java.util.Objects;
  * Created by 777Al on 22.05.2017.
  */
 public class StudentTeam extends IdentifiedDomainModel {
-    private int number;
+    private String name;
 
-    public int getNumber() {
-        return number;
+    public String getName() {
+        return name;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -21,11 +21,12 @@ public class StudentTeam extends IdentifiedDomainModel {
         if (this == o) return true;
         if (!(o instanceof StudentTeam)) return false;
         StudentTeam that = (StudentTeam) o;
-        return number == that.number;
+        return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(number);
+
+        return Objects.hash(name);
     }
 }

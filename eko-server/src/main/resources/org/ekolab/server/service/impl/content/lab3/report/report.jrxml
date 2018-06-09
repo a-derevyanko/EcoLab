@@ -220,7 +220,7 @@
 	<parameter name="teacherName">
 		<parameterDescription><![CDATA[Имя преподавателя]]></parameterDescription>
 	</parameter>
-	<parameter name="teamNumber" class="java.lang.Integer">
+	<parameter name="teamNumber">
 		<parameterDescription><![CDATA[номер бригады]]></parameterDescription>
 	</parameter>
 	<parameter name="studentsList">

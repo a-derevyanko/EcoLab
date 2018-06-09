@@ -64,11 +64,11 @@ public abstract class UserDataWindow<T extends UserDataWindowSettings> extends B
         userGroup.setTextInputAllowed(false);
         userGroup.setEmptySelectionAllowed(false);
 
-        userInfoBinder.forField(lastName).bind(UserInfo::getLastName, UserInfo::setLastName);
-        userInfoBinder.forField(firstName).bind(UserInfo::getFirstName, UserInfo::setFirstName);
-        userInfoBinder.forField(middleName).bind(UserInfo::getMiddleName, UserInfo::setMiddleName);
-        userInfoBinder.forField(note).bind(UserInfo::getNote, UserInfo::setNote);
-        userInfoBinder.forField(userGroup).bind(UserInfo::getGroup, UserInfo::setGroup);
+        userInfoBinder.forField(lastName).bind("lastName");
+        userInfoBinder.forField(firstName).bind("firstName");
+        userInfoBinder.forField(middleName).bind("middleName");
+        userInfoBinder.forField(note).bind("note");
+        userInfoBinder.forField(userGroup).bind("group");
 
         lastName.setCaption(i18N.get("userdata.lastname"));
         firstName.setCaption(i18N.get("userdata.firstname"));

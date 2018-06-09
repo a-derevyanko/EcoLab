@@ -14,7 +14,7 @@ public interface StudentInfoDao extends Serializable {
 
     StudentTeam getStudentTeam(String userName);
 
-    List<String> getTeamMembers(Integer teamNumber);
+    List<String> getTeamMembers(String teamNumber, String group);
 
     void updateStudentGroup(String userName, StudentGroup group);
 
@@ -32,9 +32,22 @@ public interface StudentInfoDao extends Serializable {
 
     /**
      * Создаёт студенческую бригаду
-     * @param number номер
+     * @param name номер
+     * @param group группа
      */
-    StudentTeam createStudentTeam(Integer number);
+    StudentTeam createStudentTeam(String name, String group);
+
+    /**
+     * Удаляет студенческую группу
+     * @param name название
+     */
+    void removeStudentGroup(String name);
+
+    /**
+     * Удаляет студенческую бригаду
+     * @param name номер
+     */
+    void removeStudentTeam(String name, String group);
 
     /**
      * Изменение студенческой группы
@@ -44,5 +57,5 @@ public interface StudentInfoDao extends Serializable {
 
     List<StudentGroup> getStudentGroups();
 
-    List<StudentTeam> getStudentTeams();
+    List<StudentTeam> getStudentTeams(String group);
 }

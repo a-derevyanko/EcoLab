@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="595" pageHeight="844" columnWidth="497" leftMargin="56" rightMargin="42" topMargin="42" bottomMargin="42" uuid="7197296b-f627-4b87-af63-e54d0144253e">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report"
+			  pageHeight="844" columnWidth="497" leftMargin="56" rightMargin="42" topMargin="42" bottomMargin="42" uuid="7197296b-f627-4b87-af63-e54d0144253e">
 	<property name="com.jaspersoft.studio.unit." value="mm"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<import value="org.ekolab.server.common.ReportUtils"/>
@@ -9,19 +10,19 @@
 	<style name="Style1Bold" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontSize="12" isBold="true"/>
 	<style name="StyleFortableCells" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12"/>
 	<style name="StyleFortableCaption" hTextAlign="Center" vTextAlign="Middle" markup="html" pattern="" fontName="Times New Roman" fontSize="12" isBold="true"/>
-	<parameter name="groupNumber" class="java.lang.String">
+	<parameter name="groupNumber">
 		<parameterDescription><![CDATA[номер группы]]></parameterDescription>
 	</parameter>
-	<parameter name="teacherName" class="java.lang.String">
+	<parameter name="teacherName">
 		<parameterDescription><![CDATA[Имя преподавателя]]></parameterDescription>
 	</parameter>
-	<parameter name="teamNumber" class="java.lang.Integer">
+	<parameter name="teamNumber">
 		<parameterDescription><![CDATA[номер бригады]]></parameterDescription>
 	</parameter>
-	<parameter name="studentsList" class="java.lang.String">
+	<parameter name="studentsList">
 		<parameterDescription><![CDATA[список студентов, членов бригады]]></parameterDescription>
 	</parameter>
-	<parameter name="objectName" class="java.lang.String">
+	<parameter name="objectName">
 		<parameterDescription><![CDATA[Имя рассматриваемого объекта]]></parameterDescription>
 	</parameter>
 	<parameter name="calculationResult" class="java.util.SortedMap">
@@ -32,7 +33,7 @@
 	<parameter name="roomSize" class="java.lang.Integer"/>
 	<parameter name="quantityOfSingleTypeEquipment" class="java.lang.Integer"/>
 	<parameter name="hemisphereRadius" class="java.lang.Double"/>
-	<parameter name="name" class="java.lang.String"/>
+	<parameter name="name"/>
 	<parameter name="soundPressure" class="java.util.List"/>
 	<parameter name="averageSoundPressure" class="java.util.List"/>
 	<queryString>

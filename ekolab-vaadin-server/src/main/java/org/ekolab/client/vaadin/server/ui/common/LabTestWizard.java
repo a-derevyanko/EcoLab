@@ -117,7 +117,7 @@ public abstract class LabTestWizard extends Wizard implements View {
         LabTestResult result = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers, UI.getCurrent().getLocale());
 
         if (result.getCompleted()) {
-            userLabService.setTestCompleted(currentUser.getName(), labService.getLabNumber());
+            userLabService.setTestCompleted(currentUser.getName(), labService.getLabNumber(), result.getMark());
         }
         labTestFinishedWindow.show(new LabTestFinishedWindow.LabFinishedWindowSettings(result, answers.keySet()));
     }

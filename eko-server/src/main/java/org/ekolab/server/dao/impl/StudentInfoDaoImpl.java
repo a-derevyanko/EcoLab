@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.ekolab.server.db.h2.public_.Tables.STUDY_GROUPS;
@@ -36,7 +37,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     private static final RecordMapper<Record, StudentTeam> STUDENT_TEAM_RECORD_MAPPER = record -> {
         StudentTeam team = new StudentTeam();
         team.setId(record.get(STUDY_TEAMS.ID));
-        team.setNumber(record.get(STUDY_TEAMS.NUMBER));
+        team.setName(record.get(STUDY_TEAMS.NAME));
         return team;
     };
 
@@ -56,7 +57,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
 
     @Override
     public StudentTeam getStudentTeam(String userName) {
-        Record teamRecord = dsl.select(STUDY_TEAMS.ID, STUDY_TEAMS.NUMBER).from(STUDY_TEAMS).join(STUDY_TEAM_MEMBERS)
+        Record teamRecord = dsl.select(STUDY_TEAMS.ID, STUDY_TEAMS.NAME).from(STUDY_TEAMS).join(STUDY_TEAM_MEMBERS)
                 .on(STUDY_TEAMS.ID.eq(STUDY_TEAM_MEMBERS.TEAM_ID)).join(USERS).on(STUDY_TEAM_MEMBERS.USER_ID.eq(USERS.ID))
                 .where(USERS.LOGIN.eq(userName)).fetchOne();
 
@@ -64,16 +65,18 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
             return null;
         } else {
             StudentTeam team = new StudentTeam();
-            team.setNumber(teamRecord.get(STUDY_TEAMS.NUMBER));
+            team.setName(teamRecord.get(STUDY_TEAMS.NAME));
             return team;
         }
     }
 
     @Override
-    public List<String> getTeamMembers(Integer teamNumber) {
+    public List<String> getTeamMembers(String teamNumber, String group) {
         return dsl.select(USERS.LOGIN).from(STUDY_TEAM_MEMBERS)
                 .join(USERS).on(STUDY_TEAM_MEMBERS.USER_ID.eq(USERS.ID))
-                .join(STUDY_TEAMS).on(STUDY_TEAM_MEMBERS.TEAM_ID.eq(STUDY_TEAMS.ID)).where(STUDY_TEAMS.NUMBER.eq(teamNumber)).
+                .join(STUDY_TEAMS).on(STUDY_TEAM_MEMBERS.TEAM_ID.eq(STUDY_TEAMS.ID))
+                .where(STUDY_TEAMS.NAME.eq(teamNumber)).and(STUDY_TEAMS.GROUP_ID
+                        .eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))).
                         fetchInto(String.class);
     }
 
@@ -114,8 +117,22 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public StudentTeam createStudentTeam(Integer number) {
-        return dsl.insertInto(STUDY_TEAMS, STUDY_TEAMS.NUMBER).values(number).returning().fetchOne().map(STUDENT_TEAM_RECORD_MAPPER);
+    public StudentTeam createStudentTeam(String name, String group) {
+        return dsl.insertInto(STUDY_TEAMS, STUDY_TEAMS.NAME, STUDY_TEAMS.GROUP_ID).values(Arrays.asList(name, dsl.
+                select(STUDY_GROUPS.ID).
+                from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)).asField())).returning().fetchOne().map(STUDENT_TEAM_RECORD_MAPPER);
+    }
+
+    @Override
+    public void removeStudentGroup(String name) {
+        dsl.deleteFrom(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(name));
+    }
+
+    @Override
+    public void removeStudentTeam(String name, String group) {
+        dsl.deleteFrom(STUDY_TEAMS).where(STUDY_TEAMS.GROUP_ID.eq(dsl.
+                select(STUDY_GROUPS.ID).
+                from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group))).and(STUDY_TEAMS.NAME.eq(name)));
     }
 
     @Override
@@ -130,7 +147,9 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public List<StudentTeam> getStudentTeams() {
-        return dsl.selectFrom(STUDY_TEAMS).fetch().map(STUDENT_TEAM_RECORD_MAPPER);
+    public List<StudentTeam> getStudentTeams(String group) {
+        return dsl.selectFrom(STUDY_TEAMS).where(STUDY_TEAMS.GROUP_ID.eq(dsl.
+                select(STUDY_GROUPS.ID).
+                from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))).fetch().map(STUDENT_TEAM_RECORD_MAPPER);
     }
 }

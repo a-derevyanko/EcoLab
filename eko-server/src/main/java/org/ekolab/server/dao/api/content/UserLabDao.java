@@ -24,6 +24,7 @@ public interface UserLabDao {
      * Устанавливает признак пройденного теста для лабораторной
      * @param userName имя пользователя, прошедшего тест
      * @param labNumber номер лабораторной
+     * @param mark оценка
      */
-    void setTestCompleted(String userName, int labNumber);
+    void setTestCompleted(String userName, int labNumber, int mark);
 }

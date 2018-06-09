@@ -25,8 +25,9 @@ public interface UserLabService {
      * Устанавливает признак пройденного теста для лабораторной
      * @param userName имя пользователя, прошедшего тест
      * @param labNumber номер лабораторной
+     * @param mark оценка
      */
-    Collection<Integer> setTestCompleted(String userName, int labNumber);
+    Collection<Integer> setTestCompleted(String userName, int labNumber, int mark);
 
     /**
      * Удаление всех лабораторных, которые были сохранены раньше, чем указанная дата

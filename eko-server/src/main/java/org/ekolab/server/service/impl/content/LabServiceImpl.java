@@ -326,13 +326,15 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
             StudentInfo studentInfo = studentInfoService.getStudentInfo(data.getUserLogin());
             values.put("teacherName", studentInfoService.getStudentTeacher(data.getUserLogin()));
             values.put("groupNumber", studentInfo.getGroup());
-            values.put("teamNumber", studentInfo.getTeam() == null ? 0 : studentInfo.getTeam().getNumber());
+            values.put("teamNumber", studentInfo.getTeam() == null ? 0 : studentInfo.getTeam().getName());
 
-            StringBuilder studentsList = new StringBuilder();
-            for (String teamMember : studentInfoService.getTeamMembers(studentInfo.getTeam().getNumber())) {
-                studentsList.append(UserInfoUtils.getShortInitials(userInfoService.getUserInfo(teamMember))).append('\n');
+            if (studentInfo.getTeam() != null) {
+                StringBuilder studentsList = new StringBuilder();
+                for (String teamMember : studentInfoService.getTeamMembers(studentInfo.getTeam().getName(), studentInfo.getGroup().getName())) {
+                    studentsList.append(UserInfoUtils.getShortInitials(userInfoService.getUserInfo(teamMember))).append('\n');
+                }
+                values.put("studentsList", studentsList.toString());
             }
-            values.put("studentsList", studentsList.toString());
         } else {
             values.put("teacherName", UserInfoUtils.getShortInitials(userInfo));
 

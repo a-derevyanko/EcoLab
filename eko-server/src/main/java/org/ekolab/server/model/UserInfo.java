@@ -9,11 +9,11 @@ import java.util.Objects;
  * Created by 777Al on 22.05.2017.
  */
 public class UserInfo extends IdentifiedDomainModel {
-    @Size(max = 256)
+    @Size(min = 1, max = 256)
     @NotNull
     private String login;
 
-    @Size(max = 256)
+    @Size(min = 1, max = 256)
     @NotNull
     private String firstName;
 
@@ -21,7 +21,7 @@ public class UserInfo extends IdentifiedDomainModel {
     @NotNull
     private String middleName;
 
-    @Size(max = 256)
+    @Size(min = 1, max = 256)
     @NotNull
     private String lastName;
 

@@ -38,8 +38,8 @@ public class UserLabServiceImpl implements UserLabService {
 
     @Override
     @CachePut(value = "COMPLETED_TEST", key = "#userName")
-    public Collection<Integer> setTestCompleted(String userName, int labNumber) {
-        dao.setTestCompleted(userName, labNumber);
+    public Collection<Integer> setTestCompleted(String userName, int labNumber, int mark) {
+        dao.setTestCompleted(userName, labNumber, mark);
         return dao.getCompletedTests(userName);
     }
 

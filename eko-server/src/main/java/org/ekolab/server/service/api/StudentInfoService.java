@@ -1,6 +1,5 @@
 package org.ekolab.server.service.api;
 
-import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.StudentTeam;
@@ -8,7 +7,6 @@ import org.ekolab.server.model.UserInfo;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by 777Al on 22.05.2017.
@@ -48,9 +46,22 @@ public interface StudentInfoService extends Serializable {
 
     /**
      * Создаёт студенческую бригаду
-     * @param number номер
+     * @param name номер
+     * @param group группа
      */
-    StudentTeam createStudentTeam(Integer number);
+    StudentTeam createStudentTeam(String name, String group);
+
+    /**
+     * Удаляет студенческую группу
+     * @param name название
+     */
+    void removeStudentGroup(String name);
+
+    /**
+     * Удаляет студенческую бригаду
+     * @param name номер
+     */
+    void removeStudentTeam(String name, String group);
 
     /**
      * Изменение студенческой группы
@@ -65,9 +76,9 @@ public interface StudentInfoService extends Serializable {
      */
     String getStudentTeacher(String studentLogin);
 
-    List<String> getTeamMembers(Integer teamNumber);
+    List<String> getTeamMembers(String teamNumber, String group);
 
     List<StudentGroup> getStudentGroups();
 
-    List<StudentTeam> getStudentTeams();
+    List<StudentTeam> getStudentTeams(String group);
 }

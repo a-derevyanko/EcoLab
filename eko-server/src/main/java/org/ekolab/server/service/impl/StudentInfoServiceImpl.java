@@ -93,8 +93,20 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
     @Override
     @Transactional
-    public StudentTeam createStudentTeam(Integer number) {
-        return studentInfoDao.createStudentTeam(number);
+    public StudentTeam createStudentTeam(String name, String group) {
+        return studentInfoDao.createStudentTeam(name, group);
+    }
+
+    @Override
+    @Transactional
+    public void removeStudentGroup(String name) {
+        studentInfoDao.removeStudentGroup(name);
+    }
+
+    @Override
+    @Transactional
+    public void removeStudentTeam(String name, String group) {
+        studentInfoDao.removeStudentTeam(name, group);
     }
 
     @Override
@@ -114,8 +126,8 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Override
     @Cacheable(TEAM_MEMBERS_CACHE)
     @Transactional(readOnly = true)
-    public List<String> getTeamMembers(Integer teamNumber) {
-        return studentInfoDao.getTeamMembers(teamNumber);
+    public List<String> getTeamMembers(String name, String group) {
+        return studentInfoDao.getTeamMembers(name, group);
     }
 
     @Override
@@ -125,7 +137,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
-    public List<StudentTeam> getStudentTeams() {
-        return studentInfoDao.getStudentTeams();
+    public List<StudentTeam> getStudentTeams(String group) {
+        return studentInfoDao.getStudentTeams(group);
     }
 }
