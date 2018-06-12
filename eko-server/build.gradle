@@ -12,6 +12,7 @@ import org.ekolab.gradle.CustomTest
 
 plugins {
     id "com.gorylenko.gradle-git-properties" version "1.4.16"
+    id 'io.franzbecker.gradle-lombok' version '1.14'
 }
 
 apply plugin: 'war'

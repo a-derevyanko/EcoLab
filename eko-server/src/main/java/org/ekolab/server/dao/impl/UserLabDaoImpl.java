@@ -2,13 +2,19 @@ package org.ekolab.server.dao.impl;
 
 import org.ekolab.server.dao.api.content.UserLabDao;
 import org.ekolab.server.model.LabMode;
+import org.ekolab.server.model.UserLabStatistics;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
+import org.jooq.Record6;
+import org.jooq.RecordMapper;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -23,7 +29,18 @@ import static org.ekolab.server.db.h2.public_.tables.Lab2ExperimentLog.LAB2_EXPE
 
 @Service
 public class UserLabDaoImpl implements UserLabDao {
-    private final DSLContext dsl;
+  private static final RecordMapper<Record6<Integer, Integer, LocalDateTime, LocalDateTime, Integer, Integer>, UserLabStatistics> USER_LAB_STATISTICS_RECORD_MAPPER = record -> {
+    UserLabStatistics statistics = new UserLabStatistics();
+    statistics.setLabNumber(record.value1());
+    statistics.setTryCount(record.value2());
+    statistics.setLabDate(record.value3());
+    statistics.setTestDate(record.value4());
+    statistics.setMark(record.value5());
+    statistics.setPointCount(record.value6());
+    return statistics;
+  };
+
+  private final DSLContext dsl;
 
     public UserLabDaoImpl(DSLContext dsl) {
         this.dsl = dsl;
@@ -50,7 +67,20 @@ public class UserLabDaoImpl implements UserLabDao {
     }
 
     @Override
-    public void setTestCompleted(String userName, int labNumber, int mark) {
-        dsl.insertInto(USER_TEST_HISTORY, USER_TEST_HISTORY.LAB_NUMBER, USER_TEST_HISTORY.USER_ID, USER_TEST_HISTORY.MARK).values(Arrays.asList(labNumber, DaoUtils.getFindUserIdSelect(dsl, userName), mark));
+    public void setTestCompleted(String userName, int labNumber, int mark, int pointCount) {
+        dsl.insertInto(USER_TEST_HISTORY, USER_TEST_HISTORY.LAB_NUMBER,
+                USER_TEST_HISTORY.LAST_MODIFY_DATE, USER_TEST_HISTORY.USER_ID,
+                USER_TEST_HISTORY.MARK, USER_TEST_HISTORY.POINT_COUNT)
+                .values(Arrays.asList(labNumber, OffsetDateTime.now(),
+                        DaoUtils.getFindUserIdSelect(dsl, userName), mark, pointCount));
+    }
+
+    @Override
+    public List<UserLabStatistics> getUserLabStatistics(String userName) {
+        return dsl.select(DSL.val(1),
+                DSL.count(LAB1DATA.ID), DSL.max(LAB1DATA.SAVE_DATE), USER_TEST_HISTORY.LAST_MODIFY_DATE, USER_TEST_HISTORY.MARK, USER_TEST_HISTORY.POINT_COUNT)
+                .from(LAB1DATA)
+                .fullOuterJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB1DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(3))).
+                where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(USER_LAB_STATISTICS_RECORD_MAPPER);
     }
 }

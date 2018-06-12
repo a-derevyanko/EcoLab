@@ -49,7 +49,7 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
     private MenuItem exitItem;
     private MenuItem userInfoItem;
     private MenuItem adminManagingItem;
-    private MenuItem teacherManagingItem;
+    private MenuItem userManagingItem;
     private MenuItem labChooserItem;
 
     @Autowired
@@ -75,18 +75,32 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
             }));
         });
         adminManagingItem = addItem(i18N.get("menubar.admin"), VaadinIcons.TOOLS, (Command) selectedItem -> navigator.redirectToView(AdminManagingView.NAME));
-        teacherManagingItem = addItem(i18N.get("menubar.teacher"), VaadinIcons.INSTITUTION, (Command) selectedItem -> vaadinSecurity.logout());
+        userManagingItem = addItem(i18N.get("menubar.account-managing"), VaadinIcons.USER_CARD, selectedItem -> {
+
+            Authentication authentication = vaadinSecurity.getAuthentication();
+
+            GrantedAuthority authority = authentication.getAuthorities().iterator().next();
+            switch (authority.getAuthority()) {
+                case Role.TEACHER:
+                    navigator.redirectToView(LabChooserView.NAME);
+                    break;
+                case Role.STUDENT:
+                    navigator.redirectToView(LabChooserView.NAME);
+                    break;
+                default:
+                    throw new IllegalStateException("Unknown roles: " + authentication.getAuthorities());
+            }
+
+        });
         labChooserItem = addItem(i18N.get("menubar.labChooser"), VaadinIcons.ACADEMY_CAP, (Command) selectedItem -> navigator.redirectToView(LabChooserView.NAME));
 
         adminManagingItem.setVisible(false);
-        teacherManagingItem.setVisible(false);
+        userManagingItem.setVisible(false);
         labChooserItem.setVisible(false);
 
         if (!DevUtils.isProductionVersion()) {
             exitItem.setEnabled(false);
             userInfoItem.setEnabled(false);
-            adminManagingItem.setEnabled(false);
-            teacherManagingItem.setEnabled(false);
         }
     }
 
@@ -106,9 +120,10 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
                             adminManagingItem.setVisible(true);
                             break;
                         case Role.TEACHER:
-                            teacherManagingItem.setVisible(true);
+                            userManagingItem.setVisible(true);
                             break;
                         case Role.STUDENT:
+                            userManagingItem.setVisible(true);
                             labChooserItem.setVisible(true);
                             break;
                     }

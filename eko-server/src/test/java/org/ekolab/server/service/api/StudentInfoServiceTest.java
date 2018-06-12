@@ -10,6 +10,7 @@ import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoC
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -25,6 +26,7 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
     @Autowired
     private StudentInfoService studentInfoService;
 
+    @BeforeClass
     @Override
     public void generateInitialData() {
         super.generateInitialData();
