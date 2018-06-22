@@ -1,14 +1,17 @@
 package org.ekolab.server.model.content;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.ekolab.server.model.IdentifiedDomainModel;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * Created by 777Al on 19.04.2017.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class LabData<V extends LabVariant> extends IdentifiedDomainModel {
     @NotNull
     private V variant;
@@ -63,22 +66,5 @@ public abstract class LabData<V extends LabVariant> extends IdentifiedDomainMode
 
     public void setVariant(V variant) {
         this.variant = variant;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LabData)) return false;
-        LabData<?> labData = (LabData<?>) o;
-        return completed == labData.completed &&
-                Objects.equals(variant, labData.variant) &&
-                Objects.equals(userLogin, labData.userLogin) &&
-                Objects.equals(startDate, labData.startDate) &&
-                Objects.equals(saveDate, labData.saveDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(variant, userLogin, startDate, saveDate, completed);
     }
 }

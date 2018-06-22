@@ -32,11 +32,11 @@ public class UserLabDaoImpl implements UserLabDao {
   private static final RecordMapper<Record6<Integer, Integer, LocalDateTime, LocalDateTime, Integer, Integer>, UserLabStatistics> USER_LAB_STATISTICS_RECORD_MAPPER = record -> {
     UserLabStatistics statistics = new UserLabStatistics();
     statistics.setLabNumber(record.value1());
-    statistics.setTryCount(record.value2());
+    statistics.setTryCount(record.value2() == null ? 0 : record.value2());
     statistics.setLabDate(record.value3());
     statistics.setTestDate(record.value4());
-    statistics.setMark(record.value5());
-    statistics.setPointCount(record.value6());
+    statistics.setMark(record.value5() == null ? 0 : record.value5());
+    statistics.setPointCount(record.value6() == null ? 0 : record.value6());
     return statistics;
   };
 
@@ -77,10 +77,22 @@ public class UserLabDaoImpl implements UserLabDao {
 
     @Override
     public List<UserLabStatistics> getUserLabStatistics(String userName) {
-        return dsl.select(DSL.val(1),
-                DSL.count(LAB1DATA.ID), DSL.max(LAB1DATA.SAVE_DATE), USER_TEST_HISTORY.LAST_MODIFY_DATE, USER_TEST_HISTORY.MARK, USER_TEST_HISTORY.POINT_COUNT)
-                .from(LAB1DATA)
-                .fullOuterJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB1DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(3))).
-                where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetch(USER_LAB_STATISTICS_RECORD_MAPPER);
+      return dsl.select(DSL.val(1),
+              DSL.count(LAB1DATA.ID), DSL.max(LAB1DATA.SAVE_DATE), USER_TEST_HISTORY.LAST_MODIFY_DATE, USER_TEST_HISTORY.MARK, USER_TEST_HISTORY.POINT_COUNT)
+              .from(LAB1DATA)
+              .leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB1DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(1))).
+                      where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))
+              .union(dsl.select(DSL.val(2),
+                      DSL.count(LAB2DATA.ID), DSL.max(LAB2DATA.SAVE_DATE), USER_TEST_HISTORY.LAST_MODIFY_DATE, USER_TEST_HISTORY.MARK, USER_TEST_HISTORY.POINT_COUNT)
+                      .from(LAB2DATA)
+                      .leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB2DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(2))).
+                              where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))
+              .union(dsl.select(DSL.val(3),
+                      DSL.count(LAB3DATA.ID), DSL.max(LAB3DATA.SAVE_DATE), USER_TEST_HISTORY.LAST_MODIFY_DATE, USER_TEST_HISTORY.MARK, USER_TEST_HISTORY.POINT_COUNT)
+                      .from(LAB3DATA)
+                      .leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB3DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(3))).
+                              where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))
+              .orderBy(1)
+              .fetch(USER_LAB_STATISTICS_RECORD_MAPPER);
     }
 }

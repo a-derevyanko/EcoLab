@@ -1,5 +1,7 @@
 package org.ekolab.server.model.content.lab3;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.ekolab.server.model.content.Calculated;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.ValidatedBy;
@@ -14,6 +16,8 @@ import java.util.Objects;
 /**
  * Created by 777Al on 06.04.2017.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * Мощность ГРЭС
@@ -942,84 +946,5 @@ public class Lab3Data extends LabData<Lab3Variant> {
 
     public void setOneBoilerFuelConsumption(Double oneBoilerFuelConsumption) {
         this.oneBoilerFuelConsumption = oneBoilerFuelConsumption;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Lab3Data)) return false;
-        if (!super.equals(o)) return false;
-        Lab3Data lab3Data = (Lab3Data) o;
-        return Objects.equals(tppOutput, lab3Data.tppOutput) &&
-                numberOfUnits == lab3Data.numberOfUnits &&
-                city == lab3Data.city &&
-                Objects.equals(steamProductionCapacity, lab3Data.steamProductionCapacity) &&
-                numberOfStacks == lab3Data.numberOfStacks &&
-                Objects.equals(stacksHeight, lab3Data.stacksHeight) &&
-                Objects.equals(stacksDiameter, lab3Data.stacksDiameter) &&
-                windDirection == lab3Data.windDirection &&
-                Objects.equals(windSpeed, lab3Data.windSpeed) &&
-                Objects.equals(lowHeatValue, lab3Data.lowHeatValue) &&
-                Objects.equals(fuelConsumer, lab3Data.fuelConsumer) &&
-                Objects.equals(carbonInFlyAsh, lab3Data.carbonInFlyAsh) &&
-                Objects.equals(sulphurContent, lab3Data.sulphurContent) &&
-                Objects.equals(ashContent, lab3Data.ashContent) &&
-                Objects.equals(waterContent, lab3Data.waterContent) &&
-                Objects.equals(ashRecyclingFactor, lab3Data.ashRecyclingFactor) &&
-                Objects.equals(flueGasNOxConcentration, lab3Data.flueGasNOxConcentration) &&
-                Objects.equals(stackExitTemperature, lab3Data.stackExitTemperature) &&
-                Objects.equals(outsideAirTemperature, lab3Data.outsideAirTemperature) &&
-                Objects.equals(excessAirRatio, lab3Data.excessAirRatio) &&
-                Objects.equals(combustionProductsVolume, lab3Data.combustionProductsVolume) &&
-                Objects.equals(waterVaporVolume, lab3Data.waterVaporVolume) &&
-                Objects.equals(airVolume, lab3Data.airVolume) &&
-                Objects.equals(no2BackgroundConcentration, lab3Data.no2BackgroundConcentration) &&
-                Objects.equals(noBackgroundConcentration, lab3Data.noBackgroundConcentration) &&
-                Objects.equals(so2BackgroundConcentration, lab3Data.so2BackgroundConcentration) &&
-                Objects.equals(ashBackgroundConcentration, lab3Data.ashBackgroundConcentration) &&
-                Objects.equals(sulphurOxidesFractionAssociatedByFlyAsh, lab3Data.sulphurOxidesFractionAssociatedByFlyAsh) &&
-                Objects.equals(sulphurOxidesFractionAssociatedInWetDustCollector, lab3Data.sulphurOxidesFractionAssociatedInWetDustCollector) &&
-                Objects.equals(sulphurOxidesFractionAssociatedInDesulphurizationSystem, lab3Data.sulphurOxidesFractionAssociatedInDesulphurizationSystem) &&
-                Objects.equals(desulphurizationSystemRunningTime, lab3Data.desulphurizationSystemRunningTime) &&
-                Objects.equals(boilerRunningTime, lab3Data.boilerRunningTime) &&
-                Objects.equals(ashProportionEntrainedGases, lab3Data.ashProportionEntrainedGases) &&
-                Objects.equals(stackAverageGasesSpeed, lab3Data.stackAverageGasesSpeed) &&
-                Objects.equals(noxMassiveInjection, lab3Data.noxMassiveInjection) &&
-                Objects.equals(no2MassiveInjection, lab3Data.no2MassiveInjection) &&
-                Objects.equals(noMassiveInjection, lab3Data.noMassiveInjection) &&
-                Objects.equals(so2MassiveInjection, lab3Data.so2MassiveInjection) &&
-                Objects.equals(ashMassiveInjection, lab3Data.ashMassiveInjection) &&
-                Objects.equals(temperatureCoefficient, lab3Data.temperatureCoefficient) &&
-                Objects.equals(terrainCoefficient, lab3Data.terrainCoefficient) &&
-                Objects.equals(harmfulSubstancesDepositionCoefficient, lab3Data.harmfulSubstancesDepositionCoefficient) &&
-                Objects.equals(no2MAC, lab3Data.no2MAC) &&
-                Objects.equals(noMAC, lab3Data.noMAC) &&
-                Objects.equals(so2MAC, lab3Data.so2MAC) &&
-                Objects.equals(ashMAC, lab3Data.ashMAC) &&
-                Objects.equals(breakdownWindSpeed, lab3Data.breakdownWindSpeed) &&
-                Objects.equals(bwdNo2GroundLevelConcentration, lab3Data.bwdNo2GroundLevelConcentration) &&
-                Objects.equals(bwdNoxGroundLevelConcentration, lab3Data.bwdNoxGroundLevelConcentration) &&
-                Objects.equals(bwdNoGroundLevelConcentration, lab3Data.bwdNoGroundLevelConcentration) &&
-                Objects.equals(bwdSo2GroundLevelConcentration, lab3Data.bwdSo2GroundLevelConcentration) &&
-                Objects.equals(bwdAshGroundLevelConcentration, lab3Data.bwdAshGroundLevelConcentration) &&
-                Objects.equals(no2AndSo2SummationGroup, lab3Data.no2AndSo2SummationGroup) &&
-                Objects.equals(noAndSo2SummationGroup, lab3Data.noAndSo2SummationGroup) &&
-                Objects.equals(bwdMaxGroundLevelConcentrationDistance, lab3Data.bwdMaxGroundLevelConcentrationDistance) &&
-                Objects.equals(windSpeedMaxNo2GroundLevelConcentration, lab3Data.windSpeedMaxNo2GroundLevelConcentration) &&
-                Objects.equals(windSpeedMaxNoGroundLevelConcentration, lab3Data.windSpeedMaxNoGroundLevelConcentration) &&
-                Objects.equals(windSpeedMaxSo2GroundLevelConcentration, lab3Data.windSpeedMaxSo2GroundLevelConcentration) &&
-                Objects.equals(windSpeedMaxAshGroundLevelConcentration, lab3Data.windSpeedMaxAshGroundLevelConcentration) &&
-                Objects.equals(windSpeedMaxGroundLevelConcentrationDistance, lab3Data.windSpeedMaxGroundLevelConcentrationDistance) &&
-                Objects.equals(f, lab3Data.f) &&
-                Objects.equals(m, lab3Data.m) &&
-                Objects.equals(d, lab3Data.d) &&
-                Objects.equals(VM, lab3Data.VM) &&
-                Objects.equals(n, lab3Data.n) &&
-                Objects.equals(oneBoilerFuelConsumption, lab3Data.oneBoilerFuelConsumption);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), tppOutput, numberOfUnits, city, steamProductionCapacity, numberOfStacks, stacksHeight, stacksDiameter, windDirection, windSpeed, lowHeatValue, fuelConsumer, carbonInFlyAsh, sulphurContent, ashContent, waterContent, ashRecyclingFactor, flueGasNOxConcentration, stackExitTemperature, outsideAirTemperature, excessAirRatio, combustionProductsVolume, waterVaporVolume, airVolume, no2BackgroundConcentration, noBackgroundConcentration, so2BackgroundConcentration, ashBackgroundConcentration, sulphurOxidesFractionAssociatedByFlyAsh, sulphurOxidesFractionAssociatedInWetDustCollector, sulphurOxidesFractionAssociatedInDesulphurizationSystem, desulphurizationSystemRunningTime, boilerRunningTime, ashProportionEntrainedGases, stackAverageGasesSpeed, noxMassiveInjection, no2MassiveInjection, noMassiveInjection, so2MassiveInjection, ashMassiveInjection, temperatureCoefficient, terrainCoefficient, harmfulSubstancesDepositionCoefficient, no2MAC, noMAC, so2MAC, ashMAC, breakdownWindSpeed, bwdNo2GroundLevelConcentration, bwdNoxGroundLevelConcentration, bwdNoGroundLevelConcentration, bwdSo2GroundLevelConcentration, bwdAshGroundLevelConcentration, no2AndSo2SummationGroup, noAndSo2SummationGroup, bwdMaxGroundLevelConcentrationDistance, windSpeedMaxNo2GroundLevelConcentration, windSpeedMaxNoGroundLevelConcentration, windSpeedMaxSo2GroundLevelConcentration, windSpeedMaxAshGroundLevelConcentration, windSpeedMaxGroundLevelConcentrationDistance, f, m, d, VM, n, oneBoilerFuelConsumption);
     }
 }

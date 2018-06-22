@@ -4,13 +4,13 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.development.DevUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.AdminManagingView;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
+import org.ekolab.client.vaadin.server.ui.view.StudentAccountManagingView;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.windows.SimpleEditUserWindow;
 import org.ekolab.client.vaadin.server.ui.windows.UserDataWindowSettings;
@@ -44,8 +44,6 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
     private final SimpleEditUserWindow userDataWindow;
 
     // ---------------------- Графические компоненты -----------------------------
-    private final HorizontalLayout leftButtonPanel = new HorizontalLayout();
-    private final HorizontalLayout rightButtonPanel = new HorizontalLayout();
     private MenuItem exitItem;
     private MenuItem userInfoItem;
     private MenuItem adminManagingItem;
@@ -79,16 +77,25 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
 
             Authentication authentication = vaadinSecurity.getAuthentication();
 
-            GrantedAuthority authority = authentication.getAuthorities().iterator().next();
-            switch (authority.getAuthority()) {
-                case Role.TEACHER:
-                    navigator.redirectToView(LabChooserView.NAME);
-                    break;
-                case Role.STUDENT:
-                    navigator.redirectToView(LabChooserView.NAME);
-                    break;
-                default:
-                    throw new IllegalStateException("Unknown roles: " + authentication.getAuthorities());
+
+            boolean student =  false;
+            boolean teacher = false;
+
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                switch (authority.getAuthority()) {
+                    case Role.TEACHER:
+                        teacher = true;
+                        break;
+                    case Role.STUDENT:
+                        student = true;
+                        break;
+                }
+            }
+
+            if (student) {
+                navigator.redirectToView(StudentAccountManagingView.NAME);
+            } else if (teacher) {
+                navigator.redirectToView(LabChooserView.NAME);
             }
 
         });

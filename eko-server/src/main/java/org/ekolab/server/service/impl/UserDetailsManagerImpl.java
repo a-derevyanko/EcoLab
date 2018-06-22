@@ -155,7 +155,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     public UserInfo getUserInfo(String userName) {
         return dsl.select(USERS.ID, USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
                 .join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID)).join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID))
-        .where(USERS.LOGIN.eq(userName)).fetchOne().map(USER_INFO_RECORD_MAPPER);
+        .where(USERS.LOGIN.eq(userName)).fetchOne(USER_INFO_RECORD_MAPPER);
     }
 
     @Override

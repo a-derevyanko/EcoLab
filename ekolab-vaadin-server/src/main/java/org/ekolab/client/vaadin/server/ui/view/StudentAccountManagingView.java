@@ -2,6 +2,7 @@ package org.ekolab.client.vaadin.server.ui.view;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
@@ -10,15 +11,22 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.renderers.LocalDateTimeRenderer;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.common.DownloadStreamResource;
+import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.model.UserLabStatistics;
 import org.ekolab.server.model.UserProfile;
+import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 
 @SpringView(name = StudentAccountManagingView.NAME)
 public class StudentAccountManagingView extends GridLayout implements View {
@@ -29,6 +37,8 @@ public class StudentAccountManagingView extends GridLayout implements View {
     private final UserLabService userLabService;
 
     private final I18N i18N;
+
+    private final List<LabService<?, ?>> labServices;
 
     // ---------------------------- Графические компоненты --------------------
     private final Label userInitialsLabel = new Label("Surname Firstname Lastname");
@@ -42,31 +52,53 @@ public class StudentAccountManagingView extends GridLayout implements View {
 
     @Autowired
     public StudentAccountManagingView(Authentication currentUser,
-                                      UserLabService userLabService, I18N i18N) {
+                                      UserLabService userLabService, I18N i18N, List<LabService<?, ?>> labServices) {
         super(4, 5);
         this.currentUser = currentUser;
         this.userLabService = userLabService;
         this.i18N = i18N;
+        this.labServices = labServices;
     }
 
     @Override
     public void init() throws Exception {
         View.super.init();
-        setMargin(false);
-        setSpacing(false);
+        setMargin(true);
+        setSpacing(true);
 
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-        photo.setSizeFull();
-        photo.setWidth(400.0F, Unit.PIXELS);
+        addComponent(userInitialsLabel, 0, 0, 0, 0);
+        addComponent(photo, 0, 1, 0, 1);
+        addComponent(averagePointCount, 0, 3, 0, 3);
+        addComponent(studentGroupLabel, 0, 4, 0, 4);
 
+        addComponent(labStatisticsGrid, 1, 0, 3, 2);
+        addComponent(lab1ReportButton, 1, 3, 1, 3);
+        addComponent(lab2ReportButton, 2, 3, 2, 3);
+        addComponent(lab3ReportButton, 3, 3, 3, 3);
+
+        lab1ReportButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        lab2ReportButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        lab3ReportButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        lab1ReportButton.setSizeFull();
+        lab2ReportButton.setSizeFull();
+        lab3ReportButton.setSizeFull();
+
+        photo.setSizeFull();
+        photo.setHeight(200.0F, Unit.PIXELS);
+
+        labStatisticsGrid.setSizeFull();
+        labStatisticsGrid.setBodyRowHeight(50);
         labStatisticsGrid.addColumn(UserLabStatistics::getLabNumber).setCaption(i18N.get("profile-view.statistics.lab-number"));
         labStatisticsGrid.addColumn(UserLabStatistics::getTryCount).setCaption(i18N.get("profile-view.statistics.try-count"));
         labStatisticsGrid.addColumn(userLabStatistics -> userLabStatistics.getMark() + " (" + userLabStatistics.getPointCount() + ')').setCaption(i18N.get("profile-view.statistics.mark"));
-        labStatisticsGrid.addColumn(UserLabStatistics::getLabDate).setCaption(i18N.get("profile-view.statistics.execution-date"));
+        labStatisticsGrid.addColumn(UserLabStatistics::getLabDate).setCaption(i18N.get("profile-view.statistics.execution-date")).setRenderer(new LocalDateTimeRenderer());
         labStatisticsGrid.addColumn(UserLabStatistics::getTestDate).setCaption(i18N.get("profile-view.statistics.defend-date"));
 
-        //addComponent(content);
+        configureReportDownloadButton(lab1ReportButton, 1);
+        configureReportDownloadButton(lab2ReportButton, 2);
+        configureReportDownloadButton(lab3ReportButton, 3);
     }
 
     @Override
@@ -75,7 +107,7 @@ public class StudentAccountManagingView extends GridLayout implements View {
 
         userInitialsLabel.setValue(userProfile.getUserInfo().getLastName() + ' ' + userProfile.getUserInfo().getFirstName()
                 + '\n' + userProfile.getUserInfo().getMiddleName());
-        photo.setSource(new StreamResource(() -> new ByteArrayInputStream(userProfile.getPicture()), null));
+        photo.setSource(new StreamResource(() -> new ByteArrayInputStream(userProfile.getPicture()), "profile.svg"));
 
         averagePointCount.setValue(i18N.get("profile-view.average-point", Math.round(userProfile.getAverageMark()),
                 Math.round(userProfile.getAveragePointCount())));
@@ -86,4 +118,16 @@ public class StudentAccountManagingView extends GridLayout implements View {
         labStatisticsGrid.setItems(userProfile.getStatistics());
     }
 
+    @SuppressWarnings("unchecked")
+    private void configureReportDownloadButton(Button button, final int labNumber) {
+        LabService<LabData<?>, ?> labService = (LabService<LabData<?>, ?>) labServices.stream().filter(s -> s.getLabNumber() == labNumber).
+                findFirst().orElseThrow(IllegalStateException::new);
+
+        final LabData<?> data = labService.getLastUncompletedLabByUser(currentUser.getName());
+
+        FileDownloader fileDownloader = new FileDownloader(
+                new DownloadStreamResource(() -> labService.createReport(data, UI.getCurrent().getLocale()), "report.pdf"));
+        fileDownloader.extend(button);
+        button.setCaption(i18N.get("profile-view.download-report", labNumber));
+    }
 }

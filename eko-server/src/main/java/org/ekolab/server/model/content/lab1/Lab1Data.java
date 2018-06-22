@@ -1,5 +1,7 @@
 package org.ekolab.server.model.content.lab1;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.model.content.ValidatedBy;
 import org.ekolab.server.model.content.lab1.validators.DValidator;
@@ -18,11 +20,12 @@ import org.ekolab.server.model.content.lab1.validators.NValidator;
 import org.ekolab.server.model.content.lab1.validators.UValidator;
 
 import javax.validation.constraints.Digits;
-import java.util.Objects;
 
 /**
  * Created by Андрей on 24.06.2017.
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
 
     /**
@@ -369,43 +372,5 @@ public class Lab1Data<V extends Lab1Variant> extends LabData<V> {
 
     public void setFlueGasNOxConcentration(Integer flueGasNOxConcentration) {
         this.flueGasNOxConcentration = flueGasNOxConcentration;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Lab1Data)) return false;
-        if (!super.equals(o)) return false;
-        Lab1Data lab1Data = (Lab1Data) o;
-        return Objects.equals(outsideAirTemperature, lab1Data.outsideAirTemperature) &&
-                Objects.equals(stacksHeight, lab1Data.stacksHeight) &&
-                Objects.equals(stacksDiameter, lab1Data.stacksDiameter) &&
-                Objects.equals(steamProductionCapacity, lab1Data.steamProductionCapacity) &&
-                Objects.equals(oxygenConcentrationPoint, lab1Data.oxygenConcentrationPoint) &&
-                Objects.equals(fuelConsumerNormalized, lab1Data.fuelConsumerNormalized) &&
-                Objects.equals(stackExitTemperature, lab1Data.stackExitTemperature) &&
-                Objects.equals(flueGasNOxConcentration, lab1Data.flueGasNOxConcentration) &&
-                Objects.equals(excessAirRatio, lab1Data.excessAirRatio) &&
-                Objects.equals(flueGasNOxConcentrationNC, lab1Data.flueGasNOxConcentrationNC) &&
-                Objects.equals(excessOfNorms, lab1Data.excessOfNorms) &&
-                Objects.equals(flueGasesRate, lab1Data.flueGasesRate) &&
-                Objects.equals(dryGasesFlowRate, lab1Data.dryGasesFlowRate) &&
-                Objects.equals(massEmissions, lab1Data.massEmissions) &&
-                Objects.equals(flueGasesSpeed, lab1Data.flueGasesSpeed) &&
-                Objects.equals(f, lab1Data.f) &&
-                Objects.equals(m, lab1Data.m) &&
-                Objects.equals(u, lab1Data.u) &&
-                Objects.equals(n, lab1Data.n) &&
-                Objects.equals(d, lab1Data.d) &&
-                Objects.equals(harmfulSubstancesDepositionCoefficient, lab1Data.harmfulSubstancesDepositionCoefficient) &&
-                Objects.equals(terrainCoefficient, lab1Data.terrainCoefficient) &&
-                Objects.equals(temperatureCoefficient, lab1Data.temperatureCoefficient) &&
-                Objects.equals(distanceFromEmissionSource, lab1Data.distanceFromEmissionSource) &&
-                Objects.equals(maximumSurfaceConcentration, lab1Data.maximumSurfaceConcentration);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), outsideAirTemperature, stacksHeight, stacksDiameter, steamProductionCapacity, oxygenConcentrationPoint, fuelConsumerNormalized, stackExitTemperature, flueGasNOxConcentration, excessAirRatio, flueGasNOxConcentrationNC, excessOfNorms, flueGasesRate, dryGasesFlowRate, massEmissions, flueGasesSpeed, f, m, u, n, d, harmfulSubstancesDepositionCoefficient, terrainCoefficient, temperatureCoefficient, distanceFromEmissionSource, maximumSurfaceConcentration);
     }
 }

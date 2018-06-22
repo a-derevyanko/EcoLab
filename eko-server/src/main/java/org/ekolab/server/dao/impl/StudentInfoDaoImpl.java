@@ -52,7 +52,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     public StudentGroup getStudentGroup(String userName) {
         return dsl.select().from(STUDY_GROUPS).join(STUDY_GROUP_MEMBERS)
                 .on(STUDY_GROUP_MEMBERS.GROUP_ID.eq(STUDY_GROUPS.ID)).join(USERS).on(USERS.ID.eq(STUDY_GROUP_MEMBERS.USER_ID))
-                .where(USERS.LOGIN.eq(userName)).fetchOne().map(STUDENT_GROUP_RECORD_MAPPER);
+                .where(USERS.LOGIN.eq(userName)).fetchOne(STUDENT_GROUP_RECORD_MAPPER);
     }
 
     @Override
