@@ -20,7 +20,9 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 public class UserLabServiceImpl implements UserLabService {
@@ -86,5 +88,10 @@ public class UserLabServiceImpl implements UserLabService {
             throw new UnhandledException(ex);
         }
         return profile;
+    }
+
+    @Override
+    public Set<UserProfile> getUserProfiles(String group) {
+        return studentInfoService.getGroupMembers(group).stream().map(this::getUserProfile).collect(Collectors.toSet());
     }
 }

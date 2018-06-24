@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.cache.SpringCacheBasedUserC
 public class CacheContext {
     public static final String STUDENT_INFO_CACHE = "STUDENT_INFO_CACHE";
 
-    public static final String STUDENT_TEACHERS_CACHE = "STUDENT_TEACHERS";
-
     public static final String TEAM_MEMBERS_CACHE = "TEAM_MEMBERS";
 
     private final CacheManager cacheManager;

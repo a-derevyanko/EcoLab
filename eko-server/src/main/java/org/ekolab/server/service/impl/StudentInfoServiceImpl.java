@@ -15,10 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 import static org.ekolab.server.CacheContext.STUDENT_INFO_CACHE;
-import static org.ekolab.server.CacheContext.STUDENT_TEACHERS_CACHE;
 import static org.ekolab.server.CacheContext.TEAM_MEMBERS_CACHE;
 
 /**
@@ -68,15 +67,14 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
     @Override
     @Transactional
-    @CachePut(cacheNames = {STUDENT_INFO_CACHE, STUDENT_TEACHERS_CACHE}, key = "#userInfo.login")
+    @CachePut(cacheNames = {STUDENT_INFO_CACHE}, key = "#userInfo.login")
     @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, key = "#team")
     @NotNull
     public StudentInfo createStudentInfo(@NotNull UserInfo userInfo, @NotNull StudentGroup group,
-                                         @NotNull StudentTeam team, @NotNull String teacherName) {
+                                         @NotNull StudentTeam team) {
         if (userInfo.getId() == null) {
             userInfoService.createUserInfo(userInfo);
         }
-        studentInfoDao.addTeacherToStudent(userInfo.getLogin(), teacherName);
         studentInfoDao.updateStudentGroup(userInfo.getLogin(), group);
         studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
         StudentInfo studentInfo = new StudentInfo();
@@ -117,27 +115,36 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
-    @Cacheable(STUDENT_TEACHERS_CACHE)
     @Transactional(readOnly = true)
-    public String getStudentTeacher(String studentLogin) {
-        return studentInfoDao.getStudentTeacher(studentLogin);
+    public UserInfo getGroupTeacher(String group) {
+        return userInfoService.getUserInfo(studentInfoDao.getGroupTeacher(group));
     }
 
     @Override
     @Cacheable(TEAM_MEMBERS_CACHE)
     @Transactional(readOnly = true)
-    public List<String> getTeamMembers(String name, String group) {
+    public Set<String> getTeamMembers(String name, String group) {
         return studentInfoDao.getTeamMembers(name, group);
     }
 
     @Override
+    public Set<String> getGroupMembers(String group) {
+        return studentInfoDao.getGroupMembers(group);
+    }
+
+    @Override
+    public Set<StudentGroup> getTeacherGroups(String teacher) {
+        return studentInfoDao.getTeacherGroups(teacher);
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    public List<StudentGroup> getStudentGroups() {
+    public Set<StudentGroup> getStudentGroups() {
         return studentInfoDao.getStudentGroups();
     }
 
     @Override
-    public List<StudentTeam> getStudentTeams(String group) {
+    public Set<StudentTeam> getStudentTeams(String group) {
         return studentInfoDao.getStudentTeams(group);
     }
 }

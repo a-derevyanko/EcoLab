@@ -6,6 +6,7 @@ import org.ekolab.server.model.UserProfile;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 public interface UserLabService {
     /**
@@ -44,4 +45,11 @@ public interface UserLabService {
      * @return профиль
      */
     UserProfile getUserProfile(String userName);
+
+    /**
+     * Возвращает данные пользоватей по группе
+     * @param group группа
+     * @return профили
+     */
+    Set<UserProfile> getUserProfiles(String group);
 }

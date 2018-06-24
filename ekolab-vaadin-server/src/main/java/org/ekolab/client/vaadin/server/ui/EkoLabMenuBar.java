@@ -11,7 +11,6 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.AdminManagingView;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.client.vaadin.server.ui.view.StudentAccountManagingView;
-import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.windows.SimpleEditUserWindow;
 import org.ekolab.client.vaadin.server.ui.windows.UserDataWindowSettings;
 import org.ekolab.server.common.Role;
@@ -47,7 +46,8 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
     private MenuItem exitItem;
     private MenuItem userInfoItem;
     private MenuItem adminManagingItem;
-    private MenuItem userManagingItem;
+    private MenuItem teacherManagingItem;
+    private MenuItem studentManagingItem;
     private MenuItem labChooserItem;
 
     @Autowired
@@ -73,36 +73,13 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
             }));
         });
         adminManagingItem = addItem(i18N.get("menubar.admin"), VaadinIcons.TOOLS, (Command) selectedItem -> navigator.redirectToView(AdminManagingView.NAME));
-        userManagingItem = addItem(i18N.get("menubar.account-managing"), VaadinIcons.USER_CARD, selectedItem -> {
-
-            Authentication authentication = vaadinSecurity.getAuthentication();
-
-
-            boolean student =  false;
-            boolean teacher = false;
-
-            for (GrantedAuthority authority : authentication.getAuthorities()) {
-                switch (authority.getAuthority()) {
-                    case Role.TEACHER:
-                        teacher = true;
-                        break;
-                    case Role.STUDENT:
-                        student = true;
-                        break;
-                }
-            }
-
-            if (student) {
-                navigator.redirectToView(StudentAccountManagingView.NAME);
-            } else if (teacher) {
-                navigator.redirectToView(LabChooserView.NAME);
-            }
-
-        });
+        studentManagingItem = addItem(i18N.get("menubar.student-account-managing"), VaadinIcons.USER_CARD, selectedItem -> navigator.redirectToView(StudentAccountManagingView.NAME));
+        teacherManagingItem = addItem(i18N.get("menubar.teacher-account-managing"), VaadinIcons.USER_CARD, selectedItem -> navigator.redirectToView(StudentAccountManagingView.NAME));
         labChooserItem = addItem(i18N.get("menubar.labChooser"), VaadinIcons.ACADEMY_CAP, (Command) selectedItem -> navigator.redirectToView(LabChooserView.NAME));
 
         adminManagingItem.setVisible(false);
-        userManagingItem.setVisible(false);
+        teacherManagingItem.setVisible(false);
+        studentManagingItem.setVisible(false);
         labChooserItem.setVisible(false);
 
         if (!DevUtils.isProductionVersion()) {
@@ -127,16 +104,15 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
                             adminManagingItem.setVisible(true);
                             break;
                         case Role.TEACHER:
-                            userManagingItem.setVisible(true);
+                            teacherManagingItem.setVisible(true);
                             break;
                         case Role.STUDENT:
-                            userManagingItem.setVisible(true);
+                            studentManagingItem.setVisible(true);
                             labChooserItem.setVisible(true);
                             break;
                     }
                 }
             }
-            ((View) event.getNewView()).placeMenuBarActions(this);
         } else {
             setVisible(false);
             getUI().setCurrentUserInfo(null);

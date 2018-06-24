@@ -1,5 +1,6 @@
 package org.ekolab.server.dao.impl;
 
+import com.google.common.collect.Sets;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.content.StudentInfoDao;
 import org.ekolab.server.model.StudentGroup;
@@ -12,11 +13,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import static org.ekolab.server.db.h2.public_.Tables.STUDY_GROUPS;
 import static org.ekolab.server.db.h2.public_.Tables.STUDY_GROUP_MEMBERS;
-import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEACHERS;
+import static org.ekolab.server.db.h2.public_.Tables.STUDY_GROUP_TEACHERS;
 import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEAMS;
 import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEAM_MEMBERS;
 import static org.ekolab.server.db.h2.public_.Tables.USERS;
@@ -71,13 +72,30 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public List<String> getTeamMembers(String teamNumber, String group) {
-        return dsl.select(USERS.LOGIN).from(STUDY_TEAM_MEMBERS)
+    public Set<String> getTeamMembers(String teamNumber, String group) {
+        return Sets.newHashSet(dsl.select(USERS.LOGIN).from(STUDY_TEAM_MEMBERS)
                 .join(USERS).on(STUDY_TEAM_MEMBERS.USER_ID.eq(USERS.ID))
                 .join(STUDY_TEAMS).on(STUDY_TEAM_MEMBERS.TEAM_ID.eq(STUDY_TEAMS.ID))
                 .where(STUDY_TEAMS.NAME.eq(teamNumber)).and(STUDY_TEAMS.GROUP_ID
                         .eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))).
-                        fetchInto(String.class);
+                        fetchInto(String.class));
+    }
+
+    @Override
+    public Set<String> getGroupMembers(String group) {
+        return Sets.newHashSet(dsl.select(USERS.LOGIN).from(USERS)
+                .join(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.USER_ID.eq(USERS.ID))
+                .join(STUDY_GROUPS).on(STUDY_GROUPS.ID.eq(STUDY_GROUP_MEMBERS.GROUP_ID))
+                .where(STUDY_GROUPS.NAME.eq(group)).
+                        fetchInto(String.class));
+    }
+
+    @Override
+    public Set<StudentGroup> getTeacherGroups(String teacher) {
+        return Sets.newHashSet(dsl.select().from(STUDY_GROUPS).
+                join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
+                where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, teacher))).
+                fetch().map(STUDENT_GROUP_RECORD_MAPPER));
     }
 
     @Override
@@ -99,15 +117,11 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public void addTeacherToStudent(String studentLogin, String teacherLogin) {
-        dsl.insertInto(STUDY_TEACHERS).
-                set(STUDY_TEACHERS.STUDENT_ID, dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(studentLogin))).
-                set(STUDY_TEACHERS.TEACHER_ID, dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(teacherLogin)));
-    }
-
-    @Override
-    public String getStudentTeacher(String studentLogin) {
-        return dsl.select(USERS.LOGIN).from(USERS).where(USERS.ID.eq(dsl.select(STUDY_TEACHERS.ID).from(STUDY_TEACHERS))).
+    public String getGroupTeacher(String group) {
+        return dsl.select(USERS.LOGIN).from(USERS).
+                join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(USERS.ID)).
+                join(STUDY_GROUPS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
+                where(STUDY_GROUPS.NAME.eq(group)).
                 fetchOneInto(String.class);
     }
 
@@ -142,14 +156,14 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public List<StudentGroup> getStudentGroups() {
-        return dsl.selectFrom(STUDY_GROUPS).fetch().map(STUDENT_GROUP_RECORD_MAPPER);
+    public Set<StudentGroup> getStudentGroups() {
+        return Sets.newHashSet(dsl.selectFrom(STUDY_GROUPS).fetch().map(STUDENT_GROUP_RECORD_MAPPER));
     }
 
     @Override
-    public List<StudentTeam> getStudentTeams(String group) {
-        return dsl.selectFrom(STUDY_TEAMS).where(STUDY_TEAMS.GROUP_ID.eq(dsl.
+    public Set<StudentTeam> getStudentTeams(String group) {
+        return Sets.newHashSet(dsl.selectFrom(STUDY_TEAMS).where(STUDY_TEAMS.GROUP_ID.eq(dsl.
                 select(STUDY_GROUPS.ID).
-                from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))).fetch().map(STUDENT_TEAM_RECORD_MAPPER);
+                from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))).fetch().map(STUDENT_TEAM_RECORD_MAPPER));
     }
 }

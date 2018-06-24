@@ -6,7 +6,7 @@ import org.ekolab.server.model.StudentTeam;
 import org.ekolab.server.model.UserInfo;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by 777Al on 22.05.2017.
@@ -33,10 +33,9 @@ public interface StudentInfoService extends Serializable {
      * @param userInfo данные пользователя
      * @param group группа студента
      * @param team бригада студента
-     * @param teacherName преподаватель
      * @return данные студента
      */
-    StudentInfo createStudentInfo(UserInfo userInfo, StudentGroup group, StudentTeam team, String teacherName);
+    StudentInfo createStudentInfo(UserInfo userInfo, StudentGroup group, StudentTeam team);
 
     /**
      * Создаёт студенческую группу
@@ -71,14 +70,18 @@ public interface StudentInfoService extends Serializable {
 
     /**
      *
-     * @param studentLogin
+     * @param group
      * @return
      */
-    String getStudentTeacher(String studentLogin);
+    UserInfo getGroupTeacher(String group);
 
-    List<String> getTeamMembers(String teamNumber, String group);
+    Set<String> getTeamMembers(String teamNumber, String group);
 
-    List<StudentGroup> getStudentGroups();
+    Set<String> getGroupMembers(String group);
 
-    List<StudentTeam> getStudentTeams(String group);
+    Set<StudentGroup> getTeacherGroups(String teacher);
+
+    Set<StudentGroup> getStudentGroups();
+
+    Set<StudentTeam> getStudentTeams(String group);
 }

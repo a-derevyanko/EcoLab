@@ -4,7 +4,7 @@ import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.StudentTeam;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by 777Al on 22.05.2017.
@@ -14,15 +14,17 @@ public interface StudentInfoDao extends Serializable {
 
     StudentTeam getStudentTeam(String userName);
 
-    List<String> getTeamMembers(String teamNumber, String group);
+    Set<String> getTeamMembers(String teamNumber, String group);
+
+    Set<String> getGroupMembers(String group);
+
+    Set<StudentGroup> getTeacherGroups(String teacher);
 
     void updateStudentGroup(String userName, StudentGroup group);
 
     void updateStudentTeam(String userName, StudentTeam studentTeam);
 
-    void addTeacherToStudent(String studentLogin, String teacherLogin);
-
-    String getStudentTeacher(String studentLogin);
+    String getGroupTeacher(String group);
 
     /**
      * Создаёт студенческую группу
@@ -55,7 +57,7 @@ public interface StudentInfoDao extends Serializable {
      */
     void updateStudentGroup(StudentGroup group);
 
-    List<StudentGroup> getStudentGroups();
+    Set<StudentGroup> getStudentGroups();
 
-    List<StudentTeam> getStudentTeams(String group);
+    Set<StudentTeam> getStudentTeams(String group);
 }

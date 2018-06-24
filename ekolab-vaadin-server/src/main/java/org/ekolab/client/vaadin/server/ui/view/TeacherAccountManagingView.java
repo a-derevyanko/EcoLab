@@ -1,5 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.view;
 
+import com.vaadin.event.selection.SingleSelectionEvent;
+import com.vaadin.event.selection.SingleSelectionListener;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FileDownloader;
@@ -9,52 +11,52 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.renderers.LocalDateTimeRenderer;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.DownloadStreamResource;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
+import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.UserLabStatistics;
 import org.ekolab.server.model.UserProfile;
 import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
 
-@SpringView(name = StudentAccountManagingView.NAME)
-public class StudentAccountManagingView extends GridLayout implements View {
+@SpringView(name = TeacherAccountManagingView.NAME)
+public class TeacherAccountManagingView extends GridLayout implements View {
     public static final String NAME = "student-account";
 
     private final Authentication currentUser;
 
     private final UserLabService userLabService;
 
-    private final I18N i18N;
+    private final StudentInfoService studentInfoService;
 
-    private final List<LabService<?, ?>> labServices;
+    private final I18N i18N;
 
     // ---------------------------- Графические компоненты --------------------
     private final Label userInitialsLabel = new Label("Surname Firstname Lastname");
-    private final Image photo = new Image();
-    private final Label averagePointCount = new Label("Average point count:\nX (XX)");
-    private final Label studentGroupLabel = new Label("GROUP");
-    private final Grid<UserLabStatistics> labStatisticsGrid = new Grid<>();
+    private final Label todayDate = new Label();
+    private final NativeSelect<StudentGroup> groups = new NativeSelect<>();
+    private final Grid<UserProfile> groupMembers = new Grid<>();
 
     @Autowired
-    public StudentAccountManagingView(Authentication currentUser,
-                                      UserLabService userLabService, I18N i18N, List<LabService<?, ?>> labServices) {
+    public TeacherAccountManagingView(Authentication currentUser,
+                                      UserLabService userLabService, StudentInfoService studentInfoService, I18N i18N) {
         super(4, 5);
         this.currentUser = currentUser;
         this.userLabService = userLabService;
+        this.studentInfoService = studentInfoService;
         this.i18N = i18N;
-        this.labServices = labServices;
     }
 
     @Override
@@ -71,8 +73,14 @@ public class StudentAccountManagingView extends GridLayout implements View {
         addComponent(studentGroupLabel, 0, 4, 0, 4);
 
         addComponent(labStatisticsGrid, 1, 1, 3, 2);
-        photo.setSizeFull();
-        photo.setHeight(200.0F, Unit.PIXELS);
+
+        groups.addSelectionListener(new SingleSelectionListener<StudentGroup>() {
+            @Override
+            public void selectionChange(SingleSelectionEvent<StudentGroup> event) {
+                studentInfoService.ge
+            }
+        });
+
 
         labStatisticsGrid.setSizeFull();
         labStatisticsGrid.addColumn(UserLabStatistics::getLabNumber).setCaption(i18N.get("profile-view.statistics.lab-number"));
@@ -111,6 +119,8 @@ public class StudentAccountManagingView extends GridLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        groups.setItems(studentInfoService.getStudentGroups());
+
         UserProfile userProfile = userLabService.getUserProfile(currentUser.getName());
 
         userInitialsLabel.setValue(userProfile.getUserInfo().getLastName() + ' ' + userProfile.getUserInfo().getFirstName()
