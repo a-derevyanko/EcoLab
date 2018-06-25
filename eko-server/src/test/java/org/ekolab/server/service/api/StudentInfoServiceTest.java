@@ -32,7 +32,7 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
         super.generateInitialData();
         testGroup = studentInfoService.createStudentGroup(GROUPNAME);
         testTeam = studentInfoService.createStudentTeam(TEAMNUMBER, GROUPNAME);
-        studentInfoService.createStudentInfo(userInfoService.getUserInfo(USERNAME), testGroup, testTeam, "");
+        studentInfoService.createStudentInfo(userInfoService.getUserInfo(USERNAME), testGroup, testTeam);
     }
 
     @AfterClass

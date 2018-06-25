@@ -1,35 +1,27 @@
 package org.ekolab.client.vaadin.server.ui.view;
 
-import com.vaadin.event.selection.SingleSelectionEvent;
 import com.vaadin.event.selection.SingleSelectionListener;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.FileDownloader;
-import com.vaadin.server.StreamResource;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeSelect;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.renderers.LocalDateTimeRenderer;
+import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
-import org.ekolab.client.vaadin.server.ui.common.DownloadStreamResource;
-import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.model.StudentGroup;
-import org.ekolab.server.model.UserLabStatistics;
 import org.ekolab.server.model.UserProfile;
-import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.service.api.StudentInfoService;
-import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
-import java.io.ByteArrayInputStream;
+import java.util.Collections;
+import java.util.Set;
 
 @SpringView(name = TeacherAccountManagingView.NAME)
 public class TeacherAccountManagingView extends GridLayout implements View {
@@ -47,6 +39,10 @@ public class TeacherAccountManagingView extends GridLayout implements View {
     private final Label userInitialsLabel = new Label("Surname Firstname Lastname");
     private final Label todayDate = new Label();
     private final NativeSelect<StudentGroup> groups = new NativeSelect<>();
+    private final Button addGroupButton = new Button();
+    private final Button removeGroupButton = new Button();
+    private final HorizontalLayout buttons = new HorizontalLayout(addGroupButton, removeGroupButton);
+    private final VerticalLayout groupsPanel = new VerticalLayout(groups, buttons);
     private final Grid<UserProfile> groupMembers = new Grid<>();
 
     @Autowired
@@ -68,21 +64,21 @@ public class TeacherAccountManagingView extends GridLayout implements View {
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
         addComponent(userInitialsLabel, 0, 0, 0, 0);
-        addComponent(photo, 0, 1, 0, 1);
+       /* addComponent(photo, 0, 1, 0, 1);
         addComponent(averagePointCount, 0, 3, 0, 3);
         addComponent(studentGroupLabel, 0, 4, 0, 4);
 
-        addComponent(labStatisticsGrid, 1, 1, 3, 2);
+        addComponent(labStatisticsGrid, 1, 1, 3, 2);*/
 
-        groups.addSelectionListener(new SingleSelectionListener<StudentGroup>() {
-            @Override
-            public void selectionChange(SingleSelectionEvent<StudentGroup> event) {
-                studentInfoService.ge
-            }
+        groups.addSelectionListener((SingleSelectionListener<StudentGroup>) event -> {
+            Set<UserProfile> userProfiles = event.getSelectedItem().isPresent() ?
+                    userLabService.getUserProfiles(event.getSelectedItem().orElseThrow(IllegalStateException::new).getName()) :
+                    Collections.emptySet();
+            groupMembers.setItems(userProfiles);
         });
 
 
-        labStatisticsGrid.setSizeFull();
+       /* labStatisticsGrid.setSizeFull();
         labStatisticsGrid.addColumn(UserLabStatistics::getLabNumber).setCaption(i18N.get("profile-view.statistics.lab-number"));
         labStatisticsGrid.addColumn(UserLabStatistics::getTryCount).setCaption(i18N.get("profile-view.statistics.try-count"));
         labStatisticsGrid.addColumn(userLabStatistics -> userLabStatistics.getMark() + " (" + userLabStatistics.getPointCount() + ')').setCaption(i18N.get("profile-view.statistics.mark"));
@@ -114,28 +110,16 @@ public class TeacherAccountManagingView extends GridLayout implements View {
                 }
             }
             return null;
-        }).setCaption(i18N.get("profile-view.statistics.report-download"));
+        }).setCaption(i18N.get("profile-view.statistics.report-download"));*/
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        groups.setItems(studentInfoService.getStudentGroups());
+        groups.setItems(studentInfoService.getTeacherGroups(currentUser.getName()));
 
         UserProfile userProfile = userLabService.getUserProfile(currentUser.getName());
 
         userInitialsLabel.setValue(userProfile.getUserInfo().getLastName() + ' ' + userProfile.getUserInfo().getFirstName()
                 + '\n' + userProfile.getUserInfo().getMiddleName());
-        photo.setSource(new StreamResource(() -> new ByteArrayInputStream(userProfile.getPicture()), "profile.svg"));
-
-        averagePointCount.setValue(i18N.get("profile-view.average-point", Math.round(userProfile.getAverageMark()),
-                Math.round(userProfile.getAveragePointCount())));
-
-        if (userProfile.getStudentInfo() != null && userProfile.getStudentInfo().getGroup() != null) {
-            studentGroupLabel.setVisible(true);
-            studentGroupLabel.setValue(i18N.get("profile-view.group", userProfile.getStudentInfo().getGroup().getName()));
-        } else {
-            studentGroupLabel.setVisible(false);
-        }
-        labStatisticsGrid.setItems(userProfile.getStatistics());
     }
 }
