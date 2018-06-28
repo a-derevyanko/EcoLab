@@ -19,6 +19,7 @@ public abstract class BaseEkoLabWindow<T extends WindowSettings> extends Window 
             this.settings = settings;
             clear();
             beforeShow();
+            center();
             UI.getCurrent().addWindow(this);
         }
     }

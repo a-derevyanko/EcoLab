@@ -16,9 +16,17 @@ public interface StudentInfoDao extends Serializable {
 
     Set<String> getTeamMembers(String teamNumber, String group);
 
-    Set<String> getGroupMembers(String group);
+    Set<String> getGroupMembers(StudentGroup group);
 
     Set<StudentGroup> getTeacherGroups(String teacher);
+
+    boolean isGroupExists(String group);
+
+    boolean isTeamExists(StudentGroup group, String team);
+
+    void addGroupToTeacher(String teacher, StudentGroup group);
+
+    void removeGroupFromTeacher(String teacher, StudentGroup group);
 
     void updateStudentGroup(String userName, StudentGroup group);
 

@@ -1,10 +1,11 @@
 package org.ekolab.client.vaadin.server.ui.view;
 
-import com.vaadin.event.selection.SingleSelectionListener;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -13,6 +14,7 @@ import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
+import org.ekolab.client.vaadin.server.ui.windows.AddTeacherGroupsWindow;
 import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.UserProfile;
 import org.ekolab.server.service.api.StudentInfoService;
@@ -21,13 +23,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 
 @SpringView(name = TeacherAccountManagingView.NAME)
 public class TeacherAccountManagingView extends GridLayout implements View {
-    public static final String NAME = "student-account";
+    public static final String NAME = "teacher-account";
 
     private final Authentication currentUser;
+
+    private final AddTeacherGroupsWindow addTeacherGroupsWindow;
 
     private final UserLabService userLabService;
 
@@ -38,7 +43,7 @@ public class TeacherAccountManagingView extends GridLayout implements View {
     // ---------------------------- Графические компоненты --------------------
     private final Label userInitialsLabel = new Label("Surname Firstname Lastname");
     private final Label todayDate = new Label();
-    private final NativeSelect<StudentGroup> groups = new NativeSelect<>();
+    private final NativeSelect<StudentGroup> groups = new NativeSelect<>(null);
     private final Button addGroupButton = new Button();
     private final Button removeGroupButton = new Button();
     private final HorizontalLayout buttons = new HorizontalLayout(addGroupButton, removeGroupButton);
@@ -47,9 +52,10 @@ public class TeacherAccountManagingView extends GridLayout implements View {
 
     @Autowired
     public TeacherAccountManagingView(Authentication currentUser,
-                                      UserLabService userLabService, StudentInfoService studentInfoService, I18N i18N) {
-        super(4, 5);
+                                      AddTeacherGroupsWindow addTeacherGroupsWindow, UserLabService userLabService, StudentInfoService studentInfoService, I18N i18N) {
+        super(2, 1);
         this.currentUser = currentUser;
+        this.addTeacherGroupsWindow = addTeacherGroupsWindow;
         this.userLabService = userLabService;
         this.studentInfoService = studentInfoService;
         this.i18N = i18N;
@@ -63,63 +69,68 @@ public class TeacherAccountManagingView extends GridLayout implements View {
 
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-        addComponent(userInitialsLabel, 0, 0, 0, 0);
-       /* addComponent(photo, 0, 1, 0, 1);
-        addComponent(averagePointCount, 0, 3, 0, 3);
-        addComponent(studentGroupLabel, 0, 4, 0, 4);
+        addComponent(groupsPanel, 0, 0, 0, 0);
 
-        addComponent(labStatisticsGrid, 1, 1, 3, 2);*/
+        addGroupButton.addClickListener(event -> {
+            Optional<StudentGroup> selected = groups.getSelectedItem();
+            Set<StudentGroup> choosableGroups = studentInfoService.getStudentGroups();
+            choosableGroups.removeAll(studentInfoService.getTeacherGroups(currentUser.getName()));
+            addTeacherGroupsWindow.show(new AddTeacherGroupsWindow.AddTeacherGroupsWindowSettings(choosableGroups, studentGroups -> {
+                studentGroups.forEach(group -> studentInfoService.addGroupToTeacher(currentUser.getName(), group));
 
-        groups.addSelectionListener((SingleSelectionListener<StudentGroup>) event -> {
-            Set<UserProfile> userProfiles = event.getSelectedItem().isPresent() ?
-                    userLabService.getUserProfiles(event.getSelectedItem().orElseThrow(IllegalStateException::new).getName()) :
-                    Collections.emptySet();
-            groupMembers.setItems(userProfiles);
+                refreshTeacherGroups(selected.orElse(null));
+            }));
         });
 
-
-       /* labStatisticsGrid.setSizeFull();
-        labStatisticsGrid.addColumn(UserLabStatistics::getLabNumber).setCaption(i18N.get("profile-view.statistics.lab-number"));
-        labStatisticsGrid.addColumn(UserLabStatistics::getTryCount).setCaption(i18N.get("profile-view.statistics.try-count"));
-        labStatisticsGrid.addColumn(userLabStatistics -> userLabStatistics.getMark() + " (" + userLabStatistics.getPointCount() + ')').setCaption(i18N.get("profile-view.statistics.mark"));
-        labStatisticsGrid.addColumn(UserLabStatistics::getLabDate).setCaption(i18N.get("profile-view.statistics.execution-date")).setRenderer(new LocalDateTimeRenderer());
-        labStatisticsGrid.addColumn(UserLabStatistics::getTestDate).setCaption(i18N.get("profile-view.statistics.defend-date"));
-        labStatisticsGrid.addComponentColumn(userLabStatistics -> {
-            if (userLabStatistics.getTryCount() > 0) {
-                @SuppressWarnings("unchecked")
-                LabService<LabData<?>, ?> labService = (LabService<LabData<?>, ?>) labServices.stream().filter(s -> s.getLabNumber() == userLabStatistics.getLabNumber()).
-                        findFirst().orElseThrow(IllegalStateException::new);
-
-                @SuppressWarnings("unchecked")
-                final LabData<?> data = labService.getCompletedLabByUser(currentUser.getName());
-
-                if (data != null) {
-                    Button button = new Button(VaadinIcons.DOWNLOAD);
-                    button.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
-                    button.setCaptionAsHtml(true);
-                    button.setDescription(i18N.get("profile-view.download-report", userLabStatistics.getLabNumber()));
-                    button.setEnabled(false);
-
-                    @SuppressWarnings("unchecked")
-                    FileDownloader fileDownloader = new FileDownloader(
-                            new DownloadStreamResource(() -> labService.createReport(data, UI.getCurrent().getLocale()), "report.pdf"));
-                    fileDownloader.extend(button);
-                    button.setEnabled(true);
-                    return button;
-
-                }
+        removeGroupButton.setEnabled(false);
+        removeGroupButton.addClickListener(event -> {
+            StudentGroup selectedGroup = groups.getSelectedItem().orElseThrow(IllegalArgumentException::new);
+            studentInfoService.removeGroupFromTeacher(currentUser.getName(), selectedGroup);
+            refreshTeacherGroups(null);
+        });
+        groups.addSelectionListener(event -> {
+            if (event.getSelectedItem().isPresent()) {
+                refreshTeacherGroups(event.getSelectedItem().orElseThrow(IllegalStateException::new));
+            } else {
+                groupMembers.setItems(Collections.emptyList());
+                removeGroupButton.setEnabled(false);
             }
-            return null;
-        }).setCaption(i18N.get("profile-view.statistics.report-download"));*/
+        });
+
+        groups.setItemCaptionGenerator(StudentGroup::getName);
+        
+        groupMembers.addComponentColumn(new ValueProvider<UserProfile, Component>() {
+            @Override
+            public Component apply(UserProfile userProfile) {
+                return null;
+            }
+        });
+
+        groupMembers.addColumn(new ValueProvider<UserProfile, String>() {
+            @Override
+            public String apply(UserProfile userProfile) {
+                return null;
+            }
+        });
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        groups.setItems(studentInfoService.getTeacherGroups(currentUser.getName()));
-
+        refreshTeacherGroups(null);
         UserProfile userProfile = userLabService.getUserProfile(currentUser.getName());
 
         userInitialsLabel.setValue(userProfile.getUserInfo().getLastName() + ' ' + userProfile.getUserInfo().getFirstName()
                 + '\n' + userProfile.getUserInfo().getMiddleName());
+    }
+
+    private void refreshTeacherGroups(StudentGroup selected) {
+        groups.setItems(studentInfoService.getTeacherGroups(currentUser.getName()));
+        if (selected == null) {
+            removeGroupButton.setEnabled(false);
+        } else {
+            groups.setSelectedItem(selected);
+            groupMembers.setItems(userLabService.getUserProfiles(selected));
+            removeGroupButton.setEnabled(true);
+        }
     }
 }

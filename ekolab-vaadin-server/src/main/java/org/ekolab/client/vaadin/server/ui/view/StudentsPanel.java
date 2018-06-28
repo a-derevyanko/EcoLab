@@ -36,11 +36,11 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
     private final Label studentGroupLabel = new Label();
     private final ComboBox<StudentGroup> studentGroupComboBox = new ComboBox<>();
     private final Button addStudentGroupButton = new Button("Add", VaadinIcons.PLUS_CIRCLE);
-    private final Button removeStudentGroupButton = new Button("Remove", VaadinIcons.MINUS_CIRCLE);
+    private final Button removeStudentGroupButton = new Button(VaadinIcons.MINUS_CIRCLE);
     private final Label studentTeamLabel = new Label();
     private final ComboBox<StudentTeam> studentTeamComboBox = new ComboBox<>();
     private final Button addStudentTeamButton = new Button("Add", VaadinIcons.PLUS_CIRCLE);
-    private final Button removeStudentTeamButton = new Button("Remove", VaadinIcons.MINUS_CIRCLE);
+    private final Button removeStudentTeamButton = new Button(VaadinIcons.MINUS_CIRCLE);
     private final GridLayout groupFilters = new GridLayout(4, 2);
     private final GridLayout teamFilters = new GridLayout(4, 2);
     private final HorizontalLayout studentFilters = new HorizontalLayout(groupFilters, teamFilters);
@@ -67,6 +67,7 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
         addStudentGroupButton.setSizeFull();
         removeStudentGroupButton.setSizeFull();
         addStudentGroupButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        addStudentGroupButton.setCaption(i18N.get("studentData.add-group"));
         addStudentGroupButton.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
                 i18N.get("studentData.add-group"),
                 s -> {
@@ -107,6 +108,7 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
         removeStudentTeamButton.setSizeFull();
         addStudentTeamButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         addStudentTeamButton.setEnabled(false);
+        addStudentTeamButton.setCaption(i18N.get("studentData.add-team"));
         addStudentTeamButton.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
                 i18N.get("studentData.add-team"),
                 s -> {

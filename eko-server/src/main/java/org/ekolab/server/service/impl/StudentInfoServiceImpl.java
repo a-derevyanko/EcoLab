@@ -128,13 +128,35 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
-    public Set<String> getGroupMembers(String group) {
+    public Set<String> getGroupMembers(StudentGroup group) {
         return studentInfoDao.getGroupMembers(group);
     }
 
     @Override
     public Set<StudentGroup> getTeacherGroups(String teacher) {
         return studentInfoDao.getTeacherGroups(teacher);
+    }
+
+    @Override
+    public boolean isGroupExists(String group) {
+        return studentInfoDao.isGroupExists(group);
+    }
+
+    @Override
+    public boolean isTeamExists(StudentGroup group, String team) {
+        return studentInfoDao.isTeamExists(group, team);
+    }
+
+    @Override
+    @Transactional
+    public void addGroupToTeacher(String teacher, StudentGroup group) {
+        studentInfoDao.addGroupToTeacher(teacher, group);
+    }
+
+    @Override
+    @Transactional
+    public void removeGroupFromTeacher(String teacher, StudentGroup group) {
+        studentInfoDao.removeGroupFromTeacher(teacher, group);
     }
 
     @Override

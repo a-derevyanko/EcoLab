@@ -8,6 +8,7 @@ import org.ekolab.server.model.StudentTeam;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -82,11 +83,11 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public Set<String> getGroupMembers(String group) {
+    public Set<String> getGroupMembers(StudentGroup group) {
         return Sets.newHashSet(dsl.select(USERS.LOGIN).from(USERS)
                 .join(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.USER_ID.eq(USERS.ID))
                 .join(STUDY_GROUPS).on(STUDY_GROUPS.ID.eq(STUDY_GROUP_MEMBERS.GROUP_ID))
-                .where(STUDY_GROUPS.NAME.eq(group)).
+                .where(STUDY_GROUPS.ID.eq(group.getId())).
                         fetchInto(String.class));
     }
 
@@ -96,6 +97,32 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
                 join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
                 where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, teacher))).
                 fetch().map(STUDENT_GROUP_RECORD_MAPPER));
+    }
+
+    @Override
+    public boolean isGroupExists(String group) {
+        return dsl.fetchExists(dsl.selectOne().from(STUDY_GROUPS)
+                .where(STUDY_GROUPS.NAME.eq(group)));
+    }
+
+    @Override
+    public boolean isTeamExists(StudentGroup group, String team) {
+        return dsl.fetchExists(dsl.selectOne().from(STUDY_TEAMS)
+                .where(STUDY_TEAMS.GROUP_ID.eq(group.getId()).and(STUDY_TEAMS.NAME.eq(team))));
+    }
+
+    @Override
+    public void addGroupToTeacher(String teacher, StudentGroup group) {
+        dsl.insertInto(STUDY_GROUP_TEACHERS, STUDY_GROUP_TEACHERS.TEACHER_ID, STUDY_GROUP_TEACHERS.GROUP_ID).
+                values(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(teacher)).asField(),
+                        DSL.val(group.getId())).execute();
+    }
+
+    @Override
+    public void removeGroupFromTeacher(String teacher, StudentGroup group) {
+        dsl.deleteFrom(STUDY_GROUP_TEACHERS)
+                .where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(teacher)))
+                        .and(STUDY_GROUP_TEACHERS.GROUP_ID.eq(group.getId()))).execute();
     }
 
     @Override

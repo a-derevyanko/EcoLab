@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.UnhandledException;
 import org.ekolab.server.dao.api.content.UserLabDao;
 import org.ekolab.server.model.LabMode;
+import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.UserLabStatistics;
 import org.ekolab.server.model.UserProfile;
 import org.ekolab.server.service.api.StudentInfoService;
@@ -91,7 +92,7 @@ public class UserLabServiceImpl implements UserLabService {
     }
 
     @Override
-    public Set<UserProfile> getUserProfiles(String group) {
+    public Set<UserProfile> getUserProfiles(StudentGroup group) {
         return studentInfoService.getGroupMembers(group).stream().map(this::getUserProfile).collect(Collectors.toSet());
     }
 }

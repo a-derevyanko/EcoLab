@@ -11,6 +11,7 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.AdminManagingView;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.client.vaadin.server.ui.view.StudentAccountManagingView;
+import org.ekolab.client.vaadin.server.ui.view.TeacherAccountManagingView;
 import org.ekolab.client.vaadin.server.ui.windows.SimpleEditUserWindow;
 import org.ekolab.client.vaadin.server.ui.windows.UserDataWindowSettings;
 import org.ekolab.server.common.Role;
@@ -74,7 +75,7 @@ public class EkoLabMenuBar extends MenuBar implements ViewChangeListener {
         });
         adminManagingItem = addItem(i18N.get("menubar.admin"), VaadinIcons.TOOLS, (Command) selectedItem -> navigator.redirectToView(AdminManagingView.NAME));
         studentManagingItem = addItem(i18N.get("menubar.student-account-managing"), VaadinIcons.USER_CARD, selectedItem -> navigator.redirectToView(StudentAccountManagingView.NAME));
-        teacherManagingItem = addItem(i18N.get("menubar.teacher-account-managing"), VaadinIcons.USER_CARD, selectedItem -> navigator.redirectToView(StudentAccountManagingView.NAME));
+        teacherManagingItem = addItem(i18N.get("menubar.teacher-account-managing"), VaadinIcons.USER_CARD, selectedItem -> navigator.redirectToView(TeacherAccountManagingView.NAME));
         labChooserItem = addItem(i18N.get("menubar.labChooser"), VaadinIcons.ACADEMY_CAP, (Command) selectedItem -> navigator.redirectToView(LabChooserView.NAME));
 
         adminManagingItem.setVisible(false);
