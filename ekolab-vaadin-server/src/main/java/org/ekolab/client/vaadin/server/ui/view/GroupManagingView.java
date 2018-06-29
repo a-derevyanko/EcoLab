@@ -10,12 +10,12 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.windows.AddTeacherGroupsWindow;
 import org.ekolab.server.model.StudentGroup;
+import org.ekolab.server.model.StudentGroupInfo;
 import org.ekolab.server.model.UserProfile;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.content.UserLabService;
@@ -26,9 +26,11 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
-@SpringView(name = TeacherAccountManagingView.NAME)
-public class TeacherAccountManagingView extends GridLayout implements View {
-    public static final String NAME = "teacher-account";
+@SpringView(name = GroupManagingView.NAME)
+public class GroupManagingView extends GridLayout implements View {
+    public static final String NAME = "group-manage";
+
+    public static final String GROUP_NAME = "name";
 
     private final Authentication currentUser;
 
@@ -43,7 +45,7 @@ public class TeacherAccountManagingView extends GridLayout implements View {
     // ---------------------------- Графические компоненты --------------------
     private final Label userInitialsLabel = new Label("Surname Firstname Lastname");
     private final Label todayDate = new Label();
-    private final NativeSelect<StudentGroup> groups = new NativeSelect<>(null);
+    private final Grid<StudentGroupInfo> groups = new Grid<>();
     private final Button addGroupButton = new Button();
     private final Button removeGroupButton = new Button();
     private final HorizontalLayout buttons = new HorizontalLayout(addGroupButton, removeGroupButton);
@@ -51,8 +53,8 @@ public class TeacherAccountManagingView extends GridLayout implements View {
     private final Grid<UserProfile> groupMembers = new Grid<>();
 
     @Autowired
-    public TeacherAccountManagingView(Authentication currentUser,
-                                      AddTeacherGroupsWindow addTeacherGroupsWindow, UserLabService userLabService, StudentInfoService studentInfoService, I18N i18N) {
+    public GroupManagingView(Authentication currentUser,
+                             AddTeacherGroupsWindow addTeacherGroupsWindow, UserLabService userLabService, StudentInfoService studentInfoService, I18N i18N) {
         super(2, 1);
         this.currentUser = currentUser;
         this.addTeacherGroupsWindow = addTeacherGroupsWindow;

@@ -1,8 +1,11 @@
 package org.ekolab.server.model;
 
+import lombok.Data;
+
 /**
  * Created by Андрей on 15.05.2017.
  */
+@Data
 public class IdentifiedDomainModel implements DomainModel {
     private Long id;
 

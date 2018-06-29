@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import org.ekolab.server.common.Profiles;
 import org.ekolab.server.dao.api.content.StudentInfoDao;
 import org.ekolab.server.model.StudentGroup;
+import org.ekolab.server.model.StudentGroupInfo;
 import org.ekolab.server.model.StudentTeam;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -100,6 +101,15 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
+    public Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher) {
+        throw new UnsupportedOperationException();
+        /*return Sets.newHashSet(dsl.select().from(STUDY_GROUPS).
+                join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
+                where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, teacher))).
+                fetch().map(STUDENT_GROUP_RECORD_MAPPER));*/
+    }
+
+    @Override
     public boolean isGroupExists(String group) {
         return dsl.fetchExists(dsl.selectOne().from(STUDY_GROUPS)
                 .where(STUDY_GROUPS.NAME.eq(group)));
@@ -119,10 +129,10 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public void removeGroupFromTeacher(String teacher, StudentGroup group) {
+    public void removeGroupFromTeacher(String teacher, String group) {
         dsl.deleteFrom(STUDY_GROUP_TEACHERS)
                 .where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(teacher)))
-                        .and(STUDY_GROUP_TEACHERS.GROUP_ID.eq(group.getId()))).execute();
+                        .and(STUDY_GROUP_TEACHERS.GROUP_ID.eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group))))).execute();
     }
 
     @Override

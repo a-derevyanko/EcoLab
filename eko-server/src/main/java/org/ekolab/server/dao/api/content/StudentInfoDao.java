@@ -1,6 +1,7 @@
 package org.ekolab.server.dao.api.content;
 
 import org.ekolab.server.model.StudentGroup;
+import org.ekolab.server.model.StudentGroupInfo;
 import org.ekolab.server.model.StudentTeam;
 
 import java.io.Serializable;
@@ -20,13 +21,15 @@ public interface StudentInfoDao extends Serializable {
 
     Set<StudentGroup> getTeacherGroups(String teacher);
 
+    Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher);
+
     boolean isGroupExists(String group);
 
     boolean isTeamExists(StudentGroup group, String team);
 
     void addGroupToTeacher(String teacher, StudentGroup group);
 
-    void removeGroupFromTeacher(String teacher, StudentGroup group);
+    void removeGroupFromTeacher(String teacher, String group);
 
     void updateStudentGroup(String userName, StudentGroup group);
 

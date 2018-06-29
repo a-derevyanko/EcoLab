@@ -5,8 +5,8 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.ListSelect;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.StudentGroup;
@@ -22,7 +22,7 @@ public class AddTeacherGroupsWindow extends BaseEkoLabWindow<AddTeacherGroupsWin
     protected final FormLayout content = new FormLayout();
     protected final Button ok = new Button("Ok", event -> save());
     protected final Button cancel = new Button("Cancel", event -> close());
-    protected final ListSelect<StudentGroup> groups = new ListSelect<>();
+    protected final Grid<StudentGroup> groups = new Grid<>();
 
     protected final HorizontalLayout actions = new HorizontalLayout(ok, cancel);
 
@@ -46,7 +46,8 @@ public class AddTeacherGroupsWindow extends BaseEkoLabWindow<AddTeacherGroupsWin
         actions.setSpacing(true);
 
         content.addComponents(groups, actions);
-        groups.setItemCaptionGenerator(StudentGroup::getName);
+        groups.addColumn(StudentGroup::getName);
+        groups.setSelectionMode(Grid.SelectionMode.MULTI);
 
         cancel.setCaption(i18N.get("confirm.cancel"));
 

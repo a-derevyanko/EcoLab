@@ -1,6 +1,7 @@
 package org.ekolab.server.service.api;
 
 import org.ekolab.server.model.StudentGroup;
+import org.ekolab.server.model.StudentGroupInfo;
 import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.StudentTeam;
 import org.ekolab.server.model.UserInfo;
@@ -81,13 +82,15 @@ public interface StudentInfoService extends Serializable {
 
     Set<StudentGroup> getTeacherGroups(String teacher);
 
+    Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher);
+
     boolean isGroupExists(String group);
 
     boolean isTeamExists(StudentGroup group, String team);
 
     void addGroupToTeacher(String teacher, StudentGroup group);
 
-    void removeGroupFromTeacher(String teacher, StudentGroup group);
+    void removeGroupFromTeacher(String teacher, String group);
 
     Set<StudentGroup> getStudentGroups();
 

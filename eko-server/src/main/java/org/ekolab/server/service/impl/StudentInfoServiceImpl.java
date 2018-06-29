@@ -2,6 +2,7 @@ package org.ekolab.server.service.impl;
 
 import org.ekolab.server.dao.api.content.StudentInfoDao;
 import org.ekolab.server.model.StudentGroup;
+import org.ekolab.server.model.StudentGroupInfo;
 import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.StudentTeam;
 import org.ekolab.server.model.UserInfo;
@@ -138,6 +139,11 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
+    public Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher) {
+        return studentInfoDao.getTeacherGroupsInfo(teacher);
+    }
+
+    @Override
     public boolean isGroupExists(String group) {
         return studentInfoDao.isGroupExists(group);
     }
@@ -155,7 +161,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
     @Override
     @Transactional
-    public void removeGroupFromTeacher(String teacher, StudentGroup group) {
+    public void removeGroupFromTeacher(String teacher, String group) {
         studentInfoDao.removeGroupFromTeacher(teacher, group);
     }
 
