@@ -92,7 +92,7 @@ public class UserLabServiceImpl implements UserLabService {
     }
 
     @Override
-    public Set<UserProfile> getUserProfiles(StudentGroup group) {
+    public Set<UserProfile> getUserProfiles(String group) {
         return studentInfoService.getGroupMembers(group).stream().map(this::getUserProfile).collect(Collectors.toSet());
     }
 }

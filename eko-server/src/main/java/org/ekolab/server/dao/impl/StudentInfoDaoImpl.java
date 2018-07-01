@@ -23,6 +23,8 @@ import static org.ekolab.server.db.h2.public_.Tables.STUDY_GROUP_TEACHERS;
 import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEAMS;
 import static org.ekolab.server.db.h2.public_.Tables.STUDY_TEAM_MEMBERS;
 import static org.ekolab.server.db.h2.public_.Tables.USERS;
+import static org.ekolab.server.db.h2.public_.Tables.USER_LAB_HISTORY;
+import static org.ekolab.server.db.h2.public_.Tables.USER_TEST_HISTORY;
 
 /**
  * Created by 777Al on 24.05.2017.
@@ -30,6 +32,15 @@ import static org.ekolab.server.db.h2.public_.Tables.USERS;
 @Service
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
 public class StudentInfoDaoImpl implements StudentInfoDao {
+    private static final RecordMapper<Record, StudentGroupInfo> STUDENT_INFO_RECORD_MAPPER = record -> {
+        StudentGroupInfo group = new StudentGroupInfo();
+        group.setIndex(record.get(1, Integer.class));
+        group.setName(record.get(STUDY_GROUPS.NAME));
+        group.setStudentCount(record.get(3, Integer.class));
+        group.setLabCount(4);
+        group.setDefenceCount(5);
+        return group;
+    };
     private static final RecordMapper<Record, StudentGroup> STUDENT_GROUP_RECORD_MAPPER = record -> {
         StudentGroup group = new StudentGroup();
         group.setId(record.get(STUDY_GROUPS.ID));
@@ -84,11 +95,11 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public Set<String> getGroupMembers(StudentGroup group) {
+    public Set<String> getGroupMembers(String group) {
         return Sets.newHashSet(dsl.select(USERS.LOGIN).from(USERS)
                 .join(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.USER_ID.eq(USERS.ID))
                 .join(STUDY_GROUPS).on(STUDY_GROUPS.ID.eq(STUDY_GROUP_MEMBERS.GROUP_ID))
-                .where(STUDY_GROUPS.ID.eq(group.getId())).
+                .where(STUDY_GROUPS.ID.eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))).
                         fetchInto(String.class));
     }
 
@@ -102,11 +113,16 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
 
     @Override
     public Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher) {
-        throw new UnsupportedOperationException();
-        /*return Sets.newHashSet(dsl.select().from(STUDY_GROUPS).
+        return Sets.newHashSet(dsl.select(DSL.rownum(), STUDY_GROUPS.NAME,
+                DSL.count(STUDY_GROUP_MEMBERS.ID), DSL.count(USER_TEST_HISTORY.ID),
+                DSL.countDistinct(USER_LAB_HISTORY.LAB_NUMBER), DSL.countDistinct(USER_TEST_HISTORY.LAB_NUMBER)).from(STUDY_GROUPS).
                 join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
+                join(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
+                leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(STUDY_GROUP_MEMBERS.USER_ID)).
+                leftJoin(USER_LAB_HISTORY).on(USER_LAB_HISTORY.USER_ID.eq(STUDY_GROUP_MEMBERS.USER_ID)).
                 where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, teacher))).
-                fetch().map(STUDENT_GROUP_RECORD_MAPPER));*/
+                groupBy(STUDY_GROUPS.NAME).
+                fetch().map(STUDENT_INFO_RECORD_MAPPER));
     }
 
     @Override

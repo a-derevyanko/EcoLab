@@ -1,7 +1,6 @@
 package org.ekolab.server.service.api.content;
 
 import org.ekolab.server.model.LabMode;
-import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.UserProfile;
 
 import java.time.LocalDateTime;
@@ -52,5 +51,5 @@ public interface UserLabService {
      * @param group группа
      * @return профили
      */
-    Set<UserProfile> getUserProfiles(StudentGroup group);
+    Set<UserProfile> getUserProfiles(String group);
 }

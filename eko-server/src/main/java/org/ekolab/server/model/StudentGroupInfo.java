@@ -1,11 +1,9 @@
 package org.ekolab.server.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class StudentGroupInfo extends IdentifiedDomainModel {
+public class StudentGroupInfo implements DomainModel {
     private int index;
     private String name;
     private int studentCount;

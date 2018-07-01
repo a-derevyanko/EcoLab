@@ -11,6 +11,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
+import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.windows.AddTeacherGroupsWindow;
 import org.ekolab.server.model.StudentGroup;
@@ -43,9 +44,11 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
     private final Label userInitialsLabel = new Label("Surname Firstname Lastname");
     private final Label todayDate = new Label();
     private final Grid<StudentGroupInfo> groups = new Grid<>();
+    private final Button manageGroupButton = new Button("View group", event ->
+            manageGroup(groups.getSelectedItems().iterator().next()));
     private final Button addGroupButton = new Button();
     private final Button removeGroupButton = new Button();
-    private final HorizontalLayout buttons = new HorizontalLayout(addGroupButton, removeGroupButton);
+    private final HorizontalLayout buttons = new HorizontalLayout(manageGroupButton, addGroupButton, removeGroupButton);
     private final VerticalLayout groupsPanel = new VerticalLayout(groups, buttons);
 
     @Autowired
@@ -68,15 +71,22 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
 
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-        addComponent(groupsPanel, 0, 0, 0, 0);
+        addComponent(userInitialsLabel, 0, 0, 0, 0);
+        addComponent(groupsPanel, 1, 0, 1, 0);
 
         groups.setSelectionMode(Grid.SelectionMode.SINGLE);
         groups.addItemClickListener(event -> {
             if (event.getMouseEventDetails().isDoubleClick()) {
-                navigator.redirectToView(GroupManagingView.NAME + '#' + GroupManagingView.GROUP_NAME  + '=' + event.getItem().getName());
+                manageGroup(event.getItem());
             }
         });
 
+        groups.addSelectionListener(event ->
+                manageGroupButton.setEnabled(!event.getAllSelectedItems().isEmpty()));
+
+        manageGroupButton.setEnabled(false);
+        addGroupButton.setCaption(i18N.get("student-data.add-group"));
+        addGroupButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         addGroupButton.addClickListener(event -> {
             Set<StudentGroupInfo> selected = groups.getSelectedItems();
             Set<StudentGroup> choosableGroups = studentInfoService.getStudentGroups();
@@ -89,6 +99,8 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
         });
 
         removeGroupButton.setEnabled(false);
+        removeGroupButton.setCaption(i18N.get("student-data.remove-group"));
+        removeGroupButton.setStyleName(EkoLabTheme.BUTTON_DANGER);
         removeGroupButton.addClickListener(event -> {
             Set<StudentGroupInfo> selected = groups.getSelectedItems();
             if (!selected.isEmpty()) {
@@ -103,8 +115,8 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
         refreshTeacherGroups(null);
         UserProfile userProfile = userLabService.getUserProfile(currentUser.getName());
 
-        userInitialsLabel.setValue(userProfile.getUserInfo().getLastName() + ' ' + userProfile.getUserInfo().getFirstName()
-                + '\n' + userProfile.getUserInfo().getMiddleName());
+        userInitialsLabel.setValue(i18N.get("teacher-group-manage.initials", userProfile.getUserInfo().getLastName(),
+                userProfile.getUserInfo().getFirstName(), userProfile.getUserInfo().getMiddleName()));
     }
 
     private void refreshTeacherGroups(Set<StudentGroupInfo> selected) {
@@ -115,5 +127,9 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
             selected.forEach(groups::select);
             removeGroupButton.setEnabled(true);
         }
+    }
+
+    private void manageGroup(StudentGroupInfo group) {
+        navigator.redirectToView(GroupManagingView.NAME + '#' + GroupManagingView.GROUP_NAME  + '=' + group.getName());
     }
 }

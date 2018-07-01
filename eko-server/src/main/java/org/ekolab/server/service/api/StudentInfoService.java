@@ -78,7 +78,7 @@ public interface StudentInfoService extends Serializable {
 
     Set<String> getTeamMembers(String teamNumber, String group);
 
-    Set<String> getGroupMembers(StudentGroup group);
+    Set<String> getGroupMembers(String group);
 
     Set<StudentGroup> getTeacherGroups(String teacher);
 

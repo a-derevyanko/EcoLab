@@ -67,9 +67,9 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
         addStudentGroupButton.setSizeFull();
         removeStudentGroupButton.setSizeFull();
         addStudentGroupButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        addStudentGroupButton.setCaption(i18N.get("studentData.add-group"));
+        addStudentGroupButton.setCaption(i18N.get("student-data.add-group"));
         addStudentGroupButton.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
-                i18N.get("studentData.add-group"),
+                i18N.get("student-data.add-group"),
                 s -> {
                     StudentGroup group = studentInfoService.createStudentGroup(s);
                     studentGroupComboBox.setSelectedItem(group);
@@ -78,7 +78,7 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
         )));
         removeStudentGroupButton.setStyleName(EkoLabTheme.BUTTON_DANGER);
         removeStudentGroupButton.setEnabled(false);
-        studentGroupLabel.setValue(i18N.get("studentData.group"));
+        studentGroupLabel.setValue(i18N.get("student-data.group"));
         studentGroupComboBox.setItems(studentInfoService.getStudentGroups());
         studentGroupComboBox.setTextInputAllowed(false);
         studentGroupComboBox.setItemCaptionGenerator(StudentGroup::getName);
@@ -108,9 +108,9 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
         removeStudentTeamButton.setSizeFull();
         addStudentTeamButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         addStudentTeamButton.setEnabled(false);
-        addStudentTeamButton.setCaption(i18N.get("studentData.add-team"));
+        addStudentTeamButton.setCaption(i18N.get("student-data.add-team"));
         addStudentTeamButton.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
-                i18N.get("studentData.add-team"),
+                i18N.get("student-data.add-team"),
                 s -> {
                     String group = studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new).getName();
                     StudentTeam team = studentInfoService.createStudentTeam(s, group);
@@ -123,7 +123,7 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
         removeStudentTeamButton.addClickListener(event -> studentInfoService.removeStudentTeam(studentTeamComboBox.
                         getSelectedItem().orElseThrow(IllegalStateException::new).getName(),
                 studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new).getName()));
-        studentTeamLabel.setValue(i18N.get("studentData.team"));
+        studentTeamLabel.setValue(i18N.get("student-data.team"));
         studentTeamComboBox.setTextInputAllowed(false);
         studentTeamComboBox.setItemCaptionGenerator(studentTeam -> String.valueOf(studentTeam.getName()));
         studentTeamComboBox.addValueChangeListener(e -> {

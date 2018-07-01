@@ -47,12 +47,12 @@ public class NewStudentWindow extends NewUserWindow<StudentDataWindowSettings> {
         content.addComponent(studentGroupComboBox, 5);
         content.addComponent(studentTeamComboBox, 6);
 
-        studentGroupComboBox.setCaption(i18N.get("studentData.group"));
-        studentTeamComboBox.setCaption(i18N.get("studentData.team"));
+        studentGroupComboBox.setCaption(i18N.get("student-data.group"));
+        studentTeamComboBox.setCaption(i18N.get("student-data.team"));
 
         studentTeamComboBox.setEnabled(false);
 
-        studentGroupComboBox.initSettings(i18N.get("studentData.add-group"),
+        studentGroupComboBox.initSettings(i18N.get("student-data.add-group"),
                 studentInfoService::getStudentGroups,
                 StudentGroup::getName,
                 event -> {
@@ -68,7 +68,7 @@ public class NewStudentWindow extends NewUserWindow<StudentDataWindowSettings> {
                 studentInfoService::isGroupExists,
                 studentInfoService::createStudentGroup,
                 groupNewLabeledItemWindow);
-        studentTeamComboBox.initSettings(i18N.get("studentData.add-team"),
+        studentTeamComboBox.initSettings(i18N.get("student-data.add-team"),
                 () -> studentInfoService.getStudentTeams(studentGroupComboBox.getValue().getName()),
                 StudentTeam::getName,
                 null,

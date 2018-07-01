@@ -129,7 +129,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
-    public Set<String> getGroupMembers(StudentGroup group) {
+    public Set<String> getGroupMembers(String group) {
         return studentInfoDao.getGroupMembers(group);
     }
 
