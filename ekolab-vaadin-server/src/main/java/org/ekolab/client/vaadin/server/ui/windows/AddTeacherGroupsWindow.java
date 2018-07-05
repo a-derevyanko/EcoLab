@@ -46,7 +46,7 @@ public class AddTeacherGroupsWindow extends BaseEkoLabWindow<AddTeacherGroupsWin
         actions.setSpacing(true);
 
         content.addComponents(groups, actions);
-        groups.addColumn(StudentGroup::getName);
+        groups.addColumn(StudentGroup::getName).setCaption(i18N.get("teacher-view.add-groups.name"));
         groups.setSelectionMode(Grid.SelectionMode.MULTI);
 
         cancel.setCaption(i18N.get("confirm.cancel"));

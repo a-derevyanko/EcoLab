@@ -9,6 +9,7 @@ import org.ekolab.server.model.StudentTeam;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
+import org.jooq.Table;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -32,13 +33,17 @@ import static org.ekolab.server.db.h2.public_.Tables.USER_TEST_HISTORY;
 @Service
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
 public class StudentInfoDaoImpl implements StudentInfoDao {
+    private static final String TEST_COUNT = "TEST_COUNT";
+    private static final String STUDENT_COUNT = "STUDENT_COUNT";
+    private static final String LAB_COUNT = "LAB_COUNT";
+    private static final String GROUP_COUNT = "GROUP_COUNT";
     private static final RecordMapper<Record, StudentGroupInfo> STUDENT_INFO_RECORD_MAPPER = record -> {
         StudentGroupInfo group = new StudentGroupInfo();
-        group.setIndex(record.get(1, Integer.class));
-        group.setName(record.get(STUDY_GROUPS.NAME));
-        group.setStudentCount(record.get(3, Integer.class));
-        group.setLabCount(4);
-        group.setDefenceCount(5);
+        group.setIndex(record.get(0, Integer.class));
+        group.setName(record.get(1, String.class));
+        group.setStudentCount(record.get(2, Integer.class));
+        group.setLabCount(record.get(3, Integer.class));
+        group.setDefenceCount(record.get(4, Integer.class));
         return group;
     };
     private static final RecordMapper<Record, StudentGroup> STUDENT_GROUP_RECORD_MAPPER = record -> {
@@ -113,15 +118,17 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
 
     @Override
     public Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher) {
-        return Sets.newHashSet(dsl.select(DSL.rownum(), STUDY_GROUPS.NAME,
-                DSL.count(STUDY_GROUP_MEMBERS.ID), DSL.count(USER_TEST_HISTORY.ID),
-                DSL.countDistinct(USER_LAB_HISTORY.LAB_NUMBER), DSL.countDistinct(USER_TEST_HISTORY.LAB_NUMBER)).from(STUDY_GROUPS).
+        Table<Record> nested = dsl.<Record>select(STUDY_GROUPS.NAME,
+                DSL.count(STUDY_GROUP_MEMBERS.ID).as(GROUP_COUNT), DSL.count(STUDY_GROUP_MEMBERS.ID).as(STUDENT_COUNT),
+                DSL.countDistinct(USER_LAB_HISTORY.LAB_NUMBER).as(TEST_COUNT), DSL.countDistinct(USER_TEST_HISTORY.LAB_NUMBER).as(LAB_COUNT)).from(STUDY_GROUPS).
                 join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
-                join(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
+                leftJoin(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
                 leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(STUDY_GROUP_MEMBERS.USER_ID)).
                 leftJoin(USER_LAB_HISTORY).on(USER_LAB_HISTORY.USER_ID.eq(STUDY_GROUP_MEMBERS.USER_ID)).
                 where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, teacher))).
-                groupBy(STUDY_GROUPS.NAME).
+                groupBy(STUDY_GROUPS.NAME).asTable("T");
+
+        return Sets.newLinkedHashSet(dsl.select(DSL.rownum()).select(nested.fields()).from(nested).
                 fetch().map(STUDENT_INFO_RECORD_MAPPER));
     }
 
