@@ -71,6 +71,8 @@ public class EkoLabTheme extends ValoTheme {
 
     public static final String IMAGE_LOGO_CROP = "logoCrop.svg";
 
+    // --------------------- Расположение --------------------------
+    public static final String V_ALIGN_CENTER = "v-align-center";
     public static String toCssPosition(int left, int top) {
         return String.format("left: %spx; top: %spx;", left, top);
     }

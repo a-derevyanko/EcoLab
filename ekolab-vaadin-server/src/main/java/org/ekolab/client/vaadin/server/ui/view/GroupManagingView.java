@@ -7,16 +7,21 @@ import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.HeaderRow;
+import org.apache.batik.util.CSSConstants;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
+import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.UserLabStatistics;
 import org.ekolab.server.model.UserProfile;
-import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,18 +38,22 @@ public class GroupManagingView extends GridLayout implements View {
 
     private final UserLabService userLabService;
 
-    private final StudentInfoService studentInfoService;
+    private final EkoLabNavigator navigator;
 
     private final I18N i18N;
 
     // ---------------------------- Графические компоненты --------------------
     private final Grid<UserProfile> groupMembers = new Grid<>();
+    private final Button backToGroups = new Button(VaadinIcons.BACKWARDS);
+    private final Button newStudentButton = new Button(VaadinIcons.PLUS_CIRCLE);
+    private final Button removeStudentButton = new Button(VaadinIcons.MINUS);
+    private final HorizontalLayout buttons = new HorizontalLayout(newStudentButton, removeStudentButton);
 
     @Autowired
-    public GroupManagingView(UserLabService userLabService, StudentInfoService studentInfoService, I18N i18N) {
-        super(1, 2);
+    public GroupManagingView(UserLabService userLabService, EkoLabNavigator navigator, I18N i18N) {
+        super(4, 4);
         this.userLabService = userLabService;
-        this.studentInfoService = studentInfoService;
+        this.navigator = navigator;
         this.i18N = i18N;
     }
 
@@ -56,15 +65,23 @@ public class GroupManagingView extends GridLayout implements View {
 
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-        addComponent(groupMembers, 0, 0, 0, 0);
+        addComponent(groupMembers, 0, 0, 3, 2);
+        addComponent(backToGroups, 0, 3, 0, 3);
+        addComponent(buttons, 2, 3, 3, 3);
+
+        backToGroups.addClickListener( event -> navigator.navigateTo(TeacherGroupsManagingView.NAME));
+        backToGroups.setCaption(i18N.get("group-manage.group-members.back-to-groups"));
+        backToGroups.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+
         groupMembers.setSizeFull();
 
+        groupMembers.setBodyRowHeight(80.0);
         HeaderRow topHeader = groupMembers.prependHeaderRow();
         Grid.Column<UserProfile, String> initials = groupMembers.addColumn(userProfile ->
                 userProfile.getUserInfo().getLastName() + ' ' +
                         userProfile.getUserInfo().getFirstName() + '\n' +
                         userProfile.getUserInfo().getMiddleName()
-        ).setCaption("FIO");
+        ).setCaption(i18N.get("group-manage.group-members.student"));
 
         //topHeader.join(initials).setText("FIO");
         addLabColumns(1, i18N.get("group-manage.group-members.lab-1"), topHeader);
@@ -103,9 +120,20 @@ public class GroupManagingView extends GridLayout implements View {
                 new Label(getUserLabStatistics(labNumber, userProfile) == null ? VaadinIcons.MINUS_CIRCLE.getHtml() :
                         VaadinIcons.PLUS_CIRCLE.getHtml(), ContentMode.HTML)).setCaption(i18N.get("group-manage.group-members.execution"));
 
-        Grid.Column<UserProfile, String> defence = groupMembers.addColumn(userProfile -> {
+        Grid.Column<UserProfile, VerticalLayout> defence = groupMembers.addComponentColumn(userProfile -> {
             UserLabStatistics s = getUserLabStatistics(labNumber, userProfile);
-            return s == null ? "" : s.getTryCount() + "/10";
+            VerticalLayout layout = new VerticalLayout();
+            layout.setMargin(false);
+            layout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+
+            VaadinIcons icon = s == null || s.getMark() < 3 ? VaadinIcons.MINUS : VaadinIcons.PLUS;
+            layout.addComponent(new Label("<span style=\'color: " + (icon == VaadinIcons.PLUS ? CSSConstants.CSS_GREEN_VALUE : CSSConstants.CSS_RED_VALUE)
+                    + " !important;\'> " + icon.getHtml()  + "</span>", ContentMode.HTML));
+
+            if (true && s != null) { // проверка допуска
+                layout.addComponent(new Label("\n(Попыток " + s.getTryCount() + ')'));
+            }
+            return layout;
         }).setCaption(i18N.get("group-manage.group-members.defence"));
 
         Grid.Column<UserProfile, String> mark = groupMembers.addColumn(userProfile -> {
