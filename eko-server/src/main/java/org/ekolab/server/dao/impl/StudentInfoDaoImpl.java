@@ -96,6 +96,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
                 .join(STUDY_TEAMS).on(STUDY_TEAM_MEMBERS.TEAM_ID.eq(STUDY_TEAMS.ID))
                 .where(STUDY_TEAMS.NAME.eq(teamNumber)).and(STUDY_TEAMS.GROUP_ID
                         .eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))).
+                        orderBy(USERS.LAST_NAME,USERS.FIRST_NAME, USERS.MIDDLE_NAME).
                         fetchInto(String.class));
     }
 
@@ -105,6 +106,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
                 .join(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.USER_ID.eq(USERS.ID))
                 .join(STUDY_GROUPS).on(STUDY_GROUPS.ID.eq(STUDY_GROUP_MEMBERS.GROUP_ID))
                 .where(STUDY_GROUPS.ID.eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))).
+                        orderBy(USERS.LAST_NAME,USERS.FIRST_NAME, USERS.MIDDLE_NAME).
                         fetchInto(String.class));
     }
 
@@ -113,6 +115,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
         return Sets.newHashSet(dsl.select().from(STUDY_GROUPS).
                 join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
                 where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, teacher))).
+                orderBy(STUDY_GROUPS.NAME).
                 fetch().map(STUDENT_GROUP_RECORD_MAPPER));
     }
 
@@ -126,7 +129,9 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
                 leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(STUDY_GROUP_MEMBERS.USER_ID)).
                 leftJoin(USER_LAB_HISTORY).on(USER_LAB_HISTORY.USER_ID.eq(STUDY_GROUP_MEMBERS.USER_ID)).
                 where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, teacher))).
-                groupBy(STUDY_GROUPS.NAME).asTable("T");
+                groupBy(STUDY_GROUPS.NAME).
+                orderBy(STUDY_GROUPS.NAME).
+                asTable("T");
 
         return Sets.newLinkedHashSet(dsl.select(DSL.rownum()).select(nested.fields()).from(nested).
                 fetch().map(STUDENT_INFO_RECORD_MAPPER));
@@ -217,7 +222,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
 
     @Override
     public Set<StudentGroup> getStudentGroups() {
-        return Sets.newHashSet(dsl.selectFrom(STUDY_GROUPS).fetch().map(STUDENT_GROUP_RECORD_MAPPER));
+        return Sets.newHashSet(dsl.selectFrom(STUDY_GROUPS).orderBy(STUDY_GROUPS.NAME).fetch().map(STUDENT_GROUP_RECORD_MAPPER));
     }
 
     @Override

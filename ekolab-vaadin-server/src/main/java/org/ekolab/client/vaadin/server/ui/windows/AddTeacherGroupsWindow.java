@@ -3,34 +3,41 @@ package org.ekolab.client.vaadin.server.ui.windows;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.StudentGroup;
+import org.ekolab.server.service.api.StudentInfoService;
 
 import javax.annotation.PostConstruct;
 import java.util.Set;
-import java.util.function.Consumer;
 
 @SpringComponent
 @UIScope
 public class AddTeacherGroupsWindow extends BaseEkoLabWindow<AddTeacherGroupsWindow.AddTeacherGroupsWindowSettings> {
     // ---------------------------- Графические компоненты --------------------
-    protected final FormLayout content = new FormLayout();
-    protected final Button ok = new Button("Ok", event -> save());
-    protected final Button cancel = new Button("Cancel", event -> close());
-    protected final Grid<StudentGroup> groups = new Grid<>();
+    private final Button ok = new Button("OK", event -> save());
+    private final Button addNewGroup = new Button("New");
+    private final Label existsLabel = new Label("Exists");
+    private final Grid<StudentGroup> groups = new Grid<>();
 
-    protected final HorizontalLayout actions = new HorizontalLayout(ok, cancel);
+    private final HorizontalLayout actions = new HorizontalLayout(ok, addNewGroup);
+    private final VerticalLayout content = new VerticalLayout(existsLabel,groups, actions);
 
     // ------------------------------------ Данные экземпляра -------------------------------------------
-    protected final I18N i18N;
+    private final I18N i18N;
+    private final NewNamedEntityWindow newNamedEntityWindow;
+    private final StudentInfoService studentInfoService;
 
-    protected AddTeacherGroupsWindow(I18N i18N) {
+    private AddTeacherGroupsWindow(I18N i18N, NewNamedEntityWindow newNamedEntityWindow, StudentInfoService studentInfoService) {
         this.i18N = i18N;
+        this.newNamedEntityWindow = newNamedEntityWindow;
+        this.studentInfoService = studentInfoService;
     }
 
     @PostConstruct
@@ -40,39 +47,52 @@ public class AddTeacherGroupsWindow extends BaseEkoLabWindow<AddTeacherGroupsWin
         ok.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         ok.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         content.setSizeUndefined();
+        content.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         setResizable(false);
         content.setMargin(true);
 
         actions.setSpacing(true);
 
-        content.addComponents(groups, actions);
+        existsLabel.setValue(i18N.get("teacher-view.add-groups.existing"));
         groups.addColumn(StudentGroup::getName).setCaption(i18N.get("teacher-view.add-groups.name"));
         groups.setSelectionMode(Grid.SelectionMode.MULTI);
 
-        cancel.setCaption(i18N.get("confirm.cancel"));
-
+        addNewGroup.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
+                i18N.get("student-data.add-group"),
+                s -> {
+                    StudentGroup group = studentInfoService.createStudentGroup(s);
+                    refreshItems();
+                    groups.getSelectionModel().select(group);
+                }
+        )));
         center();
     }
 
     protected void save() {
-        settings.selectedGroups.accept(groups.getSelectedItems());
+        groups.getSelectedItems().forEach(group -> studentInfoService.addGroupToTeacher(settings.teacher, group));
+        settings.onSave.run();
         close();
     }
 
     @Override
     protected void beforeShow() {
         super.beforeShow();
+        refreshItems();
+    }
 
-        groups.setItems(settings.chooserGroups);
+    private void refreshItems() {
+        Set<StudentGroup> studentGroups = studentInfoService.getStudentGroups();
+        studentGroups.removeAll(studentInfoService.getTeacherGroups(settings.teacher));
+        groups.setItems(studentGroups);
     }
 
     public static class AddTeacherGroupsWindowSettings implements WindowSettings {
-        private final Set<StudentGroup> chooserGroups;
-        private final Consumer<Set<StudentGroup>> selectedGroups;
+        private final String teacher;
+        private final Runnable onSave;
 
-        public AddTeacherGroupsWindowSettings(Set<StudentGroup> chooserGroups, Consumer<Set<StudentGroup>> selectedGroups) {
-            this.chooserGroups = chooserGroups;
-            this.selectedGroups = selectedGroups;
+        public AddTeacherGroupsWindowSettings(String teacher, Runnable onSave) {
+            this.teacher = teacher;
+            this.onSave = onSave;
         }
     }
 }

@@ -16,7 +16,6 @@ import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.windows.AddTeacherGroupsWindow;
-import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.StudentGroupInfo;
 import org.ekolab.server.model.UserProfile;
 import org.ekolab.server.service.api.StudentInfoService;
@@ -107,11 +106,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
         addGroupButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         addGroupButton.addClickListener(event -> {
             Set<StudentGroupInfo> selected = groups.getSelectedItems();
-            Set<StudentGroup> choosableGroups = studentInfoService.getStudentGroups();
-            choosableGroups.removeAll(studentInfoService.getTeacherGroups(currentUser.getName()));
-            addTeacherGroupsWindow.show(new AddTeacherGroupsWindow.AddTeacherGroupsWindowSettings(choosableGroups, studentGroups -> {
-                studentGroups.forEach(group -> studentInfoService.addGroupToTeacher(currentUser.getName(), group));
-
+            addTeacherGroupsWindow.show(new AddTeacherGroupsWindow.AddTeacherGroupsWindowSettings(currentUser.getName(), () -> {
                 refreshTeacherGroups(selected);
             }));
         });
