@@ -23,6 +23,7 @@ import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -138,7 +139,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        refreshTeacherGroups(null);
+        refreshTeacherGroups(Collections.emptySet());
         UserProfile userProfile = userLabService.getUserProfile(currentUser.getName());
 
         todayDate.setValue(i18N.get("teacher-group-manage.today-date", LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
@@ -148,9 +149,9 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
                 userProfile.getUserInfo().getFirstName(), userProfile.getUserInfo().getMiddleName()));
     }
 
-    private void refreshTeacherGroups(Set<StudentGroupInfo> selected) {
+    private void refreshTeacherGroups(@NotNull Set<StudentGroupInfo> selected) {
         groups.setItems(studentInfoService.getTeacherGroupsInfo(currentUser.getName()));
-        if (selected == null) {
+        if (selected.isEmpty()) {
             removeGroupButton.setEnabled(false);
         } else {
             selected.forEach(groups::select);

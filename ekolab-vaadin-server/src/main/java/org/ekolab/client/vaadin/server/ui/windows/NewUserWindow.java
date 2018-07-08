@@ -9,7 +9,6 @@ import org.ekolab.server.service.api.UserInfoService;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 
 /**
  * Created by 777Al on 20.04.2017.
@@ -20,8 +19,8 @@ public abstract class NewUserWindow<T extends UserDataWindowSettings> extends Us
     // ------------------------------------ Данные экземпляра -------------------------------------
     private final UserSavedWindow userSavedWindow;
 
-    public NewUserWindow(I18N i18N, Binder<UserInfo> userInfoBinder, UserInfoService userInfoService, UserSavedWindow userSavedWindow) {
-        super(i18N, userInfoBinder, userInfoService);
+    protected NewUserWindow(I18N i18N, UserInfoService userInfoService, UserSavedWindow userSavedWindow) {
+        super(i18N, userInfoService);
         this.userSavedWindow = userSavedWindow;
     }
 
@@ -32,10 +31,14 @@ public abstract class NewUserWindow<T extends UserDataWindowSettings> extends Us
                 ComponentErrorNotification.show(i18N.get("savable.save-exception-caption"), i18N.get("savable.save-exception"));
             }
         } else {
-            UserInfo savedUserInfo = userInfoService.createUserInfo(userInfoBinder.getBean());
+            UserInfo savedUserInfo = saveUserInfo();
             userSavedWindow.show(new UserSavedWindow.UserSavedWindowSettings(savedUserInfo));
             super.save();
         }
+    }
+
+    protected UserInfo saveUserInfo() {
+        return userInfoService.createUserInfo(userInfoBinder.getBean());
     }
 
     @Override

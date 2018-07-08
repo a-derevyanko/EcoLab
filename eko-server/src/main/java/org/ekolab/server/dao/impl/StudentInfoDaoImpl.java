@@ -36,14 +36,13 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     private static final String TEST_COUNT = "TEST_COUNT";
     private static final String STUDENT_COUNT = "STUDENT_COUNT";
     private static final String LAB_COUNT = "LAB_COUNT";
-    private static final String GROUP_COUNT = "GROUP_COUNT";
     private static final RecordMapper<Record, StudentGroupInfo> STUDENT_INFO_RECORD_MAPPER = record -> {
         StudentGroupInfo group = new StudentGroupInfo();
         group.setIndex(record.get(0, Integer.class));
         group.setName(record.get(1, String.class));
-        group.setStudentCount(record.get(2, Integer.class));
-        group.setLabCount(record.get(3, Integer.class));
-        group.setDefenceCount(record.get(4, Integer.class));
+        group.setStudentCount(record.get(STUDENT_COUNT, Integer.class));
+        group.setLabCount(record.get(LAB_COUNT, Integer.class));
+        group.setDefenceCount(record.get(TEST_COUNT, Integer.class));
         return group;
     };
     private static final RecordMapper<Record, StudentGroup> STUDENT_GROUP_RECORD_MAPPER = record -> {
@@ -121,9 +120,9 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
 
     @Override
     public Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher) {
-        Table<Record> nested = dsl.<Record>select(STUDY_GROUPS.NAME,
-                DSL.count(STUDY_GROUP_MEMBERS.ID).as(GROUP_COUNT), DSL.count(STUDY_GROUP_MEMBERS.ID).as(STUDENT_COUNT),
-                DSL.countDistinct(USER_LAB_HISTORY.LAB_NUMBER).as(TEST_COUNT), DSL.countDistinct(USER_TEST_HISTORY.LAB_NUMBER).as(LAB_COUNT)).from(STUDY_GROUPS).
+        Table<Record> nested = dsl.<Record>select(STUDY_GROUPS.NAME, DSL.count(STUDY_GROUP_MEMBERS.ID).as(STUDENT_COUNT),
+                DSL.count(DSL.coalesce(USER_LAB_HISTORY.LAB_NUMBER)).as(LAB_COUNT),
+                DSL.count(DSL.coalesce(USER_TEST_HISTORY.LAB_NUMBER)).as(TEST_COUNT)).from(STUDY_GROUPS).
                 join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
                 leftJoin(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
                 leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(STUDY_GROUP_MEMBERS.USER_ID)).
@@ -160,7 +159,8 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     public void removeGroupFromTeacher(String teacher, String group) {
         dsl.deleteFrom(STUDY_GROUP_TEACHERS)
                 .where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(teacher)))
-                        .and(STUDY_GROUP_TEACHERS.GROUP_ID.eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group))))).execute();
+                        .and(STUDY_GROUP_TEACHERS.GROUP_ID.eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))))
+                .execute();
     }
 
     @Override
@@ -204,14 +204,14 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
 
     @Override
     public void removeStudentGroup(String name) {
-        dsl.deleteFrom(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(name));
+        dsl.deleteFrom(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(name)).execute();
     }
 
     @Override
     public void removeStudentTeam(String name, String group) {
         dsl.deleteFrom(STUDY_TEAMS).where(STUDY_TEAMS.GROUP_ID.eq(dsl.
                 select(STUDY_GROUPS.ID).
-                from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group))).and(STUDY_TEAMS.NAME.eq(name)));
+                from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group))).and(STUDY_TEAMS.NAME.eq(name))).execute();
     }
 
     @Override
@@ -223,6 +223,11 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     @Override
     public Set<StudentGroup> getStudentGroups() {
         return Sets.newHashSet(dsl.selectFrom(STUDY_GROUPS).orderBy(STUDY_GROUPS.NAME).fetch().map(STUDENT_GROUP_RECORD_MAPPER));
+    }
+
+    @Override
+    public StudentGroup getStudentGroupByName(String group) {
+        return dsl.selectFrom(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)).fetchOne().map(STUDENT_GROUP_RECORD_MAPPER);
     }
 
     @Override

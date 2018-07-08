@@ -70,5 +70,7 @@ public interface StudentInfoDao extends Serializable {
 
     Set<StudentGroup> getStudentGroups();
 
+    StudentGroup getStudentGroupByName(String group);
+
     Set<StudentTeam> getStudentTeams(String group);
 }

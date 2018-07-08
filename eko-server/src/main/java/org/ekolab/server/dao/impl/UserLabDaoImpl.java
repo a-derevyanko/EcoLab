@@ -78,17 +78,23 @@ public class UserLabDaoImpl implements UserLabDao {
     @Override
     public List<UserLabStatistics> getUserLabStatistics(String userName) {
       return dsl.select(DSL.val(1),
-              DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB1DATA.SAVE_DATE), USER_TEST_HISTORY.LAST_MODIFY_DATE, USER_TEST_HISTORY.MARK, USER_TEST_HISTORY.POINT_COUNT)
+              DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB1DATA.SAVE_DATE), DSL.max(USER_TEST_HISTORY.LAST_MODIFY_DATE),
+                      DSL.max(USER_TEST_HISTORY.MARK),
+                              DSL.max(USER_TEST_HISTORY.POINT_COUNT))
               .from(LAB1DATA)
               .leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB1DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(1))).
                       where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))
               .union(dsl.select(DSL.val(2),
-                      DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB2DATA.SAVE_DATE), USER_TEST_HISTORY.LAST_MODIFY_DATE, USER_TEST_HISTORY.MARK, USER_TEST_HISTORY.POINT_COUNT)
+                      DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB2DATA.SAVE_DATE), DSL.max(USER_TEST_HISTORY.LAST_MODIFY_DATE),
+                      DSL.max(USER_TEST_HISTORY.MARK),
+                      DSL.max(USER_TEST_HISTORY.POINT_COUNT))
                       .from(LAB2DATA)
                       .leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB2DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(2))).
                               where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))
               .union(dsl.select(DSL.val(3),
-                      DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB3DATA.SAVE_DATE), USER_TEST_HISTORY.LAST_MODIFY_DATE, USER_TEST_HISTORY.MARK, USER_TEST_HISTORY.POINT_COUNT)
+                      DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB3DATA.SAVE_DATE), DSL.max(USER_TEST_HISTORY.LAST_MODIFY_DATE),
+                      DSL.max(USER_TEST_HISTORY.MARK),
+                      DSL.max(USER_TEST_HISTORY.POINT_COUNT))
                       .from(LAB3DATA)
                       .leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB3DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(3))).
                               where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))

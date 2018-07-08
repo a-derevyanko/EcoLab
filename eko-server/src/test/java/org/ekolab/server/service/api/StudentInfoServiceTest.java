@@ -38,9 +38,9 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
     @AfterClass
     @Override
     public void removeUser() {
+        studentInfoService.removeStudentTeam(testTeam.getName(), testGroup.getName());
+        studentInfoService.removeStudentGroup(testGroup.getName());
         super.removeUser();
-        studentInfoService.removeStudentTeam(TEAMNUMBER, GROUPNAME);
-        studentInfoService.removeStudentGroup(GROUPNAME);
     }
 
     @Test

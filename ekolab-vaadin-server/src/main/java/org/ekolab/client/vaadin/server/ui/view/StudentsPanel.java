@@ -8,7 +8,6 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import org.ekolab.client.vaadin.server.dataprovider.StudentInfoDataProvider;
 import org.ekolab.client.vaadin.server.dataprovider.StudentInfoFilter;
@@ -35,15 +34,13 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
     // ---------------------------- Графические компоненты --------------------
     private final Label studentGroupLabel = new Label();
     private final ComboBox<StudentGroup> studentGroupComboBox = new ComboBox<>();
-    private final Button addStudentGroupButton = new Button("Add", VaadinIcons.PLUS_CIRCLE);
+    private final Button addStudentGroupButton = new Button(VaadinIcons.PLUS_CIRCLE);
     private final Button removeStudentGroupButton = new Button(VaadinIcons.MINUS_CIRCLE);
     private final Label studentTeamLabel = new Label();
     private final ComboBox<StudentTeam> studentTeamComboBox = new ComboBox<>();
-    private final Button addStudentTeamButton = new Button("Add", VaadinIcons.PLUS_CIRCLE);
+    private final Button addStudentTeamButton = new Button(VaadinIcons.PLUS_CIRCLE);
     private final Button removeStudentTeamButton = new Button(VaadinIcons.MINUS_CIRCLE);
-    private final GridLayout groupFilters = new GridLayout(4, 2);
-    private final GridLayout teamFilters = new GridLayout(4, 2);
-    private final HorizontalLayout studentFilters = new HorizontalLayout(groupFilters, teamFilters);
+    private final GridLayout filters = new GridLayout(14, 1);
 
     public StudentsPanel(EditStudentWindow userDataWindow, UserInfoService userInfoService, NewStudentWindow newUserWindow,
                          StudentInfoDataProvider userInfoDataProvider, I18N i18N, StudentInfoService studentInfoService,
@@ -56,18 +53,23 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
     @Override
     public void init() throws Exception {
         super.init();
-        addComponent(studentFilters, 0);
-        groupFilters.setSpacing(true);
-        groupFilters.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        groupFilters.addComponent(studentGroupLabel, 0, 0);
-        groupFilters.addComponent(studentGroupComboBox, 1, 0, 3, 0);
-        groupFilters.addComponent(addStudentGroupButton, 0, 1, 1, 1);
-        groupFilters.addComponent(removeStudentGroupButton, 2, 1, 3, 1);
+        addComponent(filters, 0);
+        filters.setSpacing(true);
+        filters.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        filters.addComponent(studentGroupLabel, 0, 0);
+        filters.addComponent(studentGroupComboBox, 1, 0, 3, 0);
+        filters.addComponent(addStudentGroupButton, 4, 0);
+        filters.addComponent(removeStudentGroupButton, 5, 0);
+
+       filters.addComponent(studentTeamLabel, 7, 0);
+       filters.addComponent(studentTeamComboBox, 8, 0, 11, 0);
+       filters.addComponent(addStudentTeamButton, 12, 0);
+       filters.addComponent(removeStudentTeamButton, 13, 0);
 
         addStudentGroupButton.setSizeFull();
         removeStudentGroupButton.setSizeFull();
         addStudentGroupButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        addStudentGroupButton.setCaption(i18N.get("student-data.add-group"));
+        addStudentGroupButton.setDescription(i18N.get("student-data.add-group"));
         addStudentGroupButton.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
                 i18N.get("student-data.add-group"),
                 s -> {
@@ -78,6 +80,7 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
         )));
         removeStudentGroupButton.setStyleName(EkoLabTheme.BUTTON_DANGER);
         removeStudentGroupButton.setEnabled(false);
+        removeStudentGroupButton.setDescription(i18N.get("student-data.remove-group"));
         studentGroupLabel.setValue(i18N.get("student-data.group"));
         studentGroupComboBox.setItems(studentInfoService.getStudentGroups());
         studentGroupComboBox.setTextInputAllowed(false);
@@ -97,18 +100,12 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
             searchUsers();
         });
 
-        teamFilters.setSpacing(true);
-        teamFilters.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        teamFilters.addComponent(studentTeamLabel, 0, 0);
-        teamFilters.addComponent(studentTeamComboBox, 1, 0, 3, 0);
-        teamFilters.addComponent(addStudentTeamButton, 0, 1, 1, 1);
-        teamFilters.addComponent(removeStudentTeamButton, 2, 1, 3, 1);
-
         addStudentTeamButton.setSizeFull();
         removeStudentTeamButton.setSizeFull();
+        removeStudentTeamButton.setDescription(i18N.get("student-data.remove-team"));
         addStudentTeamButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         addStudentTeamButton.setEnabled(false);
-        addStudentTeamButton.setCaption(i18N.get("student-data.add-team"));
+        addStudentTeamButton.setDescription(i18N.get("student-data.add-team"));
         addStudentTeamButton.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
                 i18N.get("student-data.add-team"),
                 s -> {
@@ -145,13 +142,13 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
             if (dataProvider.size(new Query<>(null)) > 0) {
                 users.select(userInfo);
             }
-        }, filter.getStudentInfoFilter(), studentInfo -> studentInfo = null);
+        }, filter.getStudentInfoFilter());
     }
 
     @Override
     protected StudentDataWindowSettings createSettingsForEdit(UserInfo userInfo, ConfigurableFilterDataProvider<UserInfo, Void, StudentInfoFilter> dataProvider) {
         return new StudentDataWindowSettings(userInfo, dataProvider::refreshItem,
-                filter.getStudentInfoFilter(), studentInfo -> studentInfo = null);
+                filter.getStudentInfoFilter());
     }
 
     @Override

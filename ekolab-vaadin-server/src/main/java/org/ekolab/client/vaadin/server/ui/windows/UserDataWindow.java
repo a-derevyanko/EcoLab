@@ -1,5 +1,6 @@
 package org.ekolab.client.vaadin.server.ui.windows;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Button;
@@ -34,15 +35,14 @@ public abstract class UserDataWindow<T extends UserDataWindowSettings> extends B
     protected final HorizontalLayout actions = new HorizontalLayout(save, cancel);
 
     // ------------------------------------ Данные экземпляра -------------------------------------------
-    protected final I18N i18N;
 
-    protected final Binder<UserInfo> userInfoBinder;
+    protected final Binder<UserInfo> userInfoBinder = new BeanValidationBinder<>(UserInfo.class);
+    protected final I18N i18N;
 
     protected final UserInfoService userInfoService;
 
-    protected UserDataWindow(I18N i18N, Binder<UserInfo> userInfoBinder, UserInfoService userInfoService) {
+    protected UserDataWindow(I18N i18N, UserInfoService userInfoService) {
         this.i18N = i18N;
-        this.userInfoBinder = userInfoBinder;
         this.userInfoService = userInfoService;
     }
 

@@ -9,8 +9,7 @@ import java.util.Objects;
  * Created by 777Al on 22.05.2017.
  */
 public class UserInfo extends IdentifiedDomainModel {
-    @Size(min = 1, max = 256)
-    @NotNull
+    @Size(max = 256)
     private String login;
 
     @Size(min = 1, max = 256)

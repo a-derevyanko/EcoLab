@@ -54,7 +54,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Override
     @Transactional
     @CachePut(cacheNames = STUDENT_INFO_CACHE, key = "#userInfo.login")
-    @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, allEntries = true)
+    @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, allEntries = true, condition =  "#team != null")
     @Deprecated // todo подумать, нужен ли этот метод. кэш для getTeamMembers() плохо будет работаь
     public StudentInfo updateStudentInfo(UserInfo userInfo, StudentGroup group, StudentTeam team) {
         userInfoService.updateUserInfo(userInfo);
@@ -69,7 +69,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Override
     @Transactional
     @CachePut(cacheNames = {STUDENT_INFO_CACHE}, key = "#userInfo.login")
-    @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, key = "#team")
+    @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, key = "#team.name", condition =  "#team != null")
     @NotNull
     public StudentInfo createStudentInfo(@NotNull UserInfo userInfo, @NotNull StudentGroup group,
                                          @NotNull StudentTeam team) {
@@ -77,7 +77,9 @@ public class StudentInfoServiceImpl implements StudentInfoService {
             userInfoService.createUserInfo(userInfo);
         }
         studentInfoDao.updateStudentGroup(userInfo.getLogin(), group);
-        studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
+        if (team != null) {
+            studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
+        }
         StudentInfo studentInfo = new StudentInfo();
         studentInfo.setGroup(group);
         studentInfo.setTeam(team);
@@ -122,7 +124,6 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
-    @Cacheable(TEAM_MEMBERS_CACHE)
     @Transactional(readOnly = true)
     public Set<String> getTeamMembers(String name, String group) {
         return studentInfoDao.getTeamMembers(name, group);
@@ -169,6 +170,11 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Transactional(readOnly = true)
     public Set<StudentGroup> getStudentGroups() {
         return studentInfoDao.getStudentGroups();
+    }
+
+    @Override
+    public StudentGroup getStudentGroupByName(String group) {
+        return studentInfoDao.getStudentGroupByName(group);
     }
 
     @Override

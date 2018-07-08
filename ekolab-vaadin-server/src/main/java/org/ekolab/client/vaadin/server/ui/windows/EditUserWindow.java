@@ -1,6 +1,5 @@
 package org.ekolab.client.vaadin.server.ui.windows;
 
-import com.vaadin.data.Binder;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
@@ -25,8 +24,8 @@ public abstract class EditUserWindow<T extends UserDataWindowSettings> extends U
     private final PasswordField oldPassword = new PasswordField("Old password");
     private final PasswordField newPassword = new PasswordField("New password");
 
-    public EditUserWindow(I18N i18N, Binder<UserInfo> userInfoBinder, UserInfoService userInfoService) {
-        super(i18N, userInfoBinder, userInfoService);
+    protected EditUserWindow(I18N i18N, UserInfoService userInfoService) {
+        super(i18N, userInfoService);
     }
 
     // ------------------------------------ Данные экземпляра -------------------------------------------

@@ -1,14 +1,14 @@
 package org.ekolab.client.vaadin.server.ui.windows;
 
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.server.model.StudentGroup;
@@ -22,12 +22,11 @@ import java.util.Set;
 public class AddTeacherGroupsWindow extends BaseEkoLabWindow<AddTeacherGroupsWindow.AddTeacherGroupsWindowSettings> {
     // ---------------------------- Графические компоненты --------------------
     private final Button ok = new Button("OK", event -> save());
-    private final Button addNewGroup = new Button("New");
+    private final Button addNewGroup = new Button(VaadinIcons.PLUS_CIRCLE);
     private final Label existsLabel = new Label("Exists");
     private final Grid<StudentGroup> groups = new Grid<>();
 
-    private final HorizontalLayout actions = new HorizontalLayout(ok, addNewGroup);
-    private final VerticalLayout content = new VerticalLayout(existsLabel,groups, actions);
+    private final GridLayout content = new GridLayout(2, 3);
 
     // ------------------------------------ Данные экземпляра -------------------------------------------
     private final I18N i18N;
@@ -44,6 +43,15 @@ public class AddTeacherGroupsWindow extends BaseEkoLabWindow<AddTeacherGroupsWin
     public void init() {
         setContent(content);
         setCaption(i18N.get("teacher-view.add-groups"));
+
+        content.setSizeFull();
+        content.setSpacing(true);
+        content.addComponent(groups, 0, 0,1,1);
+        content.addComponent(ok, 0, 2,0,2);
+        content.addComponent(addNewGroup, 1, 2,1,2);
+
+        content.setComponentAlignment(addNewGroup, Alignment.MIDDLE_RIGHT);
+
         ok.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         ok.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         content.setSizeUndefined();
@@ -51,26 +59,29 @@ public class AddTeacherGroupsWindow extends BaseEkoLabWindow<AddTeacherGroupsWin
         setResizable(false);
         content.setMargin(true);
 
-        actions.setSpacing(true);
-
         existsLabel.setValue(i18N.get("teacher-view.add-groups.existing"));
         groups.addColumn(StudentGroup::getName).setCaption(i18N.get("teacher-view.add-groups.name"));
         groups.setSelectionMode(Grid.SelectionMode.MULTI);
 
+        addNewGroup.setCaption(i18N.get("teacher-view.add-groups.create-new"));
+        addNewGroup.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         addNewGroup.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
                 i18N.get("student-data.add-group"),
                 s -> {
-                    StudentGroup group = studentInfoService.createStudentGroup(s);
+                    Set<StudentGroup> selected = groups.getSelectedItems();
+                    selected.add(studentInfoService.createStudentGroup(s));
                     refreshItems();
-                    groups.getSelectionModel().select(group);
+                    selected.forEach(group -> groups.getSelectionModel().select(group));
                 }
         )));
         center();
     }
 
     protected void save() {
-        groups.getSelectedItems().forEach(group -> studentInfoService.addGroupToTeacher(settings.teacher, group));
-        settings.onSave.run();
+        if (!groups.getSelectedItems().isEmpty()) {
+            groups.getSelectedItems().forEach(group -> studentInfoService.addGroupToTeacher(settings.teacher, group));
+            settings.onSave.run();
+        }
         close();
     }
 

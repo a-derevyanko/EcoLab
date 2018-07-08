@@ -19,9 +19,16 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
+import org.ekolab.client.vaadin.server.ui.windows.NewStudentWindow;
+import org.ekolab.client.vaadin.server.ui.windows.StudentDataWindowSettings;
+import org.ekolab.server.model.StudentGroup;
+import org.ekolab.server.model.StudentInfo;
+import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.UserLabStatistics;
 import org.ekolab.server.model.UserProfile;
+import org.ekolab.server.service.api.StudentInfoService;
+import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,6 +47,12 @@ public class GroupManagingView extends GridLayout implements View {
 
     private final EkoLabNavigator navigator;
 
+    private final NewStudentWindow newStudentWindow;
+
+    private final UserInfoService userInfoService;
+
+    private final StudentInfoService studentInfoService;
+
     private final I18N i18N;
 
     // ---------------------------- Графические компоненты --------------------
@@ -49,11 +62,17 @@ public class GroupManagingView extends GridLayout implements View {
     private final Button removeStudentButton = new Button(VaadinIcons.MINUS);
     private final HorizontalLayout buttons = new HorizontalLayout(newStudentButton, removeStudentButton);
 
+    // ---------------------------- Данные экземпляра --------------------
+    private StudentGroup studentGroup;
+
     @Autowired
-    public GroupManagingView(UserLabService userLabService, EkoLabNavigator navigator, I18N i18N) {
+    public GroupManagingView(UserLabService userLabService, EkoLabNavigator navigator, NewStudentWindow newStudentWindow, UserInfoService userInfoService, StudentInfoService studentInfoService, I18N i18N) {
         super(4, 4);
         this.userLabService = userLabService;
         this.navigator = navigator;
+        this.newStudentWindow = newStudentWindow;
+        this.userInfoService = userInfoService;
+        this.studentInfoService = studentInfoService;
         this.i18N = i18N;
     }
 
@@ -69,9 +88,14 @@ public class GroupManagingView extends GridLayout implements View {
         addComponent(backToGroups, 0, 3, 0, 3);
         addComponent(buttons, 2, 3, 3, 3);
 
+        newStudentButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        removeStudentButton.setStyleName(EkoLabTheme.BUTTON_DANGER);
+
         backToGroups.addClickListener( event -> navigator.navigateTo(TeacherGroupsManagingView.NAME));
         backToGroups.setCaption(i18N.get("group-manage.group-members.back-to-groups"));
         backToGroups.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+        setComponentAlignment(backToGroups, Alignment.MIDDLE_LEFT);
+        setComponentAlignment(buttons, Alignment.MIDDLE_RIGHT);
 
         groupMembers.setSizeFull();
 
@@ -83,10 +107,36 @@ public class GroupManagingView extends GridLayout implements View {
                         userProfile.getUserInfo().getMiddleName()
         ).setCaption(i18N.get("group-manage.group-members.student"));
 
-        //topHeader.join(initials).setText("FIO");
         addLabColumns(1, i18N.get("group-manage.group-members.lab-1"), topHeader);
         addLabColumns(2, i18N.get("group-manage.group-members.lab-2"), topHeader);
         addLabColumns(3, i18N.get("group-manage.group-members.lab-3"), topHeader);
+
+        groupMembers.addSelectionListener(event -> {
+            if (event.getAllSelectedItems().isEmpty()) {
+                removeStudentButton.setEnabled(false);
+            } else {
+                removeStudentButton.setEnabled(true);
+            }
+        });
+
+        newStudentButton.setCaption(i18N.get("group-manage.group-members.add-student"));
+        newStudentButton.addClickListener(event -> {
+            UserInfo newUserInfo = new UserInfo();
+            newUserInfo.setGroup(UserGroup.STUDENT);
+
+            StudentInfo newStudentInfo = new StudentInfo();
+            newStudentInfo.setGroup(studentGroup);
+            newStudentWindow.show(new StudentDataWindowSettings(newUserInfo, userInfo -> {
+                Set<UserProfile> selected = groupMembers.getSelectedItems();
+                refreshItems();
+                selected.forEach(s -> groupMembers.getSelectionModel().select(s));
+            }, newStudentInfo));
+        });
+
+        removeStudentButton.setCaption(i18N.get("group-manage.group-members.remove-student"));
+        removeStudentButton.setEnabled(false);
+        removeStudentButton.addClickListener(event ->
+                groupMembers.getSelectedItems().forEach(userProfile -> userInfoService.deleteUser(userProfile.getUserInfo().getLogin())));
 
         groupMembers.setSortOrder(Collections.singletonList(new GridSortOrder<>(initials, SortDirection.ASCENDING)));
     }
@@ -94,8 +144,12 @@ public class GroupManagingView extends GridLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         String group = event.getParameterMap().get(GROUP_NAME);
-        Set<UserProfile> userProfiles = userLabService.getUserProfiles(group);
-        groupMembers.setItems(userProfiles);
+        studentGroup = studentInfoService.getStudentGroupByName(group);
+        refreshItems();
+    }
+
+    private void refreshItems() {
+        Set<UserProfile> userProfiles = userLabService.getUserProfiles(studentGroup.getName());
 
         //todo
         UserProfile p = new UserProfile();
@@ -112,7 +166,10 @@ public class GroupManagingView extends GridLayout implements View {
         s.setPointCount(80);
         labStatistics.add(s);
         p.setStatistics(labStatistics);
-        groupMembers.setItems(p);
+
+        userProfiles.add(p);
+        groupMembers.setItems(userProfiles);
+
     }
 
     private void addLabColumns(int labNumber, String caption, HeaderRow topHeader) {

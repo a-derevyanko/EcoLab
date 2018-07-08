@@ -1,5 +1,6 @@
 package org.ekolab.client.vaadin.server.ui.windows;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
@@ -27,15 +28,14 @@ public class NewStudentWindow extends NewUserWindow<StudentDataWindowSettings> {
     private final AddableComboBox<StudentTeam> studentTeamComboBox = new AddableComboBox<>();
 
     // ------------------------------------ Данные экземпляра -------------------------------------
+    private final Binder<StudentInfo> studentInfoBinder = new BeanValidationBinder<>(StudentInfo.class);
     private final StudentInfoService studentInfoService;
-    private final Binder<StudentInfo> studentInfoBinder;
     private final NewLabeledItemWindow<StudentGroup> groupNewLabeledItemWindow;
     private final NewLabeledItemWindow<StudentTeam> teamNewLabeledItemWindow;
 
-    public NewStudentWindow(I18N i18N, Binder<UserInfo> userInfoBinder, Binder<StudentInfo> studentInfoBinder, UserInfoService userInfoService, UserSavedWindow userSavedWindow, StudentInfoService studentInfoService, NewLabeledItemWindow<StudentGroup> groupNewLabeledItemWindow, NewLabeledItemWindow<StudentTeam> teamNewLabeledItemWindow) {
-        super(i18N, userInfoBinder, userInfoService, userSavedWindow);
+    public NewStudentWindow(I18N i18N,UserInfoService userInfoService, UserSavedWindow userSavedWindow, StudentInfoService studentInfoService, NewLabeledItemWindow<StudentGroup> groupNewLabeledItemWindow, NewLabeledItemWindow<StudentTeam> teamNewLabeledItemWindow) {
+        super(i18N,  userInfoService, userSavedWindow);
         this.studentInfoService = studentInfoService;
-        this.studentInfoBinder = studentInfoBinder;
         this.groupNewLabeledItemWindow = groupNewLabeledItemWindow;
         this.teamNewLabeledItemWindow = teamNewLabeledItemWindow;
     }
@@ -88,7 +88,16 @@ public class NewStudentWindow extends NewUserWindow<StudentDataWindowSettings> {
             studentTeamComboBox.setItems(studentInfoService.getStudentTeams(settings.getStudentInfo().getGroup().getName()));
             studentGroupComboBox.setValue(settings.getStudentInfo().getGroup());
             studentTeamComboBox.setValue(settings.getStudentInfo().getTeam());
+        } else {
+            studentGroupComboBox.setValue(null);
         }
+    }
+
+    @Override
+    protected UserInfo saveUserInfo() {
+        UserInfo userInfo = super.saveUserInfo();
+        studentInfoService.createStudentInfo(userInfo, studentGroupComboBox.getValue(), studentTeamComboBox.getValue());
+        return userInfo;
     }
 
     @Override
