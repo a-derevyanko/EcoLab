@@ -1,8 +1,10 @@
 package org.ekolab.client.vaadin.server.ui.view;
 
 import com.vaadin.data.provider.GridSortOrder;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
@@ -12,11 +14,13 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.HeaderRow;
 import org.apache.batik.util.CSSConstants;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.EkoLabNavigator;
+import org.ekolab.client.vaadin.server.ui.common.DownloadStreamResource;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.windows.NewStudentWindow;
@@ -33,6 +37,7 @@ import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -60,7 +65,8 @@ public class GroupManagingView extends GridLayout implements View {
     private final Button backToGroups = new Button(VaadinIcons.BACKWARDS);
     private final Button newStudentButton = new Button(VaadinIcons.PLUS_CIRCLE);
     private final Button removeStudentButton = new Button(VaadinIcons.MINUS);
-    private final HorizontalLayout buttons = new HorizontalLayout(newStudentButton, removeStudentButton);
+    private final Button printUserLogins = new Button("Print users", VaadinIcons.PRINT);
+    private final HorizontalLayout buttons = new HorizontalLayout(printUserLogins, newStudentButton, removeStudentButton);
 
     // ---------------------------- Данные экземпляра --------------------
     private StudentGroup studentGroup;
@@ -139,6 +145,21 @@ public class GroupManagingView extends GridLayout implements View {
                 groupMembers.getSelectedItems().forEach(userProfile -> userInfoService.deleteUser(userProfile.getUserInfo().getLogin())));
 
         groupMembers.setSortOrder(Collections.singletonList(new GridSortOrder<>(initials, SortDirection.ASCENDING)));
+
+        printUserLogins.setCaption(i18N.get("admin-manage.users.print-table"));
+        printUserLogins.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+
+        new BrowserWindowOpener(new DownloadStreamResource(
+                () -> {
+                    Collection<UserProfile> userProfiles = groupMembers.getSelectedItems();
+                    if (userProfiles.isEmpty()) {
+                        userProfiles = ((ListDataProvider<UserProfile>) groupMembers.getDataProvider()).getItems();
+                    }
+
+                    return userInfoService.printUsersData(userProfiles.stream().map(UserProfile::getUserInfo), UI.getCurrent().getLocale());
+                },
+                "users.pdf"
+        )).extend(printUserLogins);
     }
 
     @Override
