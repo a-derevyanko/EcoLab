@@ -37,7 +37,6 @@ public abstract class NewItemWindow<V, T extends DomainModel> extends BaseEkoLab
         save.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         content.setSizeUndefined();
-        setResizable(false);
         content.setMargin(true);
 
         actions.setSpacing(true);

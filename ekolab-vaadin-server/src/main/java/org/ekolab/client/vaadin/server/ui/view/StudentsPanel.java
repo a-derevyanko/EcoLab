@@ -15,7 +15,7 @@ import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.BaseUsersPanel;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.windows.EditStudentWindow;
-import org.ekolab.client.vaadin.server.ui.windows.NewNamedEntityWindow;
+import org.ekolab.client.vaadin.server.ui.windows.NewLabeledItemWindow;
 import org.ekolab.client.vaadin.server.ui.windows.NewStudentWindow;
 import org.ekolab.client.vaadin.server.ui.windows.StudentDataWindowSettings;
 import org.ekolab.server.model.StudentGroup;
@@ -29,7 +29,8 @@ import org.vaadin.spring.annotation.PrototypeScope;
 @PrototypeScope
 public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, StudentInfoFilter> {
     private final StudentInfoService studentInfoService;
-    private final NewNamedEntityWindow newNamedEntityWindow;
+    private final NewLabeledItemWindow<StudentGroup> newStudentGroupWindow;
+    private final NewLabeledItemWindow<StudentTeam> newStudentTeamWindow;
 
     // ---------------------------- Графические компоненты --------------------
     private final Label studentGroupLabel = new Label();
@@ -43,11 +44,11 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
     private final GridLayout filters = new GridLayout(14, 1);
 
     public StudentsPanel(EditStudentWindow userDataWindow, UserInfoService userInfoService, NewStudentWindow newUserWindow,
-                         StudentInfoDataProvider userInfoDataProvider, I18N i18N, StudentInfoService studentInfoService,
-                         NewNamedEntityWindow newNamedEntityWindow) {
+                         StudentInfoDataProvider userInfoDataProvider, I18N i18N, StudentInfoService studentInfoService, NewLabeledItemWindow<StudentGroup> newStudentGroupWindow, NewLabeledItemWindow<StudentTeam> newStudentTeamWindow) {
         super(userDataWindow, userInfoService, newUserWindow, userInfoDataProvider, i18N);
         this.studentInfoService = studentInfoService;
-        this.newNamedEntityWindow = newNamedEntityWindow;
+        this.newStudentGroupWindow = newStudentGroupWindow;
+        this.newStudentTeamWindow = newStudentTeamWindow;
     }
 
     @Override
@@ -70,14 +71,12 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
         removeStudentGroupButton.setSizeFull();
         addStudentGroupButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         addStudentGroupButton.setDescription(i18N.get("student-data.add-group"));
-        addStudentGroupButton.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
-                i18N.get("student-data.add-group"),
-                s -> {
-                    StudentGroup group = studentInfoService.createStudentGroup(s);
+        addStudentGroupButton.addClickListener(event -> newStudentGroupWindow.show(new NewLabeledItemWindow.NewItemWindowSettings<>(
+                group -> {
                     studentGroupComboBox.setSelectedItem(group);
-                    studentTeamComboBox.setItems(studentInfoService.getStudentTeams(s));
-                }
-        )));
+                    studentTeamComboBox.setItems(studentInfoService.getStudentTeams(group.getName()));
+                    }, studentInfoService::isGroupExists,
+                studentInfoService::createStudentGroup)));
         removeStudentGroupButton.setStyleName(EkoLabTheme.BUTTON_DANGER);
         removeStudentGroupButton.setEnabled(false);
         removeStudentGroupButton.setDescription(i18N.get("student-data.remove-group"));
@@ -106,15 +105,19 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
         addStudentTeamButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         addStudentTeamButton.setEnabled(false);
         addStudentTeamButton.setDescription(i18N.get("student-data.add-team"));
-        addStudentTeamButton.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
-                i18N.get("student-data.add-team"),
-                s -> {
+        addStudentTeamButton.addClickListener(event -> newStudentTeamWindow.show(new NewLabeledItemWindow.NewItemWindowSettings<>(
+                team -> {
                     String group = studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new).getName();
-                    StudentTeam team = studentInfoService.createStudentTeam(s, group);
                     studentTeamComboBox.setItems(studentInfoService.getStudentTeams(group));
                     studentTeamComboBox.setSelectedItem(team);
-                }
-        )));
+                }, o -> {
+                    StudentGroup group = studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new);
+                    return studentInfoService.isTeamExists(group, o);
+                },
+                s -> {
+                    String group = studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new).getName();
+                    return studentInfoService.createStudentTeam(s, group);
+                })));
         removeStudentTeamButton.setStyleName(EkoLabTheme.BUTTON_DANGER);
         removeStudentTeamButton.setEnabled(false);
         removeStudentTeamButton.addClickListener(event -> studentInfoService.removeStudentTeam(studentTeamComboBox.

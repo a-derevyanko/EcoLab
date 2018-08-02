@@ -15,6 +15,7 @@ import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.service.api.StudentInfoService;
 
 import javax.annotation.PostConstruct;
+import java.util.HashSet;
 import java.util.Set;
 
 @SpringComponent
@@ -30,12 +31,12 @@ public class AddTeacherGroupsWindow extends BaseEkoLabWindow<AddTeacherGroupsWin
 
     // ------------------------------------ Данные экземпляра -------------------------------------------
     private final I18N i18N;
-    private final NewNamedEntityWindow newNamedEntityWindow;
+    private final NewLabeledItemWindow<StudentGroup> newStudentGroupWindow;
     private final StudentInfoService studentInfoService;
 
-    private AddTeacherGroupsWindow(I18N i18N, NewNamedEntityWindow newNamedEntityWindow, StudentInfoService studentInfoService) {
+    private AddTeacherGroupsWindow(I18N i18N, NewLabeledItemWindow<StudentGroup> newStudentGroupWindow, StudentInfoService studentInfoService) {
         this.i18N = i18N;
-        this.newNamedEntityWindow = newNamedEntityWindow;
+        this.newStudentGroupWindow = newStudentGroupWindow;
         this.studentInfoService = studentInfoService;
     }
 
@@ -65,15 +66,17 @@ public class AddTeacherGroupsWindow extends BaseEkoLabWindow<AddTeacherGroupsWin
 
         addNewGroup.setCaption(i18N.get("teacher-view.add-groups.create-new"));
         addNewGroup.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        addNewGroup.addClickListener(event -> newNamedEntityWindow.show(new NewNamedEntityWindow.NamedEntityWindowSettings(
-                i18N.get("student-data.add-group"),
+        addNewGroup.addClickListener(event -> newStudentGroupWindow.show(new NewLabeledItemWindow.NewItemWindowSettings<>(
+                group -> {
+                }, studentInfoService::isGroupExists,
                 s -> {
-                    Set<StudentGroup> selected = groups.getSelectedItems();
-                    selected.add(studentInfoService.createStudentGroup(s));
+                    Set<StudentGroup> selected = new HashSet<>(groups.getSelectedItems());
+                    StudentGroup group = studentInfoService.createStudentGroup(s);
+                    selected.add(group);
                     refreshItems();
-                    selected.forEach(group -> groups.getSelectionModel().select(group));
-                }
-        )));
+                    selected.forEach(sel -> groups.getSelectionModel().select(sel));
+                    return group;
+                })));
         center();
     }
 
