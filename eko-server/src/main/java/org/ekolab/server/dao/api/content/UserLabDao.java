@@ -6,6 +6,7 @@ import org.ekolab.server.model.UserLabStatistics;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface UserLabDao {
     /**
@@ -37,4 +38,18 @@ public interface UserLabDao {
      * @return статистика
      */
     List<UserLabStatistics> getUserLabStatistics(String userName);
+
+    /**
+     * Возвращает номера лабораторных, к которым есть доступ
+     * @param userName имя пользователя
+     * @return номера лабораторных, к которым есть доступ
+     */
+    Set<Integer> getAllowedLabs(String userName);
+
+    /**
+     * Допустить пользователя к лабораторной
+     * @param userName пользователь
+     * @param allowedLabs лабораторные, к которым допускается пользователь
+     */
+    void allowLabs(String userName, int... allowedLabs);
 }

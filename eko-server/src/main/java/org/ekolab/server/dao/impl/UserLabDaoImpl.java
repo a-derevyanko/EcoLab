@@ -1,8 +1,10 @@
 package org.ekolab.server.dao.impl;
 
+import com.google.common.collect.Sets;
 import org.ekolab.server.dao.api.content.UserLabDao;
 import org.ekolab.server.model.LabMode;
 import org.ekolab.server.model.UserLabStatistics;
+import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.Record6;
@@ -16,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.ekolab.server.db.h2.public_.Tables.LAB1DATA;
@@ -24,6 +27,7 @@ import static org.ekolab.server.db.h2.public_.Tables.LAB1_RANDOM_VARIANT;
 import static org.ekolab.server.db.h2.public_.Tables.LAB2DATA;
 import static org.ekolab.server.db.h2.public_.Tables.LAB2_RANDOM_VARIANT;
 import static org.ekolab.server.db.h2.public_.Tables.LAB3DATA;
+import static org.ekolab.server.db.h2.public_.Tables.USER_LAB_ALLOWANCE;
 import static org.ekolab.server.db.h2.public_.Tables.USER_TEST_HISTORY;
 import static org.ekolab.server.db.h2.public_.tables.Lab2ExperimentLog.LAB2_EXPERIMENT_LOG;
 
@@ -101,4 +105,21 @@ public class UserLabDaoImpl implements UserLabDao {
               .orderBy(1)
               .fetch(USER_LAB_STATISTICS_RECORD_MAPPER);
     }
+
+  @Override
+  public Set<Integer> getAllowedLabs(String userName) {
+    return Sets.newHashSet(dsl.select(USER_LAB_ALLOWANCE.LAB_NUMBER).from(USER_LAB_ALLOWANCE).
+            where(USER_LAB_ALLOWANCE.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetchInto(Integer.class));
+  }
+
+  @Override
+  public void allowLabs(String userName, int... allowedLabs) {
+      BatchBindStep step = dsl.batch(dsl.insertInto(USER_LAB_ALLOWANCE, USER_LAB_ALLOWANCE.USER_ID, USER_LAB_ALLOWANCE.LAB_NUMBER).
+            values((Long)null, null));
+
+      for (int lab : allowedLabs) {
+          step = step.bind(DaoUtils.getFindUserIdSelect(dsl, userName), lab);
+      }
+      step.execute();
+  }
 }

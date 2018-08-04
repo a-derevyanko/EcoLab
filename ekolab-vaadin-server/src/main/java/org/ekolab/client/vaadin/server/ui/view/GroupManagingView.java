@@ -208,7 +208,9 @@ public class GroupManagingView extends GridLayout implements View {
             layout.addComponent(new Label("<span style=\'color: " + (icon == VaadinIcons.PLUS ? CSSConstants.CSS_GREEN_VALUE : CSSConstants.CSS_RED_VALUE)
                     + " !important;\'> " + icon.getHtml()  + "</span>", ContentMode.HTML));
 
-            if (true && s != null) { // проверка допуска
+            boolean isLabAllowed = userProfile.getAllowedLabs().contains(labNumber);
+
+            if (isLabAllowed && s != null) { // проверка допуска
                 layout.addComponent(new Label("\n(Попыток " + s.getTryCount() + ')'));
             }
             return layout;

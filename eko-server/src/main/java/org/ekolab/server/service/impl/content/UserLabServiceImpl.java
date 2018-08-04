@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.UnhandledException;
 import org.ekolab.server.dao.api.content.UserLabDao;
 import org.ekolab.server.model.LabMode;
-import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.UserLabStatistics;
 import org.ekolab.server.model.UserProfile;
 import org.ekolab.server.service.api.StudentInfoService;
@@ -14,6 +13,7 @@ import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -54,12 +54,14 @@ public class UserLabServiceImpl implements UserLabService {
 
     @Override
     @CachePut(value = "COMPLETED_TEST", key = "#userName")
+    @Transactional
     public Collection<Integer> setTestCompleted(String userName, int labNumber, int mark, int pointCount) {
         dao.setTestCompleted(userName, labNumber, mark, pointCount);
         return dao.getCompletedTests(userName);
     }
 
     @Override
+    @Transactional
     public int removeAllOldLabs(LocalDateTime lastSaveDate) {
         AtomicInteger removedLabs = new AtomicInteger();
         labServices.forEach(labService -> removedLabs.addAndGet(labService.removeOldLabs(lastSaveDate)));
@@ -71,6 +73,7 @@ public class UserLabServiceImpl implements UserLabService {
         UserProfile profile = new UserProfile();
         profile.setStatistics(dao.getUserLabStatistics(userName));
         profile.setUserInfo(userInfoService.getUserInfo(userName));
+        profile.setAllowedLabs(getAllowedLabs(userName));
         profile.setStudentInfo(studentInfoService.getStudentInfo(userName));
         profile.setAverageMark(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getMark).average().orElse(0.0));
         profile.setAveragePointCount(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getPointCount).average().orElse(0.0));
@@ -94,5 +97,16 @@ public class UserLabServiceImpl implements UserLabService {
     @Override
     public Set<UserProfile> getUserProfiles(String group) {
         return studentInfoService.getGroupMembers(group).stream().map(this::getUserProfile).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Integer> getAllowedLabs(String userName) {
+        return dao.getAllowedLabs(userName);
+    }
+
+    @Override
+    @Transactional
+    public void allowLabs(String userName, int... allowedLabs) {
+        dao.allowLabs(userName, allowedLabs);
     }
 }
