@@ -20,7 +20,13 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import java.awt.*;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import java.awt.Desktop;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -90,7 +96,12 @@ public class DesktopVaadinApplication extends VaadinApplication {
             }
             return ctx;
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(new JFrame(), "Произошла ошибка: " + ex);
+            JTextArea msg = new JTextArea("Произошла ошибка: " + ex);
+            msg.setLineWrap(true);
+            msg.setWrapStyleWord(true);
+
+            JScrollPane scrollPane = new JScrollPane(msg);
+            JOptionPane.showMessageDialog(new JFrame(), scrollPane);
             throw ex;
         } finally {
             SplashScreen.setVisible(false);

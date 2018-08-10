@@ -34,6 +34,7 @@ import org.ekolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
 import org.ekolab.client.vaadin.server.ui.windows.LabTypeSelectorWindow;
 import org.ekolab.server.model.LabMode;
 import org.ekolab.server.model.UserGroup;
+import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -56,6 +57,8 @@ public class LabChooserView extends VerticalLayout implements View {
     private final Authentication currentUser;
 
     private final UserLabService userLabService;
+
+    private final StudentInfoService studentInfoService;
 
     private final PresentationService presentationService;
 
@@ -86,11 +89,12 @@ public class LabChooserView extends VerticalLayout implements View {
     private final PopupView labPresentationSelectView = new PopupView(null, labPresentationSelectContent);
 
     @Autowired
-    public LabChooserView(EkoLabNavigator navigator, ResourceService resourceService, Authentication currentUser, UserLabService userLabService, PresentationService presentationService, I18N i18N, LabTypeSelectorWindow labTypeSelectorWindow) {
+    public LabChooserView(EkoLabNavigator navigator, ResourceService resourceService, Authentication currentUser, UserLabService userLabService, StudentInfoService studentInfoService, PresentationService presentationService, I18N i18N, LabTypeSelectorWindow labTypeSelectorWindow) {
         this.navigator = navigator;
         this.resourceService = resourceService;
         this.currentUser = currentUser;
         this.userLabService = userLabService;
+        this.studentInfoService = studentInfoService;
         this.presentationService = presentationService;
         this.i18N = i18N;
         this.labTypeSelectorWindow = labTypeSelectorWindow;
@@ -190,7 +194,7 @@ public class LabChooserView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        Set<Integer> allowedLabs = userLabService.getAllowedLabs(currentUser.getName());
+        Set<Integer> allowedLabs = studentInfoService.getAllowedLabs(currentUser.getName());
         Map<Integer, LabMode> completedLabs = userLabService.getCompletedLabs(currentUser.getName());
         Collection<Integer> completedTests = userLabService.getCompletedTests(currentUser.getName());
         setTestButtonSate(lab1TestButton, completedLabs.containsKey(1) && !completedTests.contains(1));

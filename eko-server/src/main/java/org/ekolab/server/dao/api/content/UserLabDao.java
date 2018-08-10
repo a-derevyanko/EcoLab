@@ -38,18 +38,4 @@ public interface UserLabDao {
      * @return статистика
      */
     List<UserLabStatistics> getUserLabStatistics(String userName);
-
-    /**
-     * Возвращает номера лабораторных, к которым есть доступ
-     * @param userName имя пользователя
-     * @return номера лабораторных, к которым есть доступ
-     */
-    Set<Integer> getAllowedLabs(String userName);
-
-    /**
-     * Допустить пользователя к лабораторной
-     * @param userName пользователь
-     * @param allowedLabs лабораторные, к которым допускается пользователь
-     */
-    void allowLabs(String userName, int... allowedLabs);
 }

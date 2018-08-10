@@ -73,7 +73,7 @@ public class UserLabServiceImpl implements UserLabService {
         UserProfile profile = new UserProfile();
         profile.setStatistics(dao.getUserLabStatistics(userName));
         profile.setUserInfo(userInfoService.getUserInfo(userName));
-        profile.setAllowedLabs(getAllowedLabs(userName));
+        profile.setAllowedLabs(studentInfoService.getAllowedLabs(userName));
         profile.setStudentInfo(studentInfoService.getStudentInfo(userName));
         profile.setAverageMark(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getMark).average().orElse(0.0));
         profile.setAveragePointCount(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getPointCount).average().orElse(0.0));
@@ -97,16 +97,5 @@ public class UserLabServiceImpl implements UserLabService {
     @Override
     public Set<UserProfile> getUserProfiles(String group) {
         return studentInfoService.getGroupMembers(group).stream().map(this::getUserProfile).collect(Collectors.toSet());
-    }
-
-    @Override
-    public Set<Integer> getAllowedLabs(String userName) {
-        return dao.getAllowedLabs(userName);
-    }
-
-    @Override
-    @Transactional
-    public void allowLabs(String userName, int... allowedLabs) {
-        dao.allowLabs(userName, allowedLabs);
     }
 }

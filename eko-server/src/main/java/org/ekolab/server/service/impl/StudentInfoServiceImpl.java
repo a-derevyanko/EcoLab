@@ -181,4 +181,15 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     public Set<StudentTeam> getStudentTeams(String group) {
         return studentInfoDao.getStudentTeams(group);
     }
+
+    @Override
+    public Set<Integer> getAllowedLabs(String userName) {
+        return studentInfoDao.getAllowedLabs(userName);
+    }
+
+    @Override
+    @Transactional
+    public void changeLabAllowance(String userName, boolean allow, int... labs) {
+        studentInfoDao.changeLabAllowance(userName, allow, labs);
+    }
 }

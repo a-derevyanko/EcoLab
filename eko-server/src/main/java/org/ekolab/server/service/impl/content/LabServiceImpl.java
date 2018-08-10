@@ -15,6 +15,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.types.date.FixedTimestamp;
 import org.apache.commons.lang.UnhandledException;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.math3.util.Precision;
 import org.ekolab.server.common.I18NUtils;
 import org.ekolab.server.common.MathUtils;
@@ -70,6 +71,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -127,7 +129,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     public T startNewLab(String userName) {
         T labData = createBaseLabData(userName);
         labData.setVariant(generateNewLabVariant());
-        labDao.saveLab(labData);
+        applyToTeamMembers(userName, labData, labDao::saveLab);
         updateCalculatedFields(labData);
         return labData;
     }
@@ -137,7 +139,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     //@CachePut(cacheNames = "LABDATA", key = "#labData.userLogin")
     public T updateLab(T labData) {
         labData.setSaveDate(LocalDateTime.now());
-        labDao.updateLab(labData);
+        applyToTeamMembers(labData.getUserLogin(), labData, labDao::updateLab);
         updateCalculatedFields(labData);
         return labData;
     }
@@ -421,4 +423,24 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
      * @return вариант лабораторной
      */
     protected abstract V generateNewLabVariant();
+
+    /**
+     * Применяет функцию ко всем членам бригады, у которых есть разрешение на выполнение лабораторной
+     * @param userName пользователь, который в бригаде
+     * @param labData данные лабораторной
+     * @param dataConsumer функция
+     */
+    private void applyToTeamMembers(String userName, final T labData, Consumer<T> dataConsumer) {
+        StudentInfo studentInfo = studentInfoService.getStudentInfo(userName);
+        if (studentInfo != null && studentInfo.getTeam() != null) {
+            T data = SerializationUtils.clone(labData);
+            studentInfoService.getTeamMembers(studentInfo.getTeam().getName(), studentInfo.getGroup().getName())
+                    .stream().filter(p -> !p.equals(userName)).filter(s -> studentInfoService.getAllowedLabs(s).
+                    contains(getLabNumber())).forEach(s -> {
+                data.setUserLogin(userName);
+                dataConsumer.accept(data);
+            });
+        }
+        dataConsumer.accept(labData);
+    }
 }

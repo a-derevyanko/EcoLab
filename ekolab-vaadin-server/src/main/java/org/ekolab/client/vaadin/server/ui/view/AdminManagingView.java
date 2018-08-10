@@ -2,8 +2,11 @@ package org.ekolab.client.vaadin.server.ui.view;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FileDownloader;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
@@ -11,10 +14,12 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import org.ekolab.client.vaadin.server.EkoLabVaadinProperties;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.common.DownloadStreamResource;
 import org.ekolab.client.vaadin.server.ui.common.UIUtils;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.common.Role;
 import org.ekolab.server.model.UserGroup;
+import org.ekolab.server.service.api.AdminService;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -28,6 +33,8 @@ public class AdminManagingView extends VerticalLayout implements View {
 
     private final I18N i18N;
 
+    private final AdminService adminService;
+
     private final EkoLabVaadinProperties systemProperties;
 
     private final AdminsPanel adminsPanel;
@@ -39,7 +46,9 @@ public class AdminManagingView extends VerticalLayout implements View {
     // ---------------------------- Графические компоненты --------------------
     private final TextField autoSaveRate = new TextField();
 
-    private final FormLayout properties = new FormLayout(autoSaveRate);
+    private final Button backUpButton = new Button(VaadinIcons.DOWNLOAD_ALT);
+
+    private final FormLayout properties = new FormLayout(autoSaveRate, backUpButton);
 
     private final HorizontalLayout systemPropertiesPanel = new HorizontalLayout(properties);
 
@@ -47,8 +56,9 @@ public class AdminManagingView extends VerticalLayout implements View {
 
     protected final TabSheet userTabs = new TabSheet();
 
-    public AdminManagingView(I18N i18N, EkoLabVaadinProperties systemProperties, AdminsPanel adminsPanel, TeachersPanel teachersPanel, StudentsPanel studentsPanel) {
+    public AdminManagingView(I18N i18N, AdminService adminService, EkoLabVaadinProperties systemProperties, AdminsPanel adminsPanel, TeachersPanel teachersPanel, StudentsPanel studentsPanel) {
         this.i18N = i18N;
+        this.adminService = adminService;
         this.systemProperties = systemProperties;
         this.adminsPanel = adminsPanel;
         this.teachersPanel = teachersPanel;
@@ -76,6 +86,12 @@ public class AdminManagingView extends VerticalLayout implements View {
         userTabs.addTab(teachersPanel, i18N.get(UserGroup.TEACHER));
         userTabs.addTab(studentsPanel, i18N.get(UserGroup.STUDENT));
         userTabs.addTab(systemPropertiesPanel, i18N.get("admin-manage.system.properties"));
+
+        backUpButton.setCaption(i18N.get("backUp"));
+
+        FileDownloader fileDownloader = new FileDownloader(
+                new DownloadStreamResource(adminService::getBackup, "backup.zip"));
+        fileDownloader.extend(backUpButton);
     }
 
     @Override

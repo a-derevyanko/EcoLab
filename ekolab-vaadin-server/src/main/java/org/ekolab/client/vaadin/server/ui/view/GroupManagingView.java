@@ -1,5 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.view;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import com.vaadin.data.provider.GridSortOrder;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.icons.VaadinIcons;
@@ -178,6 +180,7 @@ public class GroupManagingView extends GridLayout implements View {
         p.getUserInfo().setFirstName("admin");
         p.getUserInfo().setMiddleName("admin");
         p.getUserInfo().setLastName("admin");
+        p.setAllowedLabs(ImmutableSet.of(1, 2));
 
         List<UserLabStatistics> labStatistics = new ArrayList<>();
         UserLabStatistics s = new UserLabStatistics();
@@ -194,9 +197,33 @@ public class GroupManagingView extends GridLayout implements View {
     }
 
     private void addLabColumns(int labNumber, String caption, HeaderRow topHeader) {
-        Grid.Column<UserProfile, Label> execution = groupMembers.addComponentColumn(userProfile ->
-                new Label(getUserLabStatistics(labNumber, userProfile) == null ? VaadinIcons.MINUS_CIRCLE.getHtml() :
-                        VaadinIcons.PLUS_CIRCLE.getHtml(), ContentMode.HTML)).setCaption(i18N.get("group-manage.group-members.execution"));
+        Grid.Column<UserProfile, VerticalLayout> execution = groupMembers.addComponentColumn(userProfile ->
+        {
+            VerticalLayout layout = new VerticalLayout();
+            layout.setMargin(true);
+            layout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            Button button = new Button();
+            Button.ClickListener listener = event -> {
+                Set<Integer> allowedLabs = Sets.newHashSet(userProfile.getAllowedLabs());
+                if (allowedLabs.contains(labNumber)) {
+                    studentInfoService.changeLabAllowance(userProfile.getUserInfo().getLogin(),
+                            false, labNumber);
+                    allowedLabs.remove(labNumber);
+                    setAllowButtonStyles(button, false);
+                } else {
+                    studentInfoService.changeLabAllowance(userProfile.getUserInfo().getLogin(),
+                            true, labNumber);
+                    allowedLabs.add(labNumber);
+                    setAllowButtonStyles(button, true);
+                }
+                userProfile.setAllowedLabs(allowedLabs);
+            };
+            button.addClickListener(listener);
+
+            setAllowButtonStyles(button, userProfile.getAllowedLabs().contains(labNumber));
+            layout.addComponent(button);
+            return layout;
+        }).setCaption(i18N.get("group-manage.group-members.execution"));
 
         Grid.Column<UserProfile, VerticalLayout> defence = groupMembers.addComponentColumn(userProfile -> {
             UserLabStatistics s = getUserLabStatistics(labNumber, userProfile);
@@ -222,6 +249,18 @@ public class GroupManagingView extends GridLayout implements View {
         }).setCaption(i18N.get("group-manage.group-members.mark"));
 
         topHeader.join(execution, defence, mark).setText(caption);
+    }
+
+    private void setAllowButtonStyles(Button button, boolean labAllowed) {
+        if (labAllowed) {
+            button.setIcon(VaadinIcons.MINUS_CIRCLE);
+            button.setStyleName(EkoLabTheme.BUTTON_DANGER);
+            button.setDescription(i18N.get("admin-manage.users.remove-allow"));
+        } else {
+            button.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+            button.setIcon(VaadinIcons.PLUS_CIRCLE);
+            button.setDescription(i18N.get("admin-manage.users.allow"));
+        }
     }
 
     private static UserLabStatistics getUserLabStatistics(int labNumber, UserProfile profile) {

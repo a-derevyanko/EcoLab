@@ -73,4 +73,19 @@ public interface StudentInfoDao extends Serializable {
     StudentGroup getStudentGroupByName(String group);
 
     Set<StudentTeam> getStudentTeams(String group);
+
+    /**
+     * Возвращает номера лабораторных, к которым есть доступ
+     * @param userName имя пользователя
+     * @return номера лабораторных, к которым есть доступ
+     */
+    Set<Integer> getAllowedLabs(String userName);
+
+    /**
+     * Допустить пользователя к лабораторной
+     * @param userName пользователь
+     * @param labs лабораторные, к которым меняется допуск
+     * @param allow допустить/снять допуск
+     */
+    void changeLabAllowance(String userName, boolean allow, int... labs);
 }
