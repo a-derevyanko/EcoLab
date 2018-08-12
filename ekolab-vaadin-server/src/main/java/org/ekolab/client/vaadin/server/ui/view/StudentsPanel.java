@@ -14,7 +14,7 @@ import org.ekolab.client.vaadin.server.dataprovider.StudentInfoFilter;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.BaseUsersPanel;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
-import org.ekolab.client.vaadin.server.ui.windows.EditStudentWindow;
+import org.ekolab.client.vaadin.server.ui.windows.SimpleEditUserWindow;
 import org.ekolab.client.vaadin.server.ui.windows.NewLabeledItemWindow;
 import org.ekolab.client.vaadin.server.ui.windows.NewStudentWindow;
 import org.ekolab.client.vaadin.server.ui.windows.StudentDataWindowSettings;
@@ -43,7 +43,7 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
     private final Button removeStudentTeamButton = new Button(VaadinIcons.MINUS_CIRCLE);
     private final GridLayout filters = new GridLayout(14, 1);
 
-    public StudentsPanel(EditStudentWindow userDataWindow, UserInfoService userInfoService, NewStudentWindow newUserWindow,
+    public StudentsPanel(SimpleEditUserWindow userDataWindow, UserInfoService userInfoService, NewStudentWindow newUserWindow,
                          StudentInfoDataProvider userInfoDataProvider, I18N i18N, StudentInfoService studentInfoService, NewLabeledItemWindow<StudentGroup> newStudentGroupWindow, NewLabeledItemWindow<StudentTeam> newStudentTeamWindow) {
         super(userDataWindow, userInfoService, newUserWindow, userInfoDataProvider, i18N);
         this.studentInfoService = studentInfoService;

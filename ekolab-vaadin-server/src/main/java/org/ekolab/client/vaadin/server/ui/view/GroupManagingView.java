@@ -12,8 +12,8 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
@@ -33,6 +33,7 @@ import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.UserLabStatistics;
 import org.ekolab.server.model.UserProfile;
+import org.ekolab.server.service.api.SettingsService;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.UserLabService;
@@ -45,7 +46,7 @@ import java.util.List;
 import java.util.Set;
 
 @SpringView(name = GroupManagingView.NAME)
-public class GroupManagingView extends GridLayout implements View {
+public class GroupManagingView extends HorizontalLayout implements View {
     public static final String NAME = "group-manage";
 
     public static final String GROUP_NAME = "name";
@@ -63,19 +64,23 @@ public class GroupManagingView extends GridLayout implements View {
     private final I18N i18N;
 
     // ---------------------------- Графические компоненты --------------------
+    private final Label showLabs = new Label("Show labs: ");
     private final Grid<UserProfile> groupMembers = new Grid<>();
     private final Button backToGroups = new Button(VaadinIcons.BACKWARDS);
+    private final Button editStudentButton = new Button(VaadinIcons.EDIT);
     private final Button newStudentButton = new Button(VaadinIcons.PLUS_CIRCLE);
     private final Button removeStudentButton = new Button(VaadinIcons.MINUS);
     private final Button printUserLogins = new Button("Print users", VaadinIcons.PRINT);
-    private final HorizontalLayout buttons = new HorizontalLayout(printUserLogins, newStudentButton, removeStudentButton);
+    private final HorizontalLayout checkBoxes = new HorizontalLayout(showLabs);
+    private final VerticalLayout buttons = new VerticalLayout(printUserLogins, editStudentButton, newStudentButton,
+            removeStudentButton, showLabs, checkBoxes, backToGroups);
+    private final HorizontalLayout gridWithButtons = new HorizontalLayout(buttons, groupMembers);
 
     // ---------------------------- Данные экземпляра --------------------
     private StudentGroup studentGroup;
 
     @Autowired
-    public GroupManagingView(UserLabService userLabService, EkoLabNavigator navigator, NewStudentWindow newStudentWindow, UserInfoService userInfoService, StudentInfoService studentInfoService, I18N i18N) {
-        super(4, 4);
+    public GroupManagingView(UserLabService userLabService, EkoLabNavigator navigator, NewStudentWindow newStudentWindow, UserInfoService userInfoService, StudentInfoService studentInfoService, SettingsService settingsService, I18N i18N) {
         this.userLabService = userLabService;
         this.navigator = navigator;
         this.newStudentWindow = newStudentWindow;
@@ -92,19 +97,31 @@ public class GroupManagingView extends GridLayout implements View {
 
         setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-        addComponent(groupMembers, 0, 0, 3, 2);
-        addComponent(backToGroups, 0, 3, 0, 3);
-        addComponent(buttons, 2, 3, 3, 3);
+        addComponents(gridWithButtons);
 
+        gridWithButtons.setSizeFull();
+        gridWithButtons.setExpandRatio(buttons, 1.0F);
+        gridWithButtons.setExpandRatio(groupMembers, 3.0F);
+
+        showLabs.setStyleName(EkoLabTheme.LABEL_BOLD);
+        showLabs.setValue(i18N.get("group-manage.group-members.show-labs"));
+        checkBoxes.setSizeFull();
+
+        editStudentButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         newStudentButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
         removeStudentButton.setStyleName(EkoLabTheme.BUTTON_DANGER);
 
         backToGroups.addClickListener( event -> navigator.navigateTo(TeacherGroupsManagingView.NAME));
         backToGroups.setCaption(i18N.get("group-manage.group-members.back-to-groups"));
         backToGroups.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
-        setComponentAlignment(backToGroups, Alignment.MIDDLE_LEFT);
-        setComponentAlignment(buttons, Alignment.MIDDLE_RIGHT);
 
+        printUserLogins.setWidth(300.0F, Unit.PIXELS);
+        editStudentButton.setWidth(300.0F, Unit.PIXELS);
+        newStudentButton.setWidth(300.0F, Unit.PIXELS);
+        removeStudentButton.setWidth(300.0F, Unit.PIXELS);
+        backToGroups.setWidth(300.0F, Unit.PIXELS);
+
+        gridWithButtons.setSizeFull();
         groupMembers.setSizeFull();
 
         groupMembers.setBodyRowHeight(80.0);
@@ -115,16 +132,35 @@ public class GroupManagingView extends GridLayout implements View {
                         userProfile.getUserInfo().getMiddleName()
         ).setCaption(i18N.get("group-manage.group-members.student"));
 
+        Grid.Column<UserProfile, String> team = groupMembers.addColumn(userProfile -> null ==
+                userProfile.getStudentInfo().getTeam() ? "" :
+                userProfile.getStudentInfo().getTeam().getName()
+        ).setCaption(i18N.get("group-manage.group-members.team"));
+
         addLabColumns(1, i18N.get("group-manage.group-members.lab-1"), topHeader);
         addLabColumns(2, i18N.get("group-manage.group-members.lab-2"), topHeader);
         addLabColumns(3, i18N.get("group-manage.group-members.lab-3"), topHeader);
 
         groupMembers.addSelectionListener(event -> {
             if (event.getAllSelectedItems().isEmpty()) {
+                editStudentButton.setEnabled(false);
                 removeStudentButton.setEnabled(false);
             } else {
+                editStudentButton.setEnabled(true);
                 removeStudentButton.setEnabled(true);
             }
+        });
+
+        groupMembers.addItemClickListener(event -> {
+            if (event.getMouseEventDetails().isDoubleClick()) {
+                editUser(event.getItem());
+            }
+        });
+
+        editStudentButton.setCaption(i18N.get("group-manage.group-members.edit-student"));
+        editStudentButton.setEnabled(false);
+        editStudentButton.addClickListener(event -> {
+            editUser(groupMembers.getSelectedItems().iterator().next());
         });
 
         newStudentButton.setCaption(i18N.get("group-manage.group-members.add-student"));
@@ -162,6 +198,7 @@ public class GroupManagingView extends GridLayout implements View {
                 },
                 "users.pdf"
         )).extend(printUserLogins);
+        groupMembers.setFrozenColumnCount(2);
     }
 
     @Override
@@ -181,6 +218,9 @@ public class GroupManagingView extends GridLayout implements View {
         p.getUserInfo().setMiddleName("admin");
         p.getUserInfo().setLastName("admin");
         p.setAllowedLabs(ImmutableSet.of(1, 2));
+
+        StudentInfo studentInfo = new StudentInfo();
+        p.setStudentInfo(studentInfo);
 
         List<UserLabStatistics> labStatistics = new ArrayList<>();
         UserLabStatistics s = new UserLabStatistics();
@@ -249,6 +289,16 @@ public class GroupManagingView extends GridLayout implements View {
         }).setCaption(i18N.get("group-manage.group-members.mark"));
 
         topHeader.join(execution, defence, mark).setText(caption);
+
+        CheckBox checkBox = new CheckBox("№ " + labNumber);
+        checkBox.addValueChangeListener(event -> {
+            boolean hide = !event.getValue();
+            execution.setHidden(hide);
+            defence.setHidden(hide);
+            mark.setHidden(hide);
+        });
+        checkBox.setValue(true);
+        checkBoxes.addComponent(checkBox);
     }
 
     private void setAllowButtonStyles(Button button, boolean labAllowed) {
@@ -266,5 +316,17 @@ public class GroupManagingView extends GridLayout implements View {
     private static UserLabStatistics getUserLabStatistics(int labNumber, UserProfile profile) {
         return profile.getStatistics().stream().filter(
                 userLabStatistics -> userLabStatistics.getLabNumber() == labNumber).findAny().orElse(null);
+    }
+
+    /**
+     * Редактирование пользователя
+     * @param user пользователь
+     */
+    private void editUser(UserProfile user) {
+        newStudentWindow.show(new StudentDataWindowSettings(user.getUserInfo(), studentInfo -> {
+            Set<UserProfile> selected = groupMembers.getSelectedItems();
+            refreshItems();
+            selected.forEach(s -> groupMembers.getSelectionModel().select(s));
+        }, user.getStudentInfo()));
     }
 }

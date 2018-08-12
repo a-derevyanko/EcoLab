@@ -18,8 +18,8 @@ import org.ekolab.client.vaadin.server.dataprovider.UserInfoFilter;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.UIComponent;
-import org.ekolab.client.vaadin.server.ui.windows.EditUserWindow;
 import org.ekolab.client.vaadin.server.ui.windows.NewUserWindow;
+import org.ekolab.client.vaadin.server.ui.windows.SimpleEditUserWindow;
 import org.ekolab.client.vaadin.server.ui.windows.UserDataWindowSettings;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
@@ -27,7 +27,7 @@ import org.ekolab.server.service.api.UserInfoService;
 
 public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extends UserInfoFilter> extends VerticalLayout implements UIComponent {
 
-    private final EditUserWindow<S> editUserWindow;
+    private final SimpleEditUserWindow editUserWindow;
 
     private final NewUserWindow<S> newUserWindow;
 
@@ -57,7 +57,7 @@ public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extend
     protected final HorizontalLayout gridPanel = new HorizontalLayout(buttonsPanel, users);
     protected final HorizontalLayout findPanel = new HorizontalLayout(findLastNameTextField, findNameTextField, findMiddleNameTextField, find, clearFind);
 
-    public BaseUsersPanel(EditUserWindow<S> userDataWindow, UserInfoService userInfoService, NewUserWindow<S> newUserWindow, DataProvider<UserInfo, T> userInfoDataProvider, I18N i18N) {
+    protected BaseUsersPanel(SimpleEditUserWindow userDataWindow, UserInfoService userInfoService, NewUserWindow<S> newUserWindow, DataProvider<UserInfo, T> userInfoDataProvider, I18N i18N) {
         this.editUserWindow = userDataWindow;
         this.newUserWindow = newUserWindow;
         this.userInfoService = userInfoService;

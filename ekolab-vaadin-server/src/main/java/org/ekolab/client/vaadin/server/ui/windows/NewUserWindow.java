@@ -38,7 +38,9 @@ public abstract class NewUserWindow<T extends UserDataWindowSettings> extends Us
     }
 
     protected UserInfo saveUserInfo() {
-        return userInfoService.createUserInfo(userInfoBinder.getBean());
+        return userInfoBinder.getBean().getId() == null ?
+                userInfoService.createUserInfo(userInfoBinder.getBean()) :
+                userInfoService.updateUserInfo(userInfoBinder.getBean());
     }
 
     @Override

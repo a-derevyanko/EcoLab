@@ -50,7 +50,10 @@ public class AddableComboBox<T extends DomainModel> extends CustomField<T> imple
         if (valueChangeListener != null) {
             comboBox.addValueChangeListener(valueChangeListener);
         }
-        addButton.addClickListener(event -> newItemWindow.show(new NewItemWindow.NewItemWindowSettings<>(o -> refreshItems(), existPredicate, saveFunction)));
+        addButton.addClickListener(event -> newItemWindow.show(new NewItemWindow.NewItemWindowSettings<>(o -> {
+            refreshItems();
+            setValue(o);
+        }, existPredicate, saveFunction)));
     }
 
     @Override
