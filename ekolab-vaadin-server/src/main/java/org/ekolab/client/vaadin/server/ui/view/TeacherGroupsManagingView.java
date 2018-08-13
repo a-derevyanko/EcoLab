@@ -1,6 +1,7 @@
 package org.ekolab.client.vaadin.server.ui.view;
 
 import com.vaadin.data.provider.GridSortOrder;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.shared.ui.ContentMode;
@@ -47,6 +48,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
 
     // ---------------------------- Графические компоненты --------------------
     private final Label userInitialsLabel = new Label("Surname Firstname Lastname");
+    private final Button downloadManualButton = new Button("Download manual", VaadinIcons.DOWNLOAD);
     private final Label todayDate = new Label();
     private final Grid<StudentGroupInfo> groups = new Grid<>();
     private final Button manageGroupButton = new Button("View group", event ->
@@ -77,6 +79,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
 
         addComponent(userInitialsLabel, 0, 0, 0, 0);
         addComponent(todayDate, 0, 1, 0, 1);
+      addComponent(downloadManualButton, 0, 2, 0, 2);
         addComponent(groups, 1, 0, 4, 3);
         addComponent(manageGroupButton, 1, 4, 1, 4);
         addComponent(buttons, 3, 4, 4, 4);
@@ -135,6 +138,13 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
 
         userInitialsLabel.setContentMode(ContentMode.HTML);
         todayDate.setContentMode(ContentMode.HTML);
+
+        downloadManualButton.setCaption(i18N.get("teacher-group-manage.download-manual"));
+        downloadManualButton.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+
+        /*new BrowserWindowOpener(new DownloadStreamResource(
+                () -> settings.labService.printInitialData(settings.variant, UI.getCurrent().getLocale()),
+                "initialData.pdf")).extend(downloadManualButton);*/
     }
 
     @Override
