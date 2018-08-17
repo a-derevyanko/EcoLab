@@ -328,7 +328,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
             StudentInfo studentInfo = studentInfoService.getStudentInfo(data.getUserLogin());
             values.put("teacherName", studentInfoService.getGroupTeacher(studentInfo.getGroup().getName()));
             values.put("groupNumber", studentInfo.getGroup());
-            values.put("teamNumber", studentInfo.getTeam() == null ? 0 : studentInfo.getTeam().getName());
+            values.put("teamNumber", studentInfo.getTeam() == null ? "0" : studentInfo.getTeam().getName());
 
             if (studentInfo.getTeam() != null) {
                 StringBuilder studentsList = new StringBuilder();
@@ -342,7 +342,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
 
             //todo убрать всё то ниже после релиза
             values.put("groupNumber", "");
-            values.put("teamNumber", 0);
+            values.put("teamNumber", "0");
 
             values.put("studentsList",  "");
         }

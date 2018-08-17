@@ -250,10 +250,10 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     public void changeLabAllowance(String userName, boolean allow, int... labs) {
         if (allow) {
             BatchBindStep step = dsl.batch(dsl.insertInto(USER_LAB_ALLOWANCE, USER_LAB_ALLOWANCE.USER_ID, USER_LAB_ALLOWANCE.LAB_NUMBER).
-                    values((Long) null, null));
+                    values(DaoUtils.getFindUserIdSelect(dsl, userName).asField(), null));
 
             for (int lab : labs) {
-                step = step.bind(DaoUtils.getFindUserIdSelect(dsl, userName), lab);
+                step = step.bind(lab);
             }
             step.execute();
         } else {

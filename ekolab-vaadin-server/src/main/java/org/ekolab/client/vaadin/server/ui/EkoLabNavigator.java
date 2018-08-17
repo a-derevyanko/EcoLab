@@ -7,15 +7,19 @@ import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.client.vaadin.server.ui.view.LoginView;
+import org.ekolab.client.vaadin.server.ui.view.TeacherGroupsManagingView;
 import org.ekolab.client.vaadin.server.ui.view.api.SavableView;
 import org.ekolab.client.vaadin.server.ui.windows.ConfirmWindow;
 import org.ekolab.server.common.Profiles;
+import org.ekolab.server.common.Role;
+import org.ekolab.server.common.UserInfoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.vaadin.spring.security.VaadinSecurity;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Created by 777Al on 23.11.2016.
@@ -46,7 +50,19 @@ public class EkoLabNavigator extends SpringNavigator {
     @Override
     public String getState() {
         if (vaadinSecurity.isAuthenticated()) {
-            return super.getState().isEmpty() ? LabChooserView.NAME: super.getState();
+            if (super.getState().isEmpty()) {
+                Set<String> roles = UserInfoUtils.getRoles(vaadinSecurity.getAuthentication());
+
+                if (roles.contains(Role.ADMIN)) {
+                    return TeacherGroupsManagingView.NAME;
+                } else if (roles.contains(Role.TEACHER)) {
+                    return TeacherGroupsManagingView.NAME;
+                } else {
+                    return LabChooserView.NAME;
+                }
+            } else {
+                return super.getState();
+            }
         } else {
             return LoginView.NAME;
         }

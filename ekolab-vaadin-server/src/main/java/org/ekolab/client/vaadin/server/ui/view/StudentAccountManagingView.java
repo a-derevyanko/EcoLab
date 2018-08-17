@@ -12,6 +12,7 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.LocalDateTimeRenderer;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.ui.common.DownloadStreamResource;
@@ -75,13 +76,13 @@ public class StudentAccountManagingView extends GridLayout implements View {
         photo.setHeight(200.0F, Unit.PIXELS);
 
         labStatisticsGrid.setSizeFull();
+        labStatisticsGrid.setRowHeight(40.0);
         labStatisticsGrid.addColumn(UserLabStatistics::getLabNumber).setCaption(i18N.get("profile-view.statistics.lab-number"));
         labStatisticsGrid.addColumn(UserLabStatistics::getTryCount).setCaption(i18N.get("profile-view.statistics.try-count"));
         labStatisticsGrid.addColumn(userLabStatistics -> userLabStatistics.getMark() + " (" + userLabStatistics.getPointCount() + ')').setCaption(i18N.get("profile-view.statistics.mark"));
         labStatisticsGrid.addColumn(UserLabStatistics::getLabDate).setCaption(i18N.get("profile-view.statistics.execution-date")).setRenderer(new LocalDateTimeRenderer());
         labStatisticsGrid.addColumn(UserLabStatistics::getTestDate).setCaption(i18N.get("profile-view.statistics.defend-date"));
         labStatisticsGrid.addComponentColumn(userLabStatistics -> {
-            if (userLabStatistics.getTryCount() > 0) {
                 @SuppressWarnings("unchecked")
                 LabService<LabData<?>, ?> labService = (LabService<LabData<?>, ?>) labServices.stream().filter(s -> s.getLabNumber() == userLabStatistics.getLabNumber()).
                         findFirst().orElseThrow(IllegalStateException::new);
@@ -91,20 +92,20 @@ public class StudentAccountManagingView extends GridLayout implements View {
 
                 if (data != null) {
                     Button button = new Button(VaadinIcons.DOWNLOAD);
+                    VerticalLayout layout = new VerticalLayout(button);
+                    layout.setSpacing(true);
+                    layout.setMargin(false);
+                    layout.setComponentAlignment(button, Alignment.MIDDLE_CENTER);
                     button.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
                     button.setCaptionAsHtml(true);
                     button.setDescription(i18N.get("profile-view.download-report", userLabStatistics.getLabNumber()));
-                    button.setEnabled(false);
 
                     @SuppressWarnings("unchecked")
                     FileDownloader fileDownloader = new FileDownloader(
                             new DownloadStreamResource(() -> labService.createReport(data, UI.getCurrent().getLocale()), "report.pdf"));
                     fileDownloader.extend(button);
-                    button.setEnabled(true);
-                    return button;
-
+                    return layout;
                 }
-            }
             return null;
         }).setCaption(i18N.get("profile-view.statistics.report-download"));
     }

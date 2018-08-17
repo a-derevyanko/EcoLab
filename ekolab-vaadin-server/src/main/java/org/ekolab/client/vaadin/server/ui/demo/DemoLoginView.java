@@ -20,6 +20,10 @@ public class DemoLoginView extends LoginView {
 
     @Override
     protected void login() {
-        DevUtils.authenticateAsAdmin(vaadinSecurity);
+        if (username.isEmpty() || password.isEmpty()) {
+            DevUtils.authenticateAsAdmin(vaadinSecurity);
+        } else {
+            super.login();
+        }
     }
 }

@@ -1,6 +1,5 @@
 package org.ekolab.client.vaadin.server.ui.view;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.vaadin.data.provider.GridSortOrder;
 import com.vaadin.data.provider.ListDataProvider;
@@ -39,10 +38,8 @@ import org.ekolab.server.service.api.UserInfoService;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 @SpringView(name = GroupManagingView.NAME)
@@ -212,7 +209,7 @@ public class GroupManagingView extends HorizontalLayout implements View {
         Set<UserProfile> userProfiles = userLabService.getUserProfiles(studentGroup.getName());
 
         //todo
-        UserProfile p = new UserProfile();
+       /* UserProfile p = new UserProfile();
         p.setUserInfo(new UserInfo());
         p.getUserInfo().setFirstName("admin");
         p.getUserInfo().setMiddleName("admin");
@@ -231,7 +228,7 @@ public class GroupManagingView extends HorizontalLayout implements View {
         labStatistics.add(s);
         p.setStatistics(labStatistics);
 
-        userProfiles.add(p);
+        userProfiles.add(p);*/
         groupMembers.setItems(userProfiles);
 
     }
@@ -239,10 +236,11 @@ public class GroupManagingView extends HorizontalLayout implements View {
     private void addLabColumns(int labNumber, String caption, HeaderRow topHeader) {
         Grid.Column<UserProfile, VerticalLayout> execution = groupMembers.addComponentColumn(userProfile ->
         {
-            VerticalLayout layout = new VerticalLayout();
-            layout.setMargin(true);
-            layout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
             Button button = new Button();
+            VerticalLayout layout = new VerticalLayout(button);
+            layout.setSpacing(true);
+            layout.setMargin(false);
+            layout.setComponentAlignment(button, Alignment.MIDDLE_CENTER);
             Button.ClickListener listener = event -> {
                 Set<Integer> allowedLabs = Sets.newHashSet(userProfile.getAllowedLabs());
                 if (allowedLabs.contains(labNumber)) {
@@ -259,9 +257,10 @@ public class GroupManagingView extends HorizontalLayout implements View {
                 userProfile.setAllowedLabs(allowedLabs);
             };
             button.addClickListener(listener);
+            button.setHeight(30.0F, Unit.PIXELS);
+            button.setWidth(30.0F, Unit.PIXELS);
 
             setAllowButtonStyles(button, userProfile.getAllowedLabs().contains(labNumber));
-            layout.addComponent(button);
             return layout;
         }).setCaption(i18N.get("group-manage.group-members.execution"));
 

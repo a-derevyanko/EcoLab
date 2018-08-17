@@ -5,6 +5,7 @@ import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.UserGroup;
@@ -32,6 +33,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -200,7 +202,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
      */
     @Override
     @CachePut(cacheNames = "USER", key = "#result.login")
-    public UserInfo createUserInfo(UserInfo userInfo) {
+    public UserInfo createUserInfo(@NotNull UserInfo userInfo) {
         if (userInfo.getLogin() == null) {
             String newLogin = TRANSLITERATOR.transform(userInfo.getLastName());
             List<String> sameUsers = dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.startsWith(newLogin)).fetchInto(String.class);
@@ -247,7 +249,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
                                         FastDateFormat.getInstance("dd.MM.yyyy HH:mm").format(new Date()) +')'));
 
         TextColumnBuilder<String> firstNameColumn = col.column(messageSource.
-                getMessage("report.user.firstName", null, locale), "firstName", type.stringType());
+                getMessage("report.user.firstName", null, locale), "firstName", type.stringType()).setMinHeight(80);
         TextColumnBuilder<String> lastNameColumn = col.column(messageSource.
                 getMessage("report.user.lastName", null, locale), "lastName", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
