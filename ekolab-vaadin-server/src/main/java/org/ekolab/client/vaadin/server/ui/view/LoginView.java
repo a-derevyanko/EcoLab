@@ -11,6 +11,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickListener;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
 import org.ekolab.client.vaadin.server.service.api.ResourceService;
+import org.ekolab.client.vaadin.server.ui.common.UIUtils;
 import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.server.common.Profiles;
@@ -45,7 +46,7 @@ public class LoginView extends VerticalLayout implements View {
     protected final CheckBox rememberMe = new CheckBox("Remember me");
     protected final TextField username = new TextField("Username");
     protected final PasswordField password = new PasswordField("Password");
-    protected final Notification notification = new Notification("Welcome to EkoLab");
+    protected Notification currentNotification;
 
     @Override
     public void init() throws Exception {
@@ -96,29 +97,32 @@ public class LoginView extends VerticalLayout implements View {
         loginPanel.addComponent(rememberMe);
 
         addComponent(loginPanel);
-
-        notification.setCaption(i18N.get("login-view.ekolab-welcome"));
-        notification.setDescription("<span>This application is not real, it only demonstrates an application built with the <a href=\"https://vaadin.com\">Vaadin framework</a>.</span> <span>No username or password is required, just click the <b>Sign In</b> button to continue.</span>");
-        notification.setHtmlContentAllowed(true);
-        notification.setStyleName("tray dark small closable login-help");
-        notification.setPosition(Position.BOTTOM_CENTER);
-        notification.setDelayMsec(2000000);
     }
 
     @Override
     public void enter(ViewChangeEvent event) {
-        notification.show(Page.getCurrent());
+        if (currentNotification != null) {
+            currentNotification.close();
+        }
+        currentNotification = UIUtils.showNotification(i18N.get("login-view.ekolab-welcome"), i18N.get("login-view.ekolab-welcome-demo"));
         username.focus();
     }
 
     protected void login() {
-        try {
-            vaadinSecurity.login(username.getValue(), password.getValue(), !rememberMe.isEmpty());
-        } catch (AuthenticationException e) {
-            // отобразить понятное исключение
-            e.printStackTrace();
-        } catch (Exception e) {
-            throw new SecurityException(e);
+        currentNotification.close();
+        if (username.isEmpty() || password.isEmpty()) {
+            currentNotification = UIUtils.showNotification(i18N.get("login-view.ekolab-welcome-login-error"),
+                    i18N.get("login-view.ekolab-welcome-login-empty"));
+        } else {
+            try {
+                vaadinSecurity.login(username.getValue(), password.getValue(), !rememberMe.isEmpty());
+            } catch (AuthenticationException e) {
+                currentNotification = UIUtils.showNotification(i18N.get("login-view.ekolab-welcome-login-error"),
+                        i18N.get("login-view.ekolab-welcome-login-data-error"));
+            } catch (Exception e) {
+                throw new SecurityException(e);
+            }
         }
     }
+
 }

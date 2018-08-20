@@ -5,6 +5,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.ui.UI;
 import org.ekolab.client.vaadin.server.service.impl.I18N;
+import org.ekolab.client.vaadin.server.ui.view.AdminManagingView;
 import org.ekolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ekolab.client.vaadin.server.ui.view.LoginView;
 import org.ekolab.client.vaadin.server.ui.view.TeacherGroupsManagingView;
@@ -54,7 +55,7 @@ public class EkoLabNavigator extends SpringNavigator {
                 Set<String> roles = UserInfoUtils.getRoles(vaadinSecurity.getAuthentication());
 
                 if (roles.contains(Role.ADMIN)) {
-                    return TeacherGroupsManagingView.NAME;
+                    return AdminManagingView.NAME;
                 } else if (roles.contains(Role.TEACHER)) {
                     return TeacherGroupsManagingView.NAME;
                 } else {

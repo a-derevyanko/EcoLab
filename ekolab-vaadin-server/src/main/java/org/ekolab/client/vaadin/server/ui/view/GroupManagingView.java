@@ -32,14 +32,17 @@ import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.UserLabStatistics;
 import org.ekolab.server.model.UserProfile;
+import org.ekolab.server.model.content.LabData;
 import org.ekolab.server.service.api.SettingsService;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;
+import org.ekolab.server.service.api.content.LabService;
 import org.ekolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @SpringView(name = GroupManagingView.NAME)
@@ -49,6 +52,8 @@ public class GroupManagingView extends HorizontalLayout implements View {
     public static final String GROUP_NAME = "name";
 
     private final UserLabService userLabService;
+
+    private final List<LabService<?, ?>> labServices;
 
     private final EkoLabNavigator navigator;
 
@@ -77,8 +82,9 @@ public class GroupManagingView extends HorizontalLayout implements View {
     private StudentGroup studentGroup;
 
     @Autowired
-    public GroupManagingView(UserLabService userLabService, EkoLabNavigator navigator, NewStudentWindow newStudentWindow, UserInfoService userInfoService, StudentInfoService studentInfoService, SettingsService settingsService, I18N i18N) {
+    public GroupManagingView(UserLabService userLabService, List<LabService<?, ?>> labServices, EkoLabNavigator navigator, NewStudentWindow newStudentWindow, UserInfoService userInfoService, StudentInfoService studentInfoService, SettingsService settingsService, I18N i18N) {
         this.userLabService = userLabService;
+        this.labServices = labServices;
         this.navigator = navigator;
         this.newStudentWindow = newStudentWindow;
         this.userInfoService = userInfoService;
@@ -121,7 +127,6 @@ public class GroupManagingView extends HorizontalLayout implements View {
         gridWithButtons.setSizeFull();
         groupMembers.setSizeFull();
 
-        groupMembers.setBodyRowHeight(80.0);
         HeaderRow topHeader = groupMembers.prependHeaderRow();
         Grid.Column<UserProfile, String> initials = groupMembers.addColumn(userProfile ->
                 userProfile.getUserInfo().getLastName() + ' ' +
@@ -257,8 +262,7 @@ public class GroupManagingView extends HorizontalLayout implements View {
                 userProfile.setAllowedLabs(allowedLabs);
             };
             button.addClickListener(listener);
-            button.setHeight(30.0F, Unit.PIXELS);
-            button.setWidth(30.0F, Unit.PIXELS);
+            button.setSizeUndefined();
 
             setAllowButtonStyles(button, userProfile.getAllowedLabs().contains(labNumber));
             return layout;
@@ -287,7 +291,36 @@ public class GroupManagingView extends HorizontalLayout implements View {
             return s == null ? "" : String.format("%d (%d)", s.getMark(),  s.getPointCount());
         }).setCaption(i18N.get("group-manage.group-members.mark"));
 
-        topHeader.join(execution, defence, mark).setText(caption);
+        Grid.Column<UserProfile, VerticalLayout> report = groupMembers.addComponentColumn(userProfile -> {
+            UserLabStatistics s = getUserLabStatistics(labNumber, userProfile);
+            Button button = new Button(VaadinIcons.DOWNLOAD);
+            VerticalLayout layout = new VerticalLayout(button);
+            layout.setSpacing(true);
+            layout.setMargin(false);
+            layout.setComponentAlignment(button, Alignment.MIDDLE_CENTER);
+            button.setSizeUndefined();
+
+            if (s.getTryCount() == 0) {
+                button.setEnabled(false);
+            } else {
+                new BrowserWindowOpener(new DownloadStreamResource(
+                        () -> {
+                            LabService<LabData<?>, ?> service = (LabService<LabData<?>, ?>) labServices.stream().
+                                    filter(labService -> labService.getLabNumber() == labNumber).findAny().
+                                    orElseThrow(IllegalStateException::new);
+
+                            LabData<?> data = service.getCompletedLabByUser(userProfile.getUserInfo().getLogin());
+
+
+                            return service.createReport(data, UI.getCurrent().getLocale());
+                        },
+                        String.format("report-lab-%s.pdf", labNumber)
+                )).extend(button);
+            }
+            return layout;
+        }).setCaption(i18N.get("group-manage.group-members.report"));
+
+        topHeader.join(execution, defence, mark, report).setText(caption);
 
         CheckBox checkBox = new CheckBox("№ " + labNumber);
         checkBox.addValueChangeListener(event -> {

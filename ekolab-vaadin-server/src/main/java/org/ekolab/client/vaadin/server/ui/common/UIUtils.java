@@ -5,6 +5,9 @@ import com.vaadin.data.Converter;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.util.ReflectTools;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -82,5 +85,18 @@ public abstract class UIUtils {
                     field.setAccessible(true);
                     return ReflectionUtils.getField(field, model) == null;
                 });
+    }
+
+    public static Notification showNotification(String caption, String description) {
+        Notification notification = new Notification("Welcome to EkoLab");
+
+        notification.setCaption(caption);
+        notification.setDescription(description);
+        notification.setHtmlContentAllowed(true);
+        notification.setStyleName("tray dark small closable login-help");
+        notification.setPosition(Position.BOTTOM_CENTER);
+        notification.setDelayMsec(2000000);
+        notification.show(Page.getCurrent());
+        return notification;
     }
 }

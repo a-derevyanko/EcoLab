@@ -82,9 +82,9 @@ public class AdminManagingView extends VerticalLayout implements View {
         teachersPanel.setUserGroup(UserGroup.TEACHER);
         studentsPanel.setUserGroup(UserGroup.STUDENT);
 
-        userTabs.addTab(adminsPanel, i18N.get(UserGroup.ADMIN));
         userTabs.addTab(teachersPanel, i18N.get(UserGroup.TEACHER));
         userTabs.addTab(studentsPanel, i18N.get(UserGroup.STUDENT));
+        userTabs.addTab(adminsPanel, i18N.get(UserGroup.ADMIN));
         userTabs.addTab(systemPropertiesPanel, i18N.get("admin-manage.system.properties"));
 
         backUpButton.setCaption(i18N.get("backUp"));
