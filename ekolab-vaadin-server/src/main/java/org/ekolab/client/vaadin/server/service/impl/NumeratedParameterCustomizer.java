@@ -2,8 +2,6 @@ package org.ekolab.client.vaadin.server.service.impl;
 
 import com.vaadin.spring.annotation.ViewScope;
 import org.ekolab.client.vaadin.server.service.api.ParameterCustomizer;
-import org.ekolab.server.common.Profiles;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,7 +11,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Service
 @ViewScope
-@Profile({Profiles.MODE.DEV, Profiles.MODE.DEMO})
 public class NumeratedParameterCustomizer implements ParameterCustomizer {
     private final AtomicInteger number = new AtomicInteger();
 

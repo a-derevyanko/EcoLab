@@ -336,10 +336,10 @@ public class GroupManagingView extends HorizontalLayout implements View {
     private void setAllowButtonStyles(Button button, boolean labAllowed) {
         if (labAllowed) {
             button.setIcon(VaadinIcons.MINUS_CIRCLE);
-            button.setStyleName(EkoLabTheme.BUTTON_DANGER);
+            //button.setStyleName(EkoLabTheme.BUTTON_DANGER);
             button.setDescription(i18N.get("admin-manage.users.remove-allow"));
         } else {
-            button.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
+            //button.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
             button.setIcon(VaadinIcons.PLUS_CIRCLE);
             button.setDescription(i18N.get("admin-manage.users.allow"));
         }

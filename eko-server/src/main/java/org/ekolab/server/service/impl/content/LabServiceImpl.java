@@ -327,7 +327,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         if (userInfo.getGroup() == UserGroup.STUDENT) {
             StudentInfo studentInfo = studentInfoService.getStudentInfo(data.getUserLogin());
             values.put("teacherName", studentInfoService.getGroupTeacher(studentInfo.getGroup().getName()));
-            values.put("groupNumber", studentInfo.getGroup());
+            values.put("groupNumber", studentInfo.getGroup().getName());
             values.put("teamNumber", studentInfo.getTeam() == null ? "0" : studentInfo.getTeam().getName());
 
             if (studentInfo.getTeam() != null) {
