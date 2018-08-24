@@ -30,6 +30,12 @@ public interface UserInfoService extends UserDetailsManager, GroupManager, UserD
     UserInfo updateUserInfo(@Valid @NotNull UserInfo userInfo);
 
     /**
+     * Сброс пароля пользователя
+     * @param userName логин пользователя
+     */
+    void resetPassword(@NotNull String userName);
+
+    /**
      * Создаёт данные пользователя.
      * Заполнять логин необязательно - логином назначается фамилия пользователя.
      * @param userInfo данные пользователя

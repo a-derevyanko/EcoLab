@@ -14,6 +14,8 @@ public class EkoLabTheme extends ValoTheme {
     public static final String VIEW_LABCHOOSER = "labchooserview";
 
     // ---------------------- Панели -------------------------
+    public static final String PANEL_CAPTION = "v-panel-caption";
+
     public static final String PANEL_LOGIN = "login-panel";
 
     public static final String PANEL_LABCHOOSER = "content-panel";

@@ -39,7 +39,7 @@ CREATE TABLE STUDY_TEAMS (
 );
 
 CREATE UNIQUE INDEX IX_STUDY_TEAMS
-  ON STUDY_TEAMS (name);
+  ON STUDY_TEAMS (name, group_id);
 
 COMMENT ON TABLE STUDY_TEAMS IS 'Студенческие бригады';
 COMMENT ON COLUMN STUDY_TEAMS.id IS 'Идентификатор студенческой бригады';

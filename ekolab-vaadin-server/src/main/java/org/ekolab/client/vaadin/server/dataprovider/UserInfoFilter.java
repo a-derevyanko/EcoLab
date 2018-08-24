@@ -5,7 +5,7 @@ import org.ekolab.server.model.UserInfo;
 import java.util.Objects;
 
 public class UserInfoFilter {
-    private UserInfo userInfoFilter = new UserInfo();
+    private final UserInfo userInfoFilter = new UserInfo();
 
     public UserInfo getUserInfoFilter() {
         return userInfoFilter;

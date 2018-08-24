@@ -70,7 +70,7 @@ public class NewStudentWindow extends NewUserWindow<StudentDataWindowSettings> {
                 groupNewLabeledItemWindow);
         studentTeamComboBox.initSettings(i18N.get("student-data.add-team"),
                 () -> studentInfoService.getStudentTeams(studentGroupComboBox.getValue().getName()),
-                StudentTeam::getName,
+                studentTeam -> studentTeam.getName() == null ? i18N.get("group-manage.group-members.no-team") : studentTeam.getName(),
                 null,
                 v -> studentInfoService.isTeamExists(studentGroupComboBox.getValue(), v),
                 s -> studentInfoService.createStudentTeam(s, studentGroupComboBox.getValue().getName()),
@@ -83,26 +83,34 @@ public class NewStudentWindow extends NewUserWindow<StudentDataWindowSettings> {
     @Override
     protected void beforeShow() {
         super.beforeShow();
+        studentInfoBinder.setBean(settings.getStudentInfo());
         studentGroupComboBox.setItems(studentInfoService.getStudentGroups());
         if (settings.getStudentInfo().getGroup() != null) {
             studentTeamComboBox.setItems(studentInfoService.getStudentTeams(settings.getStudentInfo().getGroup().getName()));
             studentGroupComboBox.setValue(settings.getStudentInfo().getGroup());
             studentTeamComboBox.setValue(settings.getStudentInfo().getTeam());
+            studentGroupComboBox.setEnabled(false);
         } else {
             studentGroupComboBox.setValue(null);
+            studentGroupComboBox.setEnabled(true);
         }
     }
 
+    /**
+     * Сохраняет информацию о пользователе в базу и в фильтр
+     * @return сохранённый пользователь
+     */
     @Override
     protected UserInfo saveUserInfo() {
         boolean exists = userInfoBinder.getBean().getId() != null;
         UserInfo userInfo = super.saveUserInfo();
         //todo эти проверки в сервис или в dao
-        if (exists) {
-            studentInfoService.updateStudentInfo(userInfo, studentGroupComboBox.getValue(), studentTeamComboBox.getValue());
-        } else {
-            studentInfoService.createStudentInfo(userInfo, studentGroupComboBox.getValue(), studentTeamComboBox.getValue());
-        }
+        StudentInfo studentInfo = exists ?
+                studentInfoService.updateStudentInfo(userInfo, studentGroupComboBox.getValue(), studentTeamComboBox.getValue()) :
+                studentInfoService.createStudentInfo(userInfo, studentGroupComboBox.getValue(), studentTeamComboBox.getValue());
+
+        settings.getStudentInfo().setGroup(studentInfo.getGroup());
+        settings.getStudentInfo().setTeam(studentInfo.getTeam());
         return userInfo;
     }
 

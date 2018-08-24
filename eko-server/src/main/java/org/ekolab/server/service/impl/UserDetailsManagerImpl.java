@@ -5,7 +5,6 @@ import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.ekolab.server.dev.LogExecutionTime;
 import org.ekolab.server.model.UserGroup;
@@ -192,6 +191,12 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
                 dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq(userInfo.getGroup().name())))
                 .where(GROUP_MEMBERS.USER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userInfo.getLogin())))).execute();
         return userInfo;
+    }
+
+    @Override
+    public void resetPassword(@NotNull String userName) {
+        dsl.update(USERS).set(USERS.PASSWORD, passwordEncoder.encode(userName))
+                .where(USERS.LOGIN.eq(userName)).execute();
     }
 
     /**

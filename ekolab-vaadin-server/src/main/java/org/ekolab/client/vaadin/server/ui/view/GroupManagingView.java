@@ -15,6 +15,7 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.HeaderRow;
@@ -26,13 +27,13 @@ import org.ekolab.client.vaadin.server.ui.styles.EkoLabTheme;
 import org.ekolab.client.vaadin.server.ui.view.api.View;
 import org.ekolab.client.vaadin.server.ui.windows.NewStudentWindow;
 import org.ekolab.client.vaadin.server.ui.windows.StudentDataWindowSettings;
-import org.ekolab.server.model.StudentGroup;
 import org.ekolab.server.model.StudentInfo;
 import org.ekolab.server.model.UserGroup;
 import org.ekolab.server.model.UserInfo;
 import org.ekolab.server.model.UserLabStatistics;
 import org.ekolab.server.model.UserProfile;
 import org.ekolab.server.model.content.LabData;
+import org.ekolab.server.model.content.LabVariant;
 import org.ekolab.server.service.api.SettingsService;
 import org.ekolab.server.service.api.StudentInfoService;
 import org.ekolab.server.service.api.UserInfoService;
@@ -79,7 +80,7 @@ public class GroupManagingView extends HorizontalLayout implements View {
     private final HorizontalLayout gridWithButtons = new HorizontalLayout(buttons, groupMembers);
 
     // ---------------------------- Данные экземпляра --------------------
-    private StudentGroup studentGroup;
+    private StudentInfo studentInfo = new StudentInfo();
 
     @Autowired
     public GroupManagingView(UserLabService userLabService, List<LabService<?, ?>> labServices, EkoLabNavigator navigator, NewStudentWindow newStudentWindow, UserInfoService userInfoService, StudentInfoService studentInfoService, SettingsService settingsService, I18N i18N) {
@@ -135,9 +136,42 @@ public class GroupManagingView extends HorizontalLayout implements View {
         ).setCaption(i18N.get("group-manage.group-members.student"));
 
         Grid.Column<UserProfile, String> team = groupMembers.addColumn(userProfile -> null ==
-                userProfile.getStudentInfo().getTeam() ? "" :
+                userProfile.getStudentInfo().getTeam() ? i18N.get("group-manage.group-members.no-team") :
                 userProfile.getStudentInfo().getTeam().getName()
         ).setCaption(i18N.get("group-manage.group-members.team"));
+
+        Grid.Column<UserProfile, VerticalLayout> resetPass = groupMembers.addComponentColumn(userProfile ->
+        {
+            MenuBar menu = new MenuBar();
+            MenuBar.MenuItem item = menu.addItem("", VaadinIcons.MENU, null);
+            item.setStyleName(EkoLabTheme.BUTTON_QUIET);
+            userProfile.getStatistics().stream().filter(userLabStatistics -> userLabStatistics.getTryCount() > 0).
+                    map(UserLabStatistics::getLabNumber).forEach(labNumber -> {
+
+                        MenuBar.MenuItem downloadItem = item.addItem(i18N.get("group-manage.group-members.actions-lab-report",
+                                labNumber),
+                                VaadinIcons.DOWNLOAD, null);
+                        new BrowserWindowOpener(new DownloadStreamResource(
+                                () -> {
+                                    LabService<LabData<LabVariant>, LabVariant> service = getLabService(labNumber);
+
+                                    LabData<LabVariant> data = service.getCompletedLabByUser(userProfile.getUserInfo().getLogin());
+
+                                    return service.createReport(data, UI.getCurrent().getLocale());
+                                },
+                                String.format("report-lab-%s.pdf", labNumber)
+                        )).extend(downloadItem);
+                    });
+
+
+            item.addItem(i18N.get("group-manage.group-members.actions-reset-password"), VaadinIcons.PASSWORD,
+                    selectedItem -> userInfoService.resetPassword(userProfile.getUserInfo().getLogin()));
+            VerticalLayout layout = new VerticalLayout(menu);
+            layout.setSpacing(true);
+            layout.setMargin(false);
+            layout.setComponentAlignment(menu, Alignment.MIDDLE_CENTER);
+            return layout;
+        }).setCaption(i18N.get("group-manage.group-members.actions"));
 
         addLabColumns(1, i18N.get("group-manage.group-members.lab-1"), topHeader);
         addLabColumns(2, i18N.get("group-manage.group-members.lab-2"), topHeader);
@@ -170,13 +204,11 @@ public class GroupManagingView extends HorizontalLayout implements View {
             UserInfo newUserInfo = new UserInfo();
             newUserInfo.setGroup(UserGroup.STUDENT);
 
-            StudentInfo newStudentInfo = new StudentInfo();
-            newStudentInfo.setGroup(studentGroup);
             newStudentWindow.show(new StudentDataWindowSettings(newUserInfo, userInfo -> {
                 Set<UserProfile> selected = groupMembers.getSelectedItems();
                 refreshItems();
                 selected.forEach(s -> groupMembers.getSelectionModel().select(s));
-            }, newStudentInfo));
+            }, studentInfo));
         });
 
         removeStudentButton.setCaption(i18N.get("group-manage.group-members.remove-student"));
@@ -206,12 +238,12 @@ public class GroupManagingView extends HorizontalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         String group = event.getParameterMap().get(GROUP_NAME);
-        studentGroup = studentInfoService.getStudentGroupByName(group);
+        studentInfo.setGroup(studentInfoService.getStudentGroupByName(group));
         refreshItems();
     }
 
     private void refreshItems() {
-        Set<UserProfile> userProfiles = userLabService.getUserProfiles(studentGroup.getName());
+        Set<UserProfile> userProfiles = userLabService.getUserProfiles(studentInfo.getGroup().getName());
 
         //todo
        /* UserProfile p = new UserProfile();
@@ -291,36 +323,7 @@ public class GroupManagingView extends HorizontalLayout implements View {
             return s == null ? "" : String.format("%d (%d)", s.getMark(),  s.getPointCount());
         }).setCaption(i18N.get("group-manage.group-members.mark"));
 
-        Grid.Column<UserProfile, VerticalLayout> report = groupMembers.addComponentColumn(userProfile -> {
-            UserLabStatistics s = getUserLabStatistics(labNumber, userProfile);
-            Button button = new Button(VaadinIcons.DOWNLOAD);
-            VerticalLayout layout = new VerticalLayout(button);
-            layout.setSpacing(true);
-            layout.setMargin(false);
-            layout.setComponentAlignment(button, Alignment.MIDDLE_CENTER);
-            button.setSizeUndefined();
-
-            if (s.getTryCount() == 0) {
-                button.setEnabled(false);
-            } else {
-                new BrowserWindowOpener(new DownloadStreamResource(
-                        () -> {
-                            LabService<LabData<?>, ?> service = (LabService<LabData<?>, ?>) labServices.stream().
-                                    filter(labService -> labService.getLabNumber() == labNumber).findAny().
-                                    orElseThrow(IllegalStateException::new);
-
-                            LabData<?> data = service.getCompletedLabByUser(userProfile.getUserInfo().getLogin());
-
-
-                            return service.createReport(data, UI.getCurrent().getLocale());
-                        },
-                        String.format("report-lab-%s.pdf", labNumber)
-                )).extend(button);
-            }
-            return layout;
-        }).setCaption(i18N.get("group-manage.group-members.report"));
-
-        topHeader.join(execution, defence, mark, report).setText(caption);
+        topHeader.join(execution, defence, mark).setText(caption);
 
         CheckBox checkBox = new CheckBox("№ " + labNumber);
         checkBox.addValueChangeListener(event -> {
@@ -333,16 +336,21 @@ public class GroupManagingView extends HorizontalLayout implements View {
         checkBoxes.addComponent(checkBox);
     }
 
+    private <V extends LabVariant, T extends LabData<V>> LabService<T, V> getLabService(int labNumber) {
+        return (LabService<T, V>) labServices.stream().
+                filter(labService -> labService.getLabNumber() == labNumber).findAny().
+                orElseThrow(IllegalStateException::new);
+    }
+
     private void setAllowButtonStyles(Button button, boolean labAllowed) {
         if (labAllowed) {
             button.setIcon(VaadinIcons.MINUS_CIRCLE);
-            //button.setStyleName(EkoLabTheme.BUTTON_DANGER);
             button.setDescription(i18N.get("admin-manage.users.remove-allow"));
         } else {
-            //button.setStyleName(EkoLabTheme.BUTTON_PRIMARY);
             button.setIcon(VaadinIcons.PLUS_CIRCLE);
             button.setDescription(i18N.get("admin-manage.users.allow"));
         }
+        button.setStyleName(EkoLabTheme.BUTTON_QUIET);
     }
 
     private static UserLabStatistics getUserLabStatistics(int labNumber, UserProfile profile) {
