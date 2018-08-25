@@ -1,0 +1,1 @@
+java -Dspring.profiles.active=demo,h2 -Dspring.datasource.username=user -Dspring.datasource.password=password -Dspring.datasource.url=jdbc:h2:file:.\EcoLab-H2DB;IFEXISTS\=TRUE -jar .\ecolab-vaadin-server\build\libs\EcoLab-Vaddin-0.0.1.war

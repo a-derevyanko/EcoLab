@@ -1,9 +1,9 @@
-rootProject.name = 'EkoLab'
+rootProject.name = 'EcoLab'
 
-include 'eko-db'
+include 'eco-db'
 
-include 'ekolab-vaadin-server'
-include 'ekolab-vaadin-client'
-include 'eko-server'
-include 'ekolab-vaadin-desktop'
+include 'ecolab-vaadin-server'
+include 'ecolab-vaadin-client'
+include 'eco-server'
+include 'ecolab-vaadin-desktop'
 

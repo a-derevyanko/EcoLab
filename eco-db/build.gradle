@@ -1,0 +1,101 @@
+plugins {
+    id 'nu.studer.jooq' version '2.0.7'
+    id "org.flywaydb.flyway" version "4.2.0"
+}
+
+apply plugin: 'java'
+
+
+dependencies {
+    compile 'org.jooq:jooq:3.10.1'
+
+    compile "com.h2database:h2:$h2Version"
+
+    jooqRuntime "com.h2database:h2:$h2Version"
+    jooqRuntime "postgresql:postgresql:$pgVersion"
+
+    testCompile "com.h2database:h2:$h2Version"
+}
+
+jooq {
+    edition = 'OSS'
+    h2(sourceSets.main) {
+        jdbc {
+            driver = "$h2Driver"
+            url = "jdbc:h2:file:$project.rootProject.projectDir/$h2File"
+            user = "$h2User"
+            password = "$h2Password"
+        }
+        generator {
+            name = 'org.jooq.util.DefaultGenerator'
+            database {
+                name = 'org.jooq.util.h2.H2Database'
+                includes = '.*'
+                excludes = ''
+            }
+            generate {
+                javaTimeTypes = true
+            }
+            target {
+                packageName = 'org.ecolab.server.db.h2'
+            }
+        }
+    }
+    /*postgres(sourceSets.main) {
+        jdbc {
+            driver = 'org.postgresql.Driver'
+            url = 'jdbc:h2:~/test;AUTO_SERVER=TRUE'
+            user = 'sa'
+            password = ''
+        }
+        generator {
+            name = 'org.jooq.util.DefaultGenerator'
+            database {
+                name = 'org.jooq.util.postgres.PostgresDatabase'
+                includes = '.*'
+                excludes = ''
+            }
+            generate {
+                javaTimeTypes = true
+            }
+            target {
+                packageName = 'org.ecolab.server.db.postgres'
+            }
+        }
+    }*/
+}
+
+flyway {
+    locations = ["filesystem:${sourceSets.main.resources.srcDirs.first().path}/db/migration/h2"]
+    outOfOrder = false
+    validateOnMigrate = true
+    baselineOnMigrate = true
+    driver = "$h2Driver"
+    url = "jdbc:h2:file:$project.rootProject.projectDir/$h2File"
+    user = "$h2User"
+    password = "$h2Password"
+}
+
+//todo
+/*task flywayMigratePostgres(type: FlywayMigrateTask) {
+    extension = new FlywayExtension()
+    extension.with {
+        locations = ["filesystem:${sourceSets.main.resources.srcDirs.first().path}/db/migration/postgres"]
+        outOfOrder = true
+        validateOnMigrate = true
+        baselineOnMigrate = true
+        driver = "$h2Driver"
+        url = "$h2Url"
+        user = "$h2User"
+        password = "$h2Password"
+    }
+}*/
+
+/*flywayMigrateH2.dependsOn(compileJava)
+flywayMigratePostgres.dependsOn(compileJava)*/
+generateH2JooqSchemaSource.dependsOn(flywayMigrate)
+//generatePostgresJooqSchemaSource.dependsOn(flywayMigratePostgres)
+
+clean {
+    delete "$project.rootProject.projectDir/${h2File}.mv.db"
+}

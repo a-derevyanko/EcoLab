@@ -1,4 +1,4 @@
-import org.ekolab.gradle.CustomTest
+import org.ecolab.gradle.CustomTest
 
 import java.nio.charset.StandardCharsets
 
@@ -8,7 +8,7 @@ dependencies {
     compile localGroovy()
 }
 subprojects {
-    group 'EkoLab'
+    group 'EcoLab'
     version '0.1-SNAPSHOT'
 
     repositories {
