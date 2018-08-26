@@ -4,7 +4,6 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
-.idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
 
@@ -83,37 +82,36 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 .gitignore
 .idea/
-EkoLab.ipr
+EkcLab.ipr
 build/
-/ekolab-vaadin-server/src/main/webapp/VAADIN/
-/EkoLab-H2DB.mv.db
-/ekolab-vaadin-client/src/main/webapp/VAADIN/widgetsets/
-/ekolab-vaadin-client/src/main/resources/AppWidgetset.gwt.xml
-/ekolab-vaadin-client/src/main/webapp/VAADIN/themes/EkoLab/styles.css.gz
-/ekolab-vaadin-client/src/main/webapp/VAADIN/themes/EkoLab/styles.css
-/eko-server/src/main/resources/application-custom.properties
+/ecolab-vaadin-server/src/main/webapp/VAADIN/
+/EcoLab-H2DB.mv.db
+/ecolab-vaadin-client/src/main/resources/AppWidgetset.gwt.xml
+/ecolab-vaadin-client/src/main/webapp/VAADIN/themes/EcoLab/styles.css.gz
+/ecolab-vaadin-client/src/main/webapp/VAADIN/themes/EcoLab/styles.css
+/eco-server/src/main/resources/application-custom.properties
 /_config.yml
-/ekolab-vaadin-desktop/src/main/webapp/
-/eko-server/src/main/resources/git.properties
-EkoLab.iml
-EkoLab_main.iml
-EkoLab_test.iml
+/ecolab-vaadin-desktop/src/main/webapp/
+/eco-server/src/main/resources/git.properties
+EcoLab.iml
+EcoLab_main.iml
+EcoLab_test.iml
 buildSrc.iml
 buildSrc_main.iml
 buildSrc_test.iml
-eko-db/eko-db.iml
-eko-db/eko-db_main.iml
-eko-db/eko-db_test.iml
-eko-server/eko-server.iml
-eko-server/eko-server_main.iml
-eko-server/eko-server_test.iml
-eko-server/server-log.txt
-ekolab-vaadin-client/ekolab-vaadin-client.iml
-ekolab-vaadin-client/ekolab-vaadin-client_main.iml
-ekolab-vaadin-client/ekolab-vaadin-client_test.iml
-ekolab-vaadin-desktop/ekolab-vaadin-desktop.iml
-ekolab-vaadin-desktop/ekolab-vaadin-desktop_main.iml
-ekolab-vaadin-desktop/ekolab-vaadin-desktop_test.iml
-ekolab-vaadin-server/ekolab-vaadin-server.iml
-ekolab-vaadin-server/ekolab-vaadin-server_main.iml
-ekolab-vaadin-server/ekolab-vaadin-server_test.iml
+eco-db/eco-db.iml
+eco-db/eco-db_main.iml
+eco-db/eco-db_test.iml
+eco-server/eco-server.iml
+eco-server/eco-server_main.iml
+eco-server/eco-server_test.iml
+eco-server/server-log.txt
+ecolab-vaadin-client/ecolab-vaadin-client.iml
+ecolab-vaadin-client/ecolab-vaadin-client_main.iml
+ecolab-vaadin-client/ecolab-vaadin-client_test.iml
+ecolab-vaadin-desktop/ecolab-vaadin-desktop.iml
+ecolab-vaadin-desktop/ecolab-vaadin-desktop_main.iml
+ecolab-vaadin-desktop/ecolab-vaadin-desktop_test.iml
+ecolab-vaadin-server/ecolab-vaadin-server.iml
+ecolab-vaadin-server/ecolab-vaadin-server_main.iml
+ecolab-vaadin-server/ecolab-vaadin-server_test.iml

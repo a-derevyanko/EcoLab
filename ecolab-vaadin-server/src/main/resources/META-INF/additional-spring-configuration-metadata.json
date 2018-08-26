@@ -1,0 +1,20 @@
+{
+  "groups": [
+    {
+      "name": "lab",
+      "sourceType": "org.ecolab.client.vaadin.server.EcoLabVaadinProperties$Lab"
+    }
+  ],
+  "properties": [
+    {
+      "name": "ecolab.lab.autoSaveRate",
+      "type": "java.lang.String",
+      "description": "Интервал автосохранения выполнения лабораторных."
+    },
+    {
+      "name": "ecolab.email.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Включает возможность отправки сообщений по email."
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+@mixin ecolab-lab-form-layout {
+  .lab-form-layout .v-gridlayout-spacing-on {
+    padding-left: 25px;
+    padding-right: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
+
+  .lab-form-layout-sign {
+    font-style: italic;
+    sup {
+      margin-left: 0.1em;
+    }
+    /*sub {
+      margin-left: 0.1em;
+    }*/
+  }
+  .v-window-header {
+    text-align: center;
+    br  {
+      content: ' ';
+
+      &:after {
+        content: ' ';
+      }
+    }
+  }
+
+  .v-caption-lab-form-layout {
+    text-align: center;
+    font: bold italic 110% serif;
+  }
+
+  .v-gridlayout-lab-form-layout {
+    border-radius: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 25px;
+    padding-right: 10px;
+    border: 1px dotted;
+  }
+  ///* Columns in a field row. */
+  //.v-formlayout-contentcell {} /* Field content. */
+  //.v-formlayout-captioncell {} /* Field caption. */
+  //.v-formlayout-errorcell {}   /* Field error indicator. */
+  //
+  ///* Overall style of field rows. */
+  //.v-formlayout-row {}
+  //.v-formlayout-firstrow {}
+  //.v-formlayout-lastrow {}
+  //
+  ///* Required field indicator. */
+  //.v-formlayout .v-required-field-indicator {}
+  //.v-formlayout-captioncell .v-caption {}
+  //.v-required-field-indicator {}
+  //
+  //
+  ///* Error indicator. */
+  //.v-formlayout-cell .v-errorindicator {}
+  //.v-formlayout-error-indicator .v-errorindicator {}
+}
+
+@mixin ecolab-lab-view {
+  @include ecolab-lab-form-layout
+}

@@ -10,10 +10,10 @@
 Для сборки необходимо выполнить команду __gradle build__.
 Будет создана тестовая БД (H2).
 
-Настройки БД находятся в __gradle.properties__ и при сборке проекта __eko-server__ копируются в файл
- *EkoLab/eko-server/src/main/resources/application-custom.properties*, после чего он имеет следующее содержание:  
+Настройки БД находятся в __gradle.properties__ и при сборке проекта __eco-server__ копируются в файл
+ *EcoLab/eco-server/src/main/resources/application-custom.properties*, после чего он имеет следующее содержание:  
 
-        > spring.datasource.url=jdbc:h2:file:C:/work/EkoLab/EkoLab-H2DB;IFEXISTS=TRUE
+        > spring.datasource.url=jdbc:h2:file:C:/work/EcoLab/EcoLab-H2DB;IFEXISTS=TRUE
         > spring.datasource.username=user
         > spring.datasource.password=password
 Это параметры конфигурации источника данных, в котором будет вестись разработка и тестирование.
