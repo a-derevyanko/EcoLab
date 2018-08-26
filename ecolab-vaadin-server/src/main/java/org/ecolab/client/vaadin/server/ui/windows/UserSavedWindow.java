@@ -57,15 +57,17 @@ public class UserSavedWindow extends BaseEcoLabWindow<UserSavedWindow.UserSavedW
 
         userSaved.setValue(i18N.get("user-saved-window.user-saved", UserInfoUtils.getShortInitials(settings.userInfo)));
         login.setValue(settings.userInfo.getLogin());
-        password.setValue(settings.userInfo.getLogin());
+        password.setValue(settings.password);
         ok.focus();
     }
 
     public static class UserSavedWindowSettings implements WindowSettings {
         private final UserInfo userInfo;
+        private final String password;
 
-        public UserSavedWindowSettings(UserInfo userInfo) {
+        public UserSavedWindowSettings(UserInfo userInfo, String password) {
             this.userInfo = userInfo;
+            this.password = password;
         }
     }
 }

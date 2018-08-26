@@ -20,9 +20,9 @@ import javax.annotation.PostConstruct;
 public abstract class EditUserWindow<T extends UserDataWindowSettings> extends UserDataWindow<T> {
     // ---------------------------- Графические компоненты --------------------
     private final TextField login = new TextField("Login");
-    private final Label changePassword = new Label("New password");
-    private final PasswordField oldPassword = new PasswordField("Old password");
-    private final PasswordField newPassword = new PasswordField("New password");
+    protected final Label changePassword = new Label("New password");
+    protected final PasswordField oldPassword = new PasswordField("Old password");
+    protected final PasswordField newPassword = new PasswordField("New password");
 
     protected EditUserWindow(I18N i18N, UserInfoService userInfoService) {
         super(i18N, userInfoService);

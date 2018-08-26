@@ -40,9 +40,10 @@ public interface UserInfoService extends UserDetailsManager, GroupManager, UserD
      * Заполнять логин необязательно - логином назначается фамилия пользователя.
      * @param userInfo данные пользователя
      */
-    @Valid
-    UserInfo createUserInfo(@NotNull UserInfo userInfo);
+    UserInfo createUserInfo(@Valid @NotNull UserInfo userInfo);
 
     @LogExecutionTime(500)
     byte[] printUsersData(@Valid Stream<UserInfo> users, Locale locale);
+
+    String createDefaultPassword(@NotNull String userLogin);
 }

@@ -99,6 +99,7 @@ public class DesktopVaadinApplication extends VaadinApplication {
             JTextArea msg = new JTextArea("Произошла ошибка: " + ex);
             msg.setLineWrap(true);
             msg.setWrapStyleWord(true);
+            msg.setColumns(50);
 
             JScrollPane scrollPane = new JScrollPane(msg);
             JOptionPane.showMessageDialog(new JFrame(), scrollPane);

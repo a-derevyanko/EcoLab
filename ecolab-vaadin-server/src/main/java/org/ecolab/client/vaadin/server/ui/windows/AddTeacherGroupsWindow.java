@@ -95,8 +95,7 @@ public class AddTeacherGroupsWindow extends BaseEcoLabWindow<AddTeacherGroupsWin
     }
 
     private void refreshItems() {
-        Set<StudentGroup> studentGroups = studentInfoService.getStudentGroups();
-        studentGroups.removeAll(studentInfoService.getTeacherGroups(settings.teacher));
+        Set<StudentGroup> studentGroups = studentInfoService.getGroupsAvailableForTeacher();
         groups.setItems(studentGroups);
     }
 

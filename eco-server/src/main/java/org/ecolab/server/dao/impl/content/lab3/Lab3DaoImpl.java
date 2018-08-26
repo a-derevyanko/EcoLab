@@ -337,4 +337,10 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     protected int getLabNumber() {
         return 3;
     }
+
+    @Override
+    public void setTestCompleted(Lab3Data data) {
+        dsl.update(LAB3DATA).set(LAB3DATA.COMPLETED, true).where(LAB3DATA.ID.eq(data.getId())).execute();
+        super.setTestCompleted(data);
+    }
 }

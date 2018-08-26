@@ -94,7 +94,7 @@ public interface StudentInfoService extends Serializable {
 
     Set<StudentGroup> getStudentGroups();
 
-    Set<StudentGroup> getGroupsAvailableForTeahcer();
+    Set<StudentGroup> getGroupsAvailableForTeacher();
 
     StudentGroup getStudentGroupByName(String group);
 
@@ -108,10 +108,25 @@ public interface StudentInfoService extends Serializable {
     Set<Integer> getAllowedLabs(String userName);
 
     /**
+     * Возвращает номера защит, к которым есть доступ
+     * @param userName имя пользователя
+     * @return номера лабораторных, к которым есть доступ
+     */
+    Set<Integer> getAllowedDefence(String userName);
+
+    /**
      * Допустить пользователя к лабораторной
      * @param userName пользователь
      * @param labs лабораторные, к которым меняется допуск
      * @param allow допустить/снять допуск
      */
     void changeLabAllowance(String userName, boolean allow, int... labs);
+
+    /**
+     * Допустить пользователя к защите лабораторной
+     * @param userName пользователь
+     * @param labs лабораторные, к которым меняется допуск
+     * @param allow допустить/снять допуск
+     */
+    void changeDefenceAllowance(String userName, boolean allow, int... labs);
 }

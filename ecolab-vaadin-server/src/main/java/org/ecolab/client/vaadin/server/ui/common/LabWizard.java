@@ -45,8 +45,6 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
     protected final HorizontalLayout secondColumnLayout = new HorizontalLayout();
     protected final HorizontalLayout thirdComponentsLayout = new HorizontalLayout();
 
-    protected boolean hasChanges;
-
     protected final List<LabWizardStep<T, V>> labSteps;
 
     protected final Authentication currentUser;
@@ -128,7 +126,6 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
         binder.addValueChangeListener(event -> {
             labService.updateCalculatedFields(binder.getBean());
             saveButton.setVisible(true);
-            hasChanges = true;
         });
 
         saveButton.addClickListener(event -> saveData(true));
@@ -150,7 +147,6 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
             if (validationStatus.isOk()) {
                 ui.access(() -> {
                     binder.readBean(labService.updateLab(binder.getBean()));
-                    hasChanges = binder.hasChanges();
                     saveButton.setVisible(false);
                 });
             } else {
@@ -165,7 +161,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     @Override
     public boolean hasUnsavedData() {
-        return hasChanges || currentStep instanceof LabExperimentJournalStep;
+        return currentStep instanceof LabExperimentJournalStep;
     }
 
     @Override
@@ -193,9 +189,9 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
     public void wizardCompleted(WizardCompletedEvent event) {
         if (UIUtils.isModelFull(binder.getBean())) {
             binder.getBean().setCompleted(true);
-            hasChanges = true;
-            if (saveData(true)) {
+            if (saveData(true) || binder.validate().isOk()) {
                 removeAllWindows();
+                labService.setTestCompleted(binder.getBean());
                 confirmWindow.show(new ConfirmWindow.ConfirmWindowSettings("labwizard.lab-finished.confirm", () -> {
                     labFinishedWindow.show(new LabFinishedWindow.LabFinishedWindowSettings<>(binder.getBean(), labService));
                 }));

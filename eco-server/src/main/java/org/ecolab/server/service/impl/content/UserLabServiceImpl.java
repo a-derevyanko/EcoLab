@@ -74,6 +74,7 @@ public class UserLabServiceImpl implements UserLabService {
         profile.setStatistics(dao.getUserLabStatistics(userName));
         profile.setUserInfo(userInfoService.getUserInfo(userName));
         profile.setAllowedLabs(studentInfoService.getAllowedLabs(userName));
+        profile.setAllowedDefence(studentInfoService.getAllowedDefence(userName));
         profile.setStudentInfo(studentInfoService.getStudentInfo(userName));
         profile.setAverageMark(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getMark).average().orElse(0.0));
         profile.setAveragePointCount(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getPointCount).average().orElse(0.0));

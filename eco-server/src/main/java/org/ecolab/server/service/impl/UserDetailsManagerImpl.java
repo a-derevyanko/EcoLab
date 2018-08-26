@@ -32,11 +32,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Stream;
+import java.util.zip.Adler32;
+import java.util.zip.Checksum;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.col;
 import static net.sf.dynamicreports.report.builder.DynamicReports.report;
@@ -55,6 +58,7 @@ import static org.ecolab.server.db.h2.public_.Tables.USER_AUTHORITIES;
 @Transactional
 public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements UserInfoService {
     private static final Transliterator TRANSLITERATOR = Transliterator.getInstance("Any-Latin; Lower; Latin-ASCII");
+    private static final Checksum DEFAULT_PASSWORD_CHECKSUM = new Adler32();
 
     private static final RecordMapper<Record, UserInfo> USER_INFO_RECORD_MAPPER = record -> {
         UserInfo info = new UserInfo();
@@ -180,7 +184,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
     @Override
     @CachePut(cacheNames = "USER", key = "#userInfo.login")
-    public UserInfo updateUserInfo(UserInfo userInfo) {
+    public UserInfo updateUserInfo(@Valid @NotNull UserInfo userInfo) {
         dsl.update(USERS)
                 .set(USERS.FIRST_NAME, userInfo.getFirstName())
                 .set(USERS.MIDDLE_NAME, userInfo.getMiddleName())
@@ -195,7 +199,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
     @Override
     public void resetPassword(@NotNull String userName) {
-        dsl.update(USERS).set(USERS.PASSWORD, passwordEncoder.encode(userName))
+        dsl.update(USERS).set(USERS.PASSWORD, passwordEncoder.encode(createDefaultPassword(userName)))
                 .where(USERS.LOGIN.eq(userName)).execute();
     }
 
@@ -207,9 +211,15 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
      */
     @Override
     @CachePut(cacheNames = "USER", key = "#result.login")
-    public UserInfo createUserInfo(@NotNull UserInfo userInfo) {
+    public UserInfo createUserInfo(@Valid @NotNull UserInfo userInfo) {
         if (userInfo.getLogin() == null) {
-            String newLogin = TRANSLITERATOR.transform(userInfo.getLastName());
+            String initials = userInfo.getLastName() + userInfo.getFirstName().charAt(0);
+
+            if (!userInfo.getMiddleName().isEmpty()) {
+                initials += userInfo.getMiddleName().charAt(0);
+            }
+
+            String newLogin = TRANSLITERATOR.transform(initials);
             List<String> sameUsers = dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.startsWith(newLogin)).fetchInto(String.class);
 
             if (sameUsers.contains(newLogin)) {
@@ -231,7 +241,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
                 .set(USERS.NOTE, userInfo.getNote())
                 .set(USERS.LOGIN, userInfo.getLogin())
                 .set(USERS.ENABLED, true)
-                .set(USERS.PASSWORD, passwordEncoder.encode(userInfo.getLogin()))
+                .set(USERS.PASSWORD, passwordEncoder.encode(createDefaultPassword(userInfo.getLogin())))
                 .returning(USERS.ID).fetchOne().getId());
 
         dsl.insertInto(GROUP_MEMBERS)
@@ -245,7 +255,8 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     public byte[] printUsersData(Stream<UserInfo> users, Locale locale) {
         DRDataSource dataSource = new DRDataSource("firstName", "lastName", "login", "password");
 
-        users.forEach(value -> dataSource.add(value.getFirstName(), value.getLastName(), value.getLogin()));
+        users.forEach(value -> dataSource.add(value.getFirstName(), value.getLastName(),
+                value.getLogin(), createDefaultPassword(value.getLogin())));
 
         JasperReportBuilder builder = report()
                 .setTemplate(reportService.getReportTemplate(locale)).
@@ -262,11 +273,22 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
                 getMessage("report.user.login", null, locale), "login", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
         TextColumnBuilder<String> passwordColumn = col.column(messageSource.
-                getMessage("report.user.password", null, locale), "login", type.stringType())
+                getMessage("report.user.password", null, locale), "password", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
 
         return reportService.printReport(
                 builder.columns(firstNameColumn, lastNameColumn, loginColumn, passwordColumn)
                         .setDataSource(dataSource));
+    }
+
+    @Override
+    public String createDefaultPassword(@NotNull String userLogin) {
+        try {
+            byte bytes[] = userLogin.getBytes();
+            DEFAULT_PASSWORD_CHECKSUM.update(bytes, 0, bytes.length);
+            return Long.toHexString((DEFAULT_PASSWORD_CHECKSUM.getValue()));
+        } finally {
+            DEFAULT_PASSWORD_CHECKSUM.reset();
+        }
     }
 }

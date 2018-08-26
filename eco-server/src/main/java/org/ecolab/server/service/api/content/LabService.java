@@ -71,4 +71,10 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
     LabTestResult checkLabTest(@Valid LabData<?> data, Map<LabTestQuestionVariant, Object> answers, Locale locale);
 
     int getLabNumber();
+
+    /**
+     * Устанавливает признак пройденной лабораторной
+     * @param data данные лабораторной
+     */
+    void setTestCompleted(T data);
 }

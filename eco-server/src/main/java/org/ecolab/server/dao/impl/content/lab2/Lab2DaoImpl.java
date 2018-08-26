@@ -4,6 +4,7 @@ import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab2.Lab2Dao;
 import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.dao.impl.content.LabDaoImpl;
+import org.ecolab.server.model.content.lab1.Lab1Data;
 import org.ecolab.server.model.content.lab2.Lab2Data;
 import org.ecolab.server.model.content.lab2.Lab2Variant;
 import org.jooq.DSLContext;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.ecolab.server.db.h2.public_.Tables.LAB1DATA;
 import static org.ecolab.server.db.h2.public_.Tables.LAB2DATA;
 
 /**
@@ -146,6 +148,12 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
     @Override
     protected int getLabNumber() {
         return 2;
+    }
+
+    @Override
+    public void setTestCompleted(Lab2Data<V> data) {
+        dsl.update(LAB2DATA).set(LAB2DATA.COMPLETED, true).where(LAB2DATA.ID.eq(data.getId())).execute();
+        super.setTestCompleted(data);
     }
 
     protected static Object[] toArray(List<?> list) {

@@ -17,15 +17,14 @@ public class UserInfo extends IdentifiedDomainModel {
     private String firstName;
 
     @Size(max = 256)
-    @NotNull
-    private String middleName;
+    private String middleName = "";
 
     @Size(min = 1, max = 256)
     @NotNull
     private String lastName;
 
     @Size(max = 256)
-    private String note;
+    private String note = "";
 
     @Valid
     @NotNull

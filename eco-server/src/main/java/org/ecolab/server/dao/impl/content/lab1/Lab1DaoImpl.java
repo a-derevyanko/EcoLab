@@ -186,6 +186,12 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
         return 1;
     }
 
+    @Override
+    public void setTestCompleted(Lab1Data<V> data) {
+        dsl.update(LAB1DATA).set(LAB1DATA.COMPLETED, true).where(LAB1DATA.ID.eq(data.getId())).execute();
+        super.setTestCompleted(data);
+    }
+
     protected abstract Lab1DataMapper<V> getLabMapper();
 
     protected abstract void saveVariant(V variant);

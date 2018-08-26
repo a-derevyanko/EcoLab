@@ -8,17 +8,16 @@ $ecolab-green: #8fb82b;
   }
 }
 
-
-.onoffswitch-slider.on {
-  background-color: $ecolab-green;
-  border-color: $ecolab-green;
-}
-
-.onoffswitch-slider.on:before {
-  border-color: $ecolab-green;
-}
-
 @mixin ecolab-common {
+
+  .onoffswitch-slider.on {
+    background-color: $ecolab-green;
+    border-color: $ecolab-green;
+  }
+
+  .onoffswitch-slider.on:before {
+    border-color: $ecolab-green;
+  }
 
   .valo-menu {
     border-right: none;

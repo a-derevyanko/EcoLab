@@ -26,6 +26,7 @@ import static org.ecolab.server.db.h2.public_.Tables.STUDY_GROUP_TEACHERS;
 import static org.ecolab.server.db.h2.public_.Tables.STUDY_TEAMS;
 import static org.ecolab.server.db.h2.public_.Tables.STUDY_TEAM_MEMBERS;
 import static org.ecolab.server.db.h2.public_.Tables.USERS;
+import static org.ecolab.server.db.h2.public_.Tables.USER_DEFENCE_ALLOWANCE;
 import static org.ecolab.server.db.h2.public_.Tables.USER_LAB_ALLOWANCE;
 import static org.ecolab.server.db.h2.public_.Tables.USER_LAB_HISTORY;
 import static org.ecolab.server.db.h2.public_.Tables.USER_TEST_HISTORY;
@@ -256,6 +257,12 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
+    public Set<Integer> getAllowedDefence(String userName) {
+        return Sets.newHashSet(dsl.select(USER_DEFENCE_ALLOWANCE.LAB_NUMBER).from(USER_DEFENCE_ALLOWANCE).
+                where(USER_DEFENCE_ALLOWANCE.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetchInto(Integer.class));
+    }
+
+    @Override
     public void changeLabAllowance(String userName, boolean allow, int... labs) {
         if (allow) {
             long currentUserId =  DaoUtils.getFindUserIdSelect(dsl, userName).fetchOneInto(Long.class);
@@ -269,6 +276,23 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
         } else {
             dsl.deleteFrom(USER_LAB_ALLOWANCE).where(USER_LAB_ALLOWANCE.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))
                     .and(USER_LAB_ALLOWANCE.LAB_NUMBER.in(Ints.asList(labs)))).execute();
+        }
+    }
+
+    @Override
+    public void changeDefenceAllowance(String userName, boolean allow, int... labs) {
+        if (allow) {
+            long currentUserId =  DaoUtils.getFindUserIdSelect(dsl, userName).fetchOneInto(Long.class);
+            BatchBindStep step = dsl.batch(dsl.insertInto(USER_DEFENCE_ALLOWANCE, USER_DEFENCE_ALLOWANCE.USER_ID, USER_DEFENCE_ALLOWANCE.LAB_NUMBER).
+                    values((Long) null, null));
+
+            for (int lab : labs) {
+                step = step.bind(currentUserId, lab);
+            }
+            step.execute();
+        } else {
+            dsl.deleteFrom(USER_DEFENCE_ALLOWANCE).where(USER_DEFENCE_ALLOWANCE.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))
+                    .and(USER_DEFENCE_ALLOWANCE.LAB_NUMBER.in(Ints.asList(labs)))).execute();
         }
     }
 }

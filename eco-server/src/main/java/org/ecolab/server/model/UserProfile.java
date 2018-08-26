@@ -10,6 +10,7 @@ public class UserProfile {
   private List<UserLabStatistics> statistics;
   private UserInfo userInfo;
   private Set<Integer> allowedLabs;
+  private Set<Integer> allowedDefence;
   private StudentInfo studentInfo;
   private byte[] picture;
   private double averageMark;

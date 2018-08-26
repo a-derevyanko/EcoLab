@@ -32,7 +32,8 @@ public abstract class NewUserWindow<T extends UserDataWindowSettings> extends Us
             }
         } else {
             UserInfo savedUserInfo = saveUserInfo();
-            userSavedWindow.show(new UserSavedWindow.UserSavedWindowSettings(savedUserInfo));
+            userSavedWindow.show(new UserSavedWindow.UserSavedWindowSettings(savedUserInfo,
+                    userInfoService.createDefaultPassword(savedUserInfo.getLogin())));
             super.save();
         }
     }

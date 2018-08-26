@@ -172,7 +172,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
-    public Set<StudentGroup> getGroupsAvailableForTeahcer() {
+    public Set<StudentGroup> getGroupsAvailableForTeacher() {
         return studentInfoDao.getGroupsAvailableForTeacher();
     }
 
@@ -192,8 +192,19 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
+    public Set<Integer> getAllowedDefence(String userName) {
+        return studentInfoDao.getAllowedDefence(userName);
+    }
+
+    @Override
     @Transactional
     public void changeLabAllowance(String userName, boolean allow, int... labs) {
         studentInfoDao.changeLabAllowance(userName, allow, labs);
+    }
+
+    @Override
+    @Transactional
+    public void changeDefenceAllowance(String userName, boolean allow, int... labs) {
+        studentInfoDao.changeDefenceAllowance(userName, allow, labs);
     }
 }
