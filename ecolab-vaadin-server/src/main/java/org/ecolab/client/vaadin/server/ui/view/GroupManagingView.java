@@ -184,7 +184,10 @@ public class GroupManagingView extends HorizontalLayout implements View {
         removeStudentButton.setCaption(i18N.get("group-manage.group-members.remove-student"));
         removeStudentButton.setEnabled(false);
         removeStudentButton.addClickListener(event ->
-                groupMembers.getSelectedItems().forEach(userProfile -> userInfoService.deleteUser(userProfile.getUserInfo().getLogin())));
+        {
+            groupMembers.getSelectedItems().forEach(userProfile -> userInfoService.deleteUser(userProfile.getUserInfo().getLogin()));
+            refreshItems();
+        });
 
         groupMembers.setSortOrder(Collections.singletonList(new GridSortOrder<>(initials, SortDirection.ASCENDING)));
 
