@@ -19,11 +19,10 @@ import org.ecolab.server.model.UserInfo;
 import org.ecolab.server.service.api.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.vaadin.spring.security.VaadinSecurity;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
+import java.util.Set;
 
 /**
  * При изменении VIEW меняются кнопки в тулбаре.
@@ -91,19 +90,14 @@ public class EcoLabMenuBar extends MenuBar implements ViewChangeListener {
                 getUI().setCurrentUserInfo(userDetailsManager.getUserInfo(authentication.getName()));
                 updateUserInfoItem();
 
-                Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-                for (GrantedAuthority authority : authorities) {
-                    switch (authority.getAuthority()) {
-                        case Role.ADMIN:
-                            adminManagingItem.setVisible(true);
-                            break;
-                        case Role.TEACHER:
-                            teacherManagingItem.setVisible(true);
-                            break;
-                        case Role.STUDENT:
-                            studentManagingItem.setVisible(true);
-                            break;
-                    }
+                Set<String> roles = UserInfoUtils.getRoles(authentication);
+
+                if (roles.contains(Role.ADMIN)) {
+                    adminManagingItem.setVisible(true);
+                } else if (roles.contains(Role.TEACHER)) {
+                    teacherManagingItem.setVisible(true);
+                } else if (roles.contains(Role.STUDENT)) {
+                    studentManagingItem.setVisible(true);
                 }
             }
         } else {

@@ -57,7 +57,7 @@ import java.util.Map;
 /**
  * Created by 777Al on 03.04.2017.
  */
-@RolesAllowed(Role.STUDENT)
+@RolesAllowed({Role.ADMIN, Role.TEACHER, Role.STUDENT})
 @PrototypeScope // При повторном входе тест должен быть другим
 public abstract class LabTestWizard extends Wizard implements View {
     private final Authentication currentUser;

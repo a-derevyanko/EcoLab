@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * Created by Андрей on 19.03.2017.
  */
-@RolesAllowed(Role.STUDENT)
+@RolesAllowed({Role.ADMIN, Role.TEACHER, Role.STUDENT})
 public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S extends LabService<T, V>> extends Wizard implements AutoSavableView {
     // ---------------------------- Графические компоненты --------------------
     protected final GridLayout buttons = new GridLayout(3, 1);

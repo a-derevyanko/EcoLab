@@ -37,6 +37,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.zip.Adler32;
 import java.util.zip.Checksum;
@@ -58,7 +59,9 @@ import static org.ecolab.server.db.h2.public_.Tables.USER_AUTHORITIES;
 @Transactional
 public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements UserInfoService {
     private static final Transliterator TRANSLITERATOR = Transliterator.getInstance("Any-Latin; Lower; Latin-ASCII");
+    private static final Pattern ALPHANUMERIC_PATTERN =  Pattern.compile("[^A-Za-z0-9]");
     private static final Checksum DEFAULT_PASSWORD_CHECKSUM = new Adler32();
+    private static final String DEFAULT_USER_NAME = "user";
 
     private static final RecordMapper<Record, UserInfo> USER_INFO_RECORD_MAPPER = record -> {
         UserInfo info = new UserInfo();
@@ -219,13 +222,18 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
                 initials += userInfo.getMiddleName().charAt(0);
             }
 
-            String newLogin = TRANSLITERATOR.transform(initials);
+            String newLogin = ALPHANUMERIC_PATTERN.matcher(TRANSLITERATOR.transform(initials)).replaceAll("");
+            if (newLogin.isEmpty()) {
+                newLogin = DEFAULT_USER_NAME;
+            }
+
             List<String> sameUsers = dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.startsWith(newLogin)).fetchInto(String.class);
 
             if (sameUsers.contains(newLogin)) {
                 for (int i = 1; i < Integer.MAX_VALUE; i++) {
+                    String loginWithPostfix = newLogin + i;
                     if (!sameUsers.contains(newLogin + i)) {
-                        newLogin = newLogin + i;
+                        newLogin = loginWithPostfix;
                         break;
                     }
                 }

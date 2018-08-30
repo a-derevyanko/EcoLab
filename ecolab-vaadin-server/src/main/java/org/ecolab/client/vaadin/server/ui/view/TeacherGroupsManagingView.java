@@ -3,6 +3,8 @@ package org.ecolab.client.vaadin.server.ui.view;
 import com.vaadin.data.provider.GridSortOrder;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FileDownloader;
+import com.vaadin.server.StreamResource;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
@@ -12,6 +14,8 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.PopupView;
+import com.vaadin.ui.VerticalLayout;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.EcoLabNavigator;
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
@@ -49,6 +53,9 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
   // ---------------------------- Графические компоненты --------------------
   private final Label userInitialsLabel = new Label("Surname Firstname Lastname");
   private final Button downloadManualButton = new Button("Download manual", VaadinIcons.DOWNLOAD);
+  private final Button methodMaterials = new Button("Methodic materials");
+  private final Button lab1Journal = new Button("Lab 1 journal");
+  private final Button lab2Journal = new Button("Lab 2 journal");
   private final Label todayDate = new Label();
   private final Grid<StudentGroupInfo> groups = new Grid<>();
   private final Button manageGroupButton = new Button("View group", event ->
@@ -56,6 +63,8 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
   private final Button addGroupButton = new Button();
   private final Button removeGroupButton = new Button();
   private final HorizontalLayout buttons = new HorizontalLayout(addGroupButton, removeGroupButton);
+  private final VerticalLayout labPresentationSelectContent = new VerticalLayout();
+  private final PopupView popup = new PopupView(null, labPresentationSelectContent);
 
   @Autowired
   public TeacherGroupsManagingView(Authentication currentUser,
@@ -79,7 +88,8 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
 
     addComponent(userInitialsLabel, 0, 0, 0, 0);
     addComponent(todayDate, 0, 1, 0, 1);
-    addComponent(downloadManualButton, 0, 2, 0, 2);
+    addComponent(methodMaterials, 0, 2, 0, 2);
+    addComponent(popup, 0, 3, 0, 3);
     addComponent(groups, 1, 0, 4, 3);
     addComponent(manageGroupButton, 1, 4, 1, 4);
     addComponent(buttons, 3, 4, 4, 4);
@@ -139,12 +149,31 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
     userInitialsLabel.setContentMode(ContentMode.HTML);
     todayDate.setContentMode(ContentMode.HTML);
 
-    downloadManualButton.setCaption(i18N.get("teacher-group-manage.download-manual"));
-    downloadManualButton.setStyleName(EcoLabTheme.BUTTON_PRIMARY);
-
         /*new BrowserWindowOpener(new DownloadStreamResource(
                 () -> settings.labService.printInitialData(settings.variant, UI.getCurrent().getLocale()),
                 "initialData.pdf")).extend(downloadManualButton);*/
+
+
+    createPresentationButton(lab1Journal, i18N.get("teacher-group-manage.download-lab-journal-1"), 1);
+    createPresentationButton(lab2Journal, i18N.get("teacher-group-manage.download-lab-journal-2"), 2);
+
+    methodMaterials.setCaption(i18N.get("teacher-group-manage.download-manual"));
+    methodMaterials.setStyleName(EcoLabTheme.BUTTON_PRIMARY);
+    methodMaterials.addClickListener(event ->  popup.setPopupVisible(true));
+    downloadManualButton.setCaption(i18N.get("teacher-group-manage.download-manual-teacher"));
+    downloadManualButton.setHeight(45.0F, Unit.PIXELS);
+    downloadManualButton.setStyleName(EcoLabTheme.BUTTON_PRIMARY);
+    downloadManualButton.setSizeFull();
+
+    FileDownloader fileDownloader = new FileDownloader(new StreamResource(
+            () -> getClass().getClassLoader().getResourceAsStream("org/ecolab/server/teacher-manual.pdf"), "manual.pdf"));
+
+    fileDownloader.extend(downloadManualButton);
+
+    labPresentationSelectContent.addComponent(downloadManualButton);
+    labPresentationSelectContent.addComponent(lab1Journal);
+    labPresentationSelectContent.addComponent(lab2Journal);
+    popup.setHideOnMouseOut(true);
   }
 
   @Override
@@ -171,5 +200,16 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
 
   private void manageGroup(StudentGroupInfo group) {
     navigator.redirectToView(GroupManagingView.NAME + '/' + GroupManagingView.GROUP_NAME + '=' + group.getName());
+  }
+
+  private void createPresentationButton(Button button, String title, int labNumber) {
+    FileDownloader fileDownloader = new FileDownloader(new StreamResource(
+            () -> getClass().getClassLoader().getResourceAsStream("org/ecolab/server/service/impl/content/lab" + labNumber + "/experiment/report/experimentJournal.pdf"), "manual.pdf"));
+
+    fileDownloader.extend(button);
+    button.setCaption(title);
+    button.setHeight(45.0F, Unit.PIXELS);
+    button.setStyleName(EcoLabTheme.BUTTON_PRIMARY);
+    button.setSizeFull();
   }
 }

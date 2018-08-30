@@ -21,7 +21,6 @@ import org.ecolab.server.common.I18NUtils;
 import org.ecolab.server.common.MathUtils;
 import org.ecolab.server.common.UserInfoUtils;
 import org.ecolab.server.dao.api.content.LabDao;
-import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.dev.LogExecutionTime;
 import org.ecolab.server.model.DomainModel;
 import org.ecolab.server.model.IdentifiedDomainModel;
@@ -80,7 +79,6 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.col;
 import static net.sf.dynamicreports.report.builder.DynamicReports.report;
 import static net.sf.dynamicreports.report.builder.DynamicReports.type;
-import static org.ecolab.server.db.h2.public_.Tables.USER_DEFENCE_ALLOWANCE;
 
 /**
  * Created by 777Al on 26.04.2017.
@@ -334,7 +332,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         UserInfo userInfo = userInfoService.getUserInfo(data.getUserLogin());
         if (userInfo.getGroup() == UserGroup.STUDENT) {
             StudentInfo studentInfo = studentInfoService.getStudentInfo(data.getUserLogin());
-            values.put("teacherName", studentInfoService.getGroupTeacher(studentInfo.getGroup().getName()));
+            values.put("teacherName", UserInfoUtils.getShortInitials(studentInfoService.getGroupTeacher(studentInfo.getGroup().getName())));
             values.put("groupNumber", studentInfo.getGroup().getName());
             values.put("teamNumber", studentInfo.getTeam() == null ? "0" : studentInfo.getTeam().getName());
 
