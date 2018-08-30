@@ -5,22 +5,12 @@
 
 # User-specific stuff:
 .idea/**/tasks.xml
-.idea/dictionaries
-
 # Sensitive or high-churn files:
 /.ideaDataSources/
-.idea/**/dataSources/
 .idea/**/dataSources.ids
-.idea/**/dataSources.xml
-.idea/**/dataSources.local.xml
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-
 # Gradle:
-.idea/**/gradle.xml
-.idea/**/libraries
-
 # Mongo Explorer plugin:
 .idea/**/mongoSettings.xml
 
@@ -45,11 +35,7 @@ crashlytics-build.properties
 fabric.properties
 ### Java template
 # Compiled class file
-*.class
-
 # Log file
-*.log
-
 # BlueJ files
 *.ctxt
 
@@ -58,7 +44,6 @@ fabric.properties
 
 # Package Files #
 *.jar
-*.war
 *.ear
 *.zip
 *.tar.gz
@@ -82,7 +67,7 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 .gitignore
 .idea/
-EkcLab.ipr
+EkoLab.ipr
 build/
 /ecolab-vaadin-server/src/main/webapp/VAADIN/
 /EcoLab-H2DB.mv.db
@@ -93,9 +78,6 @@ build/
 /_config.yml
 /ecolab-vaadin-desktop/src/main/webapp/
 /eco-server/src/main/resources/git.properties
-EcoLab.iml
-EcoLab_main.iml
-EcoLab_test.iml
 buildSrc.iml
 buildSrc_main.iml
 buildSrc_test.iml
