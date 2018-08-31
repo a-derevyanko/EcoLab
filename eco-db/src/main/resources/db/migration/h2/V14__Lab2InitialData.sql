@@ -1,4 +1,4 @@
-INSERT INTO LAB2DATA (ID, USER_ID, START_DATE, SAVE_DATE, VERSION,
+INSERT INTO LAB2DATA (ID, START_DATE, SAVE_DATE, VERSION,
                              BAROMETRIC_PRESSURE,
                              INDOORS_TEMPERATURE, ROOM_SIZE,
                              QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
@@ -9,7 +9,7 @@ INSERT INTO LAB2DATA (ID, USER_ID, START_DATE, SAVE_DATE, VERSION,
                              SOUND_POWER_LEVEL, ROOM_CONSTANT_1000,
                              FREQUENCY_COEFFICIENT, ROOM_CONSTANT, REFLECTED_SOUND_POWER)
 VALUES
-  (0, 0, '2018-02-15 09:00:19.548000000', '2018-02-15 09:17:45.825000000', NULL, 755, 25, 180, 1, 4, (100.0, 100.0,
+  (0, '2018-02-15 09:00:19.548000000', '2018-02-15 09:17:45.825000000', NULL, 755, 25, 180, 1, 4, (100.0, 100.0,
                                                                                                            100.0, 100.0,
                                                                                                            100.0, 100.0,
                                                                                                            100.0, 100.0,
@@ -21,3 +21,8 @@ INSERT INTO LAB2_RANDOM_VARIANT (ID, VERSION, NAME, BAROMETRIC_PRESSURE,
                                         INDOORS_TEMPERATURE, QUANTITY_OF_SINGLE_TYPE_EQUIPMENT,
                                         AVERAGE_SOUND_PRESSURE, ESTIMATED_GEOMETRIC_MEAN_FREQUENCY)
 VALUES (0, NULL, 'SUPPLING_PUMP', 795, 20, 1, (98.2, 100.8, 104.4, 117.8, 117.2, 116.4, 110.8, 96, 95), 1000);
+
+
+insert into lab2team (id,user_id) values (
+0, 0
+);

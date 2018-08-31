@@ -1,5 +1,6 @@
 package org.ecolab.server.dao.impl.content.lab1;
 
+import com.google.common.collect.Sets;
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab1.Lab1Dao;
 import org.ecolab.server.dao.impl.DaoUtils;
@@ -9,12 +10,16 @@ import org.ecolab.server.model.content.lab1.Lab1Variant;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
+import org.jooq.impl.DSL;
 import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.ecolab.server.db.h2.public_.Tables.LAB1DATA;
+import static org.ecolab.server.db.h2.public_.Tables.LAB1TEAM;
+import static org.ecolab.server.db.h2.public_.Tables.USERS;
+import static org.ecolab.server.db.h2.public_.Tables.USER_LAB_ALLOWANCE;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -71,7 +76,6 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
     @Override
     public void saveLab(Lab1Data<V> data) {
         data.setId(dsl.insertInto(LAB1DATA,
-                LAB1DATA.USER_ID,
                 LAB1DATA.START_DATE,
                 LAB1DATA.SAVE_DATE,
                 LAB1DATA.COMPLETED,
@@ -101,7 +105,7 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
                 LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE,
                 LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION).
                 values(
-                        Arrays.asList(DaoUtils.getFindUserIdSelect(dsl, data.getUserLogin()),
+                        Arrays.asList(
                                 data.getStartDate(),
                                 data.getSaveDate(),
                                 data.isCompleted(),
@@ -134,6 +138,7 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
 
         data.getVariant().setId(data.getId());
         saveVariant(data.getVariant());
+        saveLabUsers(data);
     }
 
     @Override
@@ -173,7 +178,7 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
 
     @Override
     public int removeLabsByUser(String userName) {
-        return dsl.deleteFrom(LAB1DATA).where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).execute();
+        return dsl.deleteFrom(LAB1DATA).where(LAB1DATA.ID.in(dsl.select(LAB1TEAM.ID).from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).execute();
     }
 
     @Override
@@ -187,12 +192,25 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
     }
 
     @Override
-    public void setTestCompleted(Lab1Data<V> data) {
+    public void setLabCompleted(Lab1Data<V> data) {
         dsl.update(LAB1DATA).set(LAB1DATA.COMPLETED, true).where(LAB1DATA.ID.eq(data.getId())).execute();
-        super.setTestCompleted(data);
+        dsl.deleteFrom(USER_LAB_ALLOWANCE).where(USER_LAB_ALLOWANCE.LAB_NUMBER.eq(getLabNumber())
+                .and(USER_LAB_ALLOWANCE.USER_ID.in(dsl.select(LAB1TEAM.USER_ID).where(LAB1TEAM.ID.eq(data.getId()))))).execute();
     }
 
     protected abstract Lab1DataMapper<V> getLabMapper();
 
     protected abstract void saveVariant(V variant);
+
+  @Override
+  protected void fillLabUsers(Lab1Data<V> data) {
+    data.setUsers(Sets.newHashSet(dsl.select(USERS.LOGIN).from(USERS).join(LAB1TEAM).on(USERS.ID.eq(LAB1TEAM.USER_ID)).
+            where(LAB1TEAM.ID.eq(data.getId())).fetchInto(String.class)));
+  }
+
+  @Override
+  protected void saveLabUsers(Lab1Data<V> data) {
+    dsl.insertInto(LAB1TEAM, LAB1TEAM.ID, LAB1TEAM.USER_ID).
+            select(dsl.select(DSL.val(data.getId()), USERS.ID).from(USERS).where(USERS.LOGIN.in(data.getUsers()))).execute();
+  }
 }

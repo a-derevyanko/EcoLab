@@ -76,5 +76,5 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
      * Устанавливает признак пройденной лабораторной
      * @param data данные лабораторной
      */
-    void setTestCompleted(T data);
+    void setLabCompleted(T data);
 }

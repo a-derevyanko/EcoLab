@@ -1,15 +1,16 @@
 package org.ecolab.server.dao.impl.content.lab2;
 
+import com.google.common.collect.Sets;
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab2.Lab2Dao;
 import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.dao.impl.content.LabDaoImpl;
-import org.ecolab.server.model.content.lab1.Lab1Data;
 import org.ecolab.server.model.content.lab2.Lab2Data;
 import org.ecolab.server.model.content.lab2.Lab2Variant;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
+import org.jooq.impl.DSL;
 import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
@@ -17,8 +18,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.ecolab.server.db.h2.public_.Tables.LAB1DATA;
 import static org.ecolab.server.db.h2.public_.Tables.LAB2DATA;
+import static org.ecolab.server.db.h2.public_.Tables.LAB2TEAM;
+import static org.ecolab.server.db.h2.public_.Tables.LAB3TEAM;
+import static org.ecolab.server.db.h2.public_.Tables.USERS;
+import static org.ecolab.server.db.h2.public_.Tables.USER_LAB_ALLOWANCE;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -65,7 +69,6 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
     @Override
     public void saveLab(Lab2Data<V> data) {
         data.setId(dsl.insertInto(LAB2DATA,
-                LAB2DATA.USER_ID,
                 LAB2DATA.START_DATE,
                 LAB2DATA.SAVE_DATE,
                 LAB2DATA.COMPLETED,
@@ -85,7 +88,7 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
                 LAB2DATA.ROOM_CONSTANT,
                 LAB2DATA.REFLECTED_SOUND_POWER).
                 values(
-                        Arrays.asList(DaoUtils.getFindUserIdSelect(dsl, data.getUserLogin()),
+                        Arrays.asList(
                                 data.getStartDate(),
                                 data.getSaveDate(),
                                 data.isCompleted(),
@@ -108,6 +111,7 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
 
         data.getVariant().setId(data.getId());
         saveVariant(data.getVariant());
+        saveLabUsers(data);
     }
 
     @Override
@@ -137,7 +141,7 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
 
     @Override
     public int removeLabsByUser(String userName) {
-        return dsl.deleteFrom(LAB2DATA).where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).execute();
+        return dsl.deleteFrom(LAB2DATA).where(LAB2DATA.ID.in(dsl.select(LAB3TEAM.ID).from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).execute();
     }
 
     @Override
@@ -151,9 +155,10 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
     }
 
     @Override
-    public void setTestCompleted(Lab2Data<V> data) {
+    public void setLabCompleted(Lab2Data<V> data) {
         dsl.update(LAB2DATA).set(LAB2DATA.COMPLETED, true).where(LAB2DATA.ID.eq(data.getId())).execute();
-        super.setTestCompleted(data);
+        dsl.deleteFrom(USER_LAB_ALLOWANCE).where(USER_LAB_ALLOWANCE.LAB_NUMBER.eq(getLabNumber())
+                .and(USER_LAB_ALLOWANCE.USER_ID.in(dsl.select(LAB2TEAM.USER_ID).where(LAB2TEAM.ID.eq(data.getId()))))).execute();
     }
 
     protected static Object[] toArray(List<?> list) {
@@ -168,4 +173,16 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
     protected abstract Lab2DataMapper<V> getLabMapper();
 
     protected abstract void saveVariant(V variant);
+
+    @Override
+    protected void fillLabUsers(Lab2Data data) {
+        data.setUsers(Sets.newHashSet(dsl.select(USERS.LOGIN).from(USERS).join(LAB2TEAM).on(USERS.ID.eq(LAB2TEAM.USER_ID)).
+                where(LAB2TEAM.ID.eq(data.getId())).fetchInto(String.class)));
+    }
+
+    @Override
+    protected void saveLabUsers(Lab2Data data) {
+        dsl.insertInto(LAB2TEAM, LAB2TEAM.ID, LAB2TEAM.USER_ID).
+                select(dsl.select(DSL.val(data.getId()), USERS.ID).from(USERS).where(USERS.LOGIN.in(data.getUsers()))).execute();
+    }
 }

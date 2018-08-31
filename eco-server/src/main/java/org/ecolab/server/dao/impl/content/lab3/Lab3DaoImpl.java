@@ -1,5 +1,6 @@
 package org.ecolab.server.dao.impl.content.lab3;
 
+import com.google.common.collect.Sets;
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ecolab.server.dao.impl.DaoUtils;
@@ -14,11 +15,15 @@ import org.ecolab.server.model.content.lab3.WindDirection;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
+import org.jooq.impl.DSL;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import static org.ecolab.server.db.h2.public_.Tables.LAB3TEAM;
+import static org.ecolab.server.db.h2.public_.Tables.USERS;
+import static org.ecolab.server.db.h2.public_.Tables.USER_LAB_ALLOWANCE;
 import static org.ecolab.server.db.h2.public_.tables.Lab3data.LAB3DATA;
 import static org.ecolab.server.db.h2.public_.tables.Lab3variant.LAB3VARIANT;
 
@@ -114,15 +119,19 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
 
     @Override
     public Lab3Data getLastLabByUser(String userName, boolean completed) {
-        return dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID)).
-                where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB3DATA.COMPLETED.eq(completed)).
+        Lab3Data data = dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID)).
+                where(LAB3DATA.ID.eq(dsl.select(LAB3TEAM.ID).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                        .and(LAB3DATA.COMPLETED.eq(completed)).
                 orderBy(LAB3DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB3DATA_MAPPER);
+
+        fillLabUsers(data);
+
+        return data;
     }
 
     @Override
     public void saveLab(Lab3Data data) {
         data.setId(dsl.insertInto(LAB3DATA,
-                LAB3DATA.USER_ID,
                 LAB3DATA.START_DATE,
                 LAB3DATA.SAVE_DATE,
                 LAB3DATA.COMPLETED,
@@ -167,7 +176,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3DATA.SO2_MAC,
                 LAB3DATA.ASH_MAC).
                 values(
-                        DaoUtils.getFindUserIdSelect(dsl, data.getUserLogin()),
                         data.getStartDate(),
                         data.getSaveDate(),
                         data.isCompleted(),
@@ -212,6 +220,8 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         data.getSo2MAC(),
                         data.getAshMAC()
                 ).returning(LAB3DATA.ID).fetchOne().getId());
+
+        saveLabUsers(data);
 
         Lab3Variant variant = data.getVariant();
         dsl.insertInto(LAB3VARIANT,
@@ -325,7 +335,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
 
     @Override
     public int removeLabsByUser(String userName) {
-        return dsl.deleteFrom(LAB3DATA).where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).execute();
+        return dsl.deleteFrom(LAB3DATA).where(LAB3DATA.ID.in(dsl.select(LAB3TEAM.ID).from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).execute();
     }
 
     @Override
@@ -339,8 +349,21 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     }
 
     @Override
-    public void setTestCompleted(Lab3Data data) {
+    public void setLabCompleted(Lab3Data data) {
         dsl.update(LAB3DATA).set(LAB3DATA.COMPLETED, true).where(LAB3DATA.ID.eq(data.getId())).execute();
-        super.setTestCompleted(data);
+        dsl.deleteFrom(USER_LAB_ALLOWANCE).where(USER_LAB_ALLOWANCE.LAB_NUMBER.eq(getLabNumber())
+                .and(USER_LAB_ALLOWANCE.USER_ID.in(dsl.select(LAB3TEAM.USER_ID).where(LAB3TEAM.ID.eq(data.getId()))))).execute();
+    }
+
+    @Override
+    protected void fillLabUsers(Lab3Data data) {
+        data.setUsers(Sets.newHashSet(dsl.select(USERS.LOGIN).from(USERS).join(LAB3TEAM).on(USERS.ID.eq(LAB3TEAM.USER_ID)).
+                where(LAB3TEAM.ID.eq(data.getId())).fetchInto(String.class)));
+    }
+
+    @Override
+    protected void saveLabUsers(Lab3Data data) {
+        dsl.insertInto(LAB3TEAM, LAB3TEAM.ID, LAB3TEAM.USER_ID).
+                select(dsl.select(DSL.val(data.getId()), USERS.ID).from(USERS).where(USERS.LOGIN.in(data.getUsers()))).execute();
     }
 }

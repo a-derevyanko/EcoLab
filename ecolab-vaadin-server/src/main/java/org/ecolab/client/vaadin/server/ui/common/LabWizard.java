@@ -191,7 +191,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
             binder.getBean().setCompleted(true);
             if (saveData(true) || binder.validate().isOk()) {
                 removeAllWindows();
-                labService.setTestCompleted(binder.getBean());
+                labService.setLabCompleted(binder.getBean());
                 confirmWindow.show(new ConfirmWindow.ConfirmWindowSettings("labwizard.lab-finished.confirm", () -> {
                     labFinishedWindow.show(new LabFinishedWindow.LabFinishedWindowSettings<>(binder.getBean(), labService));
                 }));

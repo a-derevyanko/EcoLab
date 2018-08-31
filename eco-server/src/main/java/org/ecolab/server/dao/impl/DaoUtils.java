@@ -12,5 +12,4 @@ import static org.ecolab.server.db.h2.public_.Tables.USERS;
 public abstract class DaoUtils {
     public static Select<Record1<Long>> getFindUserIdSelect(DSLContext dsl, String userName) {
         return dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userName));
-    }
-}
+    }}

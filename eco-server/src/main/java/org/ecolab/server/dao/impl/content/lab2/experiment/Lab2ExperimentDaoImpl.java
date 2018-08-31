@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.ecolab.server.db.h2.public_.Tables.LAB2DATA;
+import static org.ecolab.server.db.h2.public_.Tables.LAB2TEAM;
 import static org.ecolab.server.db.h2.public_.Tables.LAB2_EXPERIMENT_LOG;
 import static org.ecolab.server.db.h2.public_.Tables.LAB2_EXPERIMENT_LOG_SOUND_PRESSURE;
 
@@ -74,7 +75,8 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
     @Override
     public Lab2Data<Lab2ExperimentLog> getLastLabByUser(String userName, boolean completed) {
         Lab2Data<Lab2ExperimentLog> data = dsl.select().from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2_EXPERIMENT_LOG.ID.eq(LAB2DATA.ID)).
-                where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB2DATA.COMPLETED.eq(completed)).
+                where(LAB2DATA.ID.eq(dsl.select(LAB2TEAM.ID).where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                        .and(LAB2DATA.COMPLETED.eq(completed)).
                 orderBy(LAB2DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
 
         if (data == null) {
@@ -85,6 +87,7 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
                     .orderBy(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.ID)
                     .fetch(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE_RECORD_MAPPER));
         }
+        fillLabUsers(data);
         return data;
     }
 

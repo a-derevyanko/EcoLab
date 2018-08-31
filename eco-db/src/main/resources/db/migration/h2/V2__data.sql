@@ -17,11 +17,8 @@ VALUES ('ADMIN'),
 
 INSERT INTO group_authorities (GROUP_ID, AUTHORITY_ID)
 VALUES (0, 0),
-        (0, 1),
-        (0, 2),
         (1, 1),
-        (1, 2),
         (2, 2);
-
 INSERT INTO GROUP_MEMBERS (USER_ID, GROUP_ID)
 VALUES (0, 0);
+

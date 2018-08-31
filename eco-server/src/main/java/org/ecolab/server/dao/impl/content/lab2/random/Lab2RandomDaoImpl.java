@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import static org.ecolab.server.db.h2.public_.Tables.LAB2DATA;
+import static org.ecolab.server.db.h2.public_.Tables.LAB2TEAM;
 import static org.ecolab.server.db.h2.public_.Tables.LAB2_RANDOM_VARIANT;
 
 /**
@@ -50,9 +51,12 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
 
     @Override
     public Lab2Data<Lab2RandomVariant> getLastLabByUser(String userName, boolean completed) {
-        return dsl.select().from(LAB2DATA).join(LAB2_RANDOM_VARIANT).on(LAB2_RANDOM_VARIANT.ID.eq(LAB2DATA.ID)).
-                where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB2DATA.COMPLETED.eq(completed)).
+        Lab2Data<Lab2RandomVariant>  data = dsl.select().from(LAB2DATA).join(LAB2_RANDOM_VARIANT).on(LAB2_RANDOM_VARIANT.ID.eq(LAB2DATA.ID)).
+                where(LAB2DATA.ID.eq(dsl.select(LAB2TEAM.ID).where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))
+                        .and(LAB2DATA.COMPLETED.eq(completed))).
                 orderBy(LAB2DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
+        fillLabUsers(data);
+        return data;
     }
 
     @Override

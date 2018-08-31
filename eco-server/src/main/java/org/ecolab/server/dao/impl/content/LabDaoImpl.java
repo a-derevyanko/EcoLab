@@ -3,7 +3,6 @@ package org.ecolab.server.dao.impl.content;
 import com.google.common.collect.Iterables;
 import org.apache.commons.lang3.ClassUtils;
 import org.ecolab.server.dao.api.content.LabDao;
-import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.model.content.LabData;
 import org.ecolab.server.model.content.LabTestHomeWorkQuestion;
 import org.ecolab.server.model.content.LabTestQuestion;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 import static org.ecolab.server.db.h2.public_.Tables.LAB_TEST_HOME_WORK_QUESTION;
 import static org.ecolab.server.db.h2.public_.Tables.LAB_TEST_QUESTION;
 import static org.ecolab.server.db.h2.public_.Tables.LAB_TEST_QUESTION_VARIANT;
-import static org.ecolab.server.db.h2.public_.Tables.USER_DEFENCE_ALLOWANCE;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -90,15 +88,13 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
         return questions.values();
     }
 
-    @Override
-    public void setTestCompleted(T data) {
-        dsl.deleteFrom(USER_DEFENCE_ALLOWANCE).where(USER_DEFENCE_ALLOWANCE.LAB_NUMBER.eq(getLabNumber())
-                .and(USER_DEFENCE_ALLOWANCE.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, data.getUserLogin())))).execute();
-    }
-
     /**
      * Возвращает номер лабораторной
      * @return номер лабораторной
      */
     protected abstract int getLabNumber();
+
+    protected abstract void fillLabUsers(T data);
+
+    protected abstract void saveLabUsers(T data);
 }

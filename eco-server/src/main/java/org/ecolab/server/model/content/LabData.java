@@ -6,6 +6,7 @@ import org.ecolab.server.model.IdentifiedDomainModel;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -17,7 +18,7 @@ public abstract class LabData<V extends LabVariant> extends IdentifiedDomainMode
     private V variant;
 
     @NotNull
-    private String userLogin;
+    private Set<String> users;
 
     @NotNull
     private LocalDateTime startDate;
@@ -27,44 +28,4 @@ public abstract class LabData<V extends LabVariant> extends IdentifiedDomainMode
 
     @NotNull
     private boolean completed;
-
-    public String getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateTime getSaveDate() {
-        return saveDate;
-    }
-
-    public void setSaveDate(LocalDateTime saveDate) {
-        this.saveDate = saveDate;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-
-    public V getVariant() {
-        return variant;
-    }
-
-    public void setVariant(V variant) {
-        this.variant = variant;
-    }
 }

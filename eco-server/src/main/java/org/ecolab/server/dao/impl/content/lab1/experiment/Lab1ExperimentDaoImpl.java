@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import static org.ecolab.server.db.h2.public_.Tables.LAB1DATA;
+import static org.ecolab.server.db.h2.public_.Tables.LAB1TEAM;
 import static org.ecolab.server.db.h2.public_.Tables.LAB1_EXPERIMENT_LOG;
 
 /**
@@ -51,9 +52,13 @@ public class Lab1ExperimentDaoImpl extends Lab1DaoImpl<Lab1ExperimentLog> implem
 
     @Override
     public Lab1Data<Lab1ExperimentLog> getLastLabByUser(String userName, boolean completed) {
-        return dsl.select().from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1_EXPERIMENT_LOG.ID.eq(LAB1DATA.ID)).
-                where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB1DATA.COMPLETED.eq(completed)).
+        Lab1Data<Lab1ExperimentLog> data = dsl.select().from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1_EXPERIMENT_LOG.ID.eq(LAB1DATA.ID)).
+                where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                        .and(LAB1DATA.COMPLETED.eq(completed)).
                 orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
+        fillLabUsers(data);
+
+        return data;
     }
 
     @Override

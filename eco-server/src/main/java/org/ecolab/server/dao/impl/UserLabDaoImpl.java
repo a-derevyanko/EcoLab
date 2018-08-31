@@ -19,11 +19,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.ecolab.server.db.h2.public_.Tables.LAB1DATA;
+import static org.ecolab.server.db.h2.public_.Tables.LAB1TEAM;
 import static org.ecolab.server.db.h2.public_.Tables.LAB1_EXPERIMENT_LOG;
 import static org.ecolab.server.db.h2.public_.Tables.LAB1_RANDOM_VARIANT;
 import static org.ecolab.server.db.h2.public_.Tables.LAB2DATA;
+import static org.ecolab.server.db.h2.public_.Tables.LAB2TEAM;
 import static org.ecolab.server.db.h2.public_.Tables.LAB2_RANDOM_VARIANT;
 import static org.ecolab.server.db.h2.public_.Tables.LAB3DATA;
+import static org.ecolab.server.db.h2.public_.Tables.LAB3TEAM;
 import static org.ecolab.server.db.h2.public_.Tables.USER_DEFENCE_ALLOWANCE;
 import static org.ecolab.server.db.h2.public_.Tables.USER_TEST_HISTORY;
 import static org.ecolab.server.db.h2.public_.tables.Lab2ExperimentLog.LAB2_EXPERIMENT_LOG;
@@ -53,18 +56,24 @@ public class UserLabDaoImpl implements UserLabDao {
     }
 
     @Override
+    //todo оптимизировать запрос
     public Map<Integer, LabMode> getCompletedLabs(String userName) {
-        return dsl.select(DSL.val(1), DSL.val(LabMode.EXPERIMENT.name())).from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1DATA.ID.eq(LAB1_EXPERIMENT_LOG.ID)).
-                where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB1DATA.COMPLETED.eq(true))
-                .union(dsl.select(DSL.val(1), DSL.val(LabMode.RANDOM.name())).from(LAB1DATA).join(LAB1_RANDOM_VARIANT).on(LAB1DATA.ID.eq(LAB1_RANDOM_VARIANT.ID)).
-                        where(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB1DATA.COMPLETED.eq(true)))
-        .union(dsl.select(DSL.val(2), DSL.val(LabMode.EXPERIMENT.name())).from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2DATA.ID.eq(LAB2_EXPERIMENT_LOG.ID)).
-                where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB2DATA.COMPLETED.eq(true))
-                .union(dsl.select(DSL.val(2), DSL.val(LabMode.RANDOM.name())).from(LAB2DATA).join(LAB2_RANDOM_VARIANT).on(LAB2DATA.ID.eq(LAB2_RANDOM_VARIANT.ID)).
-                        where(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB2DATA.COMPLETED.eq(true))))
-        .union(dsl.select(DSL.val(3), DSL.val(LabMode.NONE.name())).from(LAB3DATA).
-                where(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).and(LAB3DATA.COMPLETED.eq(true))).
-                        fetch().stream().collect(Collectors.toMap(Record2::value1, r -> LabMode.valueOf(r.value2())));
+      return dsl.select(DSL.val(1), DSL.val(LabMode.EXPERIMENT.name())).from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1DATA.ID.eq(LAB1_EXPERIMENT_LOG.ID)).
+              where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID)
+                      .from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB1DATA.COMPLETED.eq(true))
+              .union(dsl.select(DSL.val(1), DSL.val(LabMode.RANDOM.name())).from(LAB1DATA).join(LAB1_RANDOM_VARIANT).on(LAB1DATA.ID.eq(LAB1_RANDOM_VARIANT.ID)).
+                      where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID)
+                              .from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB1DATA.COMPLETED.eq(true)))
+              .union(dsl.select(DSL.val(2), DSL.val(LabMode.EXPERIMENT.name())).from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2DATA.ID.eq(LAB2_EXPERIMENT_LOG.ID)).
+                      where(LAB2DATA.ID.eq(dsl.select(LAB2TEAM.ID)
+                              .from(LAB2TEAM).where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB2DATA.COMPLETED.eq(true))
+                      .union(dsl.select(DSL.val(2), DSL.val(LabMode.RANDOM.name())).from(LAB2DATA).join(LAB2_RANDOM_VARIANT).on(LAB2DATA.ID.eq(LAB2_RANDOM_VARIANT.ID)).
+                              where(LAB2DATA.ID.eq(dsl.select(LAB2TEAM.ID)
+                                      .from(LAB2TEAM).where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB2DATA.COMPLETED.eq(true))))
+              .union(dsl.select(DSL.val(3), DSL.val(LabMode.NONE.name())).from(LAB3DATA).
+                      where(LAB3TEAM.ID.eq(dsl.select(LAB3TEAM.ID)
+                              .from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB3DATA.COMPLETED.eq(true))).
+                      fetch().stream().collect(Collectors.toMap(Record2::value1, r -> LabMode.valueOf(r.value2())));
     }
 
     @Override
@@ -85,22 +94,25 @@ public class UserLabDaoImpl implements UserLabDao {
                       DSL.max(USER_TEST_HISTORY.MARK),
                               DSL.max(USER_TEST_HISTORY.POINT_COUNT))
               .from(LAB1DATA)
-              .leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB1DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(1))).
-                      where(LAB1DATA.COMPLETED.isTrue().and(LAB1DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))
+              .leftJoin(LAB1TEAM).on(LAB1DATA.ID.eq(LAB1DATA.ID))
+              .join(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB1TEAM.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(1))).
+                      where(LAB1DATA.COMPLETED.isTrue().and(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))
               .union(dsl.select(DSL.val(2),
                       DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB2DATA.SAVE_DATE), DSL.max(USER_TEST_HISTORY.LAST_MODIFY_DATE),
                       DSL.max(USER_TEST_HISTORY.MARK),
                       DSL.max(USER_TEST_HISTORY.POINT_COUNT))
                       .from(LAB2DATA)
-                      .leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB2DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(2))).
-                              where(LAB2DATA.COMPLETED.isTrue().and(LAB2DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                      .leftJoin(LAB2TEAM).on(LAB2DATA.ID.eq(LAB2DATA.ID))
+                      .join(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB2TEAM.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(2))).
+                              where(LAB2DATA.COMPLETED.isTrue().and(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
               .union(dsl.select(DSL.val(3),
                       DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB3DATA.SAVE_DATE), DSL.max(USER_TEST_HISTORY.LAST_MODIFY_DATE),
                       DSL.max(USER_TEST_HISTORY.MARK),
                       DSL.max(USER_TEST_HISTORY.POINT_COUNT))
                       .from(LAB3DATA)
-                      .leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB3DATA.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(3))).
-                              where(LAB3DATA.COMPLETED.isTrue().and(LAB3DATA.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                      .leftJoin(LAB3TEAM).on(LAB3DATA.ID.eq(LAB3DATA.ID))
+                      .join(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB3TEAM.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(3))).
+                              where(LAB3DATA.COMPLETED.isTrue().and(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
               .orderBy(1)
               .fetch(USER_LAB_STATISTICS_RECORD_MAPPER);
     }

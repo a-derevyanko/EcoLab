@@ -27,5 +27,5 @@ public interface LabDao<T extends LabData> {
      * Устанавливает признак пройденной лабораторной
      * @param data данные лабораторной
      */
-    void setTestCompleted(T data);
+    void setLabCompleted(T data);
 }

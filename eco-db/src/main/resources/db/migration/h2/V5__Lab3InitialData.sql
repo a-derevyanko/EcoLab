@@ -1,6 +1,5 @@
 INSERT INTO lab3data (
   id,
-  user_id,
   start_date,
   save_date,
   version,
@@ -47,7 +46,6 @@ INSERT INTO lab3data (
   completed
 ) VALUES (
   0,
-  0,
   '2017-06-01 23:07:49',
   '2017-06-01 23:07:53',
   0,
@@ -92,6 +90,10 @@ INSERT INTO lab3data (
   0.5,
   0.05,
   FALSE
+);
+
+insert into lab3team (id,user_id) values (
+0, 0
 );
 
 INSERT INTO lab3variant (
