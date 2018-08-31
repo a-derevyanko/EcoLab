@@ -97,3 +97,4 @@ ecolab-vaadin-desktop/ecolab-vaadin-desktop_test.iml
 ecolab-vaadin-server/ecolab-vaadin-server.iml
 ecolab-vaadin-server/ecolab-vaadin-server_main.iml
 ecolab-vaadin-server/ecolab-vaadin-server_test.iml
+/ecolab-vaadin-client/src/main/webapp/VAADIN/widgetsets/

@@ -71,7 +71,7 @@ public class UserLabDaoImpl implements UserLabDao {
                               where(LAB2DATA.ID.eq(dsl.select(LAB2TEAM.ID)
                                       .from(LAB2TEAM).where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB2DATA.COMPLETED.eq(true))))
               .union(dsl.select(DSL.val(3), DSL.val(LabMode.NONE.name())).from(LAB3DATA).
-                      where(LAB3TEAM.ID.eq(dsl.select(LAB3TEAM.ID)
+                      where(LAB3DATA.ID.eq(dsl.select(LAB3TEAM.ID)
                               .from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB3DATA.COMPLETED.eq(true))).
                       fetch().stream().collect(Collectors.toMap(Record2::value1, r -> LabMode.valueOf(r.value2())));
     }
