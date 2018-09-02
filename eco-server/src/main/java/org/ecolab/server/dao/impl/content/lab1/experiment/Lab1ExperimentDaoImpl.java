@@ -53,10 +53,12 @@ public class Lab1ExperimentDaoImpl extends Lab1DaoImpl<Lab1ExperimentLog> implem
     @Override
     public Lab1Data<Lab1ExperimentLog> getLastLabByUser(String userName, boolean completed) {
         Lab1Data<Lab1ExperimentLog> data = dsl.select().from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1_EXPERIMENT_LOG.ID.eq(LAB1DATA.ID)).
-                where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID).from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
                         .and(LAB1DATA.COMPLETED.eq(completed)).
                 orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
-        fillLabUsers(data);
+        if (data != null) {
+            fillLabUsers(data);
+        }
 
         return data;
     }

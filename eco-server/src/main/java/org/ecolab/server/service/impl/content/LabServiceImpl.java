@@ -128,6 +128,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     public T startNewLab(String userName) {
         T labData = createBaseLabData(userName);
         labData.setVariant(generateNewLabVariant());
+        labDao.saveLab(labData);
         updateCalculatedFields(labData);
         return labData;
     }
@@ -137,6 +138,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     //@CachePut(cacheNames = "LABDATA", key = "#labData.userLogin")
     public T updateLab(T labData) {
         labData.setSaveDate(LocalDateTime.now());
+        labDao.updateLab(labData);
         updateCalculatedFields(labData);
         return labData;
     }

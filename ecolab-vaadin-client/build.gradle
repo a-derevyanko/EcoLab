@@ -19,7 +19,6 @@ vaadin {
 
 dependencies {
 
-    compile group: 'com.vaadin.addon',               name: 'vaadin-context-menu',                   version: '+'
     compile group: 'com.vaadin.addon',               name: 'vaadin-onoffswitch',                    version: '1.1.0'
     compile group: 'org.vaadin.addon',               name: 'confirmdialog',                         version: '3.1.1'
     compile (group: 'org.vaadin.addon',               name: 'jfreechartwrapper',                     version: '4.0.0') {

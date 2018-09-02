@@ -24,8 +24,9 @@ public class SettingsDaoImpl implements SettingsDao {
 
         String value = r.getValue();
         try {
-            Class valueClass = ClassUtils.primitiveToWrapper(ClassUtils.getClass(ClassLoader.getSystemClassLoader(),
+            Class valueClass = r.getType().equals("string") ? String.class : ClassUtils.primitiveToWrapper(ClassUtils.getClass(ClassLoader.getSystemClassLoader(),
                     r.getType(), true));
+
             Object val;
             if (valueClass == Boolean.class) {
                 val = Boolean.parseBoolean(value);

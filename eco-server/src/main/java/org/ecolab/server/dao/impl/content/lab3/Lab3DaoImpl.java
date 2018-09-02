@@ -120,11 +120,13 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     @Override
     public Lab3Data getLastLabByUser(String userName, boolean completed) {
         Lab3Data data = dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID)).
-                where(LAB3DATA.ID.eq(dsl.select(LAB3TEAM.ID).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                where(LAB3DATA.ID.eq(dsl.select(LAB3TEAM.ID).from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
                         .and(LAB3DATA.COMPLETED.eq(completed)).
                 orderBy(LAB3DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB3DATA_MAPPER);
 
-        fillLabUsers(data);
+        if (data != null) {
+            fillLabUsers(data);
+        }
 
         return data;
     }
@@ -352,7 +354,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     public void setLabCompleted(Lab3Data data) {
         dsl.update(LAB3DATA).set(LAB3DATA.COMPLETED, true).where(LAB3DATA.ID.eq(data.getId())).execute();
         dsl.deleteFrom(USER_LAB_ALLOWANCE).where(USER_LAB_ALLOWANCE.LAB_NUMBER.eq(getLabNumber())
-                .and(USER_LAB_ALLOWANCE.USER_ID.in(dsl.select(LAB3TEAM.USER_ID).where(LAB3TEAM.ID.eq(data.getId()))))).execute();
+                .and(USER_LAB_ALLOWANCE.USER_ID.in(dsl.select(LAB3TEAM.USER_ID).from(LAB3TEAM).where(LAB3TEAM.ID.eq(data.getId()))))).execute();
     }
 
     @Override

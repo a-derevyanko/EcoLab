@@ -10,6 +10,5 @@ import javax.annotation.security.RolesAllowed;
  */
 public interface AutoSavableView extends SavableView {
     @Scheduled
-    @RolesAllowed(Role.STUDENT)
     void autoSave();
 }

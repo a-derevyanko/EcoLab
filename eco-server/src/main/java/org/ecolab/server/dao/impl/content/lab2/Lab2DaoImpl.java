@@ -158,7 +158,7 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
     public void setLabCompleted(Lab2Data<V> data) {
         dsl.update(LAB2DATA).set(LAB2DATA.COMPLETED, true).where(LAB2DATA.ID.eq(data.getId())).execute();
         dsl.deleteFrom(USER_LAB_ALLOWANCE).where(USER_LAB_ALLOWANCE.LAB_NUMBER.eq(getLabNumber())
-                .and(USER_LAB_ALLOWANCE.USER_ID.in(dsl.select(LAB2TEAM.USER_ID).where(LAB2TEAM.ID.eq(data.getId()))))).execute();
+                .and(USER_LAB_ALLOWANCE.USER_ID.in(dsl.select(LAB2TEAM.USER_ID).from(LAB2TEAM).where(LAB2TEAM.ID.eq(data.getId()))))).execute();
     }
 
     protected static Object[] toArray(List<?> list) {

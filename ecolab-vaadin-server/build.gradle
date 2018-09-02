@@ -31,14 +31,14 @@ dependencies {
     //compile project (':ecolab-server')
     compile group: 'org.apache.commons',            name: 'commons-lang3',                      version: '3.8'
     compile group: 'com.vaadin',                    name: 'vaadin-spring',                      version: '3.0.1'
-    compile (group: 'com.vaadin',                   name: 'vaadin-spring-boot-starter',         version: '+') {
+    compile (group: 'com.vaadin',                   name: 'vaadin-spring-boot-starter',         version: '10.0.4') {
         exclude group: 'com.vaadin'
     }
 
-    compile (group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-security',        version: '+') {
+    compile (group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-security',        version: '2.0.0.RELEASE') {
         exclude group: 'org.vaadin.spring'
     }
-    compile (group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-boot',            version: '+') {
+    compile (group: 'org.vaadin.spring.extensions',  name: 'vaadin-spring-ext-boot',            version: '2.0.0.RELEASE') {
         exclude group: 'org.vaadin.spring'
     }
 

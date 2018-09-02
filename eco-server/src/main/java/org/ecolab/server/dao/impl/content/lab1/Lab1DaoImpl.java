@@ -195,7 +195,7 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
     public void setLabCompleted(Lab1Data<V> data) {
         dsl.update(LAB1DATA).set(LAB1DATA.COMPLETED, true).where(LAB1DATA.ID.eq(data.getId())).execute();
         dsl.deleteFrom(USER_LAB_ALLOWANCE).where(USER_LAB_ALLOWANCE.LAB_NUMBER.eq(getLabNumber())
-                .and(USER_LAB_ALLOWANCE.USER_ID.in(dsl.select(LAB1TEAM.USER_ID).where(LAB1TEAM.ID.eq(data.getId()))))).execute();
+                .and(USER_LAB_ALLOWANCE.USER_ID.in(dsl.select(LAB1TEAM.USER_ID).from(LAB1TEAM).where(LAB1TEAM.ID.eq(data.getId()))))).execute();
     }
 
     protected abstract Lab1DataMapper<V> getLabMapper();
