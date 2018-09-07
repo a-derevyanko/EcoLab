@@ -10,13 +10,11 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-@SpringBootApplication
-@ComponentScan(basePackageClasses = {ServerApplication.class})
+@SpringBootApplication(scanBasePackageClasses = ServerApplication.class)
 @EnableWebSecurity
 @EnableWebMvc
 @EnableCaching
