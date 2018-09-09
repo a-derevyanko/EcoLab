@@ -8,10 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.ApiContext;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -23,23 +25,38 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+/**
+ * К сожалению не работает из-за отсутствия прокси
+ */
 @ControllerAdvice
-@ConditionalOnProperty({"telegram.bot.name", "telegram.bot.token"})
+@ConditionalOnProperty(value = "telegram.bot.enabled", havingValue = "true")
 public class TelegramBotImpl extends TelegramLongPollingBot implements TelegramBot {
   private static final Logger LOGGER = LoggerFactory.getLogger(TelegramBotImpl.class);
   private static final TelegramBotsApi BOTS_API = new TelegramBotsApi();
   private final TelegramService service;
   private final String name;
   private final String token;
+  private static String PROXY_HOST = "88.255.185.216" /* proxy host */;
+  private static Integer PROXY_PORT = 9050/* proxy port */;
 
   public TelegramBotImpl(TelegramService service, @Value("telegram.bot.name") String name, @Value("telegram.bot.token") String token) {
+    super(defaultBotOptions());
     this.service = service;
     this.name = name;
     this.token = token;
   }
 
+  private static DefaultBotOptions defaultBotOptions() {
+    DefaultBotOptions botOptions = ApiContext.getInstance(DefaultBotOptions.class);
+    botOptions.setProxyHost(PROXY_HOST);
+    botOptions.setProxyPort(PROXY_PORT);
+    botOptions.setProxyType(DefaultBotOptions.ProxyType.SOCKS5);
+    return botOptions;
+  }
+
   @PostConstruct
   public void init() throws TelegramApiRequestException {
+    ApiContextInitializer.init();
     BOTS_API.registerBot(this);
   }
 
@@ -65,7 +82,7 @@ public class TelegramBotImpl extends TelegramLongPollingBot implements TelegramB
   }
 
   @ExceptionHandler(Exception.class)
-  private void notifyAboutException(Exception ex) {
+  public void notifyAboutException(Exception ex) {
     SendDocument document = new SendDocument();
     document.setDocument(ex.getLocalizedMessage() + "_"
                     + FastDateFormat.getInstance("dd_MM_yyyy_HH_mm_ss").format(new Date()) + ".txt",

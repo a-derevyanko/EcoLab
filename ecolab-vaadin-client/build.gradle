@@ -38,5 +38,5 @@ dependencies {
     compile group: 'com.vaadin',                     name: 'vaadin-icons',                          version: '3.0.1'
 
 }
-
+vaadinCompile.dependsOn vaadinThemeCompress
 jar.dependsOn 'vaadinCompile'

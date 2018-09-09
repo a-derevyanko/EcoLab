@@ -6,4 +6,5 @@ include 'ecolab-vaadin-server'
 include 'ecolab-vaadin-client'
 include 'eco-server'
 include 'ecolab-vaadin-desktop'
+include 'audit'
 
