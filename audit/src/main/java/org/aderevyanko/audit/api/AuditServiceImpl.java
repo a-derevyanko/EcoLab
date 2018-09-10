@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public abstract class AuditServiceImpl implements AuditService {
+public class AuditServiceImpl implements AuditService {
     private static final Logger LOGGER = Logger.getLogger(AuditServiceImpl.class.getName());
 
     private final PublishSubject<AuditEvent> messageObserver = PublishSubject.create();
@@ -66,6 +66,7 @@ public abstract class AuditServiceImpl implements AuditService {
             }
         }
 
+        // Subscribe for events
         Disposable subscription = messageObserver.
                 filter(message -> {
                     if (message.getEventDate() == null) {
@@ -95,6 +96,7 @@ public abstract class AuditServiceImpl implements AuditService {
                     }
                 });
     }
+
 
     @Override
     public void log(AuditEvent event) {
