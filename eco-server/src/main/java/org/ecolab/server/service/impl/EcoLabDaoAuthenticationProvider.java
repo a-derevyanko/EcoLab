@@ -2,6 +2,7 @@ package org.ecolab.server.service.impl;
 
 import org.aderevyanko.audit.api.AuditEvent;
 import org.aderevyanko.audit.api.AuditService;
+import org.aderevyanko.audit.api.base.BaseAuditService;
 import org.ecolab.server.common.EcoLabAuditEventAttribute;
 import org.ecolab.server.common.EcoLabAuditEventType;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -28,8 +29,8 @@ public class EcoLabDaoAuthenticationProvider extends DaoAuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Authentication successfulAuthentication = super.authenticate(authentication);
-        auditService.log(AuditEvent.forType(EcoLabAuditEventType.LOGIN)
-                .setAttribute(EcoLabAuditEventAttribute.USER_NAME, authentication.getName()));
+        auditService.log(AuditEvent.ofType(EcoLabAuditEventType.LOGIN)
+                .attribute(EcoLabAuditEventAttribute.USER_NAME, authentication.getName()));
         return successfulAuthentication;
     }
 }

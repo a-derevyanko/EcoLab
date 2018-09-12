@@ -1,8 +1,8 @@
 package org.ecolab.server;
 
-import org.aderevyanko.audit.api.AuditService;
-import org.aderevyanko.audit.api.AuditServiceImpl;
 import org.aderevyanko.audit.api.EventsStorage;
+import org.aderevyanko.audit.api.base.BaseAuditService;
+import org.aderevyanko.audit.impl.AuditServiceImpl;
 import org.ecolab.server.common.EcoLabAuditEventAttribute;
 import org.ecolab.server.common.EcoLabAuditEventType;
 import org.springframework.boot.SpringBootConfiguration;
@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 @SpringBootConfiguration
 public class AuditContext {
     @Bean
-    public AuditService auditService(EventsStorage storage) {
+    public BaseAuditService auditService(EventsStorage storage) {
         return new AuditServiceImpl(
                 storage,
                 Executors.newFixedThreadPool(100),

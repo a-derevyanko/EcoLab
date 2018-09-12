@@ -3,6 +3,7 @@ package org.ecolab.server.service.impl;
 import com.google.common.collect.Sets;
 import org.aderevyanko.audit.api.AuditEvent;
 import org.aderevyanko.audit.api.AuditEventAttribute;
+import org.aderevyanko.audit.api.AuditEventFilter;
 import org.aderevyanko.audit.api.EventsStorage;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
@@ -42,7 +43,7 @@ public class JooqEventsStorage implements EventsStorage {
                         values((Long) null, null, null));
                 for (AuditEvent event : events) {
                     long id = dsl.insertInto(AUDIT, AUDIT.CREATE_DATE, AUDIT.EVENT_TYPE)
-                            .values(event.getEventDate(), event.getEventType().getId())
+                            .values(event.getHeader().getEventDate(), event.getHeader().getEventType().getId())
                             .returning(AUDIT.ID).fetchOne().getId();
 
                     for (Map.Entry<AuditEventAttribute, String> entry : event.getAttributes().entrySet()) {
@@ -71,5 +72,10 @@ public class JooqEventsStorage implements EventsStorage {
     public Set<Long> getLoggableEvents() {
         return Sets.newHashSet(dsl.select(AUDIT_EVENT_TYPE.ID).from(AUDIT_EVENT_TYPE)
                 .where(AUDIT_EVENT_TYPE.IS_LOGGABLE.isTrue()).fetchInto(Long.class));
+    }
+
+    @Override
+    public Set<AuditEventFilter> getHeaders() {
+        return null;
     }
 }

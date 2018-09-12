@@ -1,12 +1,9 @@
 package org.aderevyanko.audit.api;
 
+import org.aderevyanko.audit.api.base.BaseAuditService;
+
 /**
  * Cервис аудита
  */
-public interface AuditService {
-    /**
-     * Запись события аудита в хранилище
-     * @param event событие
-     */
-    void log(AuditEvent event);
+public interface AuditService extends BaseAuditService<AuditEventHeader, AuditEvent,  AuditEventFilter> {
 }
