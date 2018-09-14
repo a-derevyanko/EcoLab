@@ -1,6 +1,6 @@
 package org.aderevyanko.audit.api;
 
-import org.aderevyanko.audit.api.base.BaseEventsStorage;
+import org.aderevyanko.audit.api.generic.GenericEventsStorage;
 
-public interface EventsStorage extends BaseEventsStorage<AuditEventHeader, AuditEvent, AuditEventFilter> {
+public interface EventsStorage extends GenericEventsStorage<AuditEventHeader, AuditEvent, AuditEventFilter> {
 }

@@ -1,23 +1,33 @@
 package org.ecolab.client.vaadin.server;
 
+import org.ecolab.server.model.ClientContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
 import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
 import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Андрей on 11.09.2016.
@@ -31,12 +41,15 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     private final AuthenticationProvider authenticationProvider;
     private final RememberMeServices rememberMeServices;
     private final PersistentTokenRepository persistentTokenRepository;
+    private final LogoutSuccessHandler logoutHandler;
 
     @Autowired
-    public VaadinServerSecurityContext(AuthenticationProvider authenticationProvider, RememberMeServices rememberMeServices, PersistentTokenRepository persistentTokenRepository) {
+    public VaadinServerSecurityContext(AuthenticationProvider authenticationProvider, RememberMeServices rememberMeServices,
+                                       PersistentTokenRepository persistentTokenRepository, LogoutSuccessHandler logoutHandler) {
         this.authenticationProvider = authenticationProvider;
         this.rememberMeServices = rememberMeServices;
         this.persistentTokenRepository = persistentTokenRepository;
+        this.logoutHandler = logoutHandler;
     }
 /*
     @Override
@@ -45,14 +58,33 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider);
     }*/
 
+    private class EcoLabAnonymousFilter extends AnonymousAuthenticationFilter {
+
+        public EcoLabAnonymousFilter(String key) {
+            super(key);
+        }
+
+        public EcoLabAnonymousFilter(String key, Object principal, List<GrantedAuthority> authorities) {
+            super(key, principal, authorities);
+        }
+
+        @Override
+        protected Authentication createAuthentication(HttpServletRequest request) {
+            AnonymousAuthenticationToken authentication = (AnonymousAuthenticationToken) super.createAuthentication(request);
+            authentication.setDetails(new ClientContext(null, request.getLocale()));
+            return authentication;
+        }
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
-        http.headers().frameOptions().disable()
+        http.anonymous().authenticationFilter(new EcoLabAnonymousFilter(UUID.randomUUID().toString())).and().
+                headers().frameOptions().disable()
                 .and()
                 .authorizeRequests().anyRequest().permitAll()
                 .and()
-                .logout().permitAll().addLogoutHandler(new VaadinSessionClosingLogoutHandler()).logoutSuccessUrl("/")
+                .logout().permitAll().addLogoutHandler(new VaadinSessionClosingLogoutHandler()).logoutSuccessUrl("/").logoutSuccessHandler(logoutHandler)
                 .and()
                 .csrf().disable().exceptionHandling()
                 .and()

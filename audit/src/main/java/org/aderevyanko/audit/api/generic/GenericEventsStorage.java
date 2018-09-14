@@ -1,4 +1,4 @@
-package org.aderevyanko.audit.api.base;
+package org.aderevyanko.audit.api.generic;
 
 import org.aderevyanko.audit.api.AuditEventHeader;
 
@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public interface BaseEventsStorage<H extends AuditEventHeader, T extends BaseAuditEvent<H, T>, F extends BaseAuditEventFilter<H>> {
+public interface GenericEventsStorage<H extends AuditEventHeader, T extends GenericAuditEvent<T>, F extends GenericAuditEventFilter<F>> {
     void saveEvents(Collection<T> events);
 
     Map<Long, String> getEventTypes();
@@ -15,5 +15,9 @@ public interface BaseEventsStorage<H extends AuditEventHeader, T extends BaseAud
 
     Set<Long> getLoggableEvents();
 
-    Set<F> getHeaders();
+    Set<H> getHeaders(F filter);
+
+    Set<T> getEvents(F filter);
+
+    T getEvent(long id);
 }

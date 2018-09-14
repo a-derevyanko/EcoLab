@@ -7,6 +7,7 @@ import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.ecolab.server.dev.LogExecutionTime;
+import org.ecolab.server.model.EcoLabUserDetails;
 import org.ecolab.server.model.UserGroup;
 import org.ecolab.server.model.UserInfo;
 import org.ecolab.server.service.api.ReportService;
@@ -112,7 +113,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
                         .set(USER_AUTHORITIES.AUTHORITY_ID, dsl.select(AUTHORITIES.ID).from(AUTHORITIES).where(AUTHORITIES.AUTHORITY_NAME.eq(""))).
                         getSQL());
         setChangePasswordSql(dsl.update(USERS).set(USERS.PASSWORD, "").where(USERS.LOGIN.eq("")).getSQL());
-        setUsersByUsernameQuery(dsl.select(USERS.LOGIN, USERS.PASSWORD, USERS.ENABLED).from(USERS).where(USERS.LOGIN.eq("")).getSQL());
+        setUsersByUsernameQuery(dsl.select(USERS.LOGIN, USERS.PASSWORD, USERS.ENABLED, USERS.ID).from(USERS).where(USERS.LOGIN.eq("")).getSQL());
         setAuthoritiesByUsernameQuery(dsl.select(USERS.LOGIN, AUTHORITIES.AUTHORITY_NAME).
                 from(USER_AUTHORITIES).join(USERS).on(USERS.ID.eq(USER_AUTHORITIES.USER_ID)).join(AUTHORITIES).on(AUTHORITIES.ID.eq(USER_AUTHORITIES.AUTHORITY_ID)).where(USERS.LOGIN.eq("")).getSQL());
         setUserExistsSql(dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.eq("")).getSQL());
@@ -152,7 +153,9 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
             String username1 = record.getValue(0, String.class);
             String password = record.getValue(1, String.class);
             boolean enabled = record.getValue(2, Boolean.class);
-            return new User(username1, password, enabled, true, true, true,
+            Long id = record.getValue(3, Long.class);
+            return new EcoLabUserDetails(id, username1, password, enabled,
+                    true, true, true,
                     AuthorityUtils.NO_AUTHORITIES);
         });
     }

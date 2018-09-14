@@ -1,9 +1,9 @@
 package org.aderevyanko.audit.api;
 
-import org.aderevyanko.audit.api.base.BaseAuditService;
+import org.aderevyanko.audit.api.generic.GenericAuditService;
 
 /**
  * Cервис аудита
  */
-public interface AuditService extends BaseAuditService<AuditEventHeader, AuditEvent,  AuditEventFilter> {
+public interface AuditService extends GenericAuditService<AuditEventHeader, AuditEvent,  AuditEventFilter> {
 }

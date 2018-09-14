@@ -3,7 +3,9 @@ package org.ecolab.server.common;
 import org.aderevyanko.audit.api.AuditEventType;
 
 public enum EcoLabAuditEventType implements AuditEventType {
-    LOGIN(0L);
+    LOGIN(0L),
+    LOGOUT(1L)
+    ;
 
     private final long id;
 

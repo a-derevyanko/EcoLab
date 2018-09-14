@@ -3,11 +3,15 @@ package org.ecolab.server.common;
 import com.github.aleksandy.petrovich.Case;
 import com.github.aleksandy.petrovich.Gender;
 import com.github.aleksandy.petrovich.Petrovich;
+import org.ecolab.server.model.ClientContext;
 import org.ecolab.server.model.UserInfo;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,5 +37,15 @@ public abstract class UserInfoUtils {
     public static Set<String> getRoles(Authentication authentication) {
         return authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+    }
+
+    /**
+     * Возвращает контекст текущей сессии
+     * @return контекст текущей сессии
+     */
+    public static ClientContext getCurrentUserContext() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Objects.requireNonNull(securityContext, "Current security context is empty!");
+        return (ClientContext) securityContext.getAuthentication().getDetails();
     }
 }

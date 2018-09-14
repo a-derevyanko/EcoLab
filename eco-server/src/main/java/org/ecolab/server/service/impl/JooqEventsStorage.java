@@ -1,10 +1,12 @@
 package org.ecolab.server.service.impl;
 
 import com.google.common.collect.Sets;
-import org.aderevyanko.audit.api.AuditEvent;
 import org.aderevyanko.audit.api.AuditEventAttribute;
 import org.aderevyanko.audit.api.AuditEventFilter;
-import org.aderevyanko.audit.api.EventsStorage;
+import org.aderevyanko.audit.api.generic.GenericEventsStorage;
+import org.ecolab.server.common.UserInfoUtils;
+import org.ecolab.server.model.EcoLabAuditEvent;
+import org.ecolab.server.model.EcoLabAuditEventHeader;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.slf4j.Logger;
@@ -23,7 +25,7 @@ import static org.ecolab.server.db.h2.public_.Tables.AUDIT_EVENT_TYPE;
 import static org.ecolab.server.db.h2.public_.tables.AuditAttributes.AUDIT_ATTRIBUTES;
 
 @Service
-public class JooqEventsStorage implements EventsStorage {
+public class JooqEventsStorage implements GenericEventsStorage<EcoLabAuditEventHeader, EcoLabAuditEvent, AuditEventFilter> {
     private static final Logger LOGGER = LoggerFactory.getLogger(JooqEventsStorage.class);
 
     private final DSLContext dsl;
@@ -34,16 +36,18 @@ public class JooqEventsStorage implements EventsStorage {
 
     @Override
     @Async
-    public void saveEvents(Collection<AuditEvent> events) {
+    public void saveEvents(Collection<EcoLabAuditEvent> events) {
         try {
             dsl.transaction(configuration -> {
                 //todo не удаётся сохранить batch, jooq пока этого не умеет https://github.com/jOOQ/jOOQ/issues/3327
                 BatchBindStep attributesBatch = dsl.batch(dsl.insertInto(AUDIT_ATTRIBUTES, AUDIT_ATTRIBUTES.AUDIT_ID,
                         AUDIT_ATTRIBUTES.AUDIT_ATTRIBUTE_ID, AUDIT_ATTRIBUTES.VALUE).
                         values((Long) null, null, null));
-                for (AuditEvent event : events) {
-                    long id = dsl.insertInto(AUDIT, AUDIT.CREATE_DATE, AUDIT.EVENT_TYPE)
-                            .values(event.getHeader().getEventDate(), event.getHeader().getEventType().getId())
+                for (EcoLabAuditEvent event : events) {
+                    long id = dsl.insertInto(AUDIT, AUDIT.CREATE_DATE, AUDIT.EVENT_TYPE, AUDIT.USER_ID)
+                            .values(event.getEventDate(),
+                                    event.getEventType().getId(),
+                                    UserInfoUtils.getCurrentUserContext().getUserId())
                             .returning(AUDIT.ID).fetchOne().getId();
 
                     for (Map.Entry<AuditEventAttribute, String> entry : event.getAttributes().entrySet()) {
@@ -75,7 +79,17 @@ public class JooqEventsStorage implements EventsStorage {
     }
 
     @Override
-    public Set<AuditEventFilter> getHeaders() {
+    public Set<EcoLabAuditEventHeader> getHeaders(AuditEventFilter filter) {
+        return null;
+    }
+
+    @Override
+    public Set<EcoLabAuditEvent> getEvents(AuditEventFilter filter) {
+        return null;
+    }
+
+    @Override
+    public EcoLabAuditEvent getEvent(long id) {
         return null;
     }
 }

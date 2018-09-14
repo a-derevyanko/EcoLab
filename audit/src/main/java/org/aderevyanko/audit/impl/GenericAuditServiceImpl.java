@@ -7,11 +7,11 @@ import io.reactivex.subjects.PublishSubject;
 import org.aderevyanko.audit.api.AuditEventAttribute;
 import org.aderevyanko.audit.api.AuditEventHeader;
 import org.aderevyanko.audit.api.AuditEventType;
-import org.aderevyanko.audit.api.base.BaseAuditService;
-import org.aderevyanko.audit.api.base.BaseAuditEvent;
-import org.aderevyanko.audit.api.base.BaseAuditEventFilter;
-import org.aderevyanko.audit.api.base.BaseEventsStorage;
 import org.aderevyanko.audit.api.StoredType;
+import org.aderevyanko.audit.api.generic.GenericAuditEvent;
+import org.aderevyanko.audit.api.generic.GenericAuditEventFilter;
+import org.aderevyanko.audit.api.generic.GenericAuditService;
+import org.aderevyanko.audit.api.generic.GenericEventsStorage;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,9 +24,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public abstract class BaseAuditServiceImpl<H extends AuditEventHeader, T extends BaseAuditEvent<H, T>, F extends BaseAuditEventFilter<H>>
-        implements BaseAuditService<H, T, F> {
-    private static final Logger LOGGER = Logger.getLogger(BaseAuditServiceImpl.class.getName());
+public abstract class GenericAuditServiceImpl<H extends AuditEventHeader, T extends GenericAuditEvent<T>, F extends GenericAuditEventFilter<F>>
+        implements GenericAuditService<H, T, F> {
+    private static final Logger LOGGER = Logger.getLogger(GenericAuditServiceImpl.class.getName());
 
     private final PublishSubject<T> messageObserver = PublishSubject.create();
 
@@ -38,10 +38,10 @@ public abstract class BaseAuditServiceImpl<H extends AuditEventHeader, T extends
 
     private final int eventsSaveTimeSpanInSeconds;
 
-    private final BaseEventsStorage<H, T, F> storage;
+    private final GenericEventsStorage<H, T, F> storage;
 
-    public BaseAuditServiceImpl(BaseEventsStorage<H, T, F> storage, Executor executor, List<AuditEventType> types,
-                                List<AuditEventAttribute> attributes, int eventsSaveCount, int eventsSaveTimeSpanInSeconds) {
+    public GenericAuditServiceImpl(GenericEventsStorage<H, T, F> storage, Executor executor, List<AuditEventType> types,
+                                   List<AuditEventAttribute> attributes, int eventsSaveCount, int eventsSaveTimeSpanInSeconds) {
         this.storage = storage;
         this.types = types;
         this.attributes = attributes;
@@ -79,14 +79,14 @@ public abstract class BaseAuditServiceImpl<H extends AuditEventHeader, T extends
         // Subscribe for events
         Disposable subscription = messageObserver.
                 filter(message -> {
-                    if (message.getHeader().getEventDate() == null) {
+                    if (message.getEventDate() == null) {
                         LOGGER.severe("Error! Empty event date: " + message);
-                    } else if (message.getHeader().getEventType() == null) {
+                    } else if (message.getEventType() == null) {
                         LOGGER.severe("Error! Empty event type: " + message);
-                    } else if (message.getHeader().getId() != null) {
+                    } else if (message.getId() != null) {
                         LOGGER.severe("Error! Event id not empty: " + message);
                     } else {
-                        return storage.getLoggableEvents().contains(message.getHeader().getEventType().getId());
+                        return storage.getLoggableEvents().contains(message.getEventType().getId());
                     }
                     return false;
                 }).
@@ -117,7 +117,7 @@ public abstract class BaseAuditServiceImpl<H extends AuditEventHeader, T extends
     }
 
     @Override
-    public Set<F> getHeaders() {
-        return storage.getHeaders();
+    public Set<H> getHeaders(F filter) {
+        return null;
     }
 }

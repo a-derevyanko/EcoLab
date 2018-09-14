@@ -1,30 +1,28 @@
-package org.aderevyanko.audit.api.base;
+package org.aderevyanko.audit.api.generic;
 
 import org.aderevyanko.audit.api.AuditEventAttribute;
-import org.aderevyanko.audit.api.AuditEventHeader;
 import org.aderevyanko.audit.api.AuditEventType;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Abstract audit event model.
  * If you use your own audit event header, this class should be inherited to add new chain builder methods.
- * @param <H> type of audit event header
  */
-public abstract class BaseAuditEvent<H extends AuditEventHeader, T extends BaseAuditEvent<H, T>> implements Serializable {
-    protected final H header;
+public abstract class GenericAuditEvent<T extends GenericAuditEvent<T>> implements Serializable {
+    private final AuditEventType eventType;
+
+    private Long id;
+
+    private LocalDateTime  eventDate;
 
     protected final Map<AuditEventAttribute, String> attributes = new HashMap<>();
 
-    protected BaseAuditEvent(H header, AuditEventType eventType) {
-        Objects.requireNonNull(header);
-        Objects.requireNonNull(eventType);
-        this.header = header;
-        this.header.setEventType(eventType);
+    protected GenericAuditEvent(AuditEventType eventType) {
+        this.eventType = eventType;
     }
 
     public T attribute(AuditEventAttribute attribute, String value) {
@@ -37,12 +35,12 @@ public abstract class BaseAuditEvent<H extends AuditEventHeader, T extends BaseA
     }
 
     public T id(Long id) {
-        this.header.setId(id);
+        this.id = id;
         return (T) this;
     }
 
     public T eventDate(LocalDateTime eventDate) {
-        this.header.setEventDate(eventDate);
+        this.eventDate = eventDate;
         return (T) this;
     }
 
@@ -50,7 +48,15 @@ public abstract class BaseAuditEvent<H extends AuditEventHeader, T extends BaseA
         return attributes;
     }
 
-    public H getHeader() {
-        return header;
+    public AuditEventType getEventType() {
+        return eventType;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getEventDate() {
+        return eventDate;
     }
 }

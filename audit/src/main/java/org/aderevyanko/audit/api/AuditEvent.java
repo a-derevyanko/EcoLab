@@ -1,10 +1,10 @@
 package org.aderevyanko.audit.api;
 
-import org.aderevyanko.audit.api.base.BaseAuditEvent;
+import org.aderevyanko.audit.api.generic.GenericAuditEvent;
 
-public class AuditEvent extends BaseAuditEvent<AuditEventHeader, AuditEvent> {
+public class AuditEvent extends GenericAuditEvent<AuditEvent> {
     private AuditEvent(AuditEventType eventType) {
-        super(new AuditEventHeader(), eventType);
+        super(eventType);
     }
 
     /**
