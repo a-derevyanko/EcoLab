@@ -7,4 +7,8 @@ public class EcoLabAuditEventHeader extends AuditEventHeader {
      * Логин инициатора события
      */
     private String initiator;
+
+    public void setInitiator(String initiator) {
+        this.initiator = initiator;
+    }
 }

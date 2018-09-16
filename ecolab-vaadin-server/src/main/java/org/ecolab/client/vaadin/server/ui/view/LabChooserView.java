@@ -196,8 +196,8 @@ public class LabChooserView extends VerticalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         Set<Integer> allowedLabs = studentInfoService.getAllowedLabs(currentUser.getName());
         Set<Integer> allowedTests = studentInfoService.getAllowedDefence(currentUser.getName());
-        Map<Integer, LabMode> completedLabs = userLabService.getCompletedLabs(currentUser.getName());
-        Collection<Integer> completedTests = userLabService.getCompletedTests(currentUser.getName());
+        Map<Integer, LabMode> completedLabs = userLabService.getCompletedLabs();
+        Collection<Integer> completedTests = userLabService.getCompletedTests();
         setTestButtonSate(lab1TestButton, allowedTests.contains(1) && completedLabs.containsKey(1) && !completedTests.contains(1));
         setTestButtonSate(lab2TestButton, allowedTests.contains(2) && completedLabs.containsKey(2) && !completedTests.contains(2));
         setTestButtonSate(lab3TestButton, allowedTests.contains(3) && completedLabs.containsKey(3) && !completedTests.contains(3));

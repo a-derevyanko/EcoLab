@@ -29,7 +29,7 @@ public class Lab2TestView extends LabTestWizard {
                            Authentication currentUser, LabTestFinishedWindow labTestFinishedWindow) {
         super(i18N,
                 userLabService,
-                userLabService.getCompletedLabs(currentUser.getName()).get(2) == LabMode.RANDOM ?
+                userLabService.getCompletedLabs().get(2) == LabMode.RANDOM ?
                         lab2RandomService : lab2ExperimentService,
                 currentUser,
                 labTestFinishedWindow);

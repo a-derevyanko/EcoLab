@@ -21,7 +21,6 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
-import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
 import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
 import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
 
@@ -35,21 +34,18 @@ import java.util.UUID;
 @SpringBootConfiguration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
-@EnableVaadinSharedSecurity
-@Import(VaadinSharedSecurityConfiguration.class)
+@Import(EcoLabVaadinSharedSecurityConfiguration.class)
 public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     private final AuthenticationProvider authenticationProvider;
     private final RememberMeServices rememberMeServices;
     private final PersistentTokenRepository persistentTokenRepository;
-    private final LogoutSuccessHandler logoutHandler;
 
     @Autowired
     public VaadinServerSecurityContext(AuthenticationProvider authenticationProvider, RememberMeServices rememberMeServices,
-                                       PersistentTokenRepository persistentTokenRepository, LogoutSuccessHandler logoutHandler) {
+                                       PersistentTokenRepository persistentTokenRepository) {
         this.authenticationProvider = authenticationProvider;
         this.rememberMeServices = rememberMeServices;
         this.persistentTokenRepository = persistentTokenRepository;
-        this.logoutHandler = logoutHandler;
     }
 /*
     @Override
@@ -84,7 +80,7 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().anyRequest().permitAll()
                 .and()
-                .logout().permitAll().addLogoutHandler(new VaadinSessionClosingLogoutHandler()).logoutSuccessUrl("/").logoutSuccessHandler(logoutHandler)
+                .logout().permitAll().addLogoutHandler(new VaadinSessionClosingLogoutHandler()).logoutSuccessUrl("/")
                 .and()
                 .csrf().disable().exceptionHandling()
                 .and()

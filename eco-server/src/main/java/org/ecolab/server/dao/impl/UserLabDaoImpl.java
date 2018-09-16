@@ -51,40 +51,40 @@ public class UserLabDaoImpl implements UserLabDao {
     }
 
     @Override
-    public Collection<Integer> getCompletedTests(String userName) {
-        return dsl.select(USER_TEST_HISTORY.LAB_NUMBER).from(USER_TEST_HISTORY).where(USER_TEST_HISTORY.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetchInto(Integer.class);
+    public Collection<Integer> getCompletedTests(long user) {
+        return dsl.select(USER_TEST_HISTORY.LAB_NUMBER).from(USER_TEST_HISTORY).where(USER_TEST_HISTORY.USER_ID.eq(user)).fetchInto(Integer.class);
     }
 
     @Override
     //todo оптимизировать запрос
-    public Map<Integer, LabMode> getCompletedLabs(String userName) {
+    public Map<Integer, LabMode> getCompletedLabs(long user) {
       return dsl.select(DSL.val(1), DSL.val(LabMode.EXPERIMENT.name())).from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1DATA.ID.eq(LAB1_EXPERIMENT_LOG.ID)).
               where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID)
-                      .from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB1DATA.COMPLETED.eq(true))
+                      .from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(user)))).and(LAB1DATA.COMPLETED.eq(true))
               .union(dsl.select(DSL.val(1), DSL.val(LabMode.RANDOM.name())).from(LAB1DATA).join(LAB1_RANDOM_VARIANT).on(LAB1DATA.ID.eq(LAB1_RANDOM_VARIANT.ID)).
                       where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID)
-                              .from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB1DATA.COMPLETED.eq(true)))
+                              .from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(user)))).and(LAB1DATA.COMPLETED.eq(true)))
               .union(dsl.select(DSL.val(2), DSL.val(LabMode.EXPERIMENT.name())).from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2DATA.ID.eq(LAB2_EXPERIMENT_LOG.ID)).
                       where(LAB2DATA.ID.eq(dsl.select(LAB2TEAM.ID)
-                              .from(LAB2TEAM).where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB2DATA.COMPLETED.eq(true))
+                              .from(LAB2TEAM).where(LAB2TEAM.USER_ID.eq(user)))).and(LAB2DATA.COMPLETED.eq(true))
                       .union(dsl.select(DSL.val(2), DSL.val(LabMode.RANDOM.name())).from(LAB2DATA).join(LAB2_RANDOM_VARIANT).on(LAB2DATA.ID.eq(LAB2_RANDOM_VARIANT.ID)).
                               where(LAB2DATA.ID.eq(dsl.select(LAB2TEAM.ID)
-                                      .from(LAB2TEAM).where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB2DATA.COMPLETED.eq(true))))
+                                      .from(LAB2TEAM).where(LAB2TEAM.USER_ID.eq(user)))).and(LAB2DATA.COMPLETED.eq(true))))
               .union(dsl.select(DSL.val(3), DSL.val(LabMode.NONE.name())).from(LAB3DATA).
                       where(LAB3DATA.ID.eq(dsl.select(LAB3TEAM.ID)
-                              .from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).and(LAB3DATA.COMPLETED.eq(true))).
+                              .from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(user)))).and(LAB3DATA.COMPLETED.eq(true))).
                       fetch().stream().collect(Collectors.toMap(Record2::value1, r -> LabMode.valueOf(r.value2())));
     }
 
     @Override
-    public void setTestCompleted(String userName, int labNumber, int mark, int pointCount) {
+    public void setTestCompleted(long user, int labNumber, int mark, int pointCount) {
         dsl.insertInto(USER_TEST_HISTORY, USER_TEST_HISTORY.LAB_NUMBER,
                 USER_TEST_HISTORY.LAST_MODIFY_DATE, USER_TEST_HISTORY.USER_ID,
                 USER_TEST_HISTORY.MARK, USER_TEST_HISTORY.POINT_COUNT)
                 .values(Arrays.asList(labNumber, OffsetDateTime.now(),
-                        DaoUtils.getFindUserIdSelect(dsl, userName), mark, pointCount)).execute();
+                        user, mark, pointCount)).execute();
         dsl.deleteFrom(USER_DEFENCE_ALLOWANCE).where(USER_DEFENCE_ALLOWANCE.LAB_NUMBER.eq(labNumber)
-                .and(USER_DEFENCE_ALLOWANCE.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))).execute();
+                .and(USER_DEFENCE_ALLOWANCE.USER_ID.eq(user))).execute();
     }
 
     @Override

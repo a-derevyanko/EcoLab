@@ -1,7 +1,5 @@
 package org.aderevyanko.audit.api;
 
-public interface StoredType {
-    long getId();
-
+public interface NamedType {
     String getSystemName();
 }

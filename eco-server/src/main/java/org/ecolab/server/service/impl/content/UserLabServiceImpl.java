@@ -2,6 +2,7 @@ package org.ecolab.server.service.impl.content;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.UnhandledException;
+import org.ecolab.server.common.UserInfoUtils;
 import org.ecolab.server.dao.api.content.UserLabDao;
 import org.ecolab.server.model.LabMode;
 import org.ecolab.server.model.UserLabStatistics;
@@ -42,22 +43,22 @@ public class UserLabServiceImpl implements UserLabService {
     }
 
     @Override
-    @Cacheable(value = "COMPLETED_TEST", key = "#userName")
-    public Collection<Integer> getCompletedTests(String userName) {
-        return dao.getCompletedTests(userName);
+    @Cacheable(value = "COMPLETED_TEST", key = "T(org.ecolab.server.common.UserInfoUtils).getCurrentUserContext().getUserId()")
+    public Collection<Integer> getCompletedTests() {
+        return dao.getCompletedTests(UserInfoUtils.getCurrentUserContext().getUserId());
     }
 
     @Override
-    public Map<Integer, LabMode> getCompletedLabs(String userName) {
-        return dao.getCompletedLabs(userName);
+    public Map<Integer, LabMode> getCompletedLabs() {
+        return dao.getCompletedLabs(UserInfoUtils.getCurrentUserContext().getUserId());
     }
 
     @Override
-    @CachePut(value = "COMPLETED_TEST", key = "#userName")
+    @CachePut(value = "COMPLETED_TEST", key = "T(org.ecolab.server.common.UserInfoUtils).getCurrentUserContext().getUserId()")
     @Transactional
-    public Collection<Integer> setTestCompleted(String userName, int labNumber, int mark, int pointCount) {
-        dao.setTestCompleted(userName, labNumber, mark, pointCount);
-        return dao.getCompletedTests(userName);
+    public Collection<Integer> setTestCompleted(int labNumber, int mark, int pointCount) {
+        dao.setTestCompleted(UserInfoUtils.getCurrentUserContext().getUserId(), labNumber, mark, pointCount);
+        return dao.getCompletedTests(UserInfoUtils.getCurrentUserContext().getUserId());
     }
 
     @Override

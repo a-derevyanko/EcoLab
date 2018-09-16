@@ -17,7 +17,7 @@ public abstract class GenericAuditEvent<T extends GenericAuditEvent<T>> implemen
 
     private Long id;
 
-    private LocalDateTime  eventDate;
+    private LocalDateTime eventDate = LocalDateTime.now();
 
     protected final Map<AuditEventAttribute, String> attributes = new HashMap<>();
 
