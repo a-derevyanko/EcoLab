@@ -75,7 +75,8 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
     @Override
     public Lab2Data<Lab2ExperimentLog> getLastLabByUser(String userName, boolean completed) {
         Lab2Data<Lab2ExperimentLog> data = dsl.select().from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2_EXPERIMENT_LOG.ID.eq(LAB2DATA.ID)).
-                where(LAB2DATA.ID.eq(dsl.select(LAB2TEAM.ID).from(LAB2TEAM).where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                join(LAB2TEAM).on(LAB2TEAM.ID.eq(LAB2DATA.ID)).
+                where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))
                         .and(LAB2DATA.COMPLETED.eq(completed)).
                 orderBy(LAB2DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
 

@@ -61,6 +61,8 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     protected final VaadinUI ui;
 
+    private boolean hasChanges;
+
     @Autowired
     public LabWizard(I18N i18N,
                      Authentication currentUser,
@@ -126,6 +128,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
         binder.addValueChangeListener(event -> {
             labService.updateCalculatedFields(binder.getBean());
             saveButton.setVisible(true);
+            hasChanges = true;
         });
 
         saveButton.addClickListener(event -> saveData(true));
@@ -147,6 +150,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
             if (validationStatus.isOk()) {
                 ui.access(() -> {
                     binder.readBean(labService.updateLab(binder.getBean()));
+                    hasChanges = binder.hasChanges();
                     saveButton.setVisible(false);
                 });
             } else {
@@ -161,7 +165,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     @Override
     public boolean hasUnsavedData() {
-        return currentStep instanceof LabExperimentJournalStep;
+        return hasChanges || currentStep instanceof LabExperimentJournalStep;
     }
 
     @Override

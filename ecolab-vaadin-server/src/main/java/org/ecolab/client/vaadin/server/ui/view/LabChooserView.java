@@ -198,14 +198,14 @@ public class LabChooserView extends VerticalLayout implements View {
         Set<Integer> allowedTests = studentInfoService.getAllowedDefence(currentUser.getName());
         Map<Integer, LabMode> completedLabs = userLabService.getCompletedLabs(currentUser.getName());
         Collection<Integer> completedTests = userLabService.getCompletedTests(currentUser.getName());
-        setTestButtonSate(lab1TestButton, allowedTests.contains(1) && completedLabs.containsKey(1) && !completedTests.contains(1));
-        setTestButtonSate(lab2TestButton, allowedTests.contains(2) && completedLabs.containsKey(2) && !completedTests.contains(2));
-        setTestButtonSate(lab3TestButton, allowedTests.contains(3) && completedLabs.containsKey(3) && !completedTests.contains(3));
         boolean isNotStudent = VaadinUI.getCurrent().getCurrentUserInfo().getGroup() != UserGroup.STUDENT;
+        setTestButtonSate(lab1TestButton, (isNotStudent || allowedTests.contains(1)) && completedLabs.containsKey(1) && !completedTests.contains(1));
+        setTestButtonSate(lab2TestButton, (isNotStudent || allowedTests.contains(2)) && completedLabs.containsKey(2) && !completedTests.contains(2));
+        setTestButtonSate(lab3TestButton, (isNotStudent || allowedTests.contains(3)) && completedLabs.containsKey(3) && !completedTests.contains(3));
         setLabButtonSate(lab1Button, isNotStudent || (allowedLabs.contains(1) && !completedLabs.containsKey(1)));
         setLabButtonSate(lab2Button, isNotStudent || (allowedLabs.contains(2) && !completedLabs.containsKey(2)));
         setLabButtonSate(lab3Button, isNotStudent || (allowedLabs.contains(3) && !completedLabs.containsKey(3)));
-        setButtonSate(labDefenceButton, lab1TestButton.isEnabled() || lab2TestButton.isEnabled() || lab3TestButton.isEnabled());
+        setButtonSate(labDefenceButton, !completedLabs.isEmpty());
     }
 
     private void setButtonSate(NativeButton button, boolean enabled) {

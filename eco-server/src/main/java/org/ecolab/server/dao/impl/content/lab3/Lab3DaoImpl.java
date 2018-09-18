@@ -5,6 +5,7 @@ import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.dao.impl.content.LabDaoImpl;
+import org.ecolab.server.db.h2.public_.Tables;
 import org.ecolab.server.model.content.lab3.City;
 import org.ecolab.server.model.content.lab3.FuelType;
 import org.ecolab.server.model.content.lab3.Lab3Data;
@@ -120,7 +121,8 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     @Override
     public Lab3Data getLastLabByUser(String userName, boolean completed) {
         Lab3Data data = dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID)).
-                where(LAB3DATA.ID.eq(dsl.select(LAB3TEAM.ID).from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                join(LAB3TEAM).on(LAB3TEAM.ID.eq(Tables.LAB3DATA.ID)).
+                where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))
                         .and(LAB3DATA.COMPLETED.eq(completed)).
                 orderBy(LAB3DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB3DATA_MAPPER);
 

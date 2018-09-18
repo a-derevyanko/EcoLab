@@ -51,7 +51,8 @@ public class Lab1RandomDaoImpl extends Lab1DaoImpl<Lab1RandomVariant> implements
     @Override
     public Lab1Data<Lab1RandomVariant> getLastLabByUser(String userName, boolean completed) {
         Lab1Data<Lab1RandomVariant> data = dsl.select().from(LAB1DATA).join(LAB1_RANDOM_VARIANT).on(LAB1_RANDOM_VARIANT.ID.eq(LAB1DATA.ID)).
-                where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID).from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))
+                join(LAB1TEAM).on(LAB1TEAM.ID.eq(LAB1DATA.ID)).
+                where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))
                         .and(LAB1DATA.COMPLETED.eq(completed))).
                 orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
 
