@@ -3,14 +3,13 @@ package org.ecolab.server.dao.impl.content.lab2;
 import com.google.common.collect.Sets;
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab2.Lab2Dao;
-import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.dao.impl.content.LabDaoImpl;
 import org.ecolab.server.model.content.lab2.Lab2Data;
 import org.ecolab.server.model.content.lab2.Lab2Variant;
+import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
-import org.jooq.impl.DSL;
 import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 import static org.ecolab.server.db.h2.public_.Tables.LAB2DATA;
 import static org.ecolab.server.db.h2.public_.Tables.LAB2TEAM;
 import static org.ecolab.server.db.h2.public_.Tables.LAB3TEAM;
-import static org.ecolab.server.db.h2.public_.Tables.USERS;
 import static org.ecolab.server.db.h2.public_.Tables.USER_LAB_ALLOWANCE;
 
 /**
@@ -140,8 +138,8 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
     }
 
     @Override
-    public int removeLabsByUser(String userName) {
-        return dsl.deleteFrom(LAB2DATA).where(LAB2DATA.ID.in(dsl.select(LAB3TEAM.ID).from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))).execute();
+    public int removeLabsByUser(long userId) {
+        return dsl.deleteFrom(LAB2DATA).where(LAB2DATA.ID.in(dsl.select(LAB3TEAM.ID).from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(userId)))).execute();
     }
 
     @Override
@@ -175,14 +173,20 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
     protected abstract void saveVariant(V variant);
 
     @Override
-    protected void fillLabUsers(Lab2Data data) {
-        data.setUsers(Sets.newHashSet(dsl.select(USERS.LOGIN).from(USERS).join(LAB2TEAM).on(USERS.ID.eq(LAB2TEAM.USER_ID)).
-                where(LAB2TEAM.ID.eq(data.getId())).fetchInto(String.class)));
+    protected void fillLabUsers(Lab2Data<V> data) {
+        data.setUsers(Sets.newHashSet(dsl.select(LAB2TEAM.USER_ID).from(LAB2TEAM).
+                where(LAB2TEAM.ID.eq(data.getId())).fetchInto(Long.class)));
     }
 
     @Override
-    protected void saveLabUsers(Lab2Data data) {
-        dsl.insertInto(LAB2TEAM, LAB2TEAM.ID, LAB2TEAM.USER_ID).
-                select(dsl.select(DSL.val(data.getId()), USERS.ID).from(USERS).where(USERS.LOGIN.in(data.getUsers()))).execute();
+    protected void saveLabUsers(Lab2Data<V> data) {
+        BatchBindStep step = dsl.batch(dsl.insertInto(LAB2TEAM, LAB2TEAM.ID, LAB2TEAM.USER_ID).
+                values((Long) null, null));
+
+
+        for (long userId : data.getUsers()) {
+            step = step.bind(data.getId(), userId);
+        }
+        step.execute();
     }
 }

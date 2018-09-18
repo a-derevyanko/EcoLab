@@ -2,7 +2,6 @@ package org.ecolab.server.dao.impl.content.lab1.experiment;
 
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab1.experiment.Lab1ExperimentDao;
-import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.dao.impl.content.lab1.Lab1DaoImpl;
 import org.ecolab.server.model.content.lab1.Lab1Data;
 import org.ecolab.server.model.content.lab1.experiment.Lab1ExperimentLog;
@@ -51,9 +50,9 @@ public class Lab1ExperimentDaoImpl extends Lab1DaoImpl<Lab1ExperimentLog> implem
     }
 
     @Override
-    public Lab1Data<Lab1ExperimentLog> getLastLabByUser(String userName, boolean completed) {
+    public Lab1Data<Lab1ExperimentLog> getLastLabByUser(long userId, boolean completed) {
         Lab1Data<Lab1ExperimentLog> data = dsl.select().from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1_EXPERIMENT_LOG.ID.eq(LAB1DATA.ID)).
-                where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID).from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID).from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(userId))))
                         .and(LAB1DATA.COMPLETED.eq(completed)).
                 orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
         if (data != null) {

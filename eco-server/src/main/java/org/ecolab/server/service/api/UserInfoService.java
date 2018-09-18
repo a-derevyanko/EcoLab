@@ -19,10 +19,10 @@ import java.util.stream.Stream;
 public interface UserInfoService extends UserDetailsManager, GroupManager, UserDetailsService {
     /**
      * Возвращает данные пользователя
-     * @param userName логин пользователя
+     * @param userId идентификатор пользователя
      * @return данные пользователя
      */
-    UserInfo getUserInfo(@NotNull String userName);
+    UserInfo getUserInfo(long userId);
     /**
      * Изменяет данные пользователя
      * @param userInfo данные пользователя

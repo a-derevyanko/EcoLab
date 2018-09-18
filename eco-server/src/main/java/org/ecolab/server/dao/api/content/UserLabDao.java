@@ -33,8 +33,8 @@ public interface UserLabDao {
 
     /**
      * Возвращает статистику по сдаче лабораторных пользователем
-     * @param userName имя пользователя
+     * @param userId идентификатор пользователя
      * @return статистика
      */
-    List<UserLabStatistics> getUserLabStatistics(String userName);
+    List<UserLabStatistics> getUserLabStatistics(long userId);
 }

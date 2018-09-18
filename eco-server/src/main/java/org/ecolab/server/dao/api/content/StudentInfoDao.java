@@ -11,31 +11,31 @@ import java.util.Set;
  * Created by 777Al on 22.05.2017.
  */
 public interface StudentInfoDao extends Serializable {
-    StudentGroup getStudentGroup(String userName);
+    StudentGroup getStudentGroup(long userId);
 
-    StudentTeam getStudentTeam(String userName);
+    StudentTeam getStudentTeam(long userId);
 
-    Set<String> getTeamMembers(String teamNumber, String group);
+    Set<Long> getTeamMembers(String teamNumber, String group);
 
-    Set<String> getGroupMembers(String group);
+    Set<Long> getGroupMembers(String group);
 
-    Set<StudentGroup> getTeacherGroups(String teacher);
+    Set<StudentGroup> getTeacherGroups(long teacherId);
 
-    Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher);
+    Set<StudentGroupInfo> getTeacherGroupsInfo(long teacherId);
 
     boolean isGroupExists(String group);
 
     boolean isTeamExists(StudentGroup group, String team);
 
-    void addGroupToTeacher(String teacher, StudentGroup group);
+    void addGroupToTeacher(long teacherId, StudentGroup group);
 
-    void removeGroupFromTeacher(String teacher, String group);
+    void removeGroupFromTeacher(long teacherId, String group);
 
-    void updateStudentGroup(String userName, StudentGroup group);
+    void updateStudentGroup(long userId, StudentGroup group);
 
-    void updateStudentTeam(String userName, StudentTeam studentTeam);
+    void updateStudentTeam(long userId, StudentTeam studentTeam);
 
-    String getGroupTeacher(String group);
+    long getGroupTeacher(String group);
 
     /**
      * Создаёт студенческую группу
@@ -81,14 +81,14 @@ public interface StudentInfoDao extends Serializable {
      * @param userName имя пользователя
      * @return номера лабораторных, к которым есть доступ
      */
-    Set<Integer> getAllowedLabs(String userName);
+    Set<Integer> getAllowedLabs(long userId);
 
     /**
      * Возвращает номера защит, к которым есть доступ
      * @param userName имя пользователя
      * @return номера лабораторных, к которым есть доступ
      */
-    Set<Integer> getAllowedDefence(String userName);
+    Set<Integer> getAllowedDefence(long userId);
 
     /**
      * Допустить пользователя к лабораторной
@@ -96,7 +96,7 @@ public interface StudentInfoDao extends Serializable {
      * @param labs лабораторные, к которым меняется допуск
      * @param allow допустить/снять допуск
      */
-    void changeLabAllowance(String userName, boolean allow, int... labs);
+    void changeLabAllowance(long userId, boolean allow, int... labs);
 
     /**
      * Допустить пользователя к защите лабораторной
@@ -104,5 +104,5 @@ public interface StudentInfoDao extends Serializable {
      * @param labs лабораторные, к которым меняется допуск
      * @param allow допустить/снять допуск
      */
-    void changeDefenceAllowance(String userName, boolean allow, int... labs);
+    void changeDefenceAllowance(long userId, boolean allow, int... labs);
 }

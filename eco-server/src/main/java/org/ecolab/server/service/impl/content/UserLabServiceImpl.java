@@ -16,7 +16,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -70,13 +69,13 @@ public class UserLabServiceImpl implements UserLabService {
     }
 
     @Override
-    public UserProfile getUserProfile(@NotNull String userName) {
+    public UserProfile getUserProfile(long userId) {
         UserProfile profile = new UserProfile();
-        profile.setStatistics(dao.getUserLabStatistics(userName));
-        profile.setUserInfo(userInfoService.getUserInfo(userName));
-        profile.setAllowedLabs(studentInfoService.getAllowedLabs(userName));
-        profile.setAllowedDefence(studentInfoService.getAllowedDefence(userName));
-        profile.setStudentInfo(studentInfoService.getStudentInfo(userName));
+        profile.setStatistics(dao.getUserLabStatistics(userId));
+        profile.setUserInfo(userInfoService.getUserInfo(userId));
+        profile.setAllowedLabs(studentInfoService.getAllowedLabs(userId));
+        profile.setAllowedDefence(studentInfoService.getAllowedDefence(userId));
+        profile.setStudentInfo(studentInfoService.getStudentInfo(userId));
         profile.setAverageMark(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getMark).average().orElse(0.0));
         profile.setAveragePointCount(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getPointCount).average().orElse(0.0));
 

@@ -38,10 +38,10 @@ public interface UserLabService {
 
     /**
      * Возвращает данные профиля пользователя
-     * @param userName имя пользователя
+     * @param userId идентификатор пользователя
      * @return профиль
      */
-    UserProfile getUserProfile(String userName);
+    UserProfile getUserProfile(long userId);
 
     /**
      * Возвращает данные пользоватей по группе

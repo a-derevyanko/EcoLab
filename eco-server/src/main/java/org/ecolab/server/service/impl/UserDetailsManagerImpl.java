@@ -166,10 +166,10 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
     @Override
     @Cacheable("USER")
-    public UserInfo getUserInfo(@NotNull String userName) {
+    public UserInfo getUserInfo(long userId) {
         return dsl.select(USERS.ID, USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
                 .join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID)).join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID))
-        .where(USERS.LOGIN.eq(userName)).fetchOne(USER_INFO_RECORD_MAPPER);
+        .where(USERS.ID.eq(userId)).fetchOne(USER_INFO_RECORD_MAPPER);
     }
 
     @Override
@@ -206,7 +206,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
         dsl.update(GROUP_MEMBERS).set(GROUP_MEMBERS.GROUP_ID,
                 dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq(userInfo.getGroup().name())))
-                .where(GROUP_MEMBERS.USER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userInfo.getLogin())))).execute();
+                .where(GROUP_MEMBERS.USER_ID.eq(userInfo.getId())).execute();
         return userInfo;
     }
 

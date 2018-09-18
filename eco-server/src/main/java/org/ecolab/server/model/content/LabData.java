@@ -18,7 +18,7 @@ public abstract class LabData<V extends LabVariant> extends IdentifiedDomainMode
     private V variant;
 
     @NotNull
-    private Set<String> users;
+    private Set<Long> users;
 
     @NotNull
     private LocalDateTime startDate;

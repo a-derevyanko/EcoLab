@@ -37,29 +37,29 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = STUDENT_INFO_CACHE, key = "#userName")
+    @Cacheable(cacheNames = STUDENT_INFO_CACHE, key = "#userId")
     @Nullable
-    public StudentInfo getStudentInfo(String userName) {
-        StudentGroup group = studentInfoDao.getStudentGroup(userName);
+    public StudentInfo getStudentInfo(long userId) {
+        StudentGroup group = studentInfoDao.getStudentGroup(userId);
         if (group == null) {
             return null;
         } else {
             StudentInfo studentInfo = new StudentInfo();
             studentInfo.setGroup(group);
-            studentInfo.setTeam(studentInfoDao.getStudentTeam(userName));
+            studentInfo.setTeam(studentInfoDao.getStudentTeam(userId));
             return studentInfo;
         }
     }
 
     @Override
     @Transactional
-    @CachePut(cacheNames = STUDENT_INFO_CACHE, key = "#userInfo.login")
+    @CachePut(cacheNames = STUDENT_INFO_CACHE, key = "#userInfo.id")
     @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, allEntries = true, condition =  "#team != null")
     @Deprecated // todo подумать, нужен ли этот метод. кэш для getTeamMembers() плохо будет работаь
     public StudentInfo updateStudentInfo(UserInfo userInfo, StudentGroup group, StudentTeam team) {
         userInfoService.updateUserInfo(userInfo);
-        studentInfoDao.updateStudentGroup(userInfo.getLogin(), group);
-        studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
+        studentInfoDao.updateStudentGroup(userInfo.getId(), group);
+        studentInfoDao.updateStudentTeam(userInfo.getId(), team);
         StudentInfo studentInfo = new StudentInfo();
         studentInfo.setGroup(group);
         studentInfo.setTeam(team);
@@ -68,17 +68,17 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
     @Override
     @Transactional
-    @CachePut(cacheNames = {STUDENT_INFO_CACHE}, key = "#userInfo.login")
+    @CachePut(cacheNames = {STUDENT_INFO_CACHE}, key = "#userInfo.id")
     @CacheEvict(cacheNames = TEAM_MEMBERS_CACHE, key = "#team.name", condition =  "#team != null")
     @NotNull
     public StudentInfo createStudentInfo(@NotNull UserInfo userInfo, @NotNull StudentGroup group,
-                                         @NotNull StudentTeam team) {
+                                         StudentTeam team) {
         if (userInfo.getId() == null) {
             userInfoService.createUserInfo(userInfo);
         }
-        studentInfoDao.updateStudentGroup(userInfo.getLogin(), group);
+        studentInfoDao.updateStudentGroup(userInfo.getId(), group);
         if (team != null) {
-            studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
+            studentInfoDao.updateStudentTeam(userInfo.getId(), team);
         }
         StudentInfo studentInfo = new StudentInfo();
         studentInfo.setGroup(group);
@@ -118,30 +118,28 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserInfo getGroupTeacher(String group) {
         return userInfoService.getUserInfo(studentInfoDao.getGroupTeacher(group));
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Set<String> getTeamMembers(String name, String group) {
+    public Set<Long> getTeamMembers(String name, String group) {
         return studentInfoDao.getTeamMembers(name, group);
     }
 
     @Override
-    public Set<String> getGroupMembers(String group) {
+    public Set<Long> getGroupMembers(String group) {
         return studentInfoDao.getGroupMembers(group);
     }
 
     @Override
-    public Set<StudentGroup> getTeacherGroups(String teacher) {
-        return studentInfoDao.getTeacherGroups(teacher);
+    public Set<StudentGroup> getTeacherGroups(long teacherId) {
+        return studentInfoDao.getTeacherGroups(teacherId);
     }
 
     @Override
-    public Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher) {
-        return studentInfoDao.getTeacherGroupsInfo(teacher);
+    public Set<StudentGroupInfo> getTeacherGroupsInfo(long teacherId) {
+        return studentInfoDao.getTeacherGroupsInfo(teacherId);
     }
 
     @Override
@@ -156,14 +154,14 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
     @Override
     @Transactional
-    public void addGroupToTeacher(String teacher, StudentGroup group) {
-        studentInfoDao.addGroupToTeacher(teacher, group);
+    public void addGroupToTeacher(long teacherId, StudentGroup group) {
+        studentInfoDao.addGroupToTeacher(teacherId, group);
     }
 
     @Override
     @Transactional
-    public void removeGroupFromTeacher(String teacher, String group) {
-        studentInfoDao.removeGroupFromTeacher(teacher, group);
+    public void removeGroupFromTeacher(long teacherId, String group) {
+        studentInfoDao.removeGroupFromTeacher(teacherId, group);
     }
 
     @Override
@@ -187,24 +185,24 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
-    public Set<Integer> getAllowedLabs(String userName) {
-        return studentInfoDao.getAllowedLabs(userName);
+    public Set<Integer> getAllowedLabs(long userId) {
+        return studentInfoDao.getAllowedLabs(userId);
     }
 
     @Override
-    public Set<Integer> getAllowedDefence(String userName) {
-        return studentInfoDao.getAllowedDefence(userName);
-    }
-
-    @Override
-    @Transactional
-    public void changeLabAllowance(String userName, boolean allow, int... labs) {
-        studentInfoDao.changeLabAllowance(userName, allow, labs);
+    public Set<Integer> getAllowedDefence(long userId) {
+        return studentInfoDao.getAllowedDefence(userId);
     }
 
     @Override
     @Transactional
-    public void changeDefenceAllowance(String userName, boolean allow, int... labs) {
-        studentInfoDao.changeDefenceAllowance(userName, allow, labs);
+    public void changeLabAllowance(long userId, boolean allow, int... labs) {
+        studentInfoDao.changeLabAllowance(userId, allow, labs);
+    }
+
+    @Override
+    @Transactional
+    public void changeDefenceAllowance(long userId, boolean allow, int... labs) {
+        studentInfoDao.changeDefenceAllowance(userId, allow, labs);
     }
 }

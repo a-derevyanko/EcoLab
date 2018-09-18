@@ -88,7 +88,7 @@ public class UserLabDaoImpl implements UserLabDao {
     }
 
     @Override
-    public List<UserLabStatistics> getUserLabStatistics(String userName) {
+    public List<UserLabStatistics> getUserLabStatistics(long userId) {
       return dsl.select(DSL.val(1),
               DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB1DATA.SAVE_DATE), DSL.max(USER_TEST_HISTORY.LAST_MODIFY_DATE),
                       DSL.max(USER_TEST_HISTORY.MARK),
@@ -96,7 +96,7 @@ public class UserLabDaoImpl implements UserLabDao {
               .from(LAB1DATA)
               .leftJoin(LAB1TEAM).on(LAB1DATA.ID.eq(LAB1DATA.ID))
               .join(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB1TEAM.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(1))).
-                      where(LAB1DATA.COMPLETED.isTrue().and(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))
+                      where(LAB1DATA.COMPLETED.isTrue().and(LAB1TEAM.USER_ID.eq(userId)))
               .union(dsl.select(DSL.val(2),
                       DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB2DATA.SAVE_DATE), DSL.max(USER_TEST_HISTORY.LAST_MODIFY_DATE),
                       DSL.max(USER_TEST_HISTORY.MARK),
@@ -104,7 +104,7 @@ public class UserLabDaoImpl implements UserLabDao {
                       .from(LAB2DATA)
                       .leftJoin(LAB2TEAM).on(LAB2DATA.ID.eq(LAB2DATA.ID))
                       .join(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB2TEAM.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(2))).
-                              where(LAB2DATA.COMPLETED.isTrue().and(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                              where(LAB2DATA.COMPLETED.isTrue().and(LAB2TEAM.USER_ID.eq(userId))))
               .union(dsl.select(DSL.val(3),
                       DSL.count(USER_TEST_HISTORY.ID), DSL.max(LAB3DATA.SAVE_DATE), DSL.max(USER_TEST_HISTORY.LAST_MODIFY_DATE),
                       DSL.max(USER_TEST_HISTORY.MARK),
@@ -112,7 +112,7 @@ public class UserLabDaoImpl implements UserLabDao {
                       .from(LAB3DATA)
                       .leftJoin(LAB3TEAM).on(LAB3DATA.ID.eq(LAB3DATA.ID))
                       .join(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(LAB3TEAM.USER_ID).and(USER_TEST_HISTORY.LAB_NUMBER.eq(3))).
-                              where(LAB3DATA.COMPLETED.isTrue().and(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
+                              where(LAB3DATA.COMPLETED.isTrue().and(LAB3TEAM.USER_ID.eq(userId))))
               .orderBy(1)
               .fetch(USER_LAB_STATISTICS_RECORD_MAPPER);
     }

@@ -31,16 +31,19 @@ public abstract class GenericAuditEvent<T extends GenericAuditEvent<T>> implemen
         } else {
             attributes.putIfAbsent(attribute, value);
         }
+        //noinspection unchecked
         return (T) this;
     }
 
     public T id(Long id) {
         this.id = id;
+        //noinspection unchecked
         return (T) this;
     }
 
     public T eventDate(LocalDateTime eventDate) {
         this.eventDate = eventDate;
+        //noinspection unchecked
         return (T) this;
     }
 

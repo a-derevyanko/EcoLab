@@ -15,10 +15,10 @@ import java.util.Set;
 public interface StudentInfoService extends Serializable {
     /**
      * Возвращает данные студента
-     * @param userName логин студента
+     * @param userId идентификатор пользователя
      * @return данные студента
      */
-    StudentInfo getStudentInfo(String userName);
+    StudentInfo getStudentInfo(long userId);
 
     /**
      * Изменяет данные студента
@@ -76,21 +76,21 @@ public interface StudentInfoService extends Serializable {
      */
     UserInfo getGroupTeacher(String group);
 
-    Set<String> getTeamMembers(String teamNumber, String group);
+    Set<Long> getTeamMembers(String teamNumber, String group);
 
-    Set<String> getGroupMembers(String group);
+    Set<Long> getGroupMembers(String group);
 
-    Set<StudentGroup> getTeacherGroups(String teacher);
+    Set<StudentGroup> getTeacherGroups(long teacherId);
 
-    Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher);
+    Set<StudentGroupInfo> getTeacherGroupsInfo(long teacherId);
 
     boolean isGroupExists(String group);
 
     boolean isTeamExists(StudentGroup group, String team);
 
-    void addGroupToTeacher(String teacher, StudentGroup group);
+    void addGroupToTeacher(long teacherId, StudentGroup group);
 
-    void removeGroupFromTeacher(String teacher, String group);
+    void removeGroupFromTeacher(long teacherId, String group);
 
     Set<StudentGroup> getStudentGroups();
 
@@ -102,31 +102,31 @@ public interface StudentInfoService extends Serializable {
 
     /**
      * Возвращает номера лабораторных, к которым есть доступ
-     * @param userName имя пользователя
+     * @param userId идентификатор пользователя
      * @return номера лабораторных, к которым есть доступ
      */
-    Set<Integer> getAllowedLabs(String userName);
+    Set<Integer> getAllowedLabs(long userId);
 
     /**
      * Возвращает номера защит, к которым есть доступ
-     * @param userName имя пользователя
+     * @param userId идентификатор пользователя
      * @return номера лабораторных, к которым есть доступ
      */
-    Set<Integer> getAllowedDefence(String userName);
+    Set<Integer> getAllowedDefence(long userId);
 
     /**
      * Допустить пользователя к лабораторной
-     * @param userName пользователь
+     * @param userId идентификатор пользователя
      * @param labs лабораторные, к которым меняется допуск
      * @param allow допустить/снять допуск
      */
-    void changeLabAllowance(String userName, boolean allow, int... labs);
+    void changeLabAllowance(long userId, boolean allow, int... labs);
 
     /**
      * Допустить пользователя к защите лабораторной
-     * @param userName пользователь
+     * @param userId идентификатор пользователя
      * @param labs лабораторные, к которым меняется допуск
      * @param allow допустить/снять допуск
      */
-    void changeDefenceAllowance(String userName, boolean allow, int... labs);
+    void changeDefenceAllowance(long userId, boolean allow, int... labs);
 }
