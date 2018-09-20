@@ -33,5 +33,6 @@ public class NewLabeledItemWindow<T extends DomainModel> extends NewItemWindow<S
     @Override
     protected void beforeShow() {
         label.clear();
+        label.focus();
     }
 }
