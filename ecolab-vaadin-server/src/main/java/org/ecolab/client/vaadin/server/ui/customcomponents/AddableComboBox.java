@@ -73,6 +73,7 @@ public class AddableComboBox<T extends DomainModel> extends CustomField<T> imple
 
     @Override
     protected void doSetValue(T value) {
+        //  8.5.1  - баг, из-за которого не читсится пофикшен в этой версии
         comboBox.setValue(value);
     }
 

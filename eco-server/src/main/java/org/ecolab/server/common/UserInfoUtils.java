@@ -23,9 +23,11 @@ public abstract class UserInfoUtils {
 
     public static String getShortInitials(UserInfo userInfo) {
         Gender gender = StringUtils.hasText(userInfo.getMiddleName()) ? Gender.detect(userInfo.getMiddleName()) : Gender.androgynous;
+        // todo  а зачем тут падежи?
+
         return PETROVICH.inflectTo(
                 new Petrovich.Names(userInfo.getLastName(), userInfo.getFirstName(), userInfo.getMiddleName(), gender),
-                Case.GENITIVE).lastName
+                Case.NOMINATIVE).lastName
                 + ' ' + userInfo.getFirstName().substring(0, 1) + ". " +
                 ((StringUtils.hasText(userInfo.getMiddleName())) ? userInfo.getMiddleName().substring(0, 1) + ". " : "");
     }

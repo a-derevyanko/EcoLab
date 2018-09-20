@@ -335,7 +335,10 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
             values.put("groupNumber", studentInfo.getGroup().getName());
             values.put("teamNumber", studentInfo.getTeam() == null ? "0" : studentInfo.getTeam().getName());
 
-            values.put("studentsList", String.join(",\n", data.getUsers()));
+            values.put("studentsList", data.getUsers().stream().
+                    map(userInfoService::getUserInfo).
+                    map(UserInfoUtils::getShortInitials).
+                    collect(Collectors.joining(",\n")));
         } else {
             values.put("teacherName", UserInfoUtils.getShortInitials(userInfo));
 
