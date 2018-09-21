@@ -29,7 +29,7 @@ public enum FuelType {
 
         @Override
         public int getFlueGasNOxConcentration() {
-            return 300 + RandomUtils.nextInt(4) * 50;
+            return 300 + RandomUtils.nextInt(3) * 50;
         }
 
         @Override
@@ -79,7 +79,7 @@ public enum FuelType {
 
         @Override
         public int getFlueGasNOxConcentration() {
-            return 300 + RandomUtils.nextInt(4) * 50;
+            return 300 + RandomUtils.nextInt(3) * 50;
         }
 
         @Override
@@ -129,7 +129,7 @@ public enum FuelType {
 
         @Override
         public int getFlueGasNOxConcentration() {
-            return 300 + RandomUtils.nextInt(4) * 50;
+            return 300 + RandomUtils.nextInt(3) * 50;
         }
 
         @Override
@@ -179,7 +179,7 @@ public enum FuelType {
 
         @Override
         public int getFlueGasNOxConcentration() {
-            return 250 + RandomUtils.nextInt(4) * 50;
+            return 250 + RandomUtils.nextInt(3) * 50;
         }
 
         @Override
@@ -229,7 +229,7 @@ public enum FuelType {
 
         @Override
         public int getFlueGasNOxConcentration() {
-            return 300 + RandomUtils.nextInt(4) * 50;
+            return 300 + RandomUtils.nextInt(3) * 50;
         }
 
         @Override
@@ -280,7 +280,7 @@ public enum FuelType {
 
         @Override
         public int getFlueGasNOxConcentration() {
-            return 300 + RandomUtils.nextInt(4) * 50;
+            return 300 + RandomUtils.nextInt(3) * 50;
         }
 
         @Override
@@ -332,7 +332,7 @@ public enum FuelType {
 
         @Override
         public int getFlueGasNOxConcentration() {
-            return 300 + RandomUtils.nextInt(4) * 50;
+            return 300 + RandomUtils.nextInt(3) * 50;
         }
 
         @Override
@@ -383,7 +383,7 @@ public enum FuelType {
 
         @Override
         public int getFlueGasNOxConcentration() {
-            return 200 + RandomUtils.nextInt(4) * 50;
+            return 200 + RandomUtils.nextInt(3) * 50;
         }
 
         @Override
@@ -434,7 +434,7 @@ public enum FuelType {
 
         @Override
         public int getFlueGasNOxConcentration() {
-            return 200 + RandomUtils.nextInt(4) * 50;
+            return 200 + RandomUtils.nextInt(3) * 50;
         }
 
         @Override

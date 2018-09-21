@@ -8,6 +8,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.shared.data.sort.SortDirection;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -246,14 +247,16 @@ public class GroupManagingView extends HorizontalLayout implements View {
     private void addLabColumns(int labNumber, String caption, HeaderRow topHeader) {
         Grid.Column<UserProfile, VerticalLayout> execution = groupMembers.addComponentColumn(userProfile ->
         {
-            OnOffSwitch onOffSwitch = new OnOffSwitch();
-            VerticalLayout layout = new VerticalLayout(onOffSwitch);
+            VerticalLayout layout = new VerticalLayout();
             layout.setSpacing(true);
             layout.setMargin(false);
-            layout.setComponentAlignment(onOffSwitch, Alignment.MIDDLE_CENTER);
-            onOffSwitch.setSizeUndefined();
+            layout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
             if (getUserLabStatistics(labNumber, userProfile).getLabDate() == null) {
+                OnOffSwitch onOffSwitch = new OnOffSwitch();
+                onOffSwitch.setSizeUndefined();
+                layout.addComponent(onOffSwitch);
+                setAllowLabButtonStyles(onOffSwitch, userProfile.getAllowedLabs().contains(labNumber));
                 onOffSwitch.addValueChangeListener(event -> {
                     if (event.isUserOriginated()) {
                         Set<Integer> allowedLabs = Sets.newHashSet(userProfile.getAllowedLabs());
@@ -272,44 +275,47 @@ public class GroupManagingView extends HorizontalLayout implements View {
                     }
                 });
             } else {
-                onOffSwitch.setEnabled(false);
+                layout.addComponent(new Label(VaadinIcons.CHECK.getHtml(), ContentMode.HTML));
             }
 
-            setAllowLabButtonStyles(onOffSwitch, userProfile.getAllowedLabs().contains(labNumber));
             return layout;
         }).setCaption(i18N.get("group-manage.group-members.execution"));
 
         Grid.Column<UserProfile, VerticalLayout> defence = groupMembers.addComponentColumn(userProfile -> {
-            OnOffSwitch onOffSwitch = new OnOffSwitch();
-            VerticalLayout layout = new VerticalLayout(onOffSwitch);
+            VerticalLayout layout = new VerticalLayout();
             layout.setSpacing(true);
             layout.setMargin(false);
-            layout.setComponentAlignment(onOffSwitch, Alignment.MIDDLE_CENTER);
-            onOffSwitch.setSizeUndefined();
+            layout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-            if (getUserLabStatistics(labNumber, userProfile).getMark() >= 3) {
-                onOffSwitch.setEnabled(false);
-            } else {
-                onOffSwitch.addValueChangeListener(event -> {
-                    if (event.isUserOriginated()) {
-                        Set<Integer> allowedLabs = Sets.newHashSet(userProfile.getAllowedDefence());
-                        if (allowedLabs.contains(labNumber)) {
-                            studentInfoService.changeDefenceAllowance(userProfile.getUserInfo().getLogin(),
-                                    false, labNumber);
-                            allowedLabs.remove(labNumber);
-                            setAllowDefenceButtonStyles(onOffSwitch, false);
-                        } else {
-                            studentInfoService.changeDefenceAllowance(userProfile.getUserInfo().getLogin(),
-                                    true, labNumber);
-                            allowedLabs.add(labNumber);
-                            setAllowDefenceButtonStyles(onOffSwitch, true);
+            UserLabStatistics statistics = getUserLabStatistics(labNumber, userProfile);
+            if (statistics.getLabDate() != null) {
+                if (getUserLabStatistics(labNumber, userProfile).getMark() >= 3) {
+                    layout.addComponent(new Label(VaadinIcons.CHECK.getHtml(), ContentMode.HTML));
+                } else {
+                    OnOffSwitch onOffSwitch = new OnOffSwitch();
+                    onOffSwitch.setSizeUndefined();
+                    layout.addComponent(onOffSwitch);
+                    setAllowDefenceButtonStyles(onOffSwitch, userProfile.getAllowedDefence().contains(labNumber));
+                    onOffSwitch.addValueChangeListener(event -> {
+                        if (event.isUserOriginated()) {
+                            Set<Integer> allowedLabs = Sets.newHashSet(userProfile.getAllowedDefence());
+                            if (allowedLabs.contains(labNumber)) {
+                                studentInfoService.changeDefenceAllowance(userProfile.getUserInfo().getLogin(),
+                                        false, labNumber);
+                                allowedLabs.remove(labNumber);
+                                setAllowDefenceButtonStyles(onOffSwitch, false);
+                            } else {
+                                studentInfoService.changeDefenceAllowance(userProfile.getUserInfo().getLogin(),
+                                        true, labNumber);
+                                allowedLabs.add(labNumber);
+                                setAllowDefenceButtonStyles(onOffSwitch, true);
+                            }
+                            userProfile.setAllowedDefence(allowedLabs);
                         }
-                        userProfile.setAllowedDefence(allowedLabs);
-                    }
-                });
+                    });
+                }
             }
 
-            setAllowDefenceButtonStyles(onOffSwitch, userProfile.getAllowedDefence().contains(labNumber));
             return layout;
         }).setCaption(i18N.get("group-manage.group-members.defence"));
 
@@ -332,7 +338,8 @@ public class GroupManagingView extends HorizontalLayout implements View {
     }
 
     private void setAllowLabButtonStyles(OnOffSwitch onOffSwitch, boolean labAllowed) {
-        onOffSwitch.setDescription(labAllowed ? i18N.get("admin-manage.users.remove-allow") : i18N.get("admin-manage.users.allow"));
+        onOffSwitch.setDescription(labAllowed ? i18N.get("admin-manage.users.remove-allow") :
+                i18N.get("admin-manage.users.allow"));
         onOffSwitch.setValue(labAllowed);
     }
 
