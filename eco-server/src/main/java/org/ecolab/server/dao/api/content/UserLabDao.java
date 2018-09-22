@@ -10,31 +10,31 @@ import java.util.Map;
 public interface UserLabDao {
     /**
      * Возвращает тесты, пройденные пользователем
-     * @param userName имя пользователя
+     * @param user идентификатор пользователя
      * @return тесты, пройденные пользователем
      */
-    Collection<Integer> getCompletedTests(String userName);
+    Collection<Integer> getCompletedTests(long user);
 
     /**
      * Возвращает лабораторные работы, пройденные пользователем
-     * @param userName имя пользователя
+     * @param user идентификатор пользователя
      * @return лабораторные работы, пройденные пользователем
      */
-    Map<Integer, LabMode> getCompletedLabs(String userName);
+    Map<Integer, LabMode> getCompletedLabs(long user);
 
     /**
      * Устанавливает признак пройденного теста для лабораторной
-     * @param userName имя пользователя, прошедшего тест
+     * @param user идентификатор пользователя
      * @param labNumber номер лабораторной
      * @param mark оценка
      * @param pointCount количество баллов
      */
-    void setTestCompleted(String userName, int labNumber, int mark, int pointCount);
+    void setTestCompleted(long user, int labNumber, int mark, int pointCount);
 
     /**
      * Возвращает статистику по сдаче лабораторных пользователем
-     * @param userName имя пользователя
+     * @param userId идентификатор пользователя
      * @return статистика
      */
-    List<UserLabStatistics> getUserLabStatistics(String userName);
+    List<UserLabStatistics> getUserLabStatistics(long userId);
 }

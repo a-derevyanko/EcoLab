@@ -9,7 +9,6 @@ import org.ecolab.server.model.LabMode;
 import org.ecolab.server.service.api.content.UserLabService;
 import org.ecolab.server.service.api.content.lab2.experiment.Lab2ExperimentService;
 import org.ecolab.server.service.api.content.lab2.random.Lab2RandomService;
-import org.springframework.security.core.Authentication;
 import org.vaadin.spring.annotation.PrototypeScope;
 
 import javax.annotation.security.RolesAllowed;
@@ -26,12 +25,11 @@ public class Lab2TestView extends LabTestWizard {
 
     protected Lab2TestView(I18N i18N, UserLabService userLabService, Lab2RandomService lab2RandomService,
                            Lab2ExperimentService lab2ExperimentService,
-                           Authentication currentUser, LabTestFinishedWindow labTestFinishedWindow) {
+                           LabTestFinishedWindow labTestFinishedWindow) {
         super(i18N,
                 userLabService,
-                userLabService.getCompletedLabs(currentUser.getName()).get(2) == LabMode.RANDOM ?
+                userLabService.getCompletedLabs().get(2) == LabMode.RANDOM ?
                         lab2RandomService : lab2ExperimentService,
-                currentUser,
                 labTestFinishedWindow);
     }
 

@@ -10,6 +10,7 @@ import com.vaadin.ui.UI;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.common.DownloadStreamResource;
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.model.StudentInfo;
 import org.ecolab.server.model.UserInfo;
 import org.ecolab.server.model.UserLabStatistics;
@@ -69,7 +70,7 @@ public class ManageStudentWindow extends EditUserWindow<ManageStudentWindow.Edit
                     () -> {
                         LabService<LabData<LabVariant>, LabVariant> service = getLabService(finalLabNumber);
 
-                        LabData<LabVariant> data = service.getCompletedLabByUser(settings.getUserInfo().getLogin());
+                        LabData<LabVariant> data = service.getCompletedLabByUser(CurrentUser.getId());
 
                         return service.createReport(data, UI.getCurrent().getLocale());
                     },

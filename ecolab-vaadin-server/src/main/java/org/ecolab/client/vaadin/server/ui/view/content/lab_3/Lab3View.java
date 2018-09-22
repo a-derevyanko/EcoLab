@@ -12,7 +12,7 @@ import org.ecolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ecolab.server.model.content.lab3.Lab3Data;
 import org.ecolab.server.model.content.lab3.Lab3Variant;
 import org.ecolab.server.service.api.content.lab3.Lab3Service;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -23,10 +23,13 @@ import java.util.List;
 public class Lab3View extends LabWizard<Lab3Data, Lab3Variant, Lab3Service> {
     public static final String NAME = "lab3view";
 
-    public Lab3View(I18N i18N, Authentication currentUser, InitialDataWindow<Lab3Data, Lab3Variant>
+    public Lab3View(I18N i18N, InitialDataWindow<Lab3Data, Lab3Variant>
             initialDataWindow, Lab3Service labService, Binder<Lab3Data> binder,
-                    LabFinishedWindow<Lab3Data, Lab3Variant> labFinishedWindow, ConfirmWindow confirmWindow, List<LabWizardStep<Lab3Data, Lab3Variant>> steps, VaadinUI ui) {
-        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, steps, confirmWindow, ui);
+                    LabFinishedWindow<Lab3Data, Lab3Variant> labFinishedWindow,
+                    ConfirmWindow confirmWindow,
+                    List<LabWizardStep<Lab3Data, Lab3Variant>> steps, VaadinUI ui,
+                    @Value("${ecolab.lab.autoSaveRate:#{60000}}") long autoSaveRate) {
+        super(i18N, initialDataWindow, labService, binder, labFinishedWindow, steps, confirmWindow, ui, autoSaveRate);
     }
 
     // ----------------------------- Графические компоненты --------------------------------

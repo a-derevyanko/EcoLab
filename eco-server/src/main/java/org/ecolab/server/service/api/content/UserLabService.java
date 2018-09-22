@@ -11,26 +11,23 @@ import java.util.Set;
 public interface UserLabService {
     /**
      * Возвращает тесты, пройденные пользователем
-     * @param userName имя пользователя
      * @return тесты, пройденные пользователем
      */
-    Collection<Integer> getCompletedTests(String userName);
+    Collection<Integer> getCompletedTests();
 
     /**
      * Возвращает лабораторные работы, пройденные пользователем
-     * @param userName имя пользователя
      * @return лабораторные работы, пройденные пользователем
      */
-    Map<Integer, LabMode> getCompletedLabs(String userName);
+    Map<Integer, LabMode> getCompletedLabs();
 
     /**
      * Устанавливает признак пройденного теста для лабораторной
-     * @param userName имя пользователя, прошедшего тест
      * @param labNumber номер лабораторной
      * @param mark оценка
      * @param pointCount количество баллов
      */
-    Collection<Integer> setTestCompleted(String userName, int labNumber, int mark, int pointCount);
+    Collection<Integer> setTestCompleted(int labNumber, int mark, int pointCount);
 
     /**
      * Удаление всех лабораторных, которые были сохранены раньше, чем указанная дата
@@ -41,10 +38,10 @@ public interface UserLabService {
 
     /**
      * Возвращает данные профиля пользователя
-     * @param userName имя пользователя
+     * @param userId идентификатор пользователя
      * @return профиль
      */
-    UserProfile getUserProfile(String userName);
+    UserProfile getUserProfile(long userId);
 
     /**
      * Возвращает данные пользоватей по группе

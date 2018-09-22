@@ -12,7 +12,7 @@ import org.ecolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ecolab.server.model.content.lab2.Lab2Data;
 import org.ecolab.server.model.content.lab2.experiment.Lab2ExperimentLog;
 import org.ecolab.server.service.api.content.lab2.experiment.Lab2ExperimentService;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -24,7 +24,15 @@ public class Lab2ExperimentView extends LabExperimentView<Lab2Data<Lab2Experimen
     public static final String NAME = "lab2experiment";
 
 
-    public Lab2ExperimentView(I18N i18N, Authentication currentUser, InitialDataWindow<Lab2Data<Lab2ExperimentLog>, Lab2ExperimentLog> initialDataWindow, Lab2ExperimentService labService, Binder<Lab2Data<Lab2ExperimentLog>> binder, LabFinishedWindow<Lab2Data<Lab2ExperimentLog>, Lab2ExperimentLog> labFinishedWindow, List<LabWizardStep<Lab2Data<Lab2ExperimentLog>, Lab2ExperimentLog>> labSteps, ConfirmWindow confirmWindow, VaadinUI ui, Binder<Lab2ExperimentLog> variantBinder) {
-        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui, variantBinder);
+    public Lab2ExperimentView(I18N i18N, InitialDataWindow<Lab2Data<Lab2ExperimentLog>,
+            Lab2ExperimentLog> initialDataWindow, Lab2ExperimentService labService,
+                              Binder<Lab2Data<Lab2ExperimentLog>> binder,
+                              LabFinishedWindow<Lab2Data<Lab2ExperimentLog>, Lab2ExperimentLog> labFinishedWindow,
+                              List<LabWizardStep<Lab2Data<Lab2ExperimentLog>, Lab2ExperimentLog>> labSteps,
+                              ConfirmWindow confirmWindow, VaadinUI ui,
+                              Binder<Lab2ExperimentLog> variantBinder,
+                              @Value("${ecolab.lab.autoSaveRate:#{60000}}") long autoSaveRate) {
+        super(i18N, initialDataWindow, labService, binder, labFinishedWindow,
+                labSteps, confirmWindow, ui, variantBinder, autoSaveRate);
     }
 }

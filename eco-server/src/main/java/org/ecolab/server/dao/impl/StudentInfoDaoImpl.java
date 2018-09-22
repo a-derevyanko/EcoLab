@@ -25,7 +25,6 @@ import static org.ecolab.server.db.h2.public_.Tables.STUDY_GROUP_MEMBERS;
 import static org.ecolab.server.db.h2.public_.Tables.STUDY_GROUP_TEACHERS;
 import static org.ecolab.server.db.h2.public_.Tables.STUDY_TEAMS;
 import static org.ecolab.server.db.h2.public_.Tables.STUDY_TEAM_MEMBERS;
-import static org.ecolab.server.db.h2.public_.Tables.USERS;
 import static org.ecolab.server.db.h2.public_.Tables.USER_DEFENCE_ALLOWANCE;
 import static org.ecolab.server.db.h2.public_.Tables.USER_LAB_ALLOWANCE;
 import static org.ecolab.server.db.h2.public_.Tables.USER_LAB_HISTORY;
@@ -71,17 +70,17 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public StudentGroup getStudentGroup(String userName) {
+    public StudentGroup getStudentGroup(long userId) {
         return dsl.select().from(STUDY_GROUPS).join(STUDY_GROUP_MEMBERS)
-                .on(STUDY_GROUP_MEMBERS.GROUP_ID.eq(STUDY_GROUPS.ID)).join(USERS).on(USERS.ID.eq(STUDY_GROUP_MEMBERS.USER_ID))
-                .where(USERS.LOGIN.eq(userName)).fetchOne(STUDENT_GROUP_RECORD_MAPPER);
+                .on(STUDY_GROUP_MEMBERS.GROUP_ID.eq(STUDY_GROUPS.ID))
+                .where(STUDY_GROUP_MEMBERS.USER_ID.eq(userId)).fetchOne(STUDENT_GROUP_RECORD_MAPPER);
     }
 
     @Override
-    public StudentTeam getStudentTeam(String userName) {
+    public StudentTeam getStudentTeam(long userId) {
         Record teamRecord = dsl.select(STUDY_TEAMS.ID, STUDY_TEAMS.NAME).from(STUDY_TEAMS).join(STUDY_TEAM_MEMBERS)
-                .on(STUDY_TEAMS.ID.eq(STUDY_TEAM_MEMBERS.TEAM_ID)).join(USERS).on(STUDY_TEAM_MEMBERS.USER_ID.eq(USERS.ID))
-                .where(USERS.LOGIN.eq(userName)).fetchOne();
+                .on(STUDY_TEAMS.ID.eq(STUDY_TEAM_MEMBERS.TEAM_ID))
+                .where(STUDY_GROUP_MEMBERS.USER_ID.eq(userId)).fetchOne();
 
         if (teamRecord == null) {
             return null;
@@ -93,37 +92,33 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public Set<String> getTeamMembers(String teamNumber, String group) {
-        return Sets.newHashSet(dsl.select(USERS.LOGIN).from(STUDY_TEAM_MEMBERS)
-                .join(USERS).on(STUDY_TEAM_MEMBERS.USER_ID.eq(USERS.ID))
+    public Set<Long> getTeamMembers(String teamNumber, String group) {
+        return Sets.newHashSet(dsl.select(STUDY_TEAM_MEMBERS.USER_ID).from(STUDY_TEAM_MEMBERS)
                 .join(STUDY_TEAMS).on(STUDY_TEAM_MEMBERS.TEAM_ID.eq(STUDY_TEAMS.ID))
                 .where(STUDY_TEAMS.NAME.eq(teamNumber)).and(STUDY_TEAMS.GROUP_ID
                         .eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))).
-                        orderBy(USERS.LAST_NAME,USERS.FIRST_NAME, USERS.MIDDLE_NAME).
-                        fetchInto(String.class));
+                        fetchInto(Long.class));
     }
 
     @Override
-    public Set<String> getGroupMembers(String group) {
-        return Sets.newHashSet(dsl.select(USERS.LOGIN).from(USERS)
-                .join(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.USER_ID.eq(USERS.ID))
+    public Set<Long> getGroupMembers(String group) {
+        return Sets.newHashSet(dsl.select(STUDY_GROUP_MEMBERS.USER_ID).from(STUDY_GROUP_MEMBERS)
                 .join(STUDY_GROUPS).on(STUDY_GROUPS.ID.eq(STUDY_GROUP_MEMBERS.GROUP_ID))
                 .where(STUDY_GROUPS.ID.eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))).
-                        orderBy(USERS.LAST_NAME,USERS.FIRST_NAME, USERS.MIDDLE_NAME).
-                        fetchInto(String.class));
+                        fetchInto(Long.class));
     }
 
     @Override
-    public Set<StudentGroup> getTeacherGroups(String teacher) {
+    public Set<StudentGroup> getTeacherGroups(long teacherId) {
         return Sets.newHashSet(dsl.select().from(STUDY_GROUPS).
                 join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
-                where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, teacher))).
+                where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(teacherId)).
                 orderBy(STUDY_GROUPS.NAME).
                 fetch().map(STUDENT_GROUP_RECORD_MAPPER));
     }
 
     @Override
-    public Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher) {
+    public Set<StudentGroupInfo> getTeacherGroupsInfo(long teacherId) {
         Table<Record> nested = dsl.<Record>select(STUDY_GROUPS.NAME,
                 DSL.countDistinct(STUDY_GROUP_MEMBERS.ID).as(STUDENT_COUNT),
                 DSL.count(DSL.coalesce(USER_LAB_HISTORY.LAB_NUMBER)).as(LAB_COUNT),
@@ -132,7 +127,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
                 leftJoin(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
                 leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(STUDY_GROUP_MEMBERS.USER_ID)).
                 leftJoin(USER_LAB_HISTORY).on(USER_LAB_HISTORY.USER_ID.eq(STUDY_GROUP_MEMBERS.USER_ID)).
-                where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, teacher))).
+                where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(teacherId)).
                 groupBy(STUDY_GROUPS.NAME).
                 orderBy(STUDY_GROUPS.NAME).
                 asTable("T");
@@ -154,45 +149,44 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public void addGroupToTeacher(String teacher, StudentGroup group) {
+    public void addGroupToTeacher(long teacherId, StudentGroup group) {
         dsl.insertInto(STUDY_GROUP_TEACHERS, STUDY_GROUP_TEACHERS.TEACHER_ID, STUDY_GROUP_TEACHERS.GROUP_ID).
-                values(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(teacher)).asField(),
+                values(DSL.val(teacherId),
                         DSL.val(group.getId())).execute();
     }
 
     @Override
-    public void removeGroupFromTeacher(String teacher, String group) {
+    public void removeGroupFromTeacher(long teacherId, String group) {
         dsl.deleteFrom(STUDY_GROUP_TEACHERS)
-                .where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(teacher)))
+                .where(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(teacherId)
                         .and(STUDY_GROUP_TEACHERS.GROUP_ID.eq(dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.NAME.eq(group)))))
                 .execute();
     }
 
     @Override
-    public void updateStudentGroup(String userName, StudentGroup group) {
+    public void updateStudentGroup(long userId, StudentGroup group) {
         dsl.mergeInto(STUDY_GROUP_MEMBERS, STUDY_GROUP_MEMBERS.USER_ID, STUDY_GROUP_MEMBERS.GROUP_ID)
                 .key(STUDY_GROUP_MEMBERS.USER_ID)
-                .values(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userName)).asField(),
+                .values(DSL.val(userId),
                         dsl.select(STUDY_GROUPS.ID).from(STUDY_GROUPS).where(STUDY_GROUPS.ID.eq(group.getId())).asField())
                 .execute();
     }
 
     @Override
-    public void updateStudentTeam(String userName, StudentTeam studentTeam) {
+    public void updateStudentTeam(long userId, StudentTeam studentTeam) {
         dsl.mergeInto(STUDY_TEAM_MEMBERS, STUDY_TEAM_MEMBERS.USER_ID, STUDY_TEAM_MEMBERS.TEAM_ID)
                 .key(STUDY_TEAM_MEMBERS.USER_ID)
-                .values(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userName)).asField(),
+                .values(DSL.val(userId),
                         dsl.select(STUDY_TEAMS.ID).from(STUDY_TEAMS).where(STUDY_TEAMS.ID.eq(studentTeam.getId())).asField())
                 .execute();
     }
 
     @Override
-    public String getGroupTeacher(String group) {
-        return dsl.select(USERS.LOGIN).from(USERS).
-                join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.TEACHER_ID.eq(USERS.ID)).
+    public long getGroupTeacher(String group) {
+        return dsl.select(STUDY_GROUP_TEACHERS.TEACHER_ID).from(STUDY_GROUP_TEACHERS).
                 join(STUDY_GROUPS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
                 where(STUDY_GROUPS.NAME.eq(group)).
-                fetchOneInto(String.class);
+                fetchOneInto(Long.class);
     }
 
     @Override
@@ -252,47 +246,45 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     }
 
     @Override
-    public Set<Integer> getAllowedLabs(String userName) {
+    public Set<Integer> getAllowedLabs(long userId) {
         return Sets.newHashSet(dsl.select(USER_LAB_ALLOWANCE.LAB_NUMBER).from(USER_LAB_ALLOWANCE).
-                where(USER_LAB_ALLOWANCE.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetchInto(Integer.class));
+                where(USER_LAB_ALLOWANCE.USER_ID.eq(userId)).fetchInto(Integer.class));
     }
 
     @Override
-    public Set<Integer> getAllowedDefence(String userName) {
+    public Set<Integer> getAllowedDefence(long userId) {
         return Sets.newHashSet(dsl.select(USER_DEFENCE_ALLOWANCE.LAB_NUMBER).from(USER_DEFENCE_ALLOWANCE).
-                where(USER_DEFENCE_ALLOWANCE.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))).fetchInto(Integer.class));
+                where(USER_DEFENCE_ALLOWANCE.USER_ID.eq(userId)).fetchInto(Integer.class));
     }
 
     @Override
-    public void changeLabAllowance(String userName, boolean allow, int... labs) {
+    public void changeLabAllowance(long userId, boolean allow, int... labs) {
         if (allow) {
-            long currentUserId =  DaoUtils.getFindUserIdSelect(dsl, userName).fetchOneInto(Long.class);
             BatchBindStep step = dsl.batch(dsl.insertInto(USER_LAB_ALLOWANCE, USER_LAB_ALLOWANCE.USER_ID, USER_LAB_ALLOWANCE.LAB_NUMBER).
                     values((Long) null, null));
 
             for (int lab : labs) {
-                step = step.bind(currentUserId, lab);
+                step = step.bind(userId, lab);
             }
             step.execute();
         } else {
-            dsl.deleteFrom(USER_LAB_ALLOWANCE).where(USER_LAB_ALLOWANCE.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))
+            dsl.deleteFrom(USER_LAB_ALLOWANCE).where(USER_LAB_ALLOWANCE.USER_ID.eq(userId)
                     .and(USER_LAB_ALLOWANCE.LAB_NUMBER.in(Ints.asList(labs)))).execute();
         }
     }
 
     @Override
-    public void changeDefenceAllowance(String userName, boolean allow, int... labs) {
+    public void changeDefenceAllowance(long userId, boolean allow, int... labs) {
         if (allow) {
-            long currentUserId =  DaoUtils.getFindUserIdSelect(dsl, userName).fetchOneInto(Long.class);
             BatchBindStep step = dsl.batch(dsl.insertInto(USER_DEFENCE_ALLOWANCE, USER_DEFENCE_ALLOWANCE.USER_ID, USER_DEFENCE_ALLOWANCE.LAB_NUMBER).
                     values((Long) null, null));
 
             for (int lab : labs) {
-                step = step.bind(currentUserId, lab);
+                step = step.bind(userId, lab);
             }
             step.execute();
         } else {
-            dsl.deleteFrom(USER_DEFENCE_ALLOWANCE).where(USER_DEFENCE_ALLOWANCE.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))
+            dsl.deleteFrom(USER_DEFENCE_ALLOWANCE).where(USER_DEFENCE_ALLOWANCE.USER_ID.eq(userId)
                     .and(USER_DEFENCE_ALLOWANCE.LAB_NUMBER.in(Ints.asList(labs)))).execute();
         }
     }

@@ -13,8 +13,8 @@ import org.ecolab.server.common.Profiles;
 import org.ecolab.server.model.content.lab1.Lab1Data;
 import org.ecolab.server.model.content.lab1.experiment.Lab1ExperimentLog;
 import org.ecolab.server.service.api.content.lab1.experiment.Lab1ExperimentService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -25,13 +25,15 @@ import java.util.List;
 @Profile(value = {Profiles.MODE.DEMO, Profiles.MODE.DEV})
 public class DemoLab1ExperimentView extends Lab1ExperimentView {
 
-    public DemoLab1ExperimentView(I18N i18N, Authentication currentUser, InitialDataWindow<Lab1Data<Lab1ExperimentLog>,
+    public DemoLab1ExperimentView(I18N i18N, InitialDataWindow<Lab1Data<Lab1ExperimentLog>,
                 Lab1ExperimentLog> initialDataWindow, Lab1ExperimentService labService,
                                   Binder<Lab1Data<Lab1ExperimentLog>> binder,
                                   LabFinishedWindow<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog> labFinishedWindow,
                                   List<LabWizardStep<Lab1Data<Lab1ExperimentLog>, Lab1ExperimentLog>> labSteps,
                                   ConfirmWindow confirmWindow,
-                                  VaadinUI ui, Binder<Lab1ExperimentLog> variantBinder) {
-        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui, variantBinder);
+                                  VaadinUI ui, Binder<Lab1ExperimentLog> variantBinder,
+                                  @Value("${ecolab.lab.autoSaveRate:#{60000}}") long autoSaveRate) {
+        super(i18N, initialDataWindow, labService, binder, labFinishedWindow, labSteps,
+                confirmWindow, ui, variantBinder, autoSaveRate);
     }
 }

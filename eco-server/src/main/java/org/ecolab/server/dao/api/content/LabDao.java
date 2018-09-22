@@ -11,13 +11,13 @@ import java.util.Locale;
  * Created by 777Al on 19.04.2017.
  */
 public interface LabDao<T extends LabData> {
-    T getLastLabByUser(String userName, boolean completed);
+    T getLastLabByUser(long userId, boolean completed);
 
     void saveLab(T labData);
 
     int updateLab(T labData);
 
-    int removeLabsByUser(String userName);
+    int removeLabsByUser(long userId);
 
     int removeOldLabs(LocalDateTime lastSaveDate);
 

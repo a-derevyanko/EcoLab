@@ -23,15 +23,15 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
 
     boolean isFieldCalculated(Field field);
 
-    T getLastUncompletedLabByUser(String userName);
+    T getLastUncompletedLabByUser(long userId);
 
-    T getCompletedLabByUser(String userName);
+    T getCompletedLabByUser(long userId);
 
-    T startNewLab(String userName);
+    T startNewLab(long userId);
 
     T updateLab(@Valid T labData);
 
-    int removeLabsByUser(String userName);
+    int removeLabsByUser(long userId);
 
     int removeOldLabs(LocalDateTime lastSaveDate);
 

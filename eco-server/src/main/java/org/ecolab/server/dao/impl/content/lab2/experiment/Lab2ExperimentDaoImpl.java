@@ -2,7 +2,6 @@ package org.ecolab.server.dao.impl.content.lab2.experiment;
 
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab2.experiment.Lab2ExperimentDao;
-import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.dao.impl.content.lab2.Lab2DaoImpl;
 import org.ecolab.server.model.content.lab2.Frequency;
 import org.ecolab.server.model.content.lab2.Lab2Data;
@@ -73,10 +72,10 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
     }
 
     @Override
-    public Lab2Data<Lab2ExperimentLog> getLastLabByUser(String userName, boolean completed) {
+    public Lab2Data<Lab2ExperimentLog> getLastLabByUser(long userId, boolean completed) {
         Lab2Data<Lab2ExperimentLog> data = dsl.select().from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2_EXPERIMENT_LOG.ID.eq(LAB2DATA.ID)).
                 join(LAB2TEAM).on(LAB2TEAM.ID.eq(LAB2DATA.ID)).
-                where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))
+                where(LAB2TEAM.USER_ID.eq(userId))
                         .and(LAB2DATA.COMPLETED.eq(completed)).
                 orderBy(LAB2DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
 

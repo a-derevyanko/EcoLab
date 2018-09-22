@@ -1,5 +1,6 @@
 package org.ecolab.server.service.impl;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.ecolab.server.dao.api.AdminDao;
 import org.ecolab.server.service.api.AdminService;
@@ -40,7 +41,7 @@ public class AdminServiceImpl implements AdminService {
     public void autoBackupDataBase() {
         String folder = settingsService.getSetting("server.backupPath");
 
-        File path = new File(System.getProperty("user.dir") + File.separator + folder);
+        File path = new File(SystemUtils.getUserDir().getPath() + File.separator + folder);
         try {
             if (!path.exists() && !path.mkdir()) {
                 throw new IllegalStateException("Can`t create folder:" + path);

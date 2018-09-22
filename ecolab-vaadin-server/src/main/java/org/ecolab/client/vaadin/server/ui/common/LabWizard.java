@@ -9,33 +9,37 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.VaadinUI;
 import org.ecolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
 import org.ecolab.client.vaadin.server.ui.development.DevUtils;
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
-import org.ecolab.client.vaadin.server.ui.view.api.AutoSavableView;
+import org.ecolab.client.vaadin.server.ui.view.api.SavableView;
 import org.ecolab.client.vaadin.server.ui.windows.ConfirmWindow;
 import org.ecolab.client.vaadin.server.ui.windows.InitialDataWindow;
 import org.ecolab.client.vaadin.server.ui.windows.LabFinishedWindow;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.common.Role;
 import org.ecolab.server.model.content.LabData;
 import org.ecolab.server.model.content.LabVariant;
 import org.ecolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.Authentication;
 import org.vaadin.teemu.wizards.event.WizardCompletedEvent;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 
+import javax.annotation.PreDestroy;
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Андрей on 19.03.2017.
  */
 @RolesAllowed({Role.ADMIN, Role.TEACHER, Role.STUDENT})
-public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S extends LabService<T, V>> extends Wizard implements AutoSavableView {
+public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S extends LabService<T, V>>
+        extends Wizard implements SavableView {
     // ---------------------------- Графические компоненты --------------------
     protected final GridLayout buttons = new GridLayout(3, 1);
     protected final Button saveButton = new Button("Save", VaadinIcons.CLOUD_DOWNLOAD_O);
@@ -46,8 +50,6 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
     protected final HorizontalLayout thirdComponentsLayout = new HorizontalLayout();
 
     protected final List<LabWizardStep<T, V>> labSteps;
-
-    protected final Authentication currentUser;
 
     protected final InitialDataWindow<T, V> initialDataWindow;
 
@@ -61,18 +63,18 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     protected final VaadinUI ui;
 
-    private boolean hasChanges;
+    protected final long autoSaveRate;
+
+    private Disposable subscription;
 
     @Autowired
-    public LabWizard(I18N i18N,
-                     Authentication currentUser,
+    protected LabWizard(I18N i18N,
                      InitialDataWindow<T, V> initialDataWindow,
                      S labService, Binder<T> binder,
                      LabFinishedWindow<T, V> labFinishedWindow,
                      List<LabWizardStep<T, V>> labSteps,
-                     ConfirmWindow confirmWindow, VaadinUI ui) {
+                     ConfirmWindow confirmWindow, VaadinUI ui, long autoSaveRate) {
         super(i18N);
-        this.currentUser = currentUser;
         this.initialDataWindow = initialDataWindow;
         this.labService = labService;
         this.binder = binder;
@@ -80,6 +82,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
         this.labSteps = labSteps;
         this.confirmWindow = confirmWindow;
         this.ui = ui;
+        this.autoSaveRate = autoSaveRate;
     }
 
     @Override
@@ -125,10 +128,18 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
         firstColumnLayout.setComponentAlignment(leftButtonsLayout, Alignment.MIDDLE_LEFT);
 
+        PublishSubject<Integer> changesObserver = PublishSubject.create();
+
         binder.addValueChangeListener(event -> {
             labService.updateCalculatedFields(binder.getBean());
             saveButton.setVisible(true);
-            hasChanges = true;
+            changesObserver.onNext(1);
+        });
+
+        subscription = changesObserver.buffer(5, autoSaveRate, TimeUnit.MILLISECONDS).subscribe(s -> {
+            if (!s.isEmpty()) {
+                saveData(false);
+            }
         });
 
         saveButton.addClickListener(event -> saveData(true));
@@ -137,10 +148,9 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
         labSteps.forEach(this::addStep);
     }
 
-    @Override
-    @Scheduled(fixedRateString = "${ecolab.lab.autoSaveRate:#{60000}}", initialDelayString = "${ecolab.lab.autoSaveRate:#{60000}}")
-    public void autoSave() {
-        saveData(false);
+    @PreDestroy
+    public void destroy() {
+        subscription.dispose();
     }
 
     @Override
@@ -165,17 +175,17 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     @Override
     public boolean hasUnsavedData() {
-        return hasChanges || currentStep instanceof LabExperimentJournalStep;
+        return saveButton.isVisible() || currentStep instanceof LabExperimentJournalStep;
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        T uncompletedLabData = labService.getLastUncompletedLabByUser(currentUser.getName());
+        T uncompletedLabData = labService.getLastUncompletedLabByUser(CurrentUser.getId());
         if (uncompletedLabData == null) {
             if (!DevUtils.isProductionVersion()) {
-                labService.removeLabsByUser(currentUser.getName());
+                labService.removeLabsByUser(CurrentUser.getId());
             }
-            T newLabData = labService.startNewLab(currentUser.getName());
+            T newLabData = labService.startNewLab(CurrentUser.getId());
             binder.setBean(newLabData);
         } else {
             binder.setBean(uncompletedLabData);

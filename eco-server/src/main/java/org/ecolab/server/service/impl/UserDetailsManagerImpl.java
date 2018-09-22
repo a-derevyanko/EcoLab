@@ -7,6 +7,7 @@ import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.ecolab.server.dev.LogExecutionTime;
+import org.ecolab.server.model.EcoLabUserDetails;
 import org.ecolab.server.model.UserGroup;
 import org.ecolab.server.model.UserInfo;
 import org.ecolab.server.service.api.ReportService;
@@ -21,6 +22,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserCache;
@@ -28,7 +30,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
@@ -56,7 +57,6 @@ import static org.ecolab.server.db.h2.public_.Tables.USER_AUTHORITIES;
  * Created by 777Al on 19.04.2017.
  */
 @Service
-@Transactional
 public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements UserInfoService {
     private static final Transliterator TRANSLITERATOR = Transliterator.getInstance("Any-Latin; Lower; Latin-ASCII");
     private static final Pattern ALPHANUMERIC_PATTERN =  Pattern.compile("[^A-Za-z0-9]");
@@ -112,7 +112,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
                         .set(USER_AUTHORITIES.AUTHORITY_ID, dsl.select(AUTHORITIES.ID).from(AUTHORITIES).where(AUTHORITIES.AUTHORITY_NAME.eq(""))).
                         getSQL());
         setChangePasswordSql(dsl.update(USERS).set(USERS.PASSWORD, "").where(USERS.LOGIN.eq("")).getSQL());
-        setUsersByUsernameQuery(dsl.select(USERS.LOGIN, USERS.PASSWORD, USERS.ENABLED).from(USERS).where(USERS.LOGIN.eq("")).getSQL());
+        setUsersByUsernameQuery(dsl.select(USERS.LOGIN, USERS.PASSWORD, USERS.ENABLED, USERS.ID).from(USERS).where(USERS.LOGIN.eq("")).getSQL());
         setAuthoritiesByUsernameQuery(dsl.select(USERS.LOGIN, AUTHORITIES.AUTHORITY_NAME).
                 from(USER_AUTHORITIES).join(USERS).on(USERS.ID.eq(USER_AUTHORITIES.USER_ID)).join(AUTHORITIES).on(AUTHORITIES.ID.eq(USER_AUTHORITIES.AUTHORITY_ID)).where(USERS.LOGIN.eq("")).getSQL());
         setUserExistsSql(dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.eq("")).getSQL());
@@ -146,32 +146,40 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     }
 
     @Override
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     protected List<UserDetails> loadUsersByUsername(String username) {
         return dsl.fetch(getUsersByUsernameQuery(), username).map(record -> {
             String username1 = record.getValue(0, String.class);
             String password = record.getValue(1, String.class);
             boolean enabled = record.getValue(2, Boolean.class);
-            return new User(username1, password, enabled, true, true, true,
+            Long id = record.getValue(3, Long.class);
+            return new EcoLabUserDetails(id, username1, password, enabled,
+                    true, true, true,
                     AuthorityUtils.NO_AUTHORITIES);
         });
     }
 
     @Override
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    @Cacheable("USER")
-    public UserInfo getUserInfo(@NotNull String userName) {
-        return dsl.select(USERS.ID, USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
-                .join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID)).join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID))
-        .where(USERS.LOGIN.eq(userName)).fetchOne(USER_INFO_RECORD_MAPPER);
+    protected UserDetails createUserDetails(String username, UserDetails userFromUserQuery, List<GrantedAuthority> combinedAuthorities) {
+        return new EcoLabUserDetails(((EcoLabUserDetails) userFromUserQuery).getId(), username, userFromUserQuery.getPassword(),
+                userFromUserQuery.isEnabled(), true, true, true, combinedAuthorities);
     }
 
     @Override
+    @Cacheable("USER")
+    public UserInfo getUserInfo(long userId) {
+        return dsl.select(USERS.ID, USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
+                .join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID)).join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID))
+        .where(USERS.ID.eq(userId)).fetchOne(USER_INFO_RECORD_MAPPER);
+    }
+
+    @Override
+    @Transactional
     public void changePassword(String oldPassword, String newPassword) throws AuthenticationException {
         super.changePassword(oldPassword, passwordEncoder.encode(newPassword));
     }
 
     @Override
+    @Transactional
     public void createUser(UserDetails userDetails) {
         User user = new User(userDetails.getUsername(),
                 passwordEncoder.encode(userDetails.getPassword()), userDetails.getAuthorities());
@@ -179,6 +187,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     }
 
     @Override
+    @Transactional
     public void updateUser(UserDetails userDetails) {
         User user = new User(userDetails.getUsername(),
                 passwordEncoder.encode(userDetails.getPassword()), userDetails.getAuthorities());
@@ -187,6 +196,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
     @Override
     @CachePut(cacheNames = "USER", key = "#userInfo.login")
+    @Transactional
     public UserInfo updateUserInfo(@Valid @NotNull UserInfo userInfo) {
         dsl.update(USERS)
                 .set(USERS.FIRST_NAME, userInfo.getFirstName())
@@ -196,11 +206,12 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
         dsl.update(GROUP_MEMBERS).set(GROUP_MEMBERS.GROUP_ID,
                 dsl.select(GROUPS.ID).from(GROUPS).where(GROUPS.GROUP_NAME.eq(userInfo.getGroup().name())))
-                .where(GROUP_MEMBERS.USER_ID.eq(dsl.select(USERS.ID).from(USERS).where(USERS.LOGIN.eq(userInfo.getLogin())))).execute();
+                .where(GROUP_MEMBERS.USER_ID.eq(userInfo.getId())).execute();
         return userInfo;
     }
 
     @Override
+    @Transactional
     public void resetPassword(@NotNull String userName) {
         dsl.update(USERS).set(USERS.PASSWORD, passwordEncoder.encode(createDefaultPassword(userName)))
                 .where(USERS.LOGIN.eq(userName)).execute();
@@ -214,6 +225,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
      */
     @Override
     @CachePut(cacheNames = "USER", key = "#result.login")
+    @Transactional
     public UserInfo createUserInfo(@Valid @NotNull UserInfo userInfo) {
         if (userInfo.getLogin() == null) {
             String initials = userInfo.getLastName() + userInfo.getFirstName().charAt(0);

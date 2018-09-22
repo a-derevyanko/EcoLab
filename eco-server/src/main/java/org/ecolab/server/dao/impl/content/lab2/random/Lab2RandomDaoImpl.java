@@ -2,7 +2,6 @@ package org.ecolab.server.dao.impl.content.lab2.random;
 
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab2.random.Lab2RandomDao;
-import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.dao.impl.content.lab2.Lab2DaoImpl;
 import org.ecolab.server.model.content.lab2.Frequency;
 import org.ecolab.server.model.content.lab2.Lab2Data;
@@ -50,10 +49,10 @@ public class Lab2RandomDaoImpl extends Lab2DaoImpl<Lab2RandomVariant> implements
     }
 
     @Override
-    public Lab2Data<Lab2RandomVariant> getLastLabByUser(String userName, boolean completed) {
+    public Lab2Data<Lab2RandomVariant> getLastLabByUser(long userId, boolean completed) {
         Lab2Data<Lab2RandomVariant>  data = dsl.select().from(LAB2DATA).join(LAB2_RANDOM_VARIANT).on(LAB2_RANDOM_VARIANT.ID.eq(LAB2DATA.ID)).
                 join(LAB2TEAM).on(LAB2TEAM.ID.eq(LAB2DATA.ID)).
-                where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))
+                where(LAB2TEAM.USER_ID.eq(userId)
                         .and(LAB2DATA.COMPLETED.eq(completed))).
                 orderBy(LAB2DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
         if (data != null) {

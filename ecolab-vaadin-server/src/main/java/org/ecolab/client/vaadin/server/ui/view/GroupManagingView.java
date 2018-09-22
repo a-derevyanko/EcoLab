@@ -261,12 +261,12 @@ public class GroupManagingView extends HorizontalLayout implements View {
                     if (event.isUserOriginated()) {
                         Set<Integer> allowedLabs = Sets.newHashSet(userProfile.getAllowedLabs());
                         if (allowedLabs.contains(labNumber)) {
-                            studentInfoService.changeLabAllowance(userProfile.getUserInfo().getLogin(),
+                            studentInfoService.changeLabAllowance(userProfile.getUserInfo().getId(),
                                     false, labNumber);
                             allowedLabs.remove(labNumber);
                             setAllowLabButtonStyles(onOffSwitch, false);
                         } else {
-                            studentInfoService.changeLabAllowance(userProfile.getUserInfo().getLogin(),
+                            studentInfoService.changeLabAllowance(userProfile.getUserInfo().getId(),
                                     true, labNumber);
                             allowedLabs.add(labNumber);
                             setAllowLabButtonStyles(onOffSwitch, true);
@@ -300,12 +300,12 @@ public class GroupManagingView extends HorizontalLayout implements View {
                         if (event.isUserOriginated()) {
                             Set<Integer> allowedLabs = Sets.newHashSet(userProfile.getAllowedDefence());
                             if (allowedLabs.contains(labNumber)) {
-                                studentInfoService.changeDefenceAllowance(userProfile.getUserInfo().getLogin(),
+                                studentInfoService.changeDefenceAllowance(userProfile.getUserInfo().getId(),
                                         false, labNumber);
                                 allowedLabs.remove(labNumber);
                                 setAllowDefenceButtonStyles(onOffSwitch, false);
                             } else {
-                                studentInfoService.changeDefenceAllowance(userProfile.getUserInfo().getLogin(),
+                                studentInfoService.changeDefenceAllowance(userProfile.getUserInfo().getId(),
                                         true, labNumber);
                                 allowedLabs.add(labNumber);
                                 setAllowDefenceButtonStyles(onOffSwitch, true);

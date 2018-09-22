@@ -113,20 +113,20 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     @Override
     @Transactional(readOnly = true)
     //@Cacheable(cacheNames = "LABDATA", key = "#userName")
-    public T getLastUncompletedLabByUser(String userName) {
-        return getLastLabByUser(userName, false);
+    public T getLastUncompletedLabByUser(long userId) {
+        return getLastLabByUser(userId, false);
     }
 
     @Override
-    public T getCompletedLabByUser(String userName) {
-        return getLastLabByUser(userName, true);
+    public T getCompletedLabByUser(long userId) {
+        return getLastLabByUser(userId, true);
     }
 
     @Override
     @Transactional
     //@CachePut(cacheNames = "LABDATA", key = "#userName")
-    public T startNewLab(String userName) {
-        T labData = createBaseLabData(userName);
+    public T startNewLab(long userId) {
+        T labData = createBaseLabData(userId);
         labData.setVariant(generateNewLabVariant());
         labDao.saveLab(labData);
         updateCalculatedFields(labData);
@@ -146,8 +146,8 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     @Override
     @Transactional
     //@CacheEvict(cacheNames = "LABDATA", key = "#userName")
-    public int removeLabsByUser(String userName) {
-        return labDao.removeLabsByUser(userName);
+    public int removeLabsByUser(long userId) {
+        return labDao.removeLabsByUser(userId);
     }
 
     @Override
@@ -397,14 +397,13 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         }
     }
 
-    protected T createBaseLabData(String userName) {
+    protected T createBaseLabData(long userId) {
         T labData = createNewLabData();
-        Set<String> users = new HashSet<>();
-        labData.setUsers(users);
+        Set<Long> users = new HashSet<>();
 
-        StudentInfo studentInfo = studentInfoService.getStudentInfo(userName);
+        StudentInfo studentInfo = studentInfoService.getStudentInfo(userId);
         if (studentInfo == null || studentInfo.getTeam() == null) {
-            users.add(userName);
+            users.add(userId);
         } else {
             users.addAll(studentInfoService.getTeamMembers(studentInfo.getTeam().getName(), studentInfo.getGroup().getName())
                     .stream().filter(s -> studentInfoService.getAllowedLabs(s).
@@ -416,8 +415,8 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         return labData;
     }
 
-    private T getLastLabByUser(String userName, boolean completed) {
-        T data = labDao.getLastLabByUser(userName, completed);
+    private T getLastLabByUser(long userId, boolean completed) {
+        T data = labDao.getLastLabByUser(userId, completed);
         if (data != null) {
             updateCalculatedFields(data);
         }

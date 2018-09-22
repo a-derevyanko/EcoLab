@@ -2,6 +2,7 @@ package org.ecolab.server.service.impl.content;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.UnhandledException;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.dao.api.content.UserLabDao;
 import org.ecolab.server.model.LabMode;
 import org.ecolab.server.model.UserLabStatistics;
@@ -15,7 +16,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -42,22 +42,22 @@ public class UserLabServiceImpl implements UserLabService {
     }
 
     @Override
-    @Cacheable(value = "COMPLETED_TEST", key = "#userName")
-    public Collection<Integer> getCompletedTests(String userName) {
-        return dao.getCompletedTests(userName);
+    @Cacheable(value = "COMPLETED_TEST", key = "T(org.ecolab.server.common.CurrentUser).getId()")
+    public Collection<Integer> getCompletedTests() {
+        return dao.getCompletedTests(CurrentUser.getId());
     }
 
     @Override
-    public Map<Integer, LabMode> getCompletedLabs(String userName) {
-        return dao.getCompletedLabs(userName);
+    public Map<Integer, LabMode> getCompletedLabs() {
+        return dao.getCompletedLabs(CurrentUser.getId());
     }
 
     @Override
-    @CachePut(value = "COMPLETED_TEST", key = "#userName")
+    @CachePut(value = "COMPLETED_TEST", key = "T(org.ecolab.server.common.CurrentUser).getId()")
     @Transactional
-    public Collection<Integer> setTestCompleted(String userName, int labNumber, int mark, int pointCount) {
-        dao.setTestCompleted(userName, labNumber, mark, pointCount);
-        return dao.getCompletedTests(userName);
+    public Collection<Integer> setTestCompleted(int labNumber, int mark, int pointCount) {
+        dao.setTestCompleted(CurrentUser.getId(), labNumber, mark, pointCount);
+        return dao.getCompletedTests(CurrentUser.getId());
     }
 
     @Override
@@ -69,13 +69,13 @@ public class UserLabServiceImpl implements UserLabService {
     }
 
     @Override
-    public UserProfile getUserProfile(@NotNull String userName) {
+    public UserProfile getUserProfile(long userId) {
         UserProfile profile = new UserProfile();
-        profile.setStatistics(dao.getUserLabStatistics(userName));
-        profile.setUserInfo(userInfoService.getUserInfo(userName));
-        profile.setAllowedLabs(studentInfoService.getAllowedLabs(userName));
-        profile.setAllowedDefence(studentInfoService.getAllowedDefence(userName));
-        profile.setStudentInfo(studentInfoService.getStudentInfo(userName));
+        profile.setStatistics(dao.getUserLabStatistics(userId));
+        profile.setUserInfo(userInfoService.getUserInfo(userId));
+        profile.setAllowedLabs(studentInfoService.getAllowedLabs(userId));
+        profile.setAllowedDefence(studentInfoService.getAllowedDefence(userId));
+        profile.setStudentInfo(studentInfoService.getStudentInfo(userId));
         profile.setAverageMark(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getMark).average().orElse(0.0));
         profile.setAveragePointCount(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getPointCount).average().orElse(0.0));
 

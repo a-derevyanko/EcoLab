@@ -21,12 +21,12 @@ import org.ecolab.client.vaadin.server.ui.EcoLabNavigator;
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
 import org.ecolab.client.vaadin.server.ui.view.api.View;
 import org.ecolab.client.vaadin.server.ui.windows.AddTeacherGroupsWindow;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.model.StudentGroupInfo;
-import org.ecolab.server.model.UserProfile;
+import org.ecolab.server.model.UserInfo;
 import org.ecolab.server.service.api.StudentInfoService;
-import org.ecolab.server.service.api.content.UserLabService;
+import org.ecolab.server.service.api.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -38,11 +38,9 @@ import java.util.Set;
 public class TeacherGroupsManagingView extends GridLayout implements View {
   public static final String NAME = "teacher-account";
 
-  private final Authentication currentUser;
-
   private final AddTeacherGroupsWindow addTeacherGroupsWindow;
 
-  private final UserLabService userLabService;
+  private final UserInfoService userInfoService;
 
   private final StudentInfoService studentInfoService;
 
@@ -67,12 +65,12 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
   private final PopupView popup = new PopupView(null, labPresentationSelectContent);
 
   @Autowired
-  public TeacherGroupsManagingView(Authentication currentUser,
-                                   AddTeacherGroupsWindow addTeacherGroupsWindow, UserLabService userLabService, StudentInfoService studentInfoService, EcoLabNavigator navigator, I18N i18N) {
+  public TeacherGroupsManagingView(AddTeacherGroupsWindow addTeacherGroupsWindow,
+                                   UserInfoService userInfoService,
+                                   StudentInfoService studentInfoService, EcoLabNavigator navigator, I18N i18N) {
     super(5, 5);
-    this.currentUser = currentUser;
     this.addTeacherGroupsWindow = addTeacherGroupsWindow;
-    this.userLabService = userLabService;
+    this.userInfoService = userInfoService;
     this.studentInfoService = studentInfoService;
     this.navigator = navigator;
     this.i18N = i18N;
@@ -120,7 +118,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
     addGroupButton.setStyleName(EcoLabTheme.BUTTON_PRIMARY);
     addGroupButton.addClickListener(event -> {
       Set<StudentGroupInfo> selected = groups.getSelectedItems();
-      addTeacherGroupsWindow.show(new AddTeacherGroupsWindow.AddTeacherGroupsWindowSettings(currentUser.getName(), () -> {
+      addTeacherGroupsWindow.show(new AddTeacherGroupsWindow.AddTeacherGroupsWindowSettings(CurrentUser.getId(), () -> {
         refreshTeacherGroups(selected);
       }));
     });
@@ -131,7 +129,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
     removeGroupButton.addClickListener(event -> {
       Set<StudentGroupInfo> selected = groups.getSelectedItems();
       if (!selected.isEmpty()) {
-        selected.forEach(s -> studentInfoService.removeGroupFromTeacher(currentUser.getName(), s.getName()));
+        selected.forEach(s -> studentInfoService.removeGroupFromTeacher(CurrentUser.getId(), s.getName()));
         refreshTeacherGroups(selected);
       }
     });
@@ -179,17 +177,17 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
   @Override
   public void enter(ViewChangeListener.ViewChangeEvent event) {
     refreshTeacherGroups(Collections.emptySet());
-    UserProfile userProfile = userLabService.getUserProfile(currentUser.getName());
+    UserInfo userProfile = userInfoService.getUserInfo(CurrentUser.getId());
 
     todayDate.setValue(i18N.get("teacher-group-manage.today-date", LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
             "" /*LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm"))*/));
 
-    userInitialsLabel.setValue(i18N.get("teacher-group-manage.initials", userProfile.getUserInfo().getLastName(),
-            userProfile.getUserInfo().getFirstName(), userProfile.getUserInfo().getMiddleName()));
+    userInitialsLabel.setValue(i18N.get("teacher-group-manage.initials", userProfile.getLastName(),
+            userProfile.getFirstName(), userProfile.getMiddleName()));
   }
 
   private void refreshTeacherGroups(@NotNull Set<StudentGroupInfo> selected) {
-    groups.setItems(studentInfoService.getTeacherGroupsInfo(currentUser.getName()));
+    groups.setItems(studentInfoService.getTeacherGroupsInfo(CurrentUser.getId()));
     if (selected.isEmpty()) {
       removeGroupButton.setEnabled(false);
     } else {

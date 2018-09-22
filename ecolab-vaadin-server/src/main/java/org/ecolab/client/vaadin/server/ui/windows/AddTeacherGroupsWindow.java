@@ -100,10 +100,10 @@ public class AddTeacherGroupsWindow extends BaseEcoLabWindow<AddTeacherGroupsWin
     }
 
     public static class AddTeacherGroupsWindowSettings implements WindowSettings {
-        private final String teacher;
+        private final long teacher;
         private final Runnable onSave;
 
-        public AddTeacherGroupsWindowSettings(String teacher, Runnable onSave) {
+        public AddTeacherGroupsWindowSettings(long teacher, Runnable onSave) {
             this.teacher = teacher;
             this.onSave = onSave;
         }

@@ -32,12 +32,12 @@ import org.ecolab.client.vaadin.server.ui.view.content.lab_2.random.Lab2RandomDa
 import org.ecolab.client.vaadin.server.ui.view.content.lab_3.Lab3TestView;
 import org.ecolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
 import org.ecolab.client.vaadin.server.ui.windows.LabTypeSelectorWindow;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.model.LabMode;
 import org.ecolab.server.model.UserGroup;
 import org.ecolab.server.service.api.StudentInfoService;
 import org.ecolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 
 import java.util.Collection;
 import java.util.Map;
@@ -53,8 +53,6 @@ public class LabChooserView extends VerticalLayout implements View {
     private final EcoLabNavigator navigator;
 
     private final ResourceService resourceService;
-
-    private final Authentication currentUser;
 
     private final UserLabService userLabService;
 
@@ -89,10 +87,9 @@ public class LabChooserView extends VerticalLayout implements View {
     private final PopupView labPresentationSelectView = new PopupView(null, labPresentationSelectContent);
 
     @Autowired
-    public LabChooserView(EcoLabNavigator navigator, ResourceService resourceService, Authentication currentUser, UserLabService userLabService, StudentInfoService studentInfoService, PresentationService presentationService, I18N i18N, LabTypeSelectorWindow labTypeSelectorWindow) {
+    public LabChooserView(EcoLabNavigator navigator, ResourceService resourceService, UserLabService userLabService, StudentInfoService studentInfoService, PresentationService presentationService, I18N i18N, LabTypeSelectorWindow labTypeSelectorWindow) {
         this.navigator = navigator;
         this.resourceService = resourceService;
-        this.currentUser = currentUser;
         this.userLabService = userLabService;
         this.studentInfoService = studentInfoService;
         this.presentationService = presentationService;
@@ -194,10 +191,10 @@ public class LabChooserView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        Set<Integer> allowedLabs = studentInfoService.getAllowedLabs(currentUser.getName());
-        Set<Integer> allowedTests = studentInfoService.getAllowedDefence(currentUser.getName());
-        Map<Integer, LabMode> completedLabs = userLabService.getCompletedLabs(currentUser.getName());
-        Collection<Integer> completedTests = userLabService.getCompletedTests(currentUser.getName());
+        Set<Integer> allowedLabs = studentInfoService.getAllowedLabs(CurrentUser.getId());
+        Set<Integer> allowedTests = studentInfoService.getAllowedDefence(CurrentUser.getId());
+        Map<Integer, LabMode> completedLabs = userLabService.getCompletedLabs();
+        Collection<Integer> completedTests = userLabService.getCompletedTests();
         boolean isNotStudent = VaadinUI.getCurrent().getCurrentUserInfo().getGroup() != UserGroup.STUDENT;
         setTestButtonSate(lab1TestButton, (isNotStudent || allowedTests.contains(1)) && completedLabs.containsKey(1) && !completedTests.contains(1));
         setTestButtonSate(lab2TestButton, (isNotStudent || allowedTests.contains(2)) && completedLabs.containsKey(2) && !completedTests.contains(2));

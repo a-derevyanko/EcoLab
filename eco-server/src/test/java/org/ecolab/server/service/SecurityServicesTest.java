@@ -22,13 +22,13 @@ public class SecurityServicesTest extends AbstractTestWithUser {
 
     @Test
     public void testPersistentTokenRepository() throws Exception {
-        PersistentRememberMeToken token = new PersistentRememberMeToken(USERNAME, "series", "tokenValue", new Date());
+        PersistentRememberMeToken token = new PersistentRememberMeToken(userInfo.getLogin(), "series", "tokenValue", new Date());
         persistentTokenRepository.createNewToken(token);
 
         Assert.assertTrue(new ReflectionEquals(persistentTokenRepository.getTokenForSeries("series")).matches(token));
         persistentTokenRepository.updateToken( "series", "tokenValueModified", new Date());
         Assert.assertEquals("tokenValueModified", persistentTokenRepository.getTokenForSeries("series").getTokenValue());
-        persistentTokenRepository.removeUserTokens( USERNAME);
+        persistentTokenRepository.removeUserTokens(userInfo.getLogin());
         Assert.assertNull(persistentTokenRepository.getTokenForSeries("series"));
     }
 }
