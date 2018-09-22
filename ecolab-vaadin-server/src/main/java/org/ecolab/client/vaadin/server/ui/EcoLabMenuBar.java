@@ -13,6 +13,7 @@ import org.ecolab.client.vaadin.server.ui.view.StudentAccountManagingView;
 import org.ecolab.client.vaadin.server.ui.view.TeacherGroupsManagingView;
 import org.ecolab.client.vaadin.server.ui.windows.SimpleEditUserWindow;
 import org.ecolab.client.vaadin.server.ui.windows.UserDataWindowSettings;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.common.Role;
 import org.ecolab.server.common.UserInfoUtils;
 import org.ecolab.server.model.UserInfo;
@@ -87,7 +88,7 @@ public class EcoLabMenuBar extends MenuBar implements ViewChangeListener {
         if (vaadinSecurity.isAuthenticated()) {
             if (VaadinUI.getCurrent().getCurrentUserInfo() == null) {
                 Authentication authentication = vaadinSecurity.getAuthentication();
-                getUI().setCurrentUserInfo(userDetailsManager.getUserInfo(authentication.getName()));
+                getUI().setCurrentUserInfo(userDetailsManager.getUserInfo(CurrentUser.getId()));
                 updateUserInfoItem();
 
                 Set<String> roles = UserInfoUtils.getRoles(authentication);

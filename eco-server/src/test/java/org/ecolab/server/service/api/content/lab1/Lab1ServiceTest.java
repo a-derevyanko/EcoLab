@@ -29,17 +29,17 @@ public abstract class Lab1ServiceTest<V extends Lab1Variant> extends AbstractTes
 
     @BeforeClass
     public void generateLab() {
-        createdLab = lab1Service.startNewLab(USERNAME);
+        createdLab = lab1Service.startNewLab(userInfo.getId());
     }
 
     @AfterClass
     public void removeLab() {
-        lab1Service.removeLabsByUser(USERNAME);
+        lab1Service.removeLabsByUser(userInfo.getId());
     }
 
     @Test
     public void testGetLabByUser() throws Exception {
-        Lab1Data lab1Data = lab1Service.getLastUncompletedLabByUser(USERNAME);
+        Lab1Data lab1Data = lab1Service.getLastUncompletedLabByUser(userInfo.getId());
         Assert.assertTrue(new ReflectionEquals(lab1Data).matches(createdLab));
     }
 
@@ -54,7 +54,7 @@ public abstract class Lab1ServiceTest<V extends Lab1Variant> extends AbstractTes
         Thread.sleep(1000L);
         int count = RandomUtils.nextInt(15);
         for (int i = 0; i < count; i++) {
-            lab1Service.startNewLab(USERNAME);
+            lab1Service.startNewLab(userInfo.getId());
         }
         Assert.assertEquals(lab1Service.removeOldLabs(startDate), count);
     }

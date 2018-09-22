@@ -30,6 +30,7 @@ import org.ecolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotific
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
 import org.ecolab.client.vaadin.server.ui.view.api.View;
 import org.ecolab.client.vaadin.server.ui.windows.LabTestFinishedWindow;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.common.Role;
 import org.ecolab.server.model.content.LabTest;
 import org.ecolab.server.model.content.LabTestHomeWorkQuestion;
@@ -60,8 +61,6 @@ import java.util.Map;
 @RolesAllowed({Role.ADMIN, Role.TEACHER, Role.STUDENT})
 @PrototypeScope // При повторном входе тест должен быть другим
 public abstract class LabTestWizard extends Wizard implements View {
-    private final Authentication currentUser;
-
     private final LabTestFinishedWindow labTestFinishedWindow;
 
     protected final UserLabService userLabService;
@@ -69,11 +68,10 @@ public abstract class LabTestWizard extends Wizard implements View {
 
     // ---------------------------- Графические компоненты --------------------
 
-    protected LabTestWizard(I18N i18N, UserLabService userLabService, LabService<?, ?> labService, Authentication currentUser, LabTestFinishedWindow labTestFinishedWindow) {
+    protected LabTestWizard(I18N i18N, UserLabService userLabService, LabService<?, ?> labService, LabTestFinishedWindow labTestFinishedWindow) {
         super(i18N);
         this.userLabService = userLabService;
         this.labService = labService;
-        this.currentUser = currentUser;
         this.labTestFinishedWindow = labTestFinishedWindow;
     }
 
@@ -114,7 +112,8 @@ public abstract class LabTestWizard extends Wizard implements View {
             }
         }
 
-        LabTestResult result = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers, UI.getCurrent().getLocale());
+        LabTestResult result = labService.checkLabTest(labService.getCompletedLabByUser(CurrentUser.getId()),
+                answers, UI.getCurrent().getLocale());
 
         if (result.getCompleted()) {
             userLabService.setTestCompleted(labService.getLabNumber(), result.getMark(), result.getPointCount());

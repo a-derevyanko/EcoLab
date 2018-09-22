@@ -22,24 +22,25 @@ import org.testng.annotations.BeforeClass;
 @Transactional
 @Rollback
 public abstract class AbstractTestWithUser extends AbstractTestNGSpringContextTests {
-    protected final String USERNAME = "testUser_" + RandomStringUtils.randomAlphabetic(5);
+    protected UserInfo userInfo;
 
     @Autowired
     protected UserInfoService userInfoService;
 
     @BeforeClass
     public void generateInitialData() {
+        String username = "testUser_" + RandomStringUtils.randomAlphabetic(5);
         UserInfo userDetails = new UserInfo();
-        userDetails.setLogin(USERNAME);
-        userDetails.setFirstName(USERNAME);
-        userDetails.setLastName(USERNAME);
-        userDetails.setMiddleName(USERNAME);
+        userDetails.setLogin(username);
+        userDetails.setFirstName(username);
+        userDetails.setLastName(username);
+        userDetails.setMiddleName(username);
         userDetails.setGroup(UserGroup.ADMIN);
-        userInfoService.createUserInfo(userDetails);
+        userInfo = userInfoService.createUserInfo(userDetails);
     }
 
     @AfterClass
     public void removeUser() {
-        userInfoService.deleteUser(USERNAME);
+        userInfoService.deleteUser(userInfo.getLogin());
     }
 }

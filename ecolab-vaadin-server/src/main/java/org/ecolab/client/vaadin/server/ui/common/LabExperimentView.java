@@ -18,7 +18,7 @@ import org.ecolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ecolab.server.model.content.LabData;
 import org.ecolab.server.model.content.LabVariant;
 import org.ecolab.server.service.api.content.LabExperimentService;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Value;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 
 import java.util.List;
@@ -31,8 +31,12 @@ public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S ext
 
     private boolean hasVariantChanges;
 
-    public LabExperimentView(I18N i18N, Authentication currentUser, InitialDataWindow<T, V> initialDataWindow, S labService, Binder<T> binder, LabFinishedWindow<T, V> labFinishedWindow, List<LabWizardStep<T, V>> labSteps, ConfirmWindow confirmWindow, VaadinUI ui, Binder<V> variantBinder) {
-        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui);
+    public LabExperimentView(I18N i18N, InitialDataWindow<T, V> initialDataWindow,
+                             S labService, Binder<T> binder, LabFinishedWindow<T, V> labFinishedWindow,
+                             List<LabWizardStep<T, V>> labSteps, ConfirmWindow confirmWindow,
+                             VaadinUI ui, Binder<V> variantBinder,
+                             @Value("${ecolab.lab.autoSaveRate:#{60000}}") long autoSaveRate) {
+        super(i18N, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui, autoSaveRate);
         this.variantBinder = variantBinder;
     }
 

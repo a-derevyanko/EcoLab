@@ -26,17 +26,17 @@ public class Lab3ServiceTest extends AbstractTestWithUser {
 
     @BeforeClass
     public void generateLab() {
-        createdLab = lab3Service.startNewLab(USERNAME);
+        createdLab = lab3Service.startNewLab(userInfo.getId());
     }
 
     @AfterClass
     public void removeLab() {
-        lab3Service.removeLabsByUser(USERNAME);
+        lab3Service.removeLabsByUser(userInfo.getId());
     }
 
     @Test
     public void testGetLabByUser() throws Exception {
-        Lab3Data lab3Data = lab3Service.getLastUncompletedLabByUser(USERNAME);
+        Lab3Data lab3Data = lab3Service.getLastUncompletedLabByUser(userInfo.getId());
         Assert.assertTrue(new ReflectionEquals(lab3Data).matches(createdLab));
     }
 
@@ -51,7 +51,7 @@ public class Lab3ServiceTest extends AbstractTestWithUser {
         Thread.sleep(1000L);
         int count = RandomUtils.nextInt(15);
         for (int i = 0; i < count; i++) {
-            lab3Service.startNewLab(USERNAME);
+            lab3Service.startNewLab(userInfo.getId());
         }
         Assert.assertEquals(lab3Service.removeOldLabs(startDate), count);
     }

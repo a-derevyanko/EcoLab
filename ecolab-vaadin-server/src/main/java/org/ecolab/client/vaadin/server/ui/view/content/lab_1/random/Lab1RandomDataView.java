@@ -12,7 +12,7 @@ import org.ecolab.client.vaadin.server.ui.windows.LabFinishedWindow;
 import org.ecolab.server.model.content.lab1.Lab1Data;
 import org.ecolab.server.model.content.lab1.random.Lab1RandomVariant;
 import org.ecolab.server.service.api.content.lab1.random.Lab1RandomService;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import java.util.List;
 public class Lab1RandomDataView extends LabWizard<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant, Lab1RandomService> {
     public static final String NAME = "lab1randomdata";
 
-    public Lab1RandomDataView(I18N i18N, Authentication currentUser,
+    public Lab1RandomDataView(I18N i18N,
                               InitialDataWindow<Lab1Data<Lab1RandomVariant>,
                                                                     Lab1RandomVariant> initialDataWindow,
                               Lab1RandomService labService,
@@ -32,8 +32,9 @@ public class Lab1RandomDataView extends LabWizard<Lab1Data<Lab1RandomVariant>, L
                                       Lab1RandomVariant> labFinishedWindow,
                               List<LabWizardStep<Lab1Data<Lab1RandomVariant>, Lab1RandomVariant>> labSteps,
                               ConfirmWindow confirmWindow,
-                              VaadinUI ui) {
-        super(i18N, currentUser, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui);
+                              VaadinUI ui,
+                              @Value("${ecolab.lab.autoSaveRate:#{60000}}") long autoSaveRate) {
+        super(i18N, initialDataWindow, labService, binder, labFinishedWindow, labSteps, confirmWindow, ui, autoSaveRate);
     }
 
 

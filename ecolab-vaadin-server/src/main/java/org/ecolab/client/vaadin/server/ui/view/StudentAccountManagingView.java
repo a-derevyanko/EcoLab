@@ -18,13 +18,13 @@ import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.common.DownloadStreamResource;
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
 import org.ecolab.client.vaadin.server.ui.view.api.View;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.model.UserLabStatistics;
 import org.ecolab.server.model.UserProfile;
 import org.ecolab.server.model.content.LabData;
 import org.ecolab.server.service.api.content.LabService;
 import org.ecolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -32,8 +32,6 @@ import java.util.List;
 @SpringView(name = StudentAccountManagingView.NAME)
 public class StudentAccountManagingView extends GridLayout implements View {
     public static final String NAME = "student-account";
-
-    private final Authentication currentUser;
 
     private final UserLabService userLabService;
 
@@ -49,10 +47,8 @@ public class StudentAccountManagingView extends GridLayout implements View {
     private final Grid<UserLabStatistics> labStatisticsGrid = new Grid<>();
 
     @Autowired
-    public StudentAccountManagingView(Authentication currentUser,
-                                      UserLabService userLabService, I18N i18N, List<LabService<?, ?>> labServices) {
+    public StudentAccountManagingView(UserLabService userLabService, I18N i18N, List<LabService<?, ?>> labServices) {
         super(4, 5);
-        this.currentUser = currentUser;
         this.userLabService = userLabService;
         this.i18N = i18N;
         this.labServices = labServices;
@@ -88,7 +84,7 @@ public class StudentAccountManagingView extends GridLayout implements View {
                         findFirst().orElseThrow(IllegalStateException::new);
 
                 @SuppressWarnings("unchecked")
-                final LabData<?> data = labService.getCompletedLabByUser(currentUser.getName());
+                final LabData<?> data = labService.getCompletedLabByUser(CurrentUser.getId());
 
                 if (data != null) {
                     Button button = new Button(VaadinIcons.DOWNLOAD);
@@ -112,7 +108,7 @@ public class StudentAccountManagingView extends GridLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        UserProfile userProfile = userLabService.getUserProfile(currentUser.getName());
+        UserProfile userProfile = userLabService.getUserProfile(CurrentUser.getId());
 
         userInitialsLabel.setValue(userProfile.getUserInfo().getLastName() + ' ' + userProfile.getUserInfo().getFirstName()
                 + '\n' + userProfile.getUserInfo().getMiddleName());

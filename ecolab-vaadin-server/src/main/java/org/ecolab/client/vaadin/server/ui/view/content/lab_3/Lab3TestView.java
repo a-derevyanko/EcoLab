@@ -7,7 +7,6 @@ import org.ecolab.client.vaadin.server.ui.windows.LabTestFinishedWindow;
 import org.ecolab.server.common.Role;
 import org.ecolab.server.service.api.content.LabService;
 import org.ecolab.server.service.api.content.UserLabService;
-import org.springframework.security.core.Authentication;
 import org.vaadin.spring.annotation.PrototypeScope;
 
 import javax.annotation.security.RolesAllowed;
@@ -21,8 +20,8 @@ import javax.annotation.security.RolesAllowed;
 public class Lab3TestView extends LabTestWizard {
     public static final String NAME = "lab3test";
 
-    protected Lab3TestView(I18N i18N, UserLabService userLabService, LabService<?, ?> labService, Authentication currentUser, LabTestFinishedWindow labTestFinishedWindow) {
-        super(i18N, userLabService, labService, currentUser, labTestFinishedWindow);
+    protected Lab3TestView(I18N i18N, UserLabService userLabService, LabService<?, ?> labService, LabTestFinishedWindow labTestFinishedWindow) {
+        super(i18N, userLabService, labService, labTestFinishedWindow);
     }
     // ---------------------------- Графические компоненты --------------------
 

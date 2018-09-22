@@ -32,7 +32,7 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
         super.generateInitialData();
         testGroup = studentInfoService.createStudentGroup(GROUPNAME);
         testTeam = studentInfoService.createStudentTeam(TEAMNUMBER, GROUPNAME);
-        studentInfoService.createStudentInfo(userInfoService.getUserInfo(USERNAME), testGroup, testTeam);
+        studentInfoService.createStudentInfo(userInfoService.getUserInfo(userInfo.getId()), testGroup, testTeam);
     }
 
     @AfterClass
@@ -45,7 +45,7 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
 
     @Test
     public void testGetStudentInfo() {
-        StudentInfo studentInfo = studentInfoService.getStudentInfo(USERNAME);
+        StudentInfo studentInfo = studentInfoService.getStudentInfo(userInfo.getId());
         Assert.assertEquals(studentInfo.getGroup(), testGroup);
         Assert.assertEquals(studentInfo.getTeam(), testTeam);
     }
@@ -55,8 +55,8 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
         String newGroupName = GROUPNAME + RandomStringUtils.randomAlphabetic(5);
         testGroup.setName(newGroupName);
         studentInfoService.updateStudentGroup(testGroup);
-        studentInfoService.updateStudentInfo(userInfoService.getUserInfo(USERNAME), testGroup, testTeam);
-        StudentInfo studentInfo = studentInfoService.getStudentInfo(USERNAME);
+        studentInfoService.updateStudentInfo(userInfoService.getUserInfo(userInfo.getId()), testGroup, testTeam);
+        StudentInfo studentInfo = studentInfoService.getStudentInfo(userInfo.getId());
         Assert.assertEquals(studentInfo.getGroup(), testGroup);
         Assert.assertEquals(studentInfo.getTeam().getName(), TEAMNUMBER);
     }
