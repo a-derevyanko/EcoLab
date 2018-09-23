@@ -36,7 +36,7 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
     }
 
     @Override
-    public Collection<LabTestQuestion> getTestQuestions(Locale locale) {
+    public Collection<LabTestQuestion> getTestQuestions() {
         Map<Integer, LabTestQuestion> questions = new TreeMap<>();
         Result<Record> variantRecords =  dsl.selectFrom(LAB_TEST_QUESTION.join(LAB_TEST_QUESTION_VARIANT).
                 on(LAB_TEST_QUESTION.ID.eq(LAB_TEST_QUESTION_VARIANT.QUESTION_ID))).

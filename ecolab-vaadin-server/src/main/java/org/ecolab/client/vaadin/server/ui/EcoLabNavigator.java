@@ -9,7 +9,6 @@ import org.ecolab.client.vaadin.server.ui.view.AdminManagingView;
 import org.ecolab.client.vaadin.server.ui.view.LabChooserView;
 import org.ecolab.client.vaadin.server.ui.view.LoginView;
 import org.ecolab.client.vaadin.server.ui.view.TeacherGroupsManagingView;
-import org.ecolab.client.vaadin.server.ui.view.api.SavableView;
 import org.ecolab.client.vaadin.server.ui.windows.ConfirmWindow;
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.common.Role;
@@ -71,11 +70,6 @@ public class EcoLabNavigator extends SpringNavigator {
 
     public void redirectToView(String viewName) {
         new ArrayList<>(UI.getCurrent().getWindows()).forEach(UI.getCurrent()::removeWindow);
-        if (getCurrentView() instanceof SavableView && ((SavableView) getCurrentView()).hasUnsavedData()) {
-            confirmWindow.show(new ConfirmWindow.ConfirmWindowSettings("savable.unsaved-data-missing",
-            () -> EcoLabNavigator.super.navigateTo(viewName)));
-        } else {
-            super.navigateTo(viewName);
-        }
+        super.navigateTo(viewName);
     }
 }

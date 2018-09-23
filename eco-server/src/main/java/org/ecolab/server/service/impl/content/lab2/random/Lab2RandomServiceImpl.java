@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -34,8 +33,8 @@ public class Lab2RandomServiceImpl extends Lab2ServiceImpl<Lab2RandomVariant, La
 
 
     @Override
-    protected Map<String, Object> getInitialDataWithLocalizedValues(Lab2RandomVariant data, Locale locale) {
-        Map<String, Object> map = super.getInitialDataWithLocalizedValues(data, locale);
+    protected Map<String, Object> getInitialDataWithLocalizedValues(Lab2RandomVariant data) {
+        Map<String, Object> map = super.getInitialDataWithLocalizedValues(data);
         map.remove("city");
 
         return map;

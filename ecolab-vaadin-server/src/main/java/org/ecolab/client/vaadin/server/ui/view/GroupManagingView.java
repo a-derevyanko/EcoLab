@@ -16,7 +16,6 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.HeaderRow;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
@@ -202,7 +201,7 @@ public class GroupManagingView extends HorizontalLayout implements View {
                         userProfiles = ((ListDataProvider<UserProfile>) groupMembers.getDataProvider()).getItems();
                     }
 
-                    return userInfoService.printUsersData(userProfiles.stream().map(UserProfile::getUserInfo), UI.getCurrent().getLocale());
+                    return userInfoService.printUsersData(userProfiles.stream().map(UserProfile::getUserInfo));
                 },
                 "users.pdf"
         )).extend(printUserLogins);

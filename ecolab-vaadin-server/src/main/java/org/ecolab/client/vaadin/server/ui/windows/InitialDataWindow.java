@@ -12,7 +12,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import org.apache.commons.io.FilenameUtils;
@@ -94,7 +93,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
         additionalFields.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
         new BrowserWindowOpener(new DownloadStreamResource(
-                () -> settings.labService.printInitialData(settings.variant, UI.getCurrent().getLocale()),
+                () -> settings.labService.printInitialData(settings.variant),
                 "initialData.pdf")).extend(printDataButton);
         center();
     }
@@ -108,7 +107,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
 
         List<Component> additionalComponents = new ArrayList<>();
 
-        for (DataValue dataValue : settings.labService.getInitialDataValues(settings.variant, UI.getCurrent().getLocale())) {
+        for (DataValue dataValue : settings.labService.getInitialDataValues(settings.variant)) {
             // Т. к. Grid до сих пор не поддерживает ячейки из нескольких строк, заменяем на пробелы все переходы на новую строку
             dataValue.setName(dataValue.getName().replaceAll("<br>", " "));
             if (dataValue.getValue() instanceof URL) {

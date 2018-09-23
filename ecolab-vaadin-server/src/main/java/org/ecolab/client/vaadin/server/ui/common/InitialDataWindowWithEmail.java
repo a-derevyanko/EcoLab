@@ -55,7 +55,7 @@ public class InitialDataWindowWithEmail<T extends LabData<V>, V extends LabVaria
         sendDataButton.setEnabled(false);
         sendDataButton.addClickListener(event -> {
             try {
-                labMailService.sentInitialDataToEmail(settings.getLabService().printInitialData(settings.getVariant(), getLocale()), UI.getCurrent().getLocale(), emailField.getValue());
+                labMailService.sentInitialDataToEmail(settings.getLabService().printInitialData(settings.getVariant()), emailField.getValue());
                 Notification.show(i18N.get("labwizard.initial-data-email-success", emailField.getValue()), Notification.Type.HUMANIZED_MESSAGE);
             } catch (MailSendException e) {
                 Notification.show(i18N.get("labwizard.initial-data-email-error", emailField.getValue()), Notification.Type.ERROR_MESSAGE);

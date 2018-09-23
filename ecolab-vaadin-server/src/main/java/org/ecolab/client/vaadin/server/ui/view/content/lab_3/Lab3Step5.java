@@ -9,7 +9,6 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.ItemCaptionGenerator;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.common.LabWizardStep;
 import org.ecolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
@@ -78,7 +77,7 @@ public class Lab3Step5 extends GridLayout implements LabWizardStep<Lab3Data, Lab
 
             if (event.getValue() != null) {
                 try {
-                    chart = new JFreeChartWrapper(lab3Service.createChart(dataBinder.getBean(), UI.getCurrent().getLocale(), event.getValue()));
+                    chart = new JFreeChartWrapper(lab3Service.createChart(dataBinder.getBean(), event.getValue()));
                     chart.setSizeFull();
                     addComponent(chart, 0, 0, 19, 19);
                 } catch (Exception ex) {

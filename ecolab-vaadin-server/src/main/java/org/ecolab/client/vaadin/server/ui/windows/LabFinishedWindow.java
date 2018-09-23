@@ -6,7 +6,6 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.EcoLabNavigator;
@@ -73,7 +72,7 @@ public class LabFinishedWindow<T extends LabData<V>, V extends LabVariant> exten
         toMainMenuButton.addStyleName(EcoLabTheme.BUTTON_TINY);
 
         FileDownloader fileDownloader = new FileDownloader(
-                new DownloadStreamResource(() -> settings.labService.createReport(settings.labData, UI.getCurrent().getLocale()), "report.pdf"));
+                new DownloadStreamResource(() -> settings.labService.createReport(settings.labData), "report.pdf"));
         fileDownloader.extend(saveReportButton);
 
         toMainMenuButton.addClickListener(event -> close());

@@ -3,6 +3,7 @@ package org.ecolab.client.vaadin.server.ui.common;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.navigator.ViewBeforeLeaveEvent;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Alignment;
@@ -136,7 +137,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
             changesObserver.onNext(1);
         });
 
-        subscription = changesObserver.buffer(5, autoSaveRate, TimeUnit.MILLISECONDS).subscribe(s -> {
+        subscription = changesObserver.buffer(autoSaveRate, TimeUnit.MILLISECONDS, 5).subscribe(s -> {
             if (!s.isEmpty()) {
                 saveData(false);
             }
@@ -155,27 +156,33 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     @Override
     public boolean saveData(boolean showErrors) {
-        if (hasUnsavedData()) {
-            BinderValidationStatus<T> validationStatus = binder.validate();
-            if (validationStatus.isOk()) {
-                ui.access(() -> {
-                    binder.readBean(labService.updateLab(binder.getBean()));
-                    hasChanges = binder.hasChanges();
-                    saveButton.setVisible(false);
-                });
-            } else {
-                if (showErrors && Page.getCurrent() != null) {
-                    ComponentErrorNotification.show(i18N.get("savable.save-exception-caption"), i18N.get("savable.save-exception"));
-                }
-                return false;
+        BinderValidationStatus<T> validationStatus = binder.validate();
+        if (validationStatus.isOk()) {
+            ui.access(() -> {
+                binder.readBean(labService.updateLab(binder.getBean()));
+                saveButton.setVisible(false);
+            });
+        } else {
+            if (showErrors && Page.getCurrent() != null) {
+                ComponentErrorNotification.show(i18N.get("savable.save-exception-caption"), i18N.get("savable.save-exception"));
             }
+            return false;
         }
         return true;
     }
 
     @Override
-    public boolean hasUnsavedData() {
-        return saveButton.isVisible() || currentStep instanceof LabExperimentJournalStep;
+    public void beforeLeave(ViewBeforeLeaveEvent event) {
+        if (saveButton.isVisible()) {
+            confirmWindow.show(new ConfirmWindow.ConfirmWindowSettings("savable.unsaved-data-missing",
+                    () -> {
+                        saveData(false);
+                        event.navigate();
+                    }
+            ));
+        } else {
+            event.navigate();
+        }
     }
 
     @Override

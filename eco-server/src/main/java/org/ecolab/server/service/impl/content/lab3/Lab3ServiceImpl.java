@@ -4,6 +4,7 @@ import com.twelvemonkeys.image.ImageUtil;
 import net.sf.dynamicreports.report.constant.PageType;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.math3.util.Precision;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.common.I18NUtils;
 import org.ecolab.server.common.MathUtils;
 import org.ecolab.server.dao.api.content.lab3.Lab3Dao;
@@ -88,23 +89,23 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
     }
 
     @Override
-    public Set<DataValue> getInitialDataValues(Lab3Variant data, Locale locale) {
-        Set<DataValue> values = super.getInitialDataValues(data, locale);
+    public Set<DataValue> getInitialDataValues(Lab3Variant data) {
+        Set<DataValue> values = super.getInitialDataValues(data);
         DataValue cityValue = new DataValue();
-        cityValue.setName(messageSource.getMessage("lab3.initial-data.city", null, locale) + ": " + getFieldValueForPrint(data.getCity(), locale));
+        cityValue.setName(messageSource.getMessage("lab3.initial-data.city", null, CurrentUser.getLocale()) + ": " + getFieldValueForPrint(data.getCity()));
         cityValue.setValue(lab3ResourceService.getCoatOfArms(data.getCity().name()));
         values.add(cityValue);
 
         DataValue desulphurizationUnitType = new DataValue();
-        desulphurizationUnitType.setName(messageSource.getMessage("desulphurizationUnitType", null, locale));
-        desulphurizationUnitType.setValue(messageSource.getMessage("desulphurizationUnitType-none", null, locale));
+        desulphurizationUnitType.setName(messageSource.getMessage("desulphurizationUnitType", null, CurrentUser.getLocale()));
+        desulphurizationUnitType.setValue(messageSource.getMessage("desulphurizationUnitType-none", null, CurrentUser.getLocale()));
         values.add(desulphurizationUnitType);
         return values;
     }
 
     @Override
-    protected Map<String, Object> getInitialDataWithLocalizedValues(Lab3Variant data, Locale locale) {
-        Map<String, Object> map = super.getInitialDataWithLocalizedValues(data, locale);
+    protected Map<String, Object> getInitialDataWithLocalizedValues(Lab3Variant data) {
+        Map<String, Object> map = super.getInitialDataWithLocalizedValues(data);
         map.put("windDirection", lab3ResourceService.getWindRose(data.getCity()));
         map.remove("city");
 
@@ -112,16 +113,16 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
     }
 
     @Override
-    protected Map<String, Object> getValuesForReport(Lab3Data labData, Locale locale) {
-        Map<String, Object> values = new HashMap<>(super.getValuesForReport(labData, locale));
+    protected Map<String, Object> getValuesForReport(Lab3Data labData) {
+        Map<String, Object> values = new HashMap<>(super.getValuesForReport(labData));
 
-        Image isoLineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ISOLINE).
+        Image isoLineImage = ImageUtil.createRotated(createChart(labData, Lab3ChartType.ISOLINE).
                 createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CCW);
 
-        Image so2LineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.SO2).
+        Image so2LineImage = ImageUtil.createRotated(createChart(labData, Lab3ChartType.SO2).
                 createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CCW);
 
-        Image ashLineImage = ImageUtil.createRotated(createChart(labData, locale, Lab3ChartType.ASH).
+        Image ashLineImage = ImageUtil.createRotated(createChart(labData, Lab3ChartType.ASH).
                 createBufferedImage(PageType.A4.getHeight(), 480), ImageUtil.ROTATE_90_CCW);
         values.put("mapImageIsoline", isoLineImage);
         values.put("mapImageSo2", so2LineImage);
@@ -333,7 +334,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
     }
 
     @Override
-    public JFreeChart createChart(Lab3Data labData, Locale locale, Lab3ChartType chartType) {
+    public JFreeChart createChart(Lab3Data labData, Lab3ChartType chartType) {
         Double bwdMaxGroundLevelConcentrationDistance = labData.getBwdMaxGroundLevelConcentrationDistance();
         Double harmfulSubstancesDepositionCoefficient = labData.getHarmfulSubstancesDepositionCoefficient();
         Double windSpeed = labData.getWindSpeed();
@@ -347,17 +348,17 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                 groundLevelConcentration = labData.getBwdNoxGroundLevelConcentration();
                 backgroundConcentration = labData.getNo2BackgroundConcentration();
                 mac = labData.getNo2MAC();
-                chartTitle = messageSource.getMessage("lab3.isoline-chart-title-nox", null, locale);
+                chartTitle = messageSource.getMessage("lab3.isoline-chart-title-nox", null, CurrentUser.getLocale());
             } else if (chartType == Lab3ChartType.SO2) {
                 groundLevelConcentration = labData.getBwdSo2GroundLevelConcentration();
                 backgroundConcentration = labData.getSo2BackgroundConcentration();
                 mac = labData.getSo2MAC();
-                chartTitle = messageSource.getMessage("lab3.isoline-chart-title-so2", null, locale);
+                chartTitle = messageSource.getMessage("lab3.isoline-chart-title-so2", null, CurrentUser.getLocale());
             } else if (chartType == Lab3ChartType.ASH) {
                 groundLevelConcentration = labData.getBwdAshGroundLevelConcentration();
                 backgroundConcentration = labData.getAshBackgroundConcentration();
                 mac = labData.getAshMAC();
-                chartTitle = messageSource.getMessage("lab3.isoline-chart-title-ash", null, locale);
+                chartTitle = messageSource.getMessage("lab3.isoline-chart-title-ash", null, CurrentUser.getLocale());
             } else {
                 throw new IllegalArgumentException("Unknown chart type");
             }
@@ -365,16 +366,16 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
             // Размеры графиков золы и серы зависят от размера графика NOx
             JFreeChart noxDataChart = createSplineChart(labData, chartTitle, createDataset(bwdMaxGroundLevelConcentrationDistance,
                     harmfulSubstancesDepositionCoefficient, labData.getBwdNoxGroundLevelConcentration(),
-                    labData.getNo2BackgroundConcentration(), windSpeed, labData.getNo2MAC(), Integer.MAX_VALUE, locale),
-                    bwdMaxGroundLevelConcentrationDistance, groundLevelConcentration, Integer.MAX_VALUE, locale);
+                    labData.getNo2BackgroundConcentration(), windSpeed, labData.getNo2MAC(), Integer.MAX_VALUE),
+                    bwdMaxGroundLevelConcentrationDistance, groundLevelConcentration, Integer.MAX_VALUE);
             if (chartType == Lab3ChartType.ISOLINE) {
                 return noxDataChart;
             } else {
                 int rightBorder = (int) ((XYPlot) noxDataChart.getPlot()).getDomainAxis().getRange().getUpperBound();
                 return createSplineChart(labData, chartTitle, createDataset(bwdMaxGroundLevelConcentrationDistance,
                         harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
-                        backgroundConcentration, windSpeed, mac, rightBorder, locale),
-                        bwdMaxGroundLevelConcentrationDistance, groundLevelConcentration, rightBorder, locale);
+                        backgroundConcentration, windSpeed, mac, rightBorder),
+                        bwdMaxGroundLevelConcentrationDistance, groundLevelConcentration, rightBorder);
             }
         }
         throw new IllegalArgumentException("Invalid data");
@@ -447,7 +448,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     private XYSeriesCollection createDataset(double bwdMaxGroundLevelConcentrationDistance,
                                              double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration,
-                                             double backgroundConcentration, double windSpeed, double mac, int maxX,  Locale locale) {
+                                             double backgroundConcentration, double windSpeed, double mac, int maxX) {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
         int Xm = Math.toIntExact(Math.round(bwdMaxGroundLevelConcentrationDistance));
@@ -467,16 +468,16 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
         // Найдём максимальный X, для которого будем производить расчёт
         maxX = findMaxXWithBorder(dataset);
 
-        String backgroundName = messageSource.getMessage("lab3.isoline-background-name", new Object[]{backgroundConcentration}, locale);
+        String backgroundName = messageSource.getMessage("lab3.isoline-background-name", new Object[]{backgroundConcentration}, CurrentUser.getLocale());
         XYSeries borderSeries = new XYSeries(backgroundName, false);
-        borderSeries.setDescription(messageSource.getMessage("lab3.isoline-background-name-description", null, locale));
+        borderSeries.setDescription(messageSource.getMessage("lab3.isoline-background-name-description", null, CurrentUser.getLocale()));
         dataset.addSeries(borderSeries);
         double borderCyCoefficient = backgroundConcentration / groundLevelConcentration;
         fillIsoLineSeries(borderSeries, borderCyCoefficient, Xm, bwdMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
                 windSpeed, maxX);
 
         if (groundLevelConcentration > mac) {
-            XYSeries macSeries = new XYSeries(messageSource.getMessage("lab3.isoline-mac-name", new Object[]{mac}, locale), false);
+            XYSeries macSeries = new XYSeries(messageSource.getMessage("lab3.isoline-mac-name", new Object[]{mac}, CurrentUser.getLocale()), false);
             macSeries.setDescription("MAC");
             dataset.addSeries(macSeries);
             double macCyCoefficient = mac / groundLevelConcentration;
@@ -575,10 +576,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                                          XYSeriesCollection dataSet,
                                          double Xm,
                                          double Cm,
-                                         int rightBorder,
-                                         Locale locale) {
-        NumberAxis xAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-x-axis", null, locale));
-        NumberAxis yAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-y-axis", null, locale));
+                                         int rightBorder) {
+        NumberAxis xAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-x-axis", null, CurrentUser.getLocale()));
+        NumberAxis yAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-y-axis", null, CurrentUser.getLocale()));
         XYItemRenderer renderer = new XYLineAndShapeRenderer(true, false);
         XYPlot plot = new XYPlot(dataSet, xAxis, yAxis, renderer);
 
@@ -623,11 +623,11 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
         TextTitle textTitle = new TextTitle(messageSource.getMessage("lab3.isoline-text-legend",
                 new Object[]{
-                        messageSource.getMessage(I18NUtils.getEnumName(labData.getCity()), null, locale),
+                        messageSource.getMessage(I18NUtils.getEnumName(labData.getCity()), null, CurrentUser.getLocale()),
                         labData.getTppOutput(),
-                        messageSource.getMessage(I18NUtils.getEnumName(labData.getVariant().getFuelType()), null, locale),
+                        messageSource.getMessage(I18NUtils.getEnumName(labData.getVariant().getFuelType()), null, CurrentUser.getLocale()),
                         Precision.round(Cm, 1),
-                        Precision.round(Xm, 1)}, locale), new Font(Font.SANS_SERIF, Font.BOLD, 12));
+                        Precision.round(Xm, 1)}, CurrentUser.getLocale()), new Font(Font.SANS_SERIF, Font.BOLD, 12));
         textTitle.setTextAlignment(HorizontalAlignment.LEFT);
 
         BlockContainer blockContainer = new BlockContainer();

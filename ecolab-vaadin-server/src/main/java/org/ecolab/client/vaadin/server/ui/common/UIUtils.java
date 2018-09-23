@@ -8,10 +8,10 @@ import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
 import com.vaadin.util.ReflectTools;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.model.DomainModel;
 import org.ecolab.server.model.content.FieldValidationResult;
 import org.ecolab.server.service.api.content.ValidationService;
@@ -31,7 +31,7 @@ public abstract class UIUtils {
 
         public StringToDoubleConverterWithMaximumFractionDigits(I18N i18N) {
             super(i18N.get("validator.must-be-double",
-                    DecimalFormatSymbols.getInstance(UI.getCurrent().getLocale()).getDecimalSeparator()));
+                    DecimalFormatSymbols.getInstance(CurrentUser.getLocale()).getDecimalSeparator()));
         }
 
         @Override

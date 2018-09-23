@@ -36,7 +36,6 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     @Cacheable(cacheNames = STUDENT_INFO_CACHE, key = "#userId")
     @Nullable
     public StudentInfo getStudentInfo(long userId) {

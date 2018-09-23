@@ -6,6 +6,7 @@ import org.ecolab.client.vaadin.server.ui.common.LabTestWizard;
 import org.ecolab.client.vaadin.server.ui.windows.LabTestFinishedWindow;
 import org.ecolab.server.common.Role;
 import org.ecolab.server.service.api.content.UserLabService;
+import org.ecolab.server.service.api.content.lab3.Lab3Service;
 import org.vaadin.spring.annotation.PrototypeScope;
 
 import javax.annotation.security.RolesAllowed;

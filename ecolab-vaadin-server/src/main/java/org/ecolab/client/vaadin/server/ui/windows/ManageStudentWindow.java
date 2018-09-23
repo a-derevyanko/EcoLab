@@ -6,7 +6,6 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.UI;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.common.DownloadStreamResource;
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
@@ -72,7 +71,7 @@ public class ManageStudentWindow extends EditUserWindow<ManageStudentWindow.Edit
 
                         LabData<LabVariant> data = service.getCompletedLabByUser(CurrentUser.getId());
 
-                        return service.createReport(data, UI.getCurrent().getLocale());
+                        return service.createReport(data);
                     },
                     String.format("report-lab-%s.pdf", labNumber)
             )).extend(downloadItem);

@@ -5,7 +5,6 @@ import org.ecolab.server.model.content.LabTestQuestion;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Locale;
 
 /**
  * Created by 777Al on 19.04.2017.
@@ -21,7 +20,7 @@ public interface LabDao<T extends LabData> {
 
     int removeOldLabs(LocalDateTime lastSaveDate);
 
-    Collection<LabTestQuestion> getTestQuestions(Locale locale);
+    Collection<LabTestQuestion> getTestQuestions();
 
     /**
      * Устанавливает признак пройденной лабораторной

@@ -5,11 +5,9 @@ import org.ecolab.server.model.content.lab3.Lab3Variant;
 import org.ecolab.server.service.api.content.LabService;
 import org.jfree.chart.JFreeChart;
 
-import java.util.Locale;
-
 /**
  * Created by 777Al on 26.04.2017.
  */
 public interface Lab3Service extends LabService<Lab3Data, Lab3Variant> {
-    JFreeChart createChart(Lab3Data labData, Locale locale, Lab3ChartType chartType);
+    JFreeChart createChart(Lab3Data labData, Lab3ChartType chartType);
 }

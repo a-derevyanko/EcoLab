@@ -1,5 +1,6 @@
 package org.ecolab.server.service.impl.content;
 
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.service.api.content.LabMailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +36,14 @@ public class LabMailServiceImpl implements LabMailService {
     }
 
     @Override
-    public void sentInitialDataToEmail(byte[] variant, Locale locale, String email) throws MailException {
+    public void sentInitialDataToEmail(byte[] variant, String email) throws MailException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
             mimeMessageHelper.setFrom("ecolabserver@gmail.com");
             mimeMessageHelper.setTo(email);
-            mimeMessageHelper.setText(messageSource.getMessage("report.initial-data.email-data-in-attach", null, locale));
-            mimeMessageHelper.setSubject(messageSource.getMessage("report.initial-data.email-subject", null, locale));
+            mimeMessageHelper.setText(messageSource.getMessage("report.initial-data.email-data-in-attach", null, CurrentUser.getLocale()));
+            mimeMessageHelper.setSubject(messageSource.getMessage("report.initial-data.email-subject", null, CurrentUser.getLocale()));
             mimeMessageHelper.addAttachment("initialData.pdf", new ByteArrayDataSource(variant, MediaType.APPLICATION_PDF_VALUE));
 
         } catch (MessagingException e) {
@@ -52,7 +53,7 @@ public class LabMailServiceImpl implements LabMailService {
     }
 
     @Override
-    public void sendReportToEmail(byte[] labData, Locale locale, String email) throws MailException {
+    public void sendReportToEmail(byte[] labData, String email) throws MailException {
 
     }
 }

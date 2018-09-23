@@ -147,11 +147,6 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
     userInitialsLabel.setContentMode(ContentMode.HTML);
     todayDate.setContentMode(ContentMode.HTML);
 
-        /*new BrowserWindowOpener(new DownloadStreamResource(
-                () -> settings.labService.printInitialData(settings.variant, UI.getCurrent().getLocale()),
-                "initialData.pdf")).extend(downloadManualButton);*/
-
-
     createPresentationButton(lab1Journal, i18N.get("teacher-group-manage.download-lab-journal-1"), 1);
     createPresentationButton(lab2Journal, i18N.get("teacher-group-manage.download-lab-journal-2"), 2);
 

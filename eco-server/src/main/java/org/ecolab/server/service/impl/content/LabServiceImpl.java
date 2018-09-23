@@ -16,6 +16,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.types.date.FixedTimestamp;
 import org.apache.commons.lang.UnhandledException;
 import org.apache.commons.math3.util.Precision;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.common.I18NUtils;
 import org.ecolab.server.common.MathUtils;
 import org.ecolab.server.common.UserInfoUtils;
@@ -68,7 +69,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -111,7 +111,6 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     }
 
     @Override
-    @Transactional(readOnly = true)
     //@Cacheable(cacheNames = "LABDATA", key = "#userName")
     public T getLastUncompletedLabByUser(long userId) {
         return getLastLabByUser(userId, false);
@@ -167,14 +166,14 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
      */
     @Override
     @Cacheable(value = "LAB_TEST", key = "#root.targetClass.simpleName")
-    public LabTest getLabTest(Locale locale) {
+    public LabTest getLabTest() {
         LabTest test = new LabTest();
-        test.setQuestions(labDao.getTestQuestions(locale));
+        test.setQuestions(labDao.getTestQuestions());
         return test;
     }
 
     @Override
-    public LabTestResult checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers, Locale locale) {
+    public LabTestResult checkLabTest(LabData<?> data, Map<LabTestQuestionVariant, Object> answers) {
         List<Integer> errors = new ArrayList<>();
         Bindings values = new SimpleBindings(getValuesFromModel(data));
 
@@ -204,7 +203,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         }
 
         LabTestResult result = new LabTestResult();
-        int pointCount = getLabTest(locale).getQuestions().stream().
+        int pointCount = getLabTest().getQuestions().stream().
                 filter(q -> !errors.contains(q.getQuestionNumber())).
                 mapToInt(LabTestQuestion::getPointCount).sum();
 
@@ -230,10 +229,10 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
 
     @LogExecutionTime(500)
     @Override
-    public byte[] printInitialData(V variant, Locale locale) {
+    public byte[] printInitialData(V variant) {
         DRDataSource dataSource = new DRDataSource("parameterName", "parameterSign", "parameterValue", "parameterDimension");
         Map<String, Image> images = new HashMap<>();
-        getInitialDataValues(variant, locale).forEach((value) -> {
+        getInitialDataValues(variant).forEach((value) -> {
             try {
                 if (value.getValue() instanceof URL) {
                     images.put(value.getName(), ImageIO.read((URL) value.getValue()));
@@ -246,10 +245,10 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         });
 
         JasperReportBuilder builder = report()
-                .setTemplate(reportService.getReportTemplate(locale)).
+                .setTemplate(reportService.getReportTemplate()).
                         title(reportService.createTitleComponent(
                                 messageSource.getMessage("report.initial-data.title",
-                                        new Object[]{getLabNumber()}, locale)));
+                                        new Object[]{getLabNumber()}, CurrentUser.getLocale())));
         if (!images.isEmpty()) {
             HorizontalListBuilder imageListBuilder = cmp.horizontalList();
             for (Map.Entry<String, Image> image : images.entrySet()) {
@@ -259,15 +258,15 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         }
 
         TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.
-                getMessage("report.lab-data.parameter-name", null, locale), "parameterName", type.stringType());
+                getMessage("report.lab-data.parameter-name", null, CurrentUser.getLocale()), "parameterName", type.stringType());
         TextColumnBuilder<String> parameterSignColumn = col.column(messageSource.
-                getMessage("report.lab-data.parameter-sign", null, locale), "parameterSign", type.stringType())
+                getMessage("report.lab-data.parameter-sign", null, CurrentUser.getLocale()), "parameterSign", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
         TextColumnBuilder<String> parameterValueColumn = col.column(messageSource.
-                getMessage("report.lab-data.parameter-value", null, locale), "parameterValue", type.stringType())
+                getMessage("report.lab-data.parameter-value", null, CurrentUser.getLocale()), "parameterValue", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
         TextColumnBuilder<String> parameterDimensionColumn = col.column(messageSource.
-                getMessage("report.lab-data.parameter-dimension", null, locale), "parameterDimension", type.stringType())
+                getMessage("report.lab-data.parameter-dimension", null, CurrentUser.getLocale()), "parameterDimension", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
 
         return reportService.printReport(
@@ -276,14 +275,14 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     }
 
     @Override
-    public Set<DataValue> getInitialDataValues(V data, Locale locale) {
+    public Set<DataValue> getInitialDataValues(V data) {
         Set<DataValue> printData = new LinkedHashSet<>();
-        for (Map.Entry<String, Object> entry : getInitialDataWithLocalizedValues(data, locale).entrySet()) {
+        for (Map.Entry<String, Object> entry : getInitialDataWithLocalizedValues(data).entrySet()) {
             DataValue dataValue = new DataValue();
-            dataValue.setName(messageSource.getMessage(entry.getKey(), null, locale));
+            dataValue.setName(messageSource.getMessage(entry.getKey(), null, CurrentUser.getLocale()));
             dataValue.setValue(entry.getValue());
-            dataValue.setSign(messageSource.getMessage(entry.getKey() + "-sign", null, locale));
-            dataValue.setDimension(messageSource.getMessage(entry.getKey() + "-dimension", null, locale));
+            dataValue.setSign(messageSource.getMessage(entry.getKey() + "-sign", null, CurrentUser.getLocale()));
+            dataValue.setDimension(messageSource.getMessage(entry.getKey() + "-dimension", null, CurrentUser.getLocale()));
             printData.add(dataValue);
         }
         return printData;
@@ -295,25 +294,25 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         labDao.setLabCompleted(data);
     }
 
-    protected Map<String, Object> getInitialDataWithLocalizedValues(V data, Locale locale) {
+    protected Map<String, Object> getInitialDataWithLocalizedValues(V data) {
         Map<String, Object> printData = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : getValuesFromModel(data).entrySet()) {
             if (entry.getValue() instanceof List) {
                 List<?> value = (List) entry.getValue();
                 if (value.isEmpty() || !(value.get(0) instanceof List)) {
-                    List<String> captions = Arrays.asList(messageSource.getMessage(entry.getKey() + "-columns", null, locale).split(";"));
+                    List<String> captions = Arrays.asList(messageSource.getMessage(entry.getKey() + "-columns", null, CurrentUser.getLocale()).split(";"));
                     Map<String, Object> valueMap = IntStream.range(0, captions.size()).boxed().
-                            collect(Collectors.toMap(captions::get, i -> getFieldValueForPrint(value.get(i), locale), (a, b) -> b, LinkedHashMap::new));
+                            collect(Collectors.toMap(captions::get, i -> getFieldValueForPrint(value.get(i)), (a, b) -> b, LinkedHashMap::new));
                     printData.put(entry.getKey(), valueMap);
                 }
             } else {
-                printData.put(entry.getKey(), getFieldValueForPrint(entry.getValue(), locale));
+                printData.put(entry.getKey(), getFieldValueForPrint(entry.getValue()));
             }
         }
         return printData;
     }
 
-    protected Object getFieldValueForPrint(Object value, Locale locale) {
+    protected Object getFieldValueForPrint(Object value) {
         if (value instanceof Integer || value instanceof Map || value instanceof List) {
             return value;
         } else if (value instanceof Double) {
@@ -321,11 +320,11 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         } else if (value instanceof LocalDateTime) {
             return DATE_TIME_FORMATTER.format((TemporalAccessor) value);
         } else {
-            return value instanceof Enum ? messageSource.getMessage(I18NUtils.getEnumName((Enum<?>) value), null, locale) : String.valueOf(value);
+            return value instanceof Enum ? messageSource.getMessage(I18NUtils.getEnumName((Enum<?>) value), null, CurrentUser.getLocale()) : String.valueOf(value);
         }
     }
 
-    protected Map<String, Object> getValuesForReport(T data, Locale locale) {
+    protected Map<String, Object> getValuesForReport(T data) {
         Map<String, Object> values = new HashMap<>();
 
         UserInfo userInfo = userInfoService.getUserInfo(data.getUsers().iterator().next()); //todo переделать и не использовать ервый элемент списка
@@ -354,7 +353,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         labVariantAndDataValues.putAll(getValuesFromModel(data));
         values.putAll(labVariantAndDataValues.entrySet().stream().
                 filter(e -> e.getValue() != null).collect(Collectors.toMap(Map.Entry::getKey,
-                e -> getFieldValueForPrint(e.getValue(), locale)))
+                e -> getFieldValueForPrint(e.getValue())))
         );
 
         return values;
@@ -382,15 +381,14 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
      * todo На второй странице отчёта печатается график изолиний в вертикальной ориентации.
      *
      * @param labData данные лабораторной работы.
-     * @param locale  язык.
      * @return печатный вариант данных в PDF формате.
      */
     @Override
-    public byte[] createReport(T labData, Locale locale) {
+    public byte[] createReport(T labData) {
         try {
             JasperReport report = reportService.getCompiledReport(this.getClass().getResource("report/report.jrxml"));
             JRDataSource dataSource = new JREmptyDataSource();
-            JasperPrint print = JasperFillManager.fillReport(report, getValuesForReport(labData, locale), dataSource);
+            JasperPrint print = JasperFillManager.fillReport(report, getValuesForReport(labData), dataSource);
             return JasperExportManager.exportReportToPdf(print);
         } catch (JRException e) {
             throw new UnhandledException(e);

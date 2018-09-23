@@ -8,13 +8,12 @@ import net.sf.jasperreports.engine.JasperReport;
 
 import java.awt.Image;
 import java.net.URL;
-import java.util.Locale;
 
 public interface ReportService {
 
     VerticalListBuilder createImageWithTitle(Image image, String title);
 
-    ReportTemplateBuilder getReportTemplate(Locale locale);
+    ReportTemplateBuilder getReportTemplate();
 
     ComponentBuilder<?, ?> createTitleComponent(String label);
 

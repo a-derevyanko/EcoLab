@@ -41,7 +41,6 @@ import org.ecolab.server.model.content.LabTestResult;
 import org.ecolab.server.service.api.content.LabService;
 import org.ecolab.server.service.api.content.UserLabService;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.Authentication;
 import org.vaadin.spring.annotation.PrototypeScope;
 import org.vaadin.teemu.wizards.WizardStep;
 import org.vaadin.teemu.wizards.event.WizardCompletedEvent;
@@ -82,7 +81,7 @@ public abstract class LabTestWizard extends Wizard implements View {
 
         getFinishButton().setIcon(VaadinIcons.FLAG_CHECKERED, i18N.get("test.check"));
 
-        LabTest test = labService.getLabTest(UI.getCurrent().getLocale());
+        LabTest test = labService.getLabTest();
 
         for (LabTestQuestion question : test.getQuestions()) {
             LabTestQuestionVariant questionVariant = question.getVariants().get(RandomUtils.nextInt(0, question.getVariants().size()));
@@ -113,7 +112,7 @@ public abstract class LabTestWizard extends Wizard implements View {
         }
 
         LabTestResult result = labService.checkLabTest(labService.getCompletedLabByUser(CurrentUser.getId()),
-                answers, UI.getCurrent().getLocale());
+                answers);
 
         if (result.getCompleted()) {
             userLabService.setTestCompleted(labService.getLabNumber(), result.getMark(), result.getPointCount());

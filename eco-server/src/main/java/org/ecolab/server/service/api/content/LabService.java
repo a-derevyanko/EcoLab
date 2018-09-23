@@ -38,10 +38,9 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
     /**
      * Возвращает печатный вариант отчёта в PDF формате
      * @param labData данные лабораторной работы
-     * @param locale язык
      * @return печатный вариант данных в PDF формате
      */
-    byte[] createReport(T labData, Locale locale);
+    byte[] createReport(T labData);
 
     /**
      * Заполняет в модели значения вычисляемых полей
@@ -52,23 +51,21 @@ public interface LabService<T extends LabData<V>, V extends LabVariant> {
     /**
      * Возвращает печатный вариант исходных данных в PDF формате
      * @param variant вариант лабораторной работы
-     * @param locale язык
      * @return печатный вариант исходных данных в PDF формате
      */
-    byte[] printInitialData(V variant, Locale locale);
+    byte[] printInitialData(V variant);
 
-    Set<DataValue> getInitialDataValues(V data, Locale locale);
+    Set<DataValue> getInitialDataValues(V data);
 
-    LabTest getLabTest(Locale locale);
+    LabTest getLabTest();
 
     /**
      * Проверяет результаты теста.
      * @param data данные лабораторной
      * @param answers ответы
-     * @param locale локализация
      * @return оценка и номера вопросов, на которые был дан неверный ответ
      */
-    LabTestResult checkLabTest(@Valid LabData<?> data, Map<LabTestQuestionVariant, Object> answers, Locale locale);
+    LabTestResult checkLabTest(@Valid LabData<?> data, Map<LabTestQuestionVariant, Object> answers);
 
     int getLabNumber();
 

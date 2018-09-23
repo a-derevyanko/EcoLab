@@ -17,6 +17,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperReport;
 import org.apache.commons.lang.UnhandledException;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.service.api.ReportService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,6 @@ import java.awt.Image;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Locale;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
@@ -71,9 +71,9 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportTemplateBuilder getReportTemplate(Locale locale) {
+    public ReportTemplateBuilder getReportTemplate() {
         return template()
-                .setLocale(locale)
+                .setLocale(CurrentUser.getLocale())
                 .setColumnStyle(COLUMN_STYLE)
                 .setColumnTitleStyle(COLUMN_TITLE_STYLE)
                 .setGroupStyle(GROUP_STYLE)

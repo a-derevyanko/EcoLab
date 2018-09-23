@@ -1,6 +1,7 @@
 package org.ecolab.server.service.impl.content.lab1.random;
 
 import org.apache.commons.lang.math.RandomUtils;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.dao.api.content.lab1.random.Lab1RandomDao;
 import org.ecolab.server.model.content.DataValue;
 import org.ecolab.server.model.content.lab1.City;
@@ -14,7 +15,6 @@ import org.ecolab.server.service.impl.content.lab1.Lab1ServiceImpl;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,16 +31,16 @@ public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1RandomVariant, La
     }
 
     @Override
-    public Set<DataValue> getInitialDataValues(Lab1RandomVariant data, Locale locale) {
-        Set<DataValue> values = super.getInitialDataValues(data, locale);
+    public Set<DataValue> getInitialDataValues(Lab1RandomVariant data) {
+        Set<DataValue> values = super.getInitialDataValues(data);
 
         DataValue imageValue = new DataValue();
-        imageValue.setName(messageSource.getMessage("lab1.initial-data.boiler", null, locale));
+        imageValue.setName(messageSource.getMessage("lab1.initial-data.boiler", null, CurrentUser.getLocale()));
         imageValue.setValue(labResourceService.getBoiler());
         values.add(imageValue);
 
         DataValue cityValue = new DataValue();
-        cityValue.setName(messageSource.getMessage("lab1.city", new Object[]{getFieldValueForPrint(data.getCity(), locale)}, locale));
+        cityValue.setName(messageSource.getMessage("lab1.city", new Object[]{getFieldValueForPrint(data.getCity())}, CurrentUser.getLocale()));
         cityValue.setValue(labResourceService.getCoatOfArms(data.getCity().name()));
         values.add(cityValue);
 
@@ -48,8 +48,8 @@ public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1RandomVariant, La
     }
 
     @Override
-    protected Map<String, Object> getInitialDataWithLocalizedValues(Lab1RandomVariant data, Locale locale) {
-        Map<String, Object> map = super.getInitialDataWithLocalizedValues(data, locale);
+    protected Map<String, Object> getInitialDataWithLocalizedValues(Lab1RandomVariant data) {
+        Map<String, Object> map = super.getInitialDataWithLocalizedValues(data);
         map.remove("city");
 
         return map;

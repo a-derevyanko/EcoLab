@@ -11,7 +11,6 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.LocalDateTimeRenderer;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
@@ -98,7 +97,7 @@ public class StudentAccountManagingView extends GridLayout implements View {
 
                     @SuppressWarnings("unchecked")
                     FileDownloader fileDownloader = new FileDownloader(
-                            new DownloadStreamResource(() -> labService.createReport(data, UI.getCurrent().getLocale()), "report.pdf"));
+                            new DownloadStreamResource(() -> labService.createReport(data), "report.pdf"));
                     fileDownloader.extend(button);
                     return layout;
                 }

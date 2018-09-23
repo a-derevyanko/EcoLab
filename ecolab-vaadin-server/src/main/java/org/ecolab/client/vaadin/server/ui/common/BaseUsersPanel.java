@@ -11,7 +11,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import org.ecolab.client.vaadin.server.dataprovider.UserInfoFilter;
@@ -148,7 +147,7 @@ public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extend
         dataProvider.setFilter(filter);
 
         new BrowserWindowOpener(new DownloadStreamResource(
-                () -> userInfoService.printUsersData(dataProvider.fetch(new Query<>(null)), UI.getCurrent().getLocale()),
+                () -> userInfoService.printUsersData(dataProvider.fetch(new Query<>(null))),
                 "users.pdf")).extend(printUserLogins);
     }
 

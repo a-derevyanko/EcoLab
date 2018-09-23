@@ -43,7 +43,7 @@ public interface UserInfoService extends UserDetailsManager, GroupManager, UserD
     UserInfo createUserInfo(@Valid @NotNull UserInfo userInfo);
 
     @LogExecutionTime(500)
-    byte[] printUsersData(@Valid Stream<UserInfo> users, Locale locale);
+    byte[] printUsersData(@Valid Stream<UserInfo> users);
 
     String createDefaultPassword(@NotNull String userLogin);
 }

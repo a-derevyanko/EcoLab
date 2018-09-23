@@ -6,6 +6,7 @@ import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.dev.LogExecutionTime;
 import org.ecolab.server.model.EcoLabUserDetails;
 import org.ecolab.server.model.UserGroup;
@@ -37,7 +38,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.zip.Adler32;
@@ -272,28 +272,28 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
     @LogExecutionTime(500)
     @Override
-    public byte[] printUsersData(Stream<UserInfo> users, Locale locale) {
+    public byte[] printUsersData(Stream<UserInfo> users) {
         DRDataSource dataSource = new DRDataSource("firstName", "lastName", "login", "password");
 
         users.forEach(value -> dataSource.add(value.getFirstName(), value.getLastName(),
                 value.getLogin(), createDefaultPassword(value.getLogin())));
 
         JasperReportBuilder builder = report()
-                .setTemplate(reportService.getReportTemplate(locale)).
+                .setTemplate(reportService.getReportTemplate()).
                         title(reportService.createTitleComponent(
-                                messageSource.getMessage("report.user.title", null, locale) + " (" +
+                                messageSource.getMessage("report.user.title", null, CurrentUser.getLocale()) + " (" +
                                         FastDateFormat.getInstance("dd.MM.yyyy HH:mm").format(new Date()) +')'));
 
         TextColumnBuilder<String> firstNameColumn = col.column(messageSource.
-                getMessage("report.user.firstName", null, locale), "firstName", type.stringType()).setMinHeight(80);
+                getMessage("report.user.firstName", null, CurrentUser.getLocale()), "firstName", type.stringType()).setMinHeight(80);
         TextColumnBuilder<String> lastNameColumn = col.column(messageSource.
-                getMessage("report.user.lastName", null, locale), "lastName", type.stringType())
+                getMessage("report.user.lastName", null, CurrentUser.getLocale()), "lastName", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
         TextColumnBuilder<String> loginColumn = col.column(messageSource.
-                getMessage("report.user.login", null, locale), "login", type.stringType())
+                getMessage("report.user.login", null, CurrentUser.getLocale()), "login", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
         TextColumnBuilder<String> passwordColumn = col.column(messageSource.
-                getMessage("report.user.password", null, locale), "password", type.stringType())
+                getMessage("report.user.password", null, CurrentUser.getLocale()), "password", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
 
         return reportService.printReport(
