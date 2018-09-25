@@ -80,7 +80,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     public StudentTeam getStudentTeam(long userId) {
         Record teamRecord = dsl.select(STUDY_TEAMS.ID, STUDY_TEAMS.NAME).from(STUDY_TEAMS).join(STUDY_TEAM_MEMBERS)
                 .on(STUDY_TEAMS.ID.eq(STUDY_TEAM_MEMBERS.TEAM_ID))
-                .where(STUDY_GROUP_MEMBERS.USER_ID.eq(userId)).fetchOne();
+                .where(STUDY_TEAM_MEMBERS.USER_ID.eq(userId)).fetchOne();
 
         if (teamRecord == null) {
             return null;

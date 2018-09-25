@@ -9,7 +9,6 @@ import com.vaadin.ui.MenuBar;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.common.DownloadStreamResource;
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
-import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.model.StudentInfo;
 import org.ecolab.server.model.UserInfo;
 import org.ecolab.server.model.UserLabStatistics;
@@ -69,7 +68,7 @@ public class ManageStudentWindow extends EditUserWindow<ManageStudentWindow.Edit
                     () -> {
                         LabService<LabData<LabVariant>, LabVariant> service = getLabService(finalLabNumber);
 
-                        LabData<LabVariant> data = service.getCompletedLabByUser(CurrentUser.getId());
+                        LabData<LabVariant> data = service.getCompletedLabByUser(settings.getUserInfo().getId());
 
                         return service.createReport(data);
                     },
@@ -90,7 +89,7 @@ public class ManageStudentWindow extends EditUserWindow<ManageStudentWindow.Edit
 
         settings.statistics.stream().filter(userLabStatistics -> userLabStatistics.getTryCount() > 0).
                 forEach(userLabStatistics -> {
-                    rootMenuItem.getChildren().get(userLabStatistics.getLabNumber()).setVisible(true);
+                    rootMenuItem.getChildren().get(userLabStatistics.getLabNumber() - 1).setVisible(true);
                     menu.setVisible(true);
                 });
 

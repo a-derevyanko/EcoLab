@@ -76,8 +76,8 @@ public class UserLabServiceImpl implements UserLabService {
         profile.setAllowedLabs(studentInfoService.getAllowedLabs(userId));
         profile.setAllowedDefence(studentInfoService.getAllowedDefence(userId));
         profile.setStudentInfo(studentInfoService.getStudentInfo(userId));
-        profile.setAverageMark(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getMark).average().orElse(0.0));
-        profile.setAveragePointCount(profile.getStatistics().stream().mapToDouble(UserLabStatistics::getPointCount).average().orElse(0.0));
+        profile.setAverageMark(profile.getStatistics().stream().filter(s -> s.getMark() != 0).mapToDouble(UserLabStatistics::getMark).average().orElse(0.0));
+        profile.setAveragePointCount(profile.getStatistics().stream().filter(s -> s.getPointCount() != 0).mapToDouble(UserLabStatistics::getPointCount).average().orElse(0.0));
 
         try {
             if (profile.getAverageMark() < 3) {
