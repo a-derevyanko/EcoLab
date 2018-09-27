@@ -2,9 +2,11 @@ package org.ecolab.server.service.impl;
 
 import org.aderevyanko.audit.api.AuditEventAttribute;
 import org.aderevyanko.audit.api.AuditEventAttributeProvider;
+import org.aderevyanko.audit.api.AuditEventContext;
 import org.aderevyanko.audit.api.AuditEventFilter;
 import org.aderevyanko.audit.api.AuditEventTypeProvider;
 import org.aderevyanko.audit.api.generic.GenericEventsStorage;
+import org.ecolab.server.model.EcoLabAuditContextAttributes;
 import org.ecolab.server.model.EcoLabAuditEvent;
 import org.ecolab.server.model.EcoLabAuditEventHeader;
 import org.jooq.BatchBindStep;
@@ -43,19 +45,19 @@ public class EcoLabEventsStorageImpl implements GenericEventsStorage<EcoLabAudit
 
     @Override
     @Async
-    public void saveEvents(Collection<EcoLabAuditEvent> events) {
+    public void saveEvents(Collection<AuditEventContext<EcoLabAuditEvent>> events) {
         try {
             dsl.transaction(configuration -> {
                 //todo не удаётся сохранить batch, jooq пока этого не умеет https://github.com/jOOQ/jOOQ/issues/3327
                 BatchBindStep attributesBatch = null;
-                for (EcoLabAuditEvent event : events) {
+                for (AuditEventContext<EcoLabAuditEvent> eventContext : events) {
                     long id = dsl.insertInto(AUDIT, AUDIT.CREATE_DATE, AUDIT.EVENT_TYPE, AUDIT.USER_ID)
-                            .values(event.getEventDate(),
-                                    eventTypeProvider.getId(event.getEventType()),
-                                    event.getUserId())
+                            .values(eventContext.getAuditEvent().getEventDate(),
+                                    eventTypeProvider.getId(eventContext.getAuditEvent().getEventType()),
+                                    eventContext.getValue(EcoLabAuditContextAttributes.USER_ID))
                             .returning(AUDIT.ID).fetchOne().getId();
 
-                    for (Map.Entry<AuditEventAttribute, String> entry : event.getAttributes().entrySet()) {
+                    for (Map.Entry<AuditEventAttribute, String> entry : eventContext.getAuditEvent().getAttributes().entrySet()) {
                         if (attributesBatch == null) {
                             attributesBatch = dsl.batch(dsl.insertInto(AUDIT_ATTRIBUTES, AUDIT_ATTRIBUTES.AUDIT_ID,
                                     AUDIT_ATTRIBUTES.AUDIT_ATTRIBUTE_ID, AUDIT_ATTRIBUTES.VALUE).
@@ -97,11 +99,23 @@ public class EcoLabEventsStorageImpl implements GenericEventsStorage<EcoLabAudit
 
     @Override
     public Set<EcoLabAuditEvent> getEvents(AuditEventFilter filter) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public EcoLabAuditEvent getEvent(long id) {
-        return null;
+        EcoLabAuditEvent event = dsl.select().from(AUDIT).
+                where(AUDIT.ID.eq(id)).
+                fetchOne().map(record -> EcoLabAuditEvent.
+                        ofType(eventTypeProvider.getById(record.get(AUDIT.EVENT_TYPE))).id(id).
+                        eventDate(record.get(AUDIT.CREATE_DATE)));
+
+        for (Map.Entry<AuditEventAttribute, String> e : dsl.select().from(AUDIT_ATTRIBUTES).where(AUDIT_ATTRIBUTES.AUDIT_ID.eq(id)).
+                fetchMap(record -> attributeProvider.getById(record.get(AUDIT_ATTRIBUTES.AUDIT_ATTRIBUTE_ID)),
+                        record -> record.get(AUDIT_ATTRIBUTES.VALUE)).entrySet()) {
+            event.attribute(e.getKey(), e.getValue());
+        }
+
+        return event;
     }
 }

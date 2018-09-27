@@ -121,8 +121,8 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     public Set<StudentGroupInfo> getTeacherGroupsInfo(long teacherId) {
         Table<Record> nested = dsl.<Record>select(STUDY_GROUPS.NAME,
                 DSL.countDistinct(STUDY_GROUP_MEMBERS.ID).as(STUDENT_COUNT),
-                DSL.count(DSL.coalesce(USER_LAB_HISTORY.LAB_NUMBER)).as(LAB_COUNT),
-                DSL.count(DSL.coalesce(USER_TEST_HISTORY.LAB_NUMBER)).as(TEST_COUNT)).from(STUDY_GROUPS).
+                DSL.countDistinct(DSL.coalesce(USER_LAB_HISTORY.LAB_NUMBER)).as(LAB_COUNT),
+                DSL.countDistinct(DSL.coalesce(USER_TEST_HISTORY.LAB_NUMBER)).as(TEST_COUNT)).from(STUDY_GROUPS).
                 join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
                 leftJoin(STUDY_GROUP_MEMBERS).on(STUDY_GROUP_MEMBERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
                 leftJoin(USER_TEST_HISTORY).on(USER_TEST_HISTORY.USER_ID.eq(STUDY_GROUP_MEMBERS.USER_ID)).

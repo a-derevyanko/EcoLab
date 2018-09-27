@@ -104,7 +104,6 @@ public class NewStudentWindow extends NewUserWindow<StudentDataWindowSettings> {
     protected UserInfo saveUserInfo() {
         boolean exists = userInfoBinder.getBean().getId() != null;
         UserInfo userInfo = super.saveUserInfo();
-        //todo эти проверки в сервис или в dao
         StudentInfo studentInfo = exists ?
                 studentInfoService.updateStudentInfo(userInfo, studentGroupComboBox.getValue(), studentTeamComboBox.getValue()) :
                 studentInfoService.createStudentInfo(userInfo, studentGroupComboBox.getValue(), studentTeamComboBox.getValue());

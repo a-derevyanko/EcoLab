@@ -202,7 +202,7 @@ public class LabChooserView extends VerticalLayout implements View {
         setLabButtonSate(lab1Button, isNotStudent || (allowedLabs.contains(1) && !completedLabs.containsKey(1)));
         setLabButtonSate(lab2Button, isNotStudent || (allowedLabs.contains(2) && !completedLabs.containsKey(2)));
         setLabButtonSate(lab3Button, isNotStudent || (allowedLabs.contains(3) && !completedLabs.containsKey(3)));
-        setButtonSate(labDefenceButton, !completedLabs.isEmpty());
+        setButtonSate(labDefenceButton, !allowedTests.isEmpty());
     }
 
     private void setButtonSate(NativeButton button, boolean enabled) {

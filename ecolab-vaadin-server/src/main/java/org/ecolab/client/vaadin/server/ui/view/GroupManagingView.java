@@ -138,7 +138,7 @@ public class GroupManagingView extends HorizontalLayout implements View {
                 userProfile.getStudentInfo().getTeam().getName()
         ).setCaption(i18N.get("group-manage.group-members.team"));
 
-        Grid.Column<UserProfile, Double> average = groupMembers.addColumn(UserProfile::getAverageMark).setCaption(i18N.get("group-manage.group-members.average"));
+        Grid.Column<UserProfile, Double> average = groupMembers.addColumn(UserProfile::getAveragePointCount).setCaption(i18N.get("group-manage.group-members.average"));
 
         addLabColumns(1, i18N.get("group-manage.group-members.lab-1"), topHeader);
         addLabColumns(2, i18N.get("group-manage.group-members.lab-2"), topHeader);
@@ -214,28 +214,6 @@ public class GroupManagingView extends HorizontalLayout implements View {
 
     private void refreshItems() {
         Set<UserProfile> userProfiles = userLabService.getUserProfiles(studentInfo.getGroup().getName());
-
-        //todo
-       /* UserProfile p = new UserProfile();
-        p.setUserInfo(new UserInfo());
-        p.getUserInfo().setFirstName("admin");
-        p.getUserInfo().setMiddleName("admin");
-        p.getUserInfo().setLastName("admin");
-        p.setAllowedLabs(ImmutableSet.of(1, 2));
-
-        StudentInfo studentInfo = new StudentInfo();
-        p.setStudentInfo(studentInfo);
-
-        List<UserLabStatistics> labStatistics = new ArrayList<>();
-        UserLabStatistics s = new UserLabStatistics();
-        s.setTryCount(8);
-        s.setLabNumber(1);
-        s.setMark(4);
-        s.setPointCount(80);
-        labStatistics.add(s);
-        p.setStatistics(labStatistics);
-
-        userProfiles.add(p);*/
         groupMembers.setItems(userProfiles);
 
     }

@@ -4,6 +4,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+import org.aderevyanko.audit.api.AuditEventContext;
 import org.aderevyanko.audit.api.AuditEventHeader;
 import org.aderevyanko.audit.api.generic.AuditConfigStorage;
 import org.aderevyanko.audit.api.generic.GenericAuditEvent;
@@ -53,7 +54,7 @@ public abstract class GenericAuditServiceImpl<H extends AuditEventHeader, T exte
                         return this.configStorage.getLoggableEvents().contains(message.getEventType().getSystemName());
                     }
                     return false;
-                }).
+                }).map(this::createAuditEventContext).
                 observeOn(scheduler).
                 buffer(this.eventsSaveTimeSpanInSeconds, TimeUnit.SECONDS, this.eventsSaveCount).
                 filter(messages -> !messages.isEmpty()).
@@ -73,4 +74,6 @@ public abstract class GenericAuditServiceImpl<H extends AuditEventHeader, T exte
     public Set<H> getHeaders(F filter) {
         return storage.getHeaders(filter);
     }
+
+    protected abstract AuditEventContext<T> createAuditEventContext(T event);
 }

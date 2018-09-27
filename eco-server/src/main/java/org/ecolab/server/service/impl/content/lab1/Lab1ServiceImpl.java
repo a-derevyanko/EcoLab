@@ -26,7 +26,6 @@ public abstract class Lab1ServiceImpl<V extends Lab1Variant, D extends Lab1Dao<V
 
     @Override
     public void updateCalculatedFields(Lab1Data labData) {
-        //todo correctionFactor!!!!
     }
 
 

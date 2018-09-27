@@ -13,7 +13,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.util.StringUtils;
 
 import javax.imageio.ImageIO;
@@ -74,7 +76,9 @@ public class DesktopVaadinApplication extends VaadinApplication {
         if (SystemTray.isSupported()) {
             exitItem.addActionListener(e -> exit());
             openItem.addActionListener(e -> openEcoLabInBrowser());
+            aboutItem.addActionListener(e -> openAboutWindow());
             openItem.setEnabled(false);
+            aboutItem.setEnabled(false);
             popup.add(openItem);
             popup.addSeparator();
             popup.add(aboutItem);
@@ -93,6 +97,7 @@ public class DesktopVaadinApplication extends VaadinApplication {
             if (SystemTray.isSupported()) {
                 openItem.setLabel(RES.getString("open"));
                 openItem.setEnabled(true);
+                aboutItem.setEnabled(true);
             }
             return ctx;
         } catch (Exception ex) {
@@ -139,6 +144,13 @@ public class DesktopVaadinApplication extends VaadinApplication {
         } catch (IOException e) {
             throw new UnhandledException(e);
         }
+    }
+
+    private void openAboutWindow() {
+        BuildProperties buildProperties = ctx.getBean(BuildProperties.class);
+        MessageSource messageSource = ctx.getBean(MessageSource.class);
+
+        new AboutWindow(buildProperties, messageSource).setVisible(true);
     }
 
     private void exit() {

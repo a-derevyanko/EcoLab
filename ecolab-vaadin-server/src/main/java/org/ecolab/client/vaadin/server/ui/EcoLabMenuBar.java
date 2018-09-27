@@ -67,8 +67,8 @@ public class EcoLabMenuBar extends MenuBar implements ViewChangeListener {
         setStyleName(EcoLabTheme.MENUBAR_BORDERLESS);
         exitItem = addItem(i18N.get("menubar.exit"), VaadinIcons.SIGN_OUT, (Command) selectedItem -> vaadinSecurity.logout());
         userInfoItem = addItem("", VaadinIcons.USER, (Command) selectedItem -> {
-            userDataWindow.show(new UserDataWindowSettings(getUI().getCurrentUserInfo(), newUserInfo -> {
-                getUI().setCurrentUserInfo(newUserInfo);
+            userDataWindow.show(new UserDataWindowSettings(VaadinUI.getCurrent().getCurrentUserInfo(), newUserInfo -> {
+                VaadinUI.getCurrent().setCurrentUserInfo(newUserInfo);
                 updateUserInfoItem();
             }));
         });
@@ -88,7 +88,7 @@ public class EcoLabMenuBar extends MenuBar implements ViewChangeListener {
         if (vaadinSecurity.isAuthenticated()) {
             if (VaadinUI.getCurrent().getCurrentUserInfo() == null) {
                 Authentication authentication = vaadinSecurity.getAuthentication();
-                getUI().setCurrentUserInfo(userDetailsManager.getUserInfo(CurrentUser.getId()));
+                VaadinUI.getCurrent().setCurrentUserInfo(userDetailsManager.getUserInfo(CurrentUser.getId()));
                 updateUserInfoItem();
 
                 Set<String> roles = UserInfoUtils.getRoles(authentication);
@@ -103,19 +103,14 @@ public class EcoLabMenuBar extends MenuBar implements ViewChangeListener {
             }
         } else {
             setVisible(false);
-            getUI().setCurrentUserInfo(null);
-            getUI().setCurrentStudentInfo(null);
+            VaadinUI.getCurrent().setCurrentUserInfo(null);
+            VaadinUI.getCurrent().setCurrentStudentInfo(null);
         }
         return true;
     }
 
-    @Override
-    public VaadinUI getUI() {
-        return VaadinUI.getCurrent();
-    }
-
     private void updateUserInfoItem() {
-        UserInfo userInfo = getUI().getCurrentUserInfo();
+        UserInfo userInfo = VaadinUI.getCurrent().getCurrentUserInfo();
         userInfoItem.setText(UserInfoUtils.getShortInitials(userInfo));
     }
 }

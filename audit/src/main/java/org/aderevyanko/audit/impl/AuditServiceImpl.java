@@ -1,6 +1,7 @@
 package org.aderevyanko.audit.impl;
 
 import org.aderevyanko.audit.api.AuditEvent;
+import org.aderevyanko.audit.api.AuditEventContext;
 import org.aderevyanko.audit.api.AuditEventFilter;
 import org.aderevyanko.audit.api.AuditEventHeader;
 import org.aderevyanko.audit.api.AuditService;
@@ -16,5 +17,10 @@ public class AuditServiceImpl extends GenericAuditServiceImpl<AuditEventHeader, 
                                Executor executor,
                                int eventsSaveCount, int eventsSaveTimeSpanInSeconds, AuditConfigStorage configStorage) {
         super(storage, executor, eventsSaveCount, eventsSaveTimeSpanInSeconds, configStorage);
+    }
+
+    @Override
+    protected AuditEventContext<AuditEvent> createAuditEventContext(AuditEvent event) {
+        return new AuditEventContext<>(event);
     }
 }

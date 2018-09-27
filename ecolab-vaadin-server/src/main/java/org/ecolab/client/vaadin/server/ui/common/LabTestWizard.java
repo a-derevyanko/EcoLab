@@ -14,7 +14,6 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.RadioButtonGroup;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.binding.IntegerExpression;
@@ -40,7 +39,6 @@ import org.ecolab.server.model.content.LabTestQuestionVariantWithAnswers;
 import org.ecolab.server.model.content.LabTestResult;
 import org.ecolab.server.service.api.content.LabService;
 import org.ecolab.server.service.api.content.UserLabService;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.vaadin.spring.annotation.PrototypeScope;
 import org.vaadin.teemu.wizards.WizardStep;
 import org.vaadin.teemu.wizards.event.WizardCompletedEvent;
@@ -114,18 +112,16 @@ public abstract class LabTestWizard extends Wizard implements View {
         LabTestResult result = labService.checkLabTest(labService.getCompletedLabByUser(CurrentUser.getId()),
                 answers);
 
-        if (result.getCompleted()) {
-            userLabService.setTestCompleted(labService.getLabNumber(), result.getMark(), result.getPointCount());
-        }
+        userLabService.setTestCompleted(labService.getLabNumber(), result.getMark(), result.getPointCount());
         labTestFinishedWindow.show(new LabTestFinishedWindow.LabFinishedWindowSettings(result, answers.keySet()));
     }
 
     /**
      * Счётчик времени выполнения теста. На тест отводится 25 минут. По истечении времени отображается
      * специальное сообщение и все вопросы, на которые не был дан ответ засчитываются как неправильные.
-     * todo реализовать метод
+     * todo реализовать метод. Scheduled не работает для ViewScope (проверено)
      */
-    @Scheduled(fixedRate = 25 * 60 * 1000)
+    //@Scheduled(fixedRate = 25 * 60 * 1000)
     protected void testExecutionCounter() {
 
     }
