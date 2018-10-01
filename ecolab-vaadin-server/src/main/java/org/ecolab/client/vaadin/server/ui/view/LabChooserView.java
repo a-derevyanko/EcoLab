@@ -167,7 +167,7 @@ public class LabChooserView extends VerticalLayout implements View {
         labContentButton.addClickListener(event ->  labPresentationSelectView.setPopupVisible(true));
 
         content.addStyleName(EcoLabTheme.PANEL_LABCHOOSER);
-        calcButton.setStyleName(EcoLabTheme.BUTTON_LEFT_PANEL);
+        calcButton.setStyleName(EcoLabTheme.BUTTON_LEFT_CALC);
         content.addComponent(calcButton, 0, 0);
         content.addComponent(logo, 1, 0, 1, 2);
         content.addComponent(lab1Button, 2, 0);

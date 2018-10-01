@@ -49,7 +49,7 @@ public class EcoLabTheme extends ValoTheme {
 
     public static final String BUTTON_VARIANT_CHOOSER = "variant-chooser";
 
-    public static final String BUTTON_LEFT_PANEL = "left-button";
+    public static final String BUTTON_LEFT_CALC = "left-button-calc";
 
     public static final String BUTTON_TEST_VARIANT_CHOOSER = "test-variant-chooser";
 
