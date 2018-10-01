@@ -167,8 +167,7 @@ public class LabChooserView extends VerticalLayout implements View {
         labContentButton.addClickListener(event ->  labPresentationSelectView.setPopupVisible(true));
 
         content.addStyleName(EcoLabTheme.PANEL_LABCHOOSER);
-        calcButton.setIcon(resourceService.getImage(EcoLabTheme.IMAGE_CALC));
-        calcButton.setStyleName(EcoLabTheme.BUTTON_LEFT_PANEL);
+        createLeftPaneButton(calcButton, EcoLabTheme.IMAGE_CALC);
         content.addComponent(calcButton, 0, 0);
         content.addComponent(logo, 1, 0, 1, 2);
         content.addComponent(lab1Button, 2, 0);
@@ -234,6 +233,13 @@ public class LabChooserView extends VerticalLayout implements View {
         button.setStyleName(EcoLabTheme.BUTTON_MULTILINE);
         button.addStyleName(EcoLabTheme.BUTTON_CHOOSER);
         button.addClickListener(listener);
+    }
+
+
+    private void createLeftPaneButton(Button button, String icon) {
+        button.setIcon(resourceService.getImage(icon));
+        button.setStyleName(EcoLabTheme.BUTTON_LEFT_PANEL);
+        button.addStyleName(EcoLabTheme.BUTTON_ICON_ONLY);
     }
 
     private void createLabTestButton(Button button, String title, Button.ClickListener listener) {
