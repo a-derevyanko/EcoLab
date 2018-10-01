@@ -66,7 +66,7 @@ public class LabChooserView extends VerticalLayout implements View {
 
     // ---------------------------- Графические компоненты --------------------
     private final Gallery gallery = new Gallery();
-    private final GridLayout content = new GridLayout(2, 5);
+    private final GridLayout content = new GridLayout(3, 5);
     private final Image logo = new Image();
     private final NativeButton lab1Button = new NativeButton("Laboratory work №1");
     private final NativeButton lab2Button = new NativeButton("Laboratory work №2");
@@ -80,6 +80,7 @@ public class LabChooserView extends VerticalLayout implements View {
     private final Button lab2PresentationButton = new Button(VaadinIcons.PRESENTATION);
     private final Button lab3PresentationButton = new Button(VaadinIcons.PRESENTATION);
     private final Button downloadPresentationButton = new Button(VaadinIcons.DOWNLOAD);
+    private final Button calcButton = new Button();
     private final AbsoluteLayout labTestChooserContent = new AbsoluteLayout();
     private final VerticalLayout labTestChooserButtons = new VerticalLayout();
     private final Window labTestChooser = new Window("Choose lab for test", labTestChooserContent);
@@ -166,14 +167,16 @@ public class LabChooserView extends VerticalLayout implements View {
         labContentButton.addClickListener(event ->  labPresentationSelectView.setPopupVisible(true));
 
         content.addStyleName(EcoLabTheme.PANEL_LABCHOOSER);
-        content.addComponent(logo, 0, 0, 0, 2);
-        content.addComponent(lab1Button, 1, 0);
-        content.addComponent(lab2Button, 1, 1);
-        content.addComponent(lab3Button, 1, 2);
-        content.addComponent(labDefenceButton, 1, 3);
-        content.addComponent(labContentButton, 0, 3);
-        content.addComponent(labPresentationSelectView, 0, 4);
-        content.addComponent(gallery, 1, 4);
+        calcButton.setStyleName(EcoLabTheme.BUTTON_LEFT_PANEL);
+        content.addComponent(calcButton, 0, 0);
+        content.addComponent(logo, 1, 0, 1, 2);
+        content.addComponent(lab1Button, 2, 0);
+        content.addComponent(lab2Button, 2, 1);
+        content.addComponent(lab3Button, 2, 2);
+        content.addComponent(labDefenceButton, 2, 3);
+        content.addComponent(labContentButton, 1, 3);
+        content.addComponent(labPresentationSelectView, 1, 4);
+        content.addComponent(gallery, 2, 4);
 
         content.setComponentAlignment(labContentButton, Alignment.BOTTOM_CENTER);
         content.setComponentAlignment(lab1Button, Alignment.MIDDLE_RIGHT);
