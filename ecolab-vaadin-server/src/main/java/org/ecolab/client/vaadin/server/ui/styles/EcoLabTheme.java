@@ -49,7 +49,7 @@ public class EcoLabTheme extends ValoTheme {
 
     public static final String BUTTON_VARIANT_CHOOSER = "variant-chooser";
 
-    public static final String BUTTON_LEFT_CALC = "left-button-calc";
+    public static final String BUTTON_LEFT_PANEL = "left-button";
 
     public static final String BUTTON_TEST_VARIANT_CHOOSER = "test-variant-chooser";
 
@@ -74,6 +74,8 @@ public class EcoLabTheme extends ValoTheme {
     public static final String RANDOM_DATA_TYPE = "randomDataType.svg";
 
     public static final String IMAGE_LOGO_CROP = "logoCrop.svg";
+
+    public static final String IMAGE_CALC = "calc.svg";
 
     // --------------------- Расположение --------------------------
     public static final String V_ALIGN_CENTER = "v-align-center";

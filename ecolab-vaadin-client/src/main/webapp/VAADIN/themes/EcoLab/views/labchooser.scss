@@ -24,11 +24,12 @@
     }
   }
 
-  .v-button-left-button-calc {
+  .v-button-left-button {
     width: 80px;
     height: 80px;
     background-size:cover;
-    background: url('../img/calc.svg') no-repeat;
+    background: no-repeat;
+    margin-left: -10px;
   }
 
   .v-nativebutton-chooser {
