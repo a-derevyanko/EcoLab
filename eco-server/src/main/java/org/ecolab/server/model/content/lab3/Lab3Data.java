@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.ecolab.server.model.content.Calculated;
 import org.ecolab.server.model.content.LabData;
 import org.ecolab.server.model.content.ValidatedBy;
+import org.ecolab.server.model.content.lab3.validators.BoilerRunningTimeValidator;
 import org.ecolab.server.model.content.lab3.validators.StacksDiameterValidator;
 
 import javax.validation.Valid;
@@ -200,6 +201,7 @@ public class Lab3Data extends LabData<Lab3Variant> {
     /**
      * Длительность работы котла
      */
+    @ValidatedBy(BoilerRunningTimeValidator.class)
     private Double boilerRunningTime;
 
     /**
