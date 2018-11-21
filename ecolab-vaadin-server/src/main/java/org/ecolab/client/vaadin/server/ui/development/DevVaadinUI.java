@@ -2,6 +2,7 @@ package org.ecolab.client.vaadin.server.ui.development;
 
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
+import org.ecolab.client.vaadin.server.service.api.EventBroadcaster;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.EcoLabMenuBar;
 import org.ecolab.client.vaadin.server.ui.EcoLabNavigator;
@@ -18,8 +19,10 @@ import org.vaadin.spring.security.shared.VaadinSharedSecurity;
 @SpringUI
 @Profile({Profiles.MODE.DEV})
 public class DevVaadinUI extends VaadinUI {
-    public DevVaadinUI(EcoLabNavigator navigator, EcoLabMenuBar menuBar, ExceptionNotification exceptionNotification, ViewContainerPanel viewContainer, VaadinSharedSecurity vaadinSecurity, I18N i18N) {
-        super(navigator, menuBar, exceptionNotification, viewContainer, vaadinSecurity, i18N);
+    public DevVaadinUI(EventBroadcaster eventBroadcaster, EcoLabNavigator navigator, EcoLabMenuBar menuBar,
+                       ExceptionNotification exceptionNotification, ViewContainerPanel viewContainer,
+                       VaadinSharedSecurity vaadinSecurity, I18N i18N) {
+        super(eventBroadcaster, navigator, menuBar, exceptionNotification, viewContainer, vaadinSecurity, i18N);
     }
 
     @Override

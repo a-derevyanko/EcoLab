@@ -10,7 +10,6 @@ import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
-import org.jooq.impl.DSL;
 import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
@@ -18,8 +17,6 @@ import java.util.Arrays;
 
 import static org.ecolab.server.db.h2.public_.Tables.LAB1DATA;
 import static org.ecolab.server.db.h2.public_.Tables.LAB1TEAM;
-import static org.ecolab.server.db.h2.public_.Tables.LAB3TEAM;
-import static org.ecolab.server.db.h2.public_.Tables.USERS;
 import static org.ecolab.server.db.h2.public_.Tables.USER_LAB_ALLOWANCE;
 
 /**

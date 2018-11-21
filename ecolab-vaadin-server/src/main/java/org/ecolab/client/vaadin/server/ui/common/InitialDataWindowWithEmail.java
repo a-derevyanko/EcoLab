@@ -8,7 +8,6 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
 import org.ecolab.client.vaadin.server.ui.windows.InitialDataWindow;

@@ -1,11 +1,7 @@
 package org.ecolab.server.common;
 
-import org.ecolab.server.model.ClientContext;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-
 import java.util.Locale;
-import java.util.Objects;
+import org.ecolab.server.model.ClientContextProvider;
 
 /**
  * Created by 777Al on 29.05.2017.
@@ -16,13 +12,12 @@ public abstract class CurrentUser {
     }
 
     /**
-     * Возвращает контекст текущей сессии
-     * @return контекст текущей сессии
+     * Контекст текущей сессии
      */
-    private static ClientContext getCurrentContext() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Objects.requireNonNull(securityContext, "Current security context is empty!");
-        return (ClientContext) securityContext.getAuthentication().getDetails();
+    private static ClientContextProvider provider;
+
+    public static void setProvider(ClientContextProvider provider) {
+        CurrentUser.provider = provider;
     }
 
     /**
@@ -30,7 +25,7 @@ public abstract class CurrentUser {
      * @return идентификатор текущего пользователя
      */
     public static long getId() {
-        return getCurrentContext().getUserId();
+        return provider.getClientContext().getUserId();
     }
 
     /**
@@ -38,6 +33,6 @@ public abstract class CurrentUser {
      * @return язык текущего пользователя
      */
     public static Locale getLocale() {
-        return getCurrentContext().getLocale();
+        return provider.getClientContext().getLocale();
     }
 }

@@ -1,5 +1,10 @@
 package org.ecolab.client.vaadin.server;
 
+import java.util.List;
+import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import org.ecolab.client.vaadin.server.security.VaadinSessionClientContextProvider;
+import org.ecolab.server.common.CurrentUser;
 import org.ecolab.server.model.ClientContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
@@ -17,16 +22,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
-import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
 import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Андрей on 11.09.2016.
@@ -75,6 +74,7 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+        CurrentUser.setProvider(VaadinSessionClientContextProvider.INSTANCE);
         http.anonymous().authenticationFilter(new EcoLabAnonymousFilter(UUID.randomUUID().toString())).and().
                 headers().frameOptions().disable()
                 .and()

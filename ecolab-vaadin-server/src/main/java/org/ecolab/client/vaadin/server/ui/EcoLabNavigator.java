@@ -4,6 +4,9 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.ui.UI;
+import java.util.ArrayList;
+import java.util.Set;
+import javax.validation.constraints.NotNull;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.view.AdminManagingView;
 import org.ecolab.client.vaadin.server.ui.view.LabChooserView;
@@ -16,10 +19,6 @@ import org.ecolab.server.common.UserInfoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.vaadin.spring.security.VaadinSecurity;
-
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Created by 777Al on 23.11.2016.

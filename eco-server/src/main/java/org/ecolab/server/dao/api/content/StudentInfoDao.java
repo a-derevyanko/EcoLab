@@ -78,21 +78,21 @@ public interface StudentInfoDao extends Serializable {
 
     /**
      * Возвращает номера лабораторных, к которым есть доступ
-     * @param userName имя пользователя
+     * @param userId пользователь
      * @return номера лабораторных, к которым есть доступ
      */
     Set<Integer> getAllowedLabs(long userId);
 
     /**
      * Возвращает номера защит, к которым есть доступ
-     * @param userName имя пользователя
+     * @param userId пользователь
      * @return номера лабораторных, к которым есть доступ
      */
     Set<Integer> getAllowedDefence(long userId);
 
     /**
      * Допустить пользователя к лабораторной
-     * @param userName пользователь
+     * @param userId пользователь
      * @param labs лабораторные, к которым меняется допуск
      * @param allow допустить/снять допуск
      */
@@ -100,7 +100,7 @@ public interface StudentInfoDao extends Serializable {
 
     /**
      * Допустить пользователя к защите лабораторной
-     * @param userName пользователь
+     * @param userId пользователь
      * @param labs лабораторные, к которым меняется допуск
      * @param allow допустить/снять допуск
      */

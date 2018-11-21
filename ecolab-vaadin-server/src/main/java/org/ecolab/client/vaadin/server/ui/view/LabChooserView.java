@@ -16,8 +16,13 @@ import com.vaadin.ui.PopupView;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import org.ecolab.client.vaadin.server.events.LabAllowanceChangedEvent;
 import org.ecolab.client.vaadin.server.service.api.PresentationService;
 import org.ecolab.client.vaadin.server.service.api.ResourceService;
+import org.ecolab.client.vaadin.server.service.api.UIEventListener;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.EcoLabNavigator;
 import org.ecolab.client.vaadin.server.ui.VaadinUI;
@@ -38,10 +43,6 @@ import org.ecolab.server.model.UserGroup;
 import org.ecolab.server.service.api.StudentInfoService;
 import org.ecolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by 777Al on 03.04.2017.
@@ -191,6 +192,15 @@ public class LabChooserView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        changeButtonStates();
+    }
+
+    @UIEventListener
+    public void onLabAllowanceChanged(LabAllowanceChangedEvent event) {
+        VaadinUI.getCurrent().access(this::changeButtonStates);
+    }
+
+    private void changeButtonStates() {
         Set<Integer> allowedLabs = studentInfoService.getAllowedLabs(CurrentUser.getId());
         Set<Integer> allowedTests = studentInfoService.getAllowedDefence(CurrentUser.getId());
         Map<Integer, LabMode> completedLabs = userLabService.getCompletedLabs();

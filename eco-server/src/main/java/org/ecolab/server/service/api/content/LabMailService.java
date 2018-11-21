@@ -2,8 +2,6 @@ package org.ecolab.server.service.api.content;
 
 import org.springframework.mail.MailException;
 
-import java.util.Locale;
-
 public interface LabMailService {
     /**
      * Отправляет печатный вариант исходных данных в PDF формате на почту

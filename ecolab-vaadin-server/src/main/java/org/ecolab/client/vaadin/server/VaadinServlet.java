@@ -3,10 +3,15 @@ package org.ecolab.client.vaadin.server;
 import com.vaadin.server.CustomizedSystemMessages;
 import com.vaadin.server.DeploymentConfiguration;
 import com.vaadin.server.ServiceException;
+import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.SystemMessagesProvider;
 import com.vaadin.server.VaadinServletService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringComponent;
+import javax.servlet.ServletException;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.vaadin.spring.servlet.Vaadin4SpringServlet;
 
 /**
@@ -33,5 +38,17 @@ public class VaadinServlet extends Vaadin4SpringServlet {
             return systemMessages;
         });
         return servletService;
+    }
+
+    @Override
+    protected void servletInitialized() throws ServletException {
+        getService().addSessionInitListener(this::onServletInit);
+        super.servletInitialized();
+    }
+
+    private void onServletInit(SessionInitEvent sessionInitEvent) {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        VaadinSession session = sessionInitEvent.getSession();
+        session.setAttribute("client", securityContext.getAuthentication().getDetails());
     }
 }

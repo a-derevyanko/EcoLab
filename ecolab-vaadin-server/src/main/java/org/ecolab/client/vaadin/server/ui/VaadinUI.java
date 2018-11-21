@@ -1,15 +1,18 @@
 package org.ecolab.client.vaadin.server.ui;
 
 import com.vaadin.annotations.PreserveOnRefresh;
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import org.ecolab.client.vaadin.server.service.api.EventBroadcaster;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.customcomponents.ExceptionNotification;
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
@@ -32,10 +35,13 @@ import java.util.Locale;
 @Widgetset("AppWidgetset")
 @Theme(EcoLabTheme.THEME_NAME)
 @PreserveOnRefresh
+@Push(transport = Transport.WEBSOCKET_XHR)
 @Profile({Profiles.MODE.PROD, Profiles.MODE.DEMO})
 public class VaadinUI extends UI {
     private static final long serialVersionUID = -2988327335267095955L;
     private static final Logger LOG = LoggerFactory.getLogger(VaadinUI.class);
+
+    private final EventBroadcaster eventBroadcaster;
 
     private final EcoLabNavigator navigator;
 
@@ -58,7 +64,10 @@ public class VaadinUI extends UI {
     private StudentInfo currentStudentInfo;
 
     @Autowired
-    public VaadinUI(EcoLabNavigator navigator, EcoLabMenuBar menuBar, ExceptionNotification exceptionNotification, ViewContainerPanel viewContainer, VaadinSharedSecurity vaadinSecurity, I18N i18N) {
+    public VaadinUI(EventBroadcaster eventBroadcaster, EcoLabNavigator navigator, EcoLabMenuBar menuBar,
+                    ExceptionNotification exceptionNotification, ViewContainerPanel viewContainer,
+                    VaadinSharedSecurity vaadinSecurity, I18N i18N) {
+        this.eventBroadcaster = eventBroadcaster;
         this.navigator = navigator;
         this.menuBar = menuBar;
         this.exceptionNotification = exceptionNotification;
@@ -85,10 +94,18 @@ public class VaadinUI extends UI {
 
         navigator.addViewChangeListener(menuBar);
 
+        eventBroadcaster.subscribe(this);
+
         Responsive.makeResponsive(this);
 
         UI.getCurrent().getReconnectDialogConfiguration().setDialogText(i18N.get("vaadin.server-connection-lost"));
         UI.getCurrent().getReconnectDialogConfiguration().setDialogTextGaveUp(i18N.get("vaadin.server-connection-lost-gave-up"));
+    }
+
+    @Override
+    public void close() {
+        eventBroadcaster.unSubscribe(this);
+        super.close();
     }
 
     public void setCurrentUserInfo(UserInfo currentUserInfo) {

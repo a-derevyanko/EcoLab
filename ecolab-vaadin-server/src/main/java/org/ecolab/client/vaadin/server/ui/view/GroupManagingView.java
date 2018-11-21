@@ -18,6 +18,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.HeaderRow;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import org.ecolab.client.vaadin.server.events.LabAllowanceChangedEvent;
+import org.ecolab.client.vaadin.server.service.api.EventBroadcaster;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.EcoLabNavigator;
 import org.ecolab.client.vaadin.server.ui.common.DownloadStreamResource;
@@ -36,15 +41,13 @@ import org.ecolab.server.service.api.UserInfoService;
 import org.ecolab.server.service.api.content.UserLabService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
-
 @SpringView(name = GroupManagingView.NAME)
 public class GroupManagingView extends HorizontalLayout implements View {
     public static final String NAME = "group-manage";
 
     public static final String GROUP_NAME = "name";
+
+    private final EventBroadcaster eventBroadcaster;
 
     private final UserLabService userLabService;
 
@@ -77,11 +80,12 @@ public class GroupManagingView extends HorizontalLayout implements View {
     private StudentInfo studentInfo = new StudentInfo();
 
     @Autowired
-    public GroupManagingView(UserLabService userLabService,
+    public GroupManagingView(EventBroadcaster eventBroadcaster, UserLabService userLabService,
                              EcoLabNavigator navigator, NewStudentWindow newStudentWindow,
                              ManageStudentWindow editStudentWindow,
                              UserInfoService userInfoService, StudentInfoService studentInfoService,
                              I18N i18N) {
+        this.eventBroadcaster = eventBroadcaster;
         this.userLabService = userLabService;
         this.navigator = navigator;
         this.newStudentWindow = newStudentWindow;
@@ -245,6 +249,7 @@ public class GroupManagingView extends HorizontalLayout implements View {
                             allowedLabs.add(labNumber);
                             setAllowLabButtonStyles(onOffSwitch, true);
                         }
+                        eventBroadcaster.publish(new LabAllowanceChangedEvent(userProfile.getUserInfo().getId()));
                         userProfile.setAllowedLabs(allowedLabs);
                     }
                 });
@@ -284,6 +289,7 @@ public class GroupManagingView extends HorizontalLayout implements View {
                                 allowedLabs.add(labNumber);
                                 setAllowDefenceButtonStyles(onOffSwitch, true);
                             }
+                            eventBroadcaster.publish(new LabAllowanceChangedEvent(userProfile.getUserInfo().getId()));
                             userProfile.setAllowedDefence(allowedLabs);
                         }
                     });
