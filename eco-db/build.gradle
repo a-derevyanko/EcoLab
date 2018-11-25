@@ -1,15 +1,23 @@
+buildscript {
+    dependencies {
+        classpath 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+    }
+}
+
 plugins {
-    id 'nu.studer.jooq' version '2.0.7'
-    id "org.flywaydb.flyway" version "4.2.0"
+    id 'nu.studer.jooq' version '3.0.2'
+    id "org.flywaydb.flyway" version "5.2.1"
 }
 
 apply plugin: 'java'
 
 
 dependencies {
-    compile 'org.jooq:jooq:3.10.1'
+    compile 'org.jooq:jooq:3.11.7'
 
     compile "com.h2database:h2:$h2Version"
+    jooqRuntime group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.1'
+    jooqRuntime group: 'com.sun.activation', name: 'javax.activation', version: '1.2.0'
 
     jooqRuntime "com.h2database:h2:$h2Version"
     jooqRuntime "postgresql:postgresql:$pgVersion"
@@ -27,9 +35,9 @@ jooq {
             password = "$h2Password"
         }
         generator {
-            name = 'org.jooq.util.DefaultGenerator'
+            name = 'org.jooq.codegen.DefaultGenerator'
             database {
-                name = 'org.jooq.util.h2.H2Database'
+                name = 'org.jooq.meta.h2.H2Database'
                 includes = '.*'
                 excludes = ''
             }
@@ -49,9 +57,9 @@ jooq {
             password = ''
         }
         generator {
-            name = 'org.jooq.util.DefaultGenerator'
+            name = 'org.jooq.codegen.DefaultGenerator'
             database {
-                name = 'org.jooq.util.postgres.PostgresDatabase'
+                name = 'org.jooq.meta.postgres.PostgresDatabase'
                 includes = '.*'
                 excludes = ''
             }
@@ -68,6 +76,7 @@ jooq {
 flyway {
     locations = ["filesystem:${sourceSets.main.resources.srcDirs.first().path}/db/migration/h2"]
     outOfOrder = false
+    table = "schema_version"
     validateOnMigrate = true
     baselineOnMigrate = true
     driver = "$h2Driver"
