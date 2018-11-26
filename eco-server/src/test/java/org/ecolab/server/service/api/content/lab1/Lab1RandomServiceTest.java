@@ -2,7 +2,7 @@ package org.ecolab.server.service.api.content.lab1;
 
 import org.ecolab.server.model.content.lab1.random.Lab1RandomVariant;
 import org.ecolab.server.service.api.content.lab1.random.Lab1RandomService;
-import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 /**

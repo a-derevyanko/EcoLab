@@ -26,7 +26,7 @@ public class ServerConfiguration {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    private void createDefaultChartTheme() {
+    public void createDefaultChartTheme() {
         StandardChartTheme chartTheme = new StandardChartTheme("EcoLab");
 
         chartTheme.setChartBackgroundPaint(Color.WHITE);
@@ -39,7 +39,7 @@ public class ServerConfiguration {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    private void installAuthenticationManager() {
+    public void installAuthenticationManager() {
         userDetailsManager.setAuthenticationManager(authenticationManager);
     }
 

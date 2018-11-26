@@ -6,7 +6,7 @@ import org.ecolab.server.model.StudentGroup;
 import org.ecolab.server.model.StudentInfo;
 import org.ecolab.server.model.StudentTeam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;

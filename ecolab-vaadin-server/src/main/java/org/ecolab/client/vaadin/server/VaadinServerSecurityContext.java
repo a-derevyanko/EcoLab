@@ -25,6 +25,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
+import org.vaadin.spring.security.config.VaadinSharedSecurityConfiguration;
 import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
 
 /**
@@ -33,7 +34,7 @@ import org.vaadin.spring.security.shared.VaadinSessionClosingLogoutHandler;
 @SpringBootConfiguration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
-@Import(EcoLabVaadinSharedSecurityConfiguration.class)
+@Import(VaadinSharedSecurityConfiguration.class)
 public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     private final AuthenticationProvider authenticationProvider;
     private final RememberMeServices rememberMeServices;

@@ -37,6 +37,7 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
                     withConverter(converter).
                     bind(data -> data.getValue(i), (doubleData, aDouble) -> doubleData.setValue(i, aDouble));
             Column<EditableGridData<T>, T> column = addColumn(data -> data.getValue(i)).setCaption(caption).setSortable(false);
+            column.setWidth(80.0);
             column.setEditorBinding(binding);
         });
     }

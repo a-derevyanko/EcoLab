@@ -101,7 +101,7 @@ public abstract class LabExperimentJournalStep<T extends LabData<V>, V extends L
         for (int i = 1; i < 4; i++) {
             TextField iMeasurementTextField = new TextField();
             iMeasurementTextField.setPlaceholder(i18N.get("lab.step-experiment-journal.measurement", i));
-            iMeasurementTextField.setWidth(50.0F, Unit.PIXELS);
+            iMeasurementTextField.setWidth(80.0F, Unit.PIXELS);
 
             averageValuesBinder.forField(iMeasurementTextField).withConverter(converter).bind((ValueProvider<String, Double>) s -> null, (Setter<String, Double>) (s, o) -> { });
             measurementComponents.add(iMeasurementTextField);

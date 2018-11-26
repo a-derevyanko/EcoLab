@@ -1,15 +1,15 @@
-apply plugin: 'war'
-apply plugin: 'org.springframework.boot'
-
 buildscript {
     repositories {
         mavenCentral()
         mavenLocal()
     }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE")
-    }
 }
+
+plugins {
+    id "org.springframework.boot" version "2.1.0.RELEASE"
+}
+
+apply plugin: 'war'
 
 repositories {
     mavenCentral()
@@ -28,15 +28,19 @@ repositories {
 dependencies {
     compile project (':ecolab-vaadin-server')
     compile group: 'de.huxhorn.lilith',         name: 'de.huxhorn.lilith.3rdparty.junique',     version: '1.0.4'
+
+    providedRuntime group: 'org.springframework.boot',  name: 'spring-boot-starter-jetty',      version: '2.1.0.RELEASE'
 }
 
-war {
+springBoot {
+    buildInfo()
+}
+
+bootWar {
     baseName = 'EcoLab-Vaddin-Desktop'
     version =  '0.0.1'
+    mainClassName = 'org.ecolab.client.vaadin.desktop.DesktopVaadinApplication'
 }
-
-springBoot.mainClass = 'org.ecolab.client.vaadin.desktop.DesktopVaadinApplication'
-
 
 /**
  * Линковка ClassPath, чтобы обойти ошибку Windows 'CreateProcess error=206, Имя файла или его расширение имеет слишком большую длину'
@@ -61,12 +65,7 @@ bootRun {
     }
     systemProperties(System.properties)
     jvmArgs = ["-Dspring.profiles.active=production,custom,h2", "-Dorg.jooq.no-logo=true"]
-    addResources = true
-}
-
-bootRepackage {
-    enabled = true
-    executable = true
+    sourceResources sourceSets.main
 }
 
 clean.delete 'src/main/webapp'

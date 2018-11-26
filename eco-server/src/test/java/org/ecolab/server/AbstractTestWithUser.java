@@ -17,7 +17,7 @@ import org.testng.annotations.BeforeClass;
 /**
  * Created by 777Al on 19.04.2017.
  */
-@SpringBootTest(classes = {ServerApplication.class})
+@SpringBootTest(classes = {ServerApplication.class, TestServerConfiguration.class})
 @ActiveProfiles({Profiles.MODE.TEST, Profiles.DB.H2})
 @Transactional
 @Rollback

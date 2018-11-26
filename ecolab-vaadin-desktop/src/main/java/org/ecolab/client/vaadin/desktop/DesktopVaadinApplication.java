@@ -1,6 +1,5 @@
 package org.ecolab.client.vaadin.desktop;
 
-import de.codecentric.boot.admin.config.EnableAdminServer;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
 import org.apache.commons.lang.UnhandledException;
@@ -10,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -35,8 +35,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.util.ResourceBundle;
 
-@SpringBootApplication
-@EnableAdminServer
+@SpringBootApplication(exclude = GsonAutoConfiguration.class)
 @EnableConfigurationProperties(EcoLabVaadinProperties.class)
 public class DesktopVaadinApplication extends VaadinApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(DesktopVaadinApplication.class);

@@ -7,16 +7,6 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.BrowserFrame;
 import com.vaadin.ui.UI;
-import org.apache.commons.lang.UnhandledException;
-import org.ecolab.client.vaadin.server.service.api.FolderIterator;
-import org.ecolab.client.vaadin.server.service.api.ResourceService;
-import org.ecolab.server.common.PathReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -32,6 +22,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import org.apache.commons.lang.UnhandledException;
+import org.ecolab.client.vaadin.server.service.api.FolderIterator;
+import org.ecolab.client.vaadin.server.service.api.ResourceService;
+import org.ecolab.server.common.PathReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * Сервис, необходмый для получения ресурсов. Кэшируемый.
@@ -40,12 +39,6 @@ import java.util.zip.ZipOutputStream;
 @UIScope
 public class ResourceServiceImpl implements ResourceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceServiceImpl.class);
-
-    private final I18N i18N;
-
-    public ResourceServiceImpl(I18N i18N) {
-        this.i18N = i18N;
-    }
 
     @Override
     @Cacheable("RESOURCE")
@@ -66,11 +59,12 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public List<com.github.lotsabackscatter.blueimp.gallery.Image> getGalleryImages(String imagesPath) {
-        return VaadinServlet.getCurrent().getServletContext().getResourcePaths(getThemeDir() + imagesPath)
+        return getResourcePaths(imagesPath)
                 .stream().sorted().map(this::loadGalleryImage).collect(Collectors.toList());
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Set<String> getResourcePaths(String directoryPath) {
         return VaadinServlet.getCurrent().getServletContext().getResourcePaths(getThemeDir() + directoryPath);
     }

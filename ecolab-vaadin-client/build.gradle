@@ -24,6 +24,7 @@ dependencies {
     compile (group: 'org.vaadin.addon',               name: 'jfreechartwrapper',                     version: '4.0.0') {
         exclude group: 'org.apache.xmlgraphics'
         exclude group: 'jfree.jfreechart'
+        exclude group: 'javax.servlet'
     }
     compile group: 'org.jfree',                          name: 'jfreechart',                            version: '1.0.19'
 

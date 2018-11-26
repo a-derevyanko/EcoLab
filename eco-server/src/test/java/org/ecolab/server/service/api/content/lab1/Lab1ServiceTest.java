@@ -1,18 +1,17 @@
 package org.ecolab.server.service.api.content.lab1;
 
+import java.time.LocalDateTime;
 import org.apache.commons.lang.math.RandomUtils;
 import org.ecolab.server.AbstractTestWithUser;
 import org.ecolab.server.model.content.lab1.Lab1Data;
 import org.ecolab.server.model.content.lab1.Lab1Variant;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.time.LocalDateTime;
 
 /**
  * Created by Андрей on 01.05.2017.

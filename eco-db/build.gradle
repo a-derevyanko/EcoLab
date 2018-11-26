@@ -1,13 +1,13 @@
 plugins {
-    id 'nu.studer.jooq' version '2.0.7'
-    id "org.flywaydb.flyway" version "4.2.0"
+    id 'nu.studer.jooq' version '3.0.2'
+    id "org.flywaydb.flyway" version "5.2.1"
 }
 
 apply plugin: 'java'
 
 
 dependencies {
-    compile 'org.jooq:jooq:3.10.1'
+    compile 'org.jooq:jooq:3.11.2'
 
     compile "com.h2database:h2:$h2Version"
 
@@ -27,9 +27,9 @@ jooq {
             password = "$h2Password"
         }
         generator {
-            name = 'org.jooq.util.DefaultGenerator'
+            name = 'org.jooq.codegen.DefaultGenerator'
             database {
-                name = 'org.jooq.util.h2.H2Database'
+                name = 'org.jooq.meta.h2.H2Database'
                 includes = '.*'
                 excludes = ''
             }
@@ -70,6 +70,7 @@ flyway {
     outOfOrder = false
     validateOnMigrate = true
     baselineOnMigrate = true
+    table = 'schema_version'
     driver = "$h2Driver"
     url = "jdbc:h2:file:$project.rootProject.projectDir/$h2File"
     user = "$h2User"

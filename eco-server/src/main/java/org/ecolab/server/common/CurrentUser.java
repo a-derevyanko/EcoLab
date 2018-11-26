@@ -24,7 +24,7 @@ public abstract class CurrentUser {
      * Возвращает идентификатор текущего пользователя
      * @return идентификатор текущего пользователя
      */
-    public static long getId() {
+    public static Long getId() {
         return provider.getClientContext().getUserId();
     }
 
