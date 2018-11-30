@@ -1,9 +1,10 @@
 package org.aderevyanko.audit.impl;
 
-import io.reactivex.Scheduler;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
+import java.time.Duration;
+import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.aderevyanko.audit.api.AuditEventContext;
 import org.aderevyanko.audit.api.AuditEventHeader;
 import org.aderevyanko.audit.api.generic.AuditConfigStorage;
@@ -11,18 +12,16 @@ import org.aderevyanko.audit.api.generic.GenericAuditEvent;
 import org.aderevyanko.audit.api.generic.GenericAuditEventFilter;
 import org.aderevyanko.audit.api.generic.GenericAuditService;
 import org.aderevyanko.audit.api.generic.GenericEventsStorage;
-
-import java.util.Set;
-import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import reactor.core.Disposable;
+import reactor.core.publisher.EmitterProcessor;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 public abstract class GenericAuditServiceImpl<H extends AuditEventHeader, T extends GenericAuditEvent<T>, F extends GenericAuditEventFilter<F>>
         implements GenericAuditService<H, T, F> {
     private static final Logger LOGGER = Logger.getLogger(GenericAuditServiceImpl.class.getName());
 
-    private final PublishSubject<T> messageObserver = PublishSubject.create();
+    private final EmitterProcessor<T> messageObserver = EmitterProcessor.create();
 
     private final int eventsSaveCount;
 
@@ -39,7 +38,7 @@ public abstract class GenericAuditServiceImpl<H extends AuditEventHeader, T exte
         this.eventsSaveCount = eventsSaveCount;
         this.eventsSaveTimeSpanInSeconds = eventsSaveTimeSpanInSeconds;
         this.configStorage = configStorage;
-        Scheduler scheduler = Schedulers.from(executor);
+        Scheduler scheduler = Schedulers.fromExecutor(executor);
 
         // Subscribe for events
         Disposable subscription = messageObserver.
@@ -55,8 +54,8 @@ public abstract class GenericAuditServiceImpl<H extends AuditEventHeader, T exte
                     }
                     return false;
                 }).map(this::createAuditEventContext).
-                observeOn(scheduler).
-                buffer(this.eventsSaveTimeSpanInSeconds, TimeUnit.SECONDS, this.eventsSaveCount).
+                publishOn(scheduler).
+                bufferTimeout(this.eventsSaveCount, Duration.ofSeconds(this.eventsSaveTimeSpanInSeconds)).
                 filter(messages -> !messages.isEmpty()).
                 subscribe(storage::saveEvents);
         Runtime.getRuntime().addShutdownHook(new Thread(subscription::dispose));

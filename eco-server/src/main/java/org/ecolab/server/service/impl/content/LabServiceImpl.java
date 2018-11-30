@@ -254,7 +254,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
             for (Map.Entry<String, Image> image : images.entrySet()) {
                 imageListBuilder.add(reportService.createImageWithTitle(image.getValue(), image.getKey()));
             }
-            builder.title(imageListBuilder, cmp.verticalGap(20));
+            builder.title(imageListBuilder, cmp.verticalGap(10));
         }
 
         TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.

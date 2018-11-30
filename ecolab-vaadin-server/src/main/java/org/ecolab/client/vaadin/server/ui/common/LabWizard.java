@@ -10,8 +10,10 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.PublishSubject;
+import java.time.Duration;
+import java.util.List;
+import javax.annotation.PreDestroy;
+import javax.annotation.security.RolesAllowed;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.VaadinUI;
 import org.ecolab.client.vaadin.server.ui.customcomponents.ComponentErrorNotification;
@@ -29,11 +31,8 @@ import org.ecolab.server.service.api.content.LabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.teemu.wizards.event.WizardCompletedEvent;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
-
-import javax.annotation.PreDestroy;
-import javax.annotation.security.RolesAllowed;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import reactor.core.Disposable;
+import reactor.core.publisher.EmitterProcessor;
 
 /**
  * Created by Андрей on 19.03.2017.
@@ -129,7 +128,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
         firstColumnLayout.setComponentAlignment(leftButtonsLayout, Alignment.MIDDLE_LEFT);
 
-        PublishSubject<Integer> changesObserver = PublishSubject.create();
+        EmitterProcessor<Integer> changesObserver = EmitterProcessor.create();
 
         binder.addValueChangeListener(event -> {
             labService.updateCalculatedFields(binder.getBean());
@@ -137,7 +136,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
             changesObserver.onNext(1);
         });
 
-        subscription = changesObserver.buffer(autoSaveRate, TimeUnit.MILLISECONDS, 5).subscribe(s -> {
+        subscription = changesObserver.bufferTimeout(5, Duration.ofSeconds(autoSaveRate)).subscribe(s -> {
             if (!s.isEmpty()) {
                 saveData(false);
             }
