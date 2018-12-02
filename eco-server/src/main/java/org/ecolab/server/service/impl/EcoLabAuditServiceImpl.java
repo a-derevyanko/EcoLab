@@ -13,9 +13,7 @@ import org.ecolab.server.model.EcoLabAuditContextAttributes;
 import org.ecolab.server.model.EcoLabAuditEvent;
 import org.ecolab.server.model.EcoLabAuditEventHeader;
 import org.ecolab.server.service.api.EcoLabAuditService;
-import org.springframework.stereotype.Service;
 
-@Service
 public class EcoLabAuditServiceImpl extends GenericAuditServiceImpl<EcoLabAuditEventHeader, EcoLabAuditEvent, AuditEventFilter>
         implements EcoLabAuditService {
     private final Set<Consumer<EcoLabAuditEvent>> consumers = new CopyOnWriteArraySet<>();
