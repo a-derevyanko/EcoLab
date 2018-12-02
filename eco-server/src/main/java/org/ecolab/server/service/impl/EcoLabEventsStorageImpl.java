@@ -1,14 +1,19 @@
 package org.ecolab.server.service.impl;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.aderevyanko.audit.api.AuditEventAttribute;
 import org.aderevyanko.audit.api.AuditEventAttributeProvider;
 import org.aderevyanko.audit.api.AuditEventContext;
 import org.aderevyanko.audit.api.AuditEventFilter;
 import org.aderevyanko.audit.api.AuditEventTypeProvider;
-import org.aderevyanko.audit.api.generic.GenericEventsStorage;
 import org.ecolab.server.model.EcoLabAuditContextAttributes;
 import org.ecolab.server.model.EcoLabAuditEvent;
 import org.ecolab.server.model.EcoLabAuditEventHeader;
+import org.ecolab.server.service.api.EcoLabEventsStorage;
 import org.jooq.BatchBindStep;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
@@ -18,18 +23,13 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.ecolab.server.db.h2.public_.Tables.AUDIT;
 import static org.ecolab.server.db.h2.public_.tables.AuditAttributes.AUDIT_ATTRIBUTES;
 import static org.ecolab.server.db.h2.public_.tables.Users.USERS;
 
 @Service
-public class EcoLabEventsStorageImpl implements GenericEventsStorage<EcoLabAuditEventHeader, EcoLabAuditEvent, AuditEventFilter> {
+public class EcoLabEventsStorageImpl implements EcoLabEventsStorage {
     private static final Logger LOGGER = LoggerFactory.getLogger(EcoLabEventsStorageImpl.class);
 
     private final AuditEventTypeProvider eventTypeProvider;
@@ -77,16 +77,9 @@ public class EcoLabEventsStorageImpl implements GenericEventsStorage<EcoLabAudit
 
     @Override
     public Set<EcoLabAuditEventHeader> getHeaders(AuditEventFilter filter) {
-        Collection<Condition> conditions = new HashSet<>();
-        conditions.add(AUDIT.CREATE_DATE.between(filter.getStartDate(), filter.getEndDate()));
-
-        if (!CollectionUtils.isEmpty(filter.getEventTypes())) {
-            conditions.add(AUDIT.EVENT_TYPE.in(filter.getEventTypes().stream().map(eventTypeProvider::getId).collect(Collectors.toList())));
-        }
-
         return new HashSet<>(dsl.select(USERS.LOGIN, AUDIT.EVENT_TYPE, AUDIT.ID, AUDIT.CREATE_DATE).
                 from(AUDIT.join(USERS).on(AUDIT.USER_ID.eq(USERS.ID))).
-                where(conditions).fetch(record -> {
+                where(createHeadersConditions(filter)).fetch(record -> {
                     EcoLabAuditEventHeader header = new EcoLabAuditEventHeader();
                     header.setId(record.get(AUDIT.ID));
                     header.setEventDate(record.get(AUDIT.CREATE_DATE));
@@ -94,12 +87,6 @@ public class EcoLabEventsStorageImpl implements GenericEventsStorage<EcoLabAudit
                     header.setInitiator(record.get(USERS.LOGIN));
                     return header;
                 }));
-    }
-
-
-    @Override
-    public Set<EcoLabAuditEvent> getEvents(AuditEventFilter filter) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -117,5 +104,22 @@ public class EcoLabEventsStorageImpl implements GenericEventsStorage<EcoLabAudit
         }
 
         return event;
+    }
+
+    @Override
+    public int getHeadersSize(AuditEventFilter filter) {
+        return dsl.selectCount().
+                from(AUDIT.join(USERS).on(AUDIT.USER_ID.eq(USERS.ID))).
+                where(createHeadersConditions(filter)).fetchOneInto(Integer.class);
+    }
+
+    private Collection<Condition> createHeadersConditions(AuditEventFilter filter) {
+        Collection<Condition> conditions = new HashSet<>();
+        conditions.add(AUDIT.CREATE_DATE.between(filter.getStartDate(), filter.getEndDate()));
+
+        if (!CollectionUtils.isEmpty(filter.getEventTypes())) {
+            conditions.add(AUDIT.EVENT_TYPE.in(filter.getEventTypes().stream().map(eventTypeProvider::getId).collect(Collectors.toList())));
+        }
+        return conditions;
     }
 }

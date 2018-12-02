@@ -22,9 +22,20 @@ public class EcoLabAuditConfigStorageImpl implements AuditConfigStorage {
     }
 
     @Override
+    @Cacheable("EVENT_NAMES")
+    public Map<String, String> getEventNames() {
+        return dsl.selectFrom(AUDIT_EVENT_TYPE).fetchMap(AUDIT_EVENT_TYPE.SYSTEMNAME, AUDIT_EVENT_TYPE.NAME);
+    }
+    @Override
     @Cacheable("EVENT_TYPES")
     public Map<Long, String> getEventTypes() {
         return dsl.selectFrom(AUDIT_EVENT_TYPE).fetchMap(AUDIT_EVENT_TYPE.ID, AUDIT_EVENT_TYPE.SYSTEMNAME);
+    }
+
+    @Override
+    @Cacheable("EVENT_ATTRIBUTE_NAMES")
+    public Map<String, String> getEventAttributeNames() {
+        return dsl.selectFrom(AUDIT_EVENT_ATTRIBUTE).fetchMap(AUDIT_EVENT_ATTRIBUTE.SYSTEMNAME, AUDIT_EVENT_ATTRIBUTE.NAME);
     }
 
     @Override

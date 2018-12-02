@@ -12,7 +12,5 @@ public interface GenericEventsStorage<H extends AuditEventHeader,
 
     Set<H> getHeaders(F filter);
 
-    Set<T> getEvents(F filter);
-
     T getEvent(long id);
 }

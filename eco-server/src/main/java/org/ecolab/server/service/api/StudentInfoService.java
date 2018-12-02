@@ -116,17 +116,17 @@ public interface StudentInfoService extends Serializable {
 
     /**
      * Допустить пользователя к лабораторной
-     * @param userId идентификатор пользователя
+     * @param user пользователь
      * @param labs лабораторные, к которым меняется допуск
      * @param allow допустить/снять допуск
      */
-    void changeLabAllowance(long userId, boolean allow, int... labs);
+    void changeLabAllowance(UserInfo user, boolean allow, int... labs);
 
     /**
      * Допустить пользователя к защите лабораторной
-     * @param userId идентификатор пользователя
+     * @param user пользователь
      * @param labs лабораторные, к которым меняется допуск
      * @param allow допустить/снять допуск
      */
-    void changeDefenceAllowance(long userId, boolean allow, int... labs);
+    void changeDefenceAllowance(UserInfo user, boolean allow, int... labs);
 }

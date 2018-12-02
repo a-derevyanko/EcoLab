@@ -4,7 +4,11 @@ import org.aderevyanko.audit.api.AuditEventType;
 
 public enum EcoLabAuditEventType implements AuditEventType {
     LOGIN,
-    LOGOUT;
+    LOGOUT,
+    LAB_DISALLOWED,
+    LAB_ALLOWED,
+    LAB_DEFENCE_DISALLOWED,
+    LAB_DEFENCE_ALLOWED;
 
     @Override
     public String getSystemName() {

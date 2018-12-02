@@ -19,7 +19,6 @@ import com.vaadin.ui.Window;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import org.ecolab.client.vaadin.server.events.LabAllowanceChangedEvent;
 import org.ecolab.client.vaadin.server.service.api.PresentationService;
 import org.ecolab.client.vaadin.server.service.api.ResourceService;
 import org.ecolab.client.vaadin.server.service.api.UIEventListener;
@@ -38,6 +37,8 @@ import org.ecolab.client.vaadin.server.ui.view.content.lab_3.Lab3TestView;
 import org.ecolab.client.vaadin.server.ui.view.content.lab_3.Lab3View;
 import org.ecolab.client.vaadin.server.ui.windows.LabTypeSelectorWindow;
 import org.ecolab.server.common.CurrentUser;
+import org.ecolab.server.common.EcoLabAuditEventType;
+import org.ecolab.server.model.EcoLabAuditEvent;
 import org.ecolab.server.model.LabMode;
 import org.ecolab.server.model.UserGroup;
 import org.ecolab.server.service.api.StudentInfoService;
@@ -195,8 +196,9 @@ public class LabChooserView extends VerticalLayout implements View {
         changeButtonStates();
     }
 
-    @UIEventListener
-    public void onLabAllowanceChanged(LabAllowanceChangedEvent event) {
+    @UIEventListener({EcoLabAuditEventType.LAB_ALLOWED, EcoLabAuditEventType.LAB_DEFENCE_ALLOWED,
+            EcoLabAuditEventType.LAB_DISALLOWED, EcoLabAuditEventType.LAB_DEFENCE_DISALLOWED})
+    public void onLabAllowanceChanged(EcoLabAuditEvent event) {
         VaadinUI.getCurrent().access(this::changeButtonStates);
     }
 

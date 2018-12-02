@@ -1,11 +1,21 @@
 package org.ecolab.server.service.impl;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
+import org.ecolab.server.common.EcoLabAuditEventAttribute;
+import org.ecolab.server.common.EcoLabAuditEventType;
+import org.ecolab.server.common.UserInfoUtils;
 import org.ecolab.server.dao.api.content.StudentInfoDao;
+import org.ecolab.server.model.EcoLabAuditEvent;
 import org.ecolab.server.model.StudentGroup;
 import org.ecolab.server.model.StudentGroupInfo;
 import org.ecolab.server.model.StudentInfo;
 import org.ecolab.server.model.StudentTeam;
 import org.ecolab.server.model.UserInfo;
+import org.ecolab.server.service.api.EcoLabAuditService;
 import org.ecolab.server.service.api.StudentInfoService;
 import org.ecolab.server.service.api.UserInfoService;
 import org.springframework.cache.annotation.CacheEvict;
@@ -14,9 +24,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nullable;
-import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 import static org.ecolab.server.CacheContext.STUDENT_INFO_CACHE;
 import static org.ecolab.server.CacheContext.TEAM_MEMBERS_CACHE;
@@ -28,10 +35,13 @@ import static org.ecolab.server.CacheContext.TEAM_MEMBERS_CACHE;
 public class StudentInfoServiceImpl implements StudentInfoService {
     private final UserInfoService userInfoService;
 
+    private final EcoLabAuditService auditService;
+
     private final StudentInfoDao studentInfoDao;
 
-    public StudentInfoServiceImpl(UserInfoService userInfoService, StudentInfoDao studentInfoDao) {
+    public StudentInfoServiceImpl(UserInfoService userInfoService, EcoLabAuditService auditService, StudentInfoDao studentInfoDao) {
         this.userInfoService = userInfoService;
+        this.auditService = auditService;
         this.studentInfoDao = studentInfoDao;
     }
 
@@ -195,13 +205,25 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
     @Override
     @Transactional
-    public void changeLabAllowance(long userId, boolean allow, int... labs) {
-        studentInfoDao.changeLabAllowance(userId, allow, labs);
+    public void changeLabAllowance(UserInfo user, boolean allow, int... labs) {
+        studentInfoDao.changeLabAllowance(user.getId(), allow, labs);
+
+        auditService.log(EcoLabAuditEvent.ofType(allow ? EcoLabAuditEventType.LAB_ALLOWED : EcoLabAuditEventType.LAB_DISALLOWED).
+                forUser(user.getId()).
+                attribute(EcoLabAuditEventAttribute.CONSUMER_NAME,
+                        UserInfoUtils.getShortInitials(user)).
+                attribute(EcoLabAuditEventAttribute.LAB_NUMBER, Arrays.stream(labs).mapToObj(String::valueOf).collect(Collectors.joining(", "))));
     }
 
     @Override
     @Transactional
-    public void changeDefenceAllowance(long userId, boolean allow, int... labs) {
-        studentInfoDao.changeDefenceAllowance(userId, allow, labs);
+    public void changeDefenceAllowance(UserInfo user, boolean allow, int... labs) {
+        studentInfoDao.changeDefenceAllowance(user.getId(), allow, labs);
+
+        auditService.log(EcoLabAuditEvent.ofType(allow ? EcoLabAuditEventType.LAB_DEFENCE_ALLOWED : EcoLabAuditEventType.LAB_DEFENCE_DISALLOWED).
+                forUser(user.getId()).
+                attribute(EcoLabAuditEventAttribute.CONSUMER_NAME,
+                        UserInfoUtils.getShortInitials(user)).
+                attribute(EcoLabAuditEventAttribute.LAB_NUMBER, Arrays.stream(labs).mapToObj(String::valueOf).collect(Collectors.joining(", "))));
     }
 }

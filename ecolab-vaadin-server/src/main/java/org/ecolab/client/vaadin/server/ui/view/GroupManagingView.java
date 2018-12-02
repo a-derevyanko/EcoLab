@@ -2,6 +2,7 @@ package org.ecolab.client.vaadin.server.ui.view;
 
 import com.google.common.collect.Sets;
 import com.vaadin.addon.onoffswitch.OnOffSwitch;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.GridSortOrder;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.icons.VaadinIcons;
@@ -13,6 +14,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -21,8 +23,6 @@ import com.vaadin.ui.components.grid.HeaderRow;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-import org.ecolab.client.vaadin.server.events.LabAllowanceChangedEvent;
-import org.ecolab.client.vaadin.server.service.api.EventBroadcaster;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.EcoLabNavigator;
 import org.ecolab.client.vaadin.server.ui.common.DownloadStreamResource;
@@ -46,8 +46,6 @@ public class GroupManagingView extends HorizontalLayout implements View {
     public static final String NAME = "group-manage";
 
     public static final String GROUP_NAME = "name";
-
-    private final EventBroadcaster eventBroadcaster;
 
     private final UserLabService userLabService;
 
@@ -80,12 +78,11 @@ public class GroupManagingView extends HorizontalLayout implements View {
     private StudentInfo studentInfo = new StudentInfo();
 
     @Autowired
-    public GroupManagingView(EventBroadcaster eventBroadcaster, UserLabService userLabService,
+    public GroupManagingView(UserLabService userLabService,
                              EcoLabNavigator navigator, NewStudentWindow newStudentWindow,
                              ManageStudentWindow editStudentWindow,
                              UserInfoService userInfoService, StudentInfoService studentInfoService,
                              I18N i18N) {
-        this.eventBroadcaster = eventBroadcaster;
         this.userLabService = userLabService;
         this.navigator = navigator;
         this.newStudentWindow = newStudentWindow;
@@ -136,6 +133,13 @@ public class GroupManagingView extends HorizontalLayout implements View {
                         userProfile.getUserInfo().getFirstName() + '\n' +
                         userProfile.getUserInfo().getMiddleName()
         ).setCaption(i18N.get("group-manage.group-members.student"));
+
+        groupMembers.addComponentColumn(new ValueProvider<UserProfile, Component>() {
+            @Override
+            public Component apply(UserProfile userProfile) {
+                return null;
+            }
+        }).setCaption(i18N.get("group-manage.group-members.student"));
 
         Grid.Column<UserProfile, String> team = groupMembers.addColumn(userProfile -> null ==
                 userProfile.getStudentInfo().getTeam() ? i18N.get("group-manage.group-members.no-team") :
@@ -219,10 +223,9 @@ public class GroupManagingView extends HorizontalLayout implements View {
     private void refreshItems() {
         Set<UserProfile> userProfiles = userLabService.getUserProfiles(studentInfo.getGroup().getName());
         groupMembers.setItems(userProfiles);
-
     }
 
-    private void addLabColumns(int labNumber, String caption, HeaderRow topHeader) {
+    private void addLabColumns(final int labNumber, String caption, HeaderRow topHeader) {
         Grid.Column<UserProfile, VerticalLayout> execution = groupMembers.addComponentColumn(userProfile ->
         {
             VerticalLayout layout = new VerticalLayout();
@@ -239,17 +242,16 @@ public class GroupManagingView extends HorizontalLayout implements View {
                     if (event.isUserOriginated()) {
                         Set<Integer> allowedLabs = Sets.newHashSet(userProfile.getAllowedLabs());
                         if (allowedLabs.contains(labNumber)) {
-                            studentInfoService.changeLabAllowance(userProfile.getUserInfo().getId(),
+                            studentInfoService.changeLabAllowance(userProfile.getUserInfo(),
                                     false, labNumber);
                             allowedLabs.remove(labNumber);
                             setAllowLabButtonStyles(onOffSwitch, false);
                         } else {
-                            studentInfoService.changeLabAllowance(userProfile.getUserInfo().getId(),
+                            studentInfoService.changeLabAllowance(userProfile.getUserInfo(),
                                     true, labNumber);
                             allowedLabs.add(labNumber);
                             setAllowLabButtonStyles(onOffSwitch, true);
                         }
-                        eventBroadcaster.publish(new LabAllowanceChangedEvent(userProfile.getUserInfo().getId()));
                         userProfile.setAllowedLabs(allowedLabs);
                     }
                 });
@@ -279,17 +281,16 @@ public class GroupManagingView extends HorizontalLayout implements View {
                         if (event.isUserOriginated()) {
                             Set<Integer> allowedLabs = Sets.newHashSet(userProfile.getAllowedDefence());
                             if (allowedLabs.contains(labNumber)) {
-                                studentInfoService.changeDefenceAllowance(userProfile.getUserInfo().getId(),
+                                studentInfoService.changeDefenceAllowance(userProfile.getUserInfo(),
                                         false, labNumber);
                                 allowedLabs.remove(labNumber);
                                 setAllowDefenceButtonStyles(onOffSwitch, false);
                             } else {
-                                studentInfoService.changeDefenceAllowance(userProfile.getUserInfo().getId(),
+                                studentInfoService.changeDefenceAllowance(userProfile.getUserInfo(),
                                         true, labNumber);
                                 allowedLabs.add(labNumber);
                                 setAllowDefenceButtonStyles(onOffSwitch, true);
                             }
-                            eventBroadcaster.publish(new LabAllowanceChangedEvent(userProfile.getUserInfo().getId()));
                             userProfile.setAllowedDefence(allowedLabs);
                         }
                     });

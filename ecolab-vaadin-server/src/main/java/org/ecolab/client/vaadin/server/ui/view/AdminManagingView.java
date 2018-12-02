@@ -14,6 +14,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import org.ecolab.client.vaadin.server.EcoLabVaadinProperties;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
+import org.ecolab.client.vaadin.server.ui.common.AuditPanel;
 import org.ecolab.client.vaadin.server.ui.common.DownloadStreamResource;
 import org.ecolab.client.vaadin.server.ui.common.UIUtils;
 import org.ecolab.client.vaadin.server.ui.view.api.View;
@@ -43,6 +44,8 @@ public class AdminManagingView extends VerticalLayout implements View {
 
     private final StudentsPanel studentsPanel;
 
+    private final AuditPanel auditPanel;
+
     // ---------------------------- Графические компоненты --------------------
     private final TextField autoSaveRate = new TextField();
 
@@ -56,15 +59,15 @@ public class AdminManagingView extends VerticalLayout implements View {
 
     protected final TabSheet userTabs = new TabSheet();
 
-    public AdminManagingView(I18N i18N, AdminService adminService, EcoLabVaadinProperties systemProperties, AdminsPanel adminsPanel, TeachersPanel teachersPanel, StudentsPanel studentsPanel) {
+    public AdminManagingView(I18N i18N, AdminService adminService, EcoLabVaadinProperties systemProperties, AdminsPanel adminsPanel, TeachersPanel teachersPanel, StudentsPanel studentsPanel, AuditPanel auditPanel) {
         this.i18N = i18N;
         this.adminService = adminService;
         this.systemProperties = systemProperties;
         this.adminsPanel = adminsPanel;
         this.teachersPanel = teachersPanel;
         this.studentsPanel = studentsPanel;
+        this.auditPanel = auditPanel;
     }
-
 
     @Override
     public void init() throws Exception {
@@ -85,6 +88,7 @@ public class AdminManagingView extends VerticalLayout implements View {
         userTabs.addTab(teachersPanel, i18N.get(UserGroup.TEACHER));
         userTabs.addTab(studentsPanel, i18N.get(UserGroup.STUDENT));
         userTabs.addTab(adminsPanel, i18N.get(UserGroup.ADMIN));
+        userTabs.addTab(auditPanel, i18N.get("admin-manage.system.audit"));
         userTabs.addTab(systemPropertiesPanel, i18N.get("admin-manage.system.properties"));
 
         backUpButton.setCaption(i18N.get("backUp"));

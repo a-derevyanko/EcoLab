@@ -1,5 +1,8 @@
 package org.ecolab.server.service.impl;
 
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Consumer;
 import org.aderevyanko.audit.api.AuditEventContext;
 import org.aderevyanko.audit.api.AuditEventFilter;
 import org.aderevyanko.audit.api.generic.AuditConfigStorage;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EcoLabAuditServiceImpl extends GenericAuditServiceImpl<EcoLabAuditEventHeader, EcoLabAuditEvent, AuditEventFilter>
         implements EcoLabAuditService {
+    private final Set<Consumer<EcoLabAuditEvent>> consumers = new CopyOnWriteArraySet<>();
 
     public EcoLabAuditServiceImpl(GenericEventsStorage<EcoLabAuditEventHeader, EcoLabAuditEvent, AuditEventFilter> storage,
                                   AuditConfigStorage configStorage) {
@@ -30,5 +34,18 @@ public class EcoLabAuditServiceImpl extends GenericAuditServiceImpl<EcoLabAuditE
         AuditEventContext<EcoLabAuditEvent> context = new AuditEventContext<>(event);
         context.setValue(EcoLabAuditContextAttributes.USER_ID, CurrentUser.getId());
         return context;
+    }
+
+    @Override
+    public void addEventSubscriber(Consumer<EcoLabAuditEvent> subscriber) {
+        consumers.add(subscriber);
+    }
+
+    @Override
+    public void log(EcoLabAuditEvent event) {
+        for (Consumer<EcoLabAuditEvent> consumer : consumers) {
+            consumer.accept(event);
+        }
+        super.log(event);
     }
 }
