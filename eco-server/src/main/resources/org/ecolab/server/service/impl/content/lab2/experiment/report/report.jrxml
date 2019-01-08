@@ -58,7 +58,7 @@
 					<font isItalic="false"/>
 				</textElement>
 				<text><![CDATA[НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ УНИВЕРСИТЕТ
-«МОСКОВСКИЙ ЭНЕРГЕТИЧЕСКИЙ ИНСТИТУТ»]]></text>
+«МЭИ»]]></text>
 			</staticText>
 			<textField>
 				<reportElement key="" style="StyleFortableCells" x="388" y="600" width="109" height="20" uuid="33e230e5-0a9c-4016-a05c-7375f214ff07"/>
