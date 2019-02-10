@@ -1,5 +1,6 @@
 package org.ecolab.client.vaadin.server.ui.customcomponents;
 
+import com.lowagie.text.html.HtmlTags;
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
 import com.vaadin.icons.VaadinIcons;
@@ -17,6 +18,13 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import com.vaadin.util.ReflectTools;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import org.apache.commons.io.FilenameUtils;
 import org.ecolab.client.vaadin.server.service.api.ParameterCustomizer;
 import org.ecolab.client.vaadin.server.service.api.ResourceService;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
@@ -28,14 +36,6 @@ import org.ecolab.server.model.content.LabData;
 import org.ecolab.server.model.content.LabVariant;
 import org.ecolab.server.service.api.content.LabService;
 import org.ecolab.server.service.api.content.ValidationService;
-import org.springframework.boot.autoconfigure.mustache.MustacheProperties;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by 777Al on 08.04.2017.
@@ -183,11 +183,12 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
 
 
     public void addInfoButton(String fieldName, int row) {
-        if (res.isResourceExists(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)) {
+        String resourceName = fieldName + FilenameUtils.EXTENSION_SEPARATOR + HtmlTags.HTML;
+        if (res.isResourceExists(additionsPath, resourceName)) {
             Button infoButton = new Button(VaadinIcons.QUESTION);
             infoButton.addClickListener(event -> resourceWindow.show(
                     new ResourceWindow.ResourceWindowSettings(i18N.get(fieldName),
-                            res.getHtmlData(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX), false)));
+                            res.getHtmlData(additionsPath, resourceName), false)));
             infoButton.addStyleName(EcoLabTheme.BUTTON_TINY);
             super.addComponent(infoButton, 3, row);
         }

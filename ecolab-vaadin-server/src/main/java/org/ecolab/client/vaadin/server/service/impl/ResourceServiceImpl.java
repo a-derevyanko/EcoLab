@@ -88,7 +88,7 @@ public class ResourceServiceImpl implements ResourceService {
     /**
      * Собирает архив с файлами
      * Архивы больше 100 мб не кэшируются
-     * @param folderIterator селектор для папок, айлы из которых будут добавлены в архив
+     * @param folderIterator селектор для папок, файлы из которых будут добавлены в архив
      * @return zip - архив
      */
     @Override

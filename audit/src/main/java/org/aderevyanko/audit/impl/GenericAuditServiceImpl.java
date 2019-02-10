@@ -21,7 +21,7 @@ public abstract class GenericAuditServiceImpl<H extends AuditEventHeader, T exte
         implements GenericAuditService<H, T, F> {
     private static final Logger LOGGER = Logger.getLogger(GenericAuditServiceImpl.class.getName());
 
-    private final EmitterProcessor<T> messageObserver = EmitterProcessor.create();
+    protected final EmitterProcessor<T> messageObserver = EmitterProcessor.create();
 
     private final int eventsSaveCount;
 

@@ -1,8 +1,7 @@
 package org.ecolab.server.service.impl;
 
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 import org.aderevyanko.audit.api.AuditEventContext;
 import org.aderevyanko.audit.api.AuditEventFilter;
 import org.aderevyanko.audit.api.generic.AuditConfigStorage;
@@ -13,10 +12,11 @@ import org.ecolab.server.model.EcoLabAuditContextAttributes;
 import org.ecolab.server.model.EcoLabAuditEvent;
 import org.ecolab.server.model.EcoLabAuditEventHeader;
 import org.ecolab.server.service.api.EcoLabAuditService;
+import reactor.core.Disposable;
 
 public class EcoLabAuditServiceImpl extends GenericAuditServiceImpl<EcoLabAuditEventHeader, EcoLabAuditEvent, AuditEventFilter>
         implements EcoLabAuditService {
-    private final Set<Consumer<EcoLabAuditEvent>> consumers = new CopyOnWriteArraySet<>();
+    private static final Logger LOGGER = Logger.getLogger(EcoLabAuditServiceImpl.class.getName());
 
     public EcoLabAuditServiceImpl(GenericEventsStorage<EcoLabAuditEventHeader, EcoLabAuditEvent, AuditEventFilter> storage,
                                   AuditConfigStorage configStorage) {
@@ -36,14 +36,7 @@ public class EcoLabAuditServiceImpl extends GenericAuditServiceImpl<EcoLabAuditE
 
     @Override
     public void addEventSubscriber(Consumer<EcoLabAuditEvent> subscriber) {
-        consumers.add(subscriber);
-    }
-
-    @Override
-    public void log(EcoLabAuditEvent event) {
-        for (Consumer<EcoLabAuditEvent> consumer : consumers) {
-            consumer.accept(event);
-        }
-        super.log(event);
+        Disposable subscription = messageObserver.subscribe(subscriber);
+        Runtime.getRuntime().addShutdownHook(new Thread(subscription::dispose));
     }
 }

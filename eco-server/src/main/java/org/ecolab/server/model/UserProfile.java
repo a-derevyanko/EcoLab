@@ -13,6 +13,6 @@ public class UserProfile {
   private Set<Integer> allowedDefence;
   private StudentInfo studentInfo;
   private byte[] picture;
-  private double averageMark;
-  private double averagePointCount;
+  private int averageMark;
+  private int averagePointCount;
 }

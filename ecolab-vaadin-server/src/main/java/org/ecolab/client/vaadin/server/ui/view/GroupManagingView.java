@@ -146,7 +146,8 @@ public class GroupManagingView extends HorizontalLayout implements View {
                 userProfile.getStudentInfo().getTeam().getName()
         ).setCaption(i18N.get("group-manage.group-members.team"));
 
-        Grid.Column<UserProfile, Double> average = groupMembers.addColumn(UserProfile::getAveragePointCount).setCaption(i18N.get("group-manage.group-members.average"));
+        Grid.Column<UserProfile, String> average = groupMembers.addColumn(s -> String.format("%d (%d)",
+                s.getAverageMark(), s.getAveragePointCount())).setCaption(i18N.get("group-manage.group-members.average"));
 
         addLabColumns(1, i18N.get("group-manage.group-members.lab-1"), topHeader);
         addLabColumns(2, i18N.get("group-manage.group-members.lab-2"), topHeader);

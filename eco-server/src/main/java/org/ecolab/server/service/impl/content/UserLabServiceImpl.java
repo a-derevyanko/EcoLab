@@ -1,5 +1,13 @@
 package org.ecolab.server.service.impl.content;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.UnhandledException;
 import org.ecolab.server.common.CurrentUser;
@@ -15,15 +23,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Service
 public class UserLabServiceImpl implements UserLabService {
@@ -76,8 +75,10 @@ public class UserLabServiceImpl implements UserLabService {
         profile.setAllowedLabs(studentInfoService.getAllowedLabs(userId));
         profile.setAllowedDefence(studentInfoService.getAllowedDefence(userId));
         profile.setStudentInfo(studentInfoService.getStudentInfo(userId));
-        profile.setAverageMark(profile.getStatistics().stream().filter(s -> s.getMark() != 0).mapToDouble(UserLabStatistics::getMark).average().orElse(0.0));
-        profile.setAveragePointCount(profile.getStatistics().stream().filter(s -> s.getPointCount() != 0).mapToDouble(UserLabStatistics::getPointCount).average().orElse(0.0));
+        Double averageMark = profile.getStatistics().stream().filter(s -> s.getMark() != 0).collect(Collectors.averagingInt(UserLabStatistics::getMark));
+        Double averagePointCount = profile.getStatistics().stream().filter(s -> s.getMark() != 0).collect(Collectors.averagingInt(UserLabStatistics::getPointCount));
+        profile.setAverageMark(averageMark == null ? 0 : (int) Math.round(averageMark));
+        profile.setAveragePointCount(averagePointCount == null ? 0 : (int) Math.round(averagePointCount));
 
         try {
             if (profile.getAverageMark() < 3) {
