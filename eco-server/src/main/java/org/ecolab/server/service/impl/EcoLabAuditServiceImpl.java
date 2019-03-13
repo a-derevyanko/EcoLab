@@ -12,8 +12,10 @@ import org.ecolab.server.model.EcoLabAuditContextAttributes;
 import org.ecolab.server.model.EcoLabAuditEvent;
 import org.ecolab.server.model.EcoLabAuditEventHeader;
 import org.ecolab.server.service.api.EcoLabAuditService;
+import org.springframework.stereotype.Service;
 import reactor.core.Disposable;
 
+@Service
 public class EcoLabAuditServiceImpl extends GenericAuditServiceImpl<EcoLabAuditEventHeader, EcoLabAuditEvent, AuditEventFilter>
         implements EcoLabAuditService {
     private static final Logger LOGGER = Logger.getLogger(EcoLabAuditServiceImpl.class.getName());

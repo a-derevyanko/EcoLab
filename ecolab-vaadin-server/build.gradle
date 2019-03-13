@@ -25,7 +25,7 @@ dependencies {
     compile project (':eco-server')
     compile project (':ecolab-vaadin-client')
     //compile project (':ecolab-server')
-    compile group: 'com.vaadin',                    name: 'vaadin-push',                        version: '8.5.2'
+    compile group: 'com.vaadin',                    name: 'vaadin-push',                        version: '8.7.1'
     
     compile group: 'org.apache.commons',            name: 'commons-lang3',                      version: '3.8'
     compile group: 'com.vaadin',                    name: 'vaadin-spring',                      version: '3.0.1'
