@@ -1,11 +1,11 @@
 package org.ecolab.server.model.content.lab2.validators;
 
+import java.util.List;
+import java.util.Objects;
 import org.ecolab.server.model.DomainModel;
 import org.ecolab.server.model.content.FieldValidationResult;
 import org.ecolab.server.model.content.FieldValidator;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AverageSoundPressureControlPointValidator implements FieldValidator<List<Double>, DomainModel> {
@@ -18,6 +18,7 @@ public class AverageSoundPressureControlPointValidator implements FieldValidator
                 return FieldValidationResult.error("lab2.error.soundPressureControlPointValidator");
             }
         }*/
-        return FieldValidationResult.ok();
+        // Проверяем что все значения непусты
+        return FieldValidationResult.of(value.stream().anyMatch(Objects::isNull));
     }
 }

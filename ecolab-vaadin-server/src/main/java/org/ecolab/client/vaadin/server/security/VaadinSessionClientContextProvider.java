@@ -15,6 +15,8 @@ public class VaadinSessionClientContextProvider implements ClientContextProvider
 
     public void setAuthentication(Authentication authentication) {
         VaadinSession session = VaadinSession.getCurrent();
-        session.setAttribute("client", authentication.getDetails());
+        if (session != null) {
+            session.setAttribute("client", authentication.getDetails());
+        }
     }
 }

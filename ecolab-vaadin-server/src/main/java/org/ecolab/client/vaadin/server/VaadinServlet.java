@@ -71,7 +71,7 @@ public class VaadinServlet extends Vaadin4SpringServlet {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
 
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             VaadinSessionClientContextProvider.INSTANCE.setAuthentication(authentication);
 
             EcoLabAuditEvent logoutAudit = EcoLabAuditEvent.ofType(EcoLabAuditEventType.LOGOUT);

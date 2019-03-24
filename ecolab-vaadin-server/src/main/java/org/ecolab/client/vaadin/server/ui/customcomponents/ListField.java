@@ -3,11 +3,10 @@ package org.ecolab.client.vaadin.server.ui.customcomponents;
 import com.vaadin.data.Converter;
 import com.vaadin.data.HasValue;
 import com.vaadin.shared.Registration;
-import org.ecolab.client.vaadin.server.service.impl.I18N;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.ecolab.client.vaadin.server.service.impl.I18N;
 
 public class ListField<T> extends EditableGrid<T> implements HasValue<List<T>> {
     private final T defaultValue;

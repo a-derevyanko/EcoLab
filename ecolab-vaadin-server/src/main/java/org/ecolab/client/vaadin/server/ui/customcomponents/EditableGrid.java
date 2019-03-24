@@ -2,18 +2,18 @@ package org.ecolab.client.vaadin.server.ui.customcomponents;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.Converter;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
-import org.ecolab.client.vaadin.server.service.impl.I18N;
-import org.ecolab.client.vaadin.server.ui.view.api.UIComponent;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.ecolab.client.vaadin.server.service.impl.I18N;
+import org.ecolab.client.vaadin.server.ui.view.api.UIComponent;
 
 public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComponent {
     public EditableGrid() {
@@ -35,6 +35,7 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
             Binder<EditableGridData<T>> binder = getEditor().getBinder();
             Binder.Binding<EditableGridData<T>, T> binding = binder.forField(field).
                     withConverter(converter).
+                    withValidator((value, context) -> value == null ? ValidationResult.error("validator.not-null") : ValidationResult.ok()).
                     bind(data -> data.getValue(i), (doubleData, aDouble) -> doubleData.setValue(i, aDouble));
             Column<EditableGridData<T>, T> column = addColumn(data -> data.getValue(i)).setCaption(caption).setSortable(false);
             column.setWidth(80.0);
