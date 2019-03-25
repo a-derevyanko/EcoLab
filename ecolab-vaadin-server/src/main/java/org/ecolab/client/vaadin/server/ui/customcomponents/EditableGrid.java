@@ -35,7 +35,7 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
             Binder<EditableGridData<T>> binder = getEditor().getBinder();
             Binder.Binding<EditableGridData<T>, T> binding = binder.forField(field).
                     withConverter(converter).
-                    withValidator((value, context) -> value == null ? ValidationResult.error("validator.not-null") : ValidationResult.ok()).
+                    withValidator((value, context) -> value == null ? ValidationResult.error(i18N.get("validator.not-null")) : ValidationResult.ok()).
                     bind(data -> data.getValue(i), (doubleData, aDouble) -> doubleData.setValue(i, aDouble));
             Column<EditableGridData<T>, T> column = addColumn(data -> data.getValue(i)).setCaption(caption).setSortable(false);
             column.setWidth(80.0);
