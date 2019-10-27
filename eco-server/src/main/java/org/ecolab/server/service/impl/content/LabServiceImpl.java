@@ -111,7 +111,6 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     }
 
     @Override
-    @Transactional(readOnly = true)
     //@Cacheable(cacheNames = "LABDATA", key = "#userName")
     public T getLastUncompletedLabByUser(String userName) {
         return getLastLabByUser(userName, false);
@@ -408,8 +407,6 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
                             contains(getLabNumber())).collect(Collectors.toSet()));
         }
         labData.setUsers(users);
-        labData.setStartDate(LocalDateTime.now());
-        labData.setSaveDate(LocalDateTime.now());
         return labData;
     }
 

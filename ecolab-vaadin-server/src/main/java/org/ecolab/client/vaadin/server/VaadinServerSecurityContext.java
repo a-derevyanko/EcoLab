@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -31,12 +32,18 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     private final AuthenticationProvider authenticationProvider;
     private final RememberMeServices rememberMeServices;
     private final PersistentTokenRepository persistentTokenRepository;
+    private final JdbcUserDetailsManager userDetailsManager;
+
 
     @Autowired
-    public VaadinServerSecurityContext(AuthenticationProvider authenticationProvider, RememberMeServices rememberMeServices, PersistentTokenRepository persistentTokenRepository) {
+    public VaadinServerSecurityContext(AuthenticationProvider authenticationProvider,
+                                       RememberMeServices rememberMeServices,
+                                       PersistentTokenRepository persistentTokenRepository,
+                                       JdbcUserDetailsManager userDetailsManager) {
         this.authenticationProvider = authenticationProvider;
         this.rememberMeServices = rememberMeServices;
         this.persistentTokenRepository = persistentTokenRepository;
+        this.userDetailsManager = userDetailsManager;
     }
 /*
     @Override
@@ -65,7 +72,9 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+        AuthenticationManager authenticationManager = super.authenticationManagerBean();
+        userDetailsManager.setAuthenticationManager(authenticationManager);
+        return authenticationManager;
     }
 
     /**

@@ -1,13 +1,20 @@
+plugins {
+    id 'io.franzbecker.gradle-lombok' version '3.2.0'
+}
 import org.ecolab.gradle.CustomTest
 
 import java.nio.charset.StandardCharsets
 
 apply plugin: 'groovy'
 dependencies {
-    compile gradleApi()
     compile localGroovy()
 }
+
+allprojects {
+    apply plugin: 'io.franzbecker.gradle-lombok'
+}
 subprojects {
+    apply plugin: 'io.franzbecker.gradle-lombok'
     group 'EcoLab'
     version '0.1-SNAPSHOT'
 
@@ -25,19 +32,18 @@ subprojects {
 
     apply plugin: 'java'
     apply plugin: 'idea'
-    apply plugin: 'maven-publish'
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_13
+    targetCompatibility = JavaVersion.VERSION_13
 
     dependencies {
-        testCompile group: 'org.springframework.boot',  name: 'spring-boot-starter-test',           version: '1.5.6.RELEASE'
+        testCompile group: 'org.springframework.boot',  name: 'spring-boot-starter-test',           version: '2.2.0.RELEASE'
 
         testCompile group: 'org.testng',                name: 'testng',                             version: '6.8.13'
     }
 
-    check.dependsOn.remove(test)
-    build.dependsOn.remove(test)
+    /*check.dependsOn.remove(test)
+    build.dependsOn.remove(test)*/
 
     task test(type: CustomTest, overwrite:true)
 

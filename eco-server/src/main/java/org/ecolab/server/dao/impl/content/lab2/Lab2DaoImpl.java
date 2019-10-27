@@ -1,10 +1,15 @@
 package org.ecolab.server.dao.impl.content.lab2;
 
 import com.google.common.collect.Sets;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab2.Lab2Dao;
 import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.dao.impl.content.LabDaoImpl;
+import org.ecolab.server.db.h2.public_.tables.records.Lab2dataRecord;
 import org.ecolab.server.model.content.lab2.Lab2Data;
 import org.ecolab.server.model.content.lab2.Lab2Variant;
 import org.jooq.DSLContext;
@@ -13,10 +18,6 @@ import org.jooq.RecordMapper;
 import org.jooq.impl.DSL;
 import org.springframework.context.annotation.Profile;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.ecolab.server.db.h2.public_.Tables.LAB2DATA;
 import static org.ecolab.server.db.h2.public_.Tables.LAB2TEAM;
@@ -68,7 +69,7 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
 
     @Override
     public void saveLab(Lab2Data<V> data) {
-        data.setId(dsl.insertInto(LAB2DATA,
+        Lab2dataRecord record = dsl.insertInto(LAB2DATA,
                 LAB2DATA.START_DATE,
                 LAB2DATA.SAVE_DATE,
                 LAB2DATA.COMPLETED,
@@ -107,7 +108,12 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
                                 data.getFrequencyCoefficient(),
                                 data.getRoomConstant(),
                                 data.getReflectedSoundPower())
-                ).returning(LAB2DATA.ID).fetchOne().getId());
+                ).returning(LAB2DATA.ID, LAB2DATA.START_DATE, LAB2DATA.SAVE_DATE)
+                .fetchOne();
+
+        data.setId(record.getId());
+        data.setSaveDate(record.getSaveDate());
+        data.setStartDate(record.getStartDate());
 
         data.getVariant().setId(data.getId());
         saveVariant(data.getVariant());

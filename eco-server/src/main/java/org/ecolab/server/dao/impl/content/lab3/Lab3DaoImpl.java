@@ -1,6 +1,7 @@
 package org.ecolab.server.dao.impl.content.lab3;
 
 import com.google.common.collect.Sets;
+import java.time.LocalDateTime;
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab3.Lab3Dao;
 import org.ecolab.server.dao.impl.DaoUtils;
@@ -19,7 +20,6 @@ import org.jooq.impl.DSL;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 
 import static org.ecolab.server.db.h2.public_.Tables.LAB3TEAM;
 import static org.ecolab.server.db.h2.public_.Tables.USERS;
@@ -133,9 +133,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
 
     @Override
     public void saveLab(Lab3Data data) {
-        data.setId(dsl.insertInto(LAB3DATA,
-                LAB3DATA.START_DATE,
-                LAB3DATA.SAVE_DATE,
+        var record = dsl.insertInto(LAB3DATA,
                 LAB3DATA.COMPLETED,
                 LAB3DATA.TPP_OUTPUT,
                 LAB3DATA.NUMBER_OF_UNITS,
@@ -178,8 +176,6 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                 LAB3DATA.SO2_MAC,
                 LAB3DATA.ASH_MAC).
                 values(
-                        data.getStartDate(),
-                        data.getSaveDate(),
                         data.isCompleted(),
                         data.getTppOutput(),
                         data.getNumberOfUnits() == null ? null : data.getNumberOfUnits().value(),
@@ -221,7 +217,10 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
                         data.getNoMAC(),
                         data.getSo2MAC(),
                         data.getAshMAC()
-                ).returning(LAB3DATA.ID).fetchOne().getId());
+                ).returning(LAB3DATA.ID, LAB3DATA.START_DATE, LAB3DATA.SAVE_DATE).fetchOne();
+        data.setId(record.getId());
+        data.setSaveDate(record.getSaveDate());
+        data.setStartDate(record.getStartDate());
 
         saveLabUsers(data);
 

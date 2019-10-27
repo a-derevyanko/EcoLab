@@ -1,10 +1,13 @@
 package org.ecolab.server.dao.impl.content.lab1;
 
 import com.google.common.collect.Sets;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import org.ecolab.server.common.Profiles;
 import org.ecolab.server.dao.api.content.lab1.Lab1Dao;
 import org.ecolab.server.dao.impl.DaoUtils;
 import org.ecolab.server.dao.impl.content.LabDaoImpl;
+import org.ecolab.server.db.h2.public_.tables.records.Lab1dataRecord;
 import org.ecolab.server.model.content.lab1.Lab1Data;
 import org.ecolab.server.model.content.lab1.Lab1Variant;
 import org.jooq.DSLContext;
@@ -13,8 +16,6 @@ import org.jooq.RecordMapper;
 import org.jooq.impl.DSL;
 import org.springframework.context.annotation.Profile;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
 
 import static org.ecolab.server.db.h2.public_.Tables.LAB1DATA;
 import static org.ecolab.server.db.h2.public_.Tables.LAB1TEAM;
@@ -75,9 +76,7 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
 
     @Override
     public void saveLab(Lab1Data<V> data) {
-        data.setId(dsl.insertInto(LAB1DATA,
-                LAB1DATA.START_DATE,
-                LAB1DATA.SAVE_DATE,
+        Lab1dataRecord record = dsl.insertInto(LAB1DATA,
                 LAB1DATA.COMPLETED,
                 LAB1DATA.STACKS_DIAMETER,
                 LAB1DATA.STACKS_HEIGHT,
@@ -106,8 +105,6 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
                 LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION).
                 values(
                         Arrays.asList(
-                                data.getStartDate(),
-                                data.getSaveDate(),
                                 data.isCompleted(),
                                 data.getStacksDiameter(),
                                 data.getStacksHeight(),
@@ -134,7 +131,12 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
                                 data.getTemperatureCoefficient(),
                                 data.getDistanceFromEmissionSource(),
                                 data.getMaximumSurfaceConcentration())
-                ).returning(LAB1DATA.ID).fetchOne().getId());
+                ).returning(LAB1DATA.ID, LAB1DATA.START_DATE, LAB1DATA.SAVE_DATE)
+                .fetchOne();
+
+        data.setId(record.getId());
+        data.setSaveDate(record.getSaveDate());
+        data.setStartDate(record.getStartDate());
 
         data.getVariant().setId(data.getId());
         saveVariant(data.getVariant());

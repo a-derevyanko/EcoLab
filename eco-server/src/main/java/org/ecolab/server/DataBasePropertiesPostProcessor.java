@@ -1,5 +1,7 @@
 package org.ecolab.server;
 
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.ecolab.server.db.h2.public_.tables.records.CommonSettingsRecord;
 import org.jooq.impl.DSL;
 import org.springframework.boot.SpringApplication;
@@ -7,11 +9,8 @@ import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.ecolab.server.db.h2.public_.Tables.COMMON_SETTINGS;
-import static org.springframework.boot.context.config.ConfigFileApplicationListener.APPLICATION_CONFIGURATION_PROPERTY_SOURCE_NAME;
 
 public class DataBasePropertiesPostProcessor implements EnvironmentPostProcessor {
 
@@ -22,7 +21,7 @@ public class DataBasePropertiesPostProcessor implements EnvironmentPostProcessor
      */
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        if (environment.getPropertySources().get(APPLICATION_CONFIGURATION_PROPERTY_SOURCE_NAME).containsProperty("spring.datasource.url")) {
+        if (environment.containsProperty("spring.datasource.url")) {
             String dataSourceUrl = environment.getProperty("spring.datasource.url");
             String username = environment.getProperty("spring.datasource.username");
             String password = environment.getProperty("spring.datasource.password");

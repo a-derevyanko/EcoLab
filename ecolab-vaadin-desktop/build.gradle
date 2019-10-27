@@ -1,5 +1,3 @@
-apply plugin: 'war'
-apply plugin: 'org.springframework.boot'
 
 buildscript {
     repositories {
@@ -7,9 +5,15 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.0.RELEASE")
     }
 }
+
+plugins {
+    id "com.gorylenko.gradle-git-properties" version "2.2.0"
+}
+
+apply plugin: 'org.springframework.boot'
 
 repositories {
     mavenCentral()
@@ -28,14 +32,10 @@ repositories {
 dependencies {
     compile project (':ecolab-vaadin-server')
     compile group: 'de.huxhorn.lilith',         name: 'de.huxhorn.lilith.3rdparty.junique',     version: '1.0.4'
+    compile("org.springframework.boot:spring-boot-starter-jetty:2.0.0.BUILD-SNAPSHOT")
 }
 
-war {
-    baseName = 'EcoLab-Vaddin-Desktop'
-    version =  '0.0.1'
-}
-
-springBoot.mainClass = 'org.ecolab.client.vaadin.desktop.DesktopVaadinApplication'
+springBoot.mainClassName = 'org.ecolab.client.vaadin.desktop.DesktopVaadinApplication'
 
 
 /**
@@ -61,12 +61,16 @@ bootRun {
     }
     systemProperties(System.properties)
     jvmArgs = ["-Dspring.profiles.active=production,custom,h2", "-Dorg.jooq.no-logo=true"]
-    addResources = true
 }
 
-bootRepackage {
-    enabled = true
-    executable = true
+springBoot {
+    buildInfo()
+}
+
+gitProperties {
+    gitPropertiesDir = new File("${project.projectDir.path}/src/main/resources")
+    dateFormat = "yyyy-MM-dd'T'HH:mmZ"
+    dateFormatTimeZone = "GMT+03:00"
 }
 
 clean.delete 'src/main/webapp'
