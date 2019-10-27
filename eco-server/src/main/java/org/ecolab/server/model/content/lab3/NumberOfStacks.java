@@ -20,7 +20,7 @@ public enum NumberOfStacks implements Valued<Integer> {
     }
 
     public static NumberOfStacks valueOf(int numberOfStacks) {
-        for (NumberOfStacks value : values()) {
+        for (var value : values()) {
             if (value.value() == numberOfStacks) {
                 return value;
             }

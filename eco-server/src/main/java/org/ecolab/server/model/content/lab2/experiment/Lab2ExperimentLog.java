@@ -63,7 +63,7 @@ public class Lab2ExperimentLog extends Lab2Variant {
         if (this == o) return true;
         if (!(o instanceof Lab2ExperimentLog)) return false;
         if (!super.equals(o)) return false;
-        Lab2ExperimentLog that = (Lab2ExperimentLog) o;
+        var that = (Lab2ExperimentLog) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(hemisphereRadius, that.hemisphereRadius) &&
                 Objects.equals(roomSize, that.roomSize) &&

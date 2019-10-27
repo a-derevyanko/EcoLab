@@ -20,7 +20,7 @@ public class LabTest implements DomainModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof LabTest)) return false;
-        LabTest test = (LabTest) o;
+        var test = (LabTest) o;
         return Objects.equals(questions, test.questions);
     }
 

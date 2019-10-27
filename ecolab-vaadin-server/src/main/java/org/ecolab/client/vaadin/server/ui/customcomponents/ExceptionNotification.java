@@ -31,7 +31,7 @@ public class ExceptionNotification extends Notification {
     }
 
     public void show(Page page, Throwable ex) {
-        Throwable rootEx = ExceptionUtils.getRootCause(ex);
+        var rootEx = ExceptionUtils.getRootCause(ex);
         LOGGER.error(ex.getLocalizedMessage(), rootEx == null ? ex : rootEx);
         super.show(page);
     }

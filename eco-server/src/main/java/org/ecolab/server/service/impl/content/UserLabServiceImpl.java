@@ -63,14 +63,14 @@ public class UserLabServiceImpl implements UserLabService {
     @Override
     @Transactional
     public int removeAllOldLabs(LocalDateTime lastSaveDate) {
-        AtomicInteger removedLabs = new AtomicInteger();
+        var removedLabs = new AtomicInteger();
         labServices.forEach(labService -> removedLabs.addAndGet(labService.removeOldLabs(lastSaveDate)));
         return removedLabs.get();
     }
 
     @Override
     public UserProfile getUserProfile(@NotNull String userName) {
-        UserProfile profile = new UserProfile();
+        var profile = new UserProfile();
         profile.setStatistics(dao.getUserLabStatistics(userName));
         profile.setUserInfo(userInfoService.getUserInfo(userName));
         profile.setAllowedLabs(studentInfoService.getAllowedLabs(userName));

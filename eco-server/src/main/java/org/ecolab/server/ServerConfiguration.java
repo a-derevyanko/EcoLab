@@ -14,7 +14,7 @@ import org.springframework.context.event.EventListener;
 public class ServerConfiguration {
     @EventListener(ApplicationReadyEvent.class)
     private void createDefaultChartTheme() {
-        StandardChartTheme chartTheme = new StandardChartTheme("EcoLab");
+        var chartTheme = new StandardChartTheme("EcoLab");
 
         chartTheme.setChartBackgroundPaint(Color.WHITE);
         chartTheme.setPlotBackgroundPaint(Color.WHITE);

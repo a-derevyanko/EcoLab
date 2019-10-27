@@ -57,7 +57,7 @@ public enum NumberOfUnits implements Valued<Integer> {
     public abstract List<NumberOfStacks> getStacksCounts();
 
     public static NumberOfUnits valueOf(int numberOfUnits) {
-        for (NumberOfUnits value : values()) {
+        for (var value : values()) {
             if (value.value() == numberOfUnits) {
                 return value;
             }

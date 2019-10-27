@@ -28,7 +28,7 @@ public class LabTestQuestionVariantWithAnswers extends LabTestQuestionVariant {
         if (this == o) return true;
         if (!(o instanceof LabTestQuestionVariantWithAnswers)) return false;
         if (!super.equals(o)) return false;
-        LabTestQuestionVariantWithAnswers that = (LabTestQuestionVariantWithAnswers) o;
+        var that = (LabTestQuestionVariantWithAnswers) o;
         return rightAnswer == that.rightAnswer &&
                 Objects.equals(answers, that.answers);
     }

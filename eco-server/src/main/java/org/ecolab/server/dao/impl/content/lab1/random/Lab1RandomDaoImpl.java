@@ -26,7 +26,7 @@ public class Lab1RandomDaoImpl extends Lab1DaoImpl<Lab1RandomVariant> implements
 
         @Override
         public Lab1Data<Lab1RandomVariant> map(Record record) {
-            Lab1Data<Lab1RandomVariant> data = super.map(record);
+            var data = super.map(record);
             data.getVariant().setId(record.get(LAB1_RANDOM_VARIANT.ID));
             data.getVariant().setCity(record.get(LAB1_RANDOM_VARIANT.CITY) == null ? null : City.valueOf(record.get(LAB1_RANDOM_VARIANT.CITY)));
             data.getVariant().setOutsideAirTemperature(record.get(LAB1_RANDOM_VARIANT.OUTSIDE_AIR_TEMPERATURE));
@@ -50,7 +50,7 @@ public class Lab1RandomDaoImpl extends Lab1DaoImpl<Lab1RandomVariant> implements
 
     @Override
     public Lab1Data<Lab1RandomVariant> getLastLabByUser(String userName, boolean completed) {
-        Lab1Data<Lab1RandomVariant> data = dsl.select().from(LAB1DATA).join(LAB1_RANDOM_VARIANT).on(LAB1_RANDOM_VARIANT.ID.eq(LAB1DATA.ID)).
+        var data = dsl.select().from(LAB1DATA).join(LAB1_RANDOM_VARIANT).on(LAB1_RANDOM_VARIANT.ID.eq(LAB1DATA.ID)).
                 where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID).from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName))))
                         .and(LAB1DATA.COMPLETED.eq(completed))).
                 orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());

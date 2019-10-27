@@ -49,8 +49,8 @@ public class VirtualKeyboard extends AbstractJavaScriptComponent {
         this.isFloatingWindow = isFloatingWindow;
         registerRpc((KeyClickRpc) s -> {
             if (focusedTextField != null) {
-                int curPos = focusedTextField.getCursorPosition();
-                String oldText = focusedTextField.getValue();
+                var curPos = focusedTextField.getCursorPosition();
+                var oldText = focusedTextField.getValue();
 
                 if (Objects.equals("\b", s) && curPos > 0) {
                     focusedTextField.setValue(oldText.substring(0, curPos - 1) + oldText.substring(curPos, oldText.length()));

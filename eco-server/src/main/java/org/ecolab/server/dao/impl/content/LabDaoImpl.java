@@ -38,16 +38,16 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
     @Override
     public Collection<LabTestQuestion> getTestQuestions(Locale locale) {
         Map<Integer, LabTestQuestion> questions = new TreeMap<>();
-        Result<Record> variantRecords =  dsl.selectFrom(LAB_TEST_QUESTION.join(LAB_TEST_QUESTION_VARIANT).
+        var variantRecords =  dsl.selectFrom(LAB_TEST_QUESTION.join(LAB_TEST_QUESTION_VARIANT).
                 on(LAB_TEST_QUESTION.ID.eq(LAB_TEST_QUESTION_VARIANT.QUESTION_ID))).
                 where(LAB_TEST_QUESTION.LAB_NUMBER.eq(getLabNumber())).fetch();
 
-        Result<Record> homeWorkRecords =  dsl.selectFrom(LAB_TEST_QUESTION.join(LAB_TEST_HOME_WORK_QUESTION).
+        var homeWorkRecords =  dsl.selectFrom(LAB_TEST_QUESTION.join(LAB_TEST_HOME_WORK_QUESTION).
                 on(LAB_TEST_QUESTION.ID.eq(LAB_TEST_HOME_WORK_QUESTION.QUESTION_ID))).
                 where(LAB_TEST_QUESTION.LAB_NUMBER.eq(getLabNumber())).fetch();
 
-        for (Record record : Iterables.concat(variantRecords, homeWorkRecords)) {
-            LabTestQuestion question = new LabTestQuestion();
+        for (var record : Iterables.concat(variantRecords, homeWorkRecords)) {
+            var question = new LabTestQuestion();
             question.setQuestionNumber(record.get(LAB_TEST_QUESTION.QUESTION_NUMBER));
             question.setPointCount(record.get(LAB_TEST_QUESTION.POINT_COUNT));
             question.setTitle(record.get(LAB_TEST_QUESTION.QUESTION_TITLE));
@@ -55,9 +55,9 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
             questions.put(question.getQuestionNumber(), question);
         }
 
-        for (Record record : variantRecords) {
+        for (var record : variantRecords) {
             int number = record.get(LAB_TEST_QUESTION.QUESTION_NUMBER);
-            LabTestQuestionVariantWithAnswers questionVariant = new LabTestQuestionVariantWithAnswers();
+            var questionVariant = new LabTestQuestionVariantWithAnswers();
             questionVariant.setNumber(number);
             questionVariant.setQuestion(record.get(LAB_TEST_QUESTION_VARIANT.QUESTION_TEXT));
             questionVariant.setAnswers(Arrays.stream(record.get(LAB_TEST_QUESTION_VARIANT.ANSWERS)).map(Object::toString).collect(Collectors.toList()));
@@ -66,9 +66,9 @@ public abstract class LabDaoImpl<T extends LabData> implements LabDao<T> {
             questions.get(number).getVariants().add(questionVariant);
         }
 
-        for (Record record : homeWorkRecords) {
+        for (var record : homeWorkRecords) {
             int number = record.get(LAB_TEST_QUESTION.QUESTION_NUMBER);
-            LabTestHomeWorkQuestion homeWorkQuestion = new LabTestHomeWorkQuestion();
+            var homeWorkQuestion = new LabTestHomeWorkQuestion();
             homeWorkQuestion.setNumber(number);
             homeWorkQuestion.setQuestion(record.get(LAB_TEST_HOME_WORK_QUESTION.QUESTION_TEXT));
             homeWorkQuestion.setImage(record.get(LAB_TEST_HOME_WORK_QUESTION.IMAGE));

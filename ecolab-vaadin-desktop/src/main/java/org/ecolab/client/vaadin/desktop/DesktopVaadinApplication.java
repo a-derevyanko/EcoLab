@@ -65,7 +65,7 @@ public class DesktopVaadinApplication extends VaadinApplication {
             });
         } catch (AlreadyLockedException e) {
             JUnique.sendMessage(DesktopVaadinApplication.class.getName(), null);
-            for (String arg : args) {
+            for (var arg : args) {
                 JUnique.sendMessage(DesktopVaadinApplication.class.getName(), arg);
             }
             exit();
@@ -80,8 +80,8 @@ public class DesktopVaadinApplication extends VaadinApplication {
             popup.add(aboutItem);
             popup.addSeparator();
             popup.add(exitItem);
-            try (InputStream icon = SplashScreen.class.getResourceAsStream("icon.svg")) {
-                TrayIcon trayIcon = new TrayIcon(ImageIO.read(icon), RES.getString("ecolab"), popup);
+            try (var icon = SplashScreen.class.getResourceAsStream("icon.svg")) {
+                var trayIcon = new TrayIcon(ImageIO.read(icon), RES.getString("ecolab"), popup);
                 trayIcon.setImageAutoSize(true);
                 SystemTray.getSystemTray().add(trayIcon);
                 trayIcon.displayMessage(RES.getString("ecolab"), RES.getString("trayInfo"), TrayIcon.MessageType.INFO);
@@ -96,12 +96,12 @@ public class DesktopVaadinApplication extends VaadinApplication {
             }
             return ctx;
         } catch (Exception ex) {
-            JTextArea msg = new JTextArea("Произошла ошибка: " + ex);
+            var msg = new JTextArea("Произошла ошибка: " + ex);
             msg.setLineWrap(true);
             msg.setWrapStyleWord(true);
             msg.setColumns(50);
 
-            JScrollPane scrollPane = new JScrollPane(msg);
+            var scrollPane = new JScrollPane(msg);
             JOptionPane.showMessageDialog(new JFrame(), scrollPane);
             throw ex;
         } finally {
@@ -126,13 +126,13 @@ public class DesktopVaadinApplication extends VaadinApplication {
     }
 
     private void openEcoLabInBrowser() {
-        ServerProperties serverProperties = ctx.getBean(ServerProperties.class);
-        ServletContext servletContext = ctx.getBean(ServletContext.class);
+        var serverProperties = ctx.getBean(ServerProperties.class);
+        var servletContext = ctx.getBean(ServletContext.class);
 
         try {
-            String appUrl = String.format("http://%s:%s%s", serverProperties.getAddress() == null ? InetAddress.getLocalHost().getCanonicalHostName() : serverProperties.getAddress(),  serverProperties.getPort(), servletContext.getContextPath());
+            var appUrl = String.format("http://%s:%s%s", serverProperties.getAddress() == null ? InetAddress.getLocalHost().getCanonicalHostName() : serverProperties.getAddress(),  serverProperties.getPort(), servletContext.getContextPath());
 
-            Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+            var desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
             if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
                 desktop.browse(URI.create(appUrl));
             }

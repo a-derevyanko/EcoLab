@@ -38,7 +38,7 @@ public class StudentInfoDataProvider extends BaseUserInfoDataProvider<StudentInf
      */
     @Override
     protected Stream<UserInfo> fetchFromBackEnd(Query<UserInfo, StudentInfoFilter> query) {
-        Stream<UserInfo> stream = addJoinsByFilter(
+        var stream = addJoinsByFilter(
                 dsl.select(USERS.LOGIN, USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME, USERS.NOTE, GROUPS.GROUP_NAME).from(USERS)
                         .join(GROUP_MEMBERS).on(GROUP_MEMBERS.USER_ID.eq(USERS.ID)).join(GROUPS).on(GROUP_MEMBERS.GROUP_ID.eq(GROUPS.ID)), query).
                 where(getConditions(query)).limit(query.getLimit()).offset(query.getOffset()).fetch().map(USER_INFO_RECORD_MAPPER).stream();
@@ -55,10 +55,10 @@ public class StudentInfoDataProvider extends BaseUserInfoDataProvider<StudentInf
 
     @Override
     protected List<Condition> getConditions(Query<UserInfo, StudentInfoFilter> query) {
-        List<Condition> conditions = super.getConditions(query);
+        var conditions = super.getConditions(query);
 
         if (query.getFilter().isPresent()) {
-            StudentInfo filter = query.getFilter().get().getStudentInfoFilter();
+            var filter = query.getFilter().get().getStudentInfoFilter();
             if (filter.getGroup() != null) {
                 conditions.add(STUDY_GROUPS.ID.eq(filter.getGroup().getId()));
             }

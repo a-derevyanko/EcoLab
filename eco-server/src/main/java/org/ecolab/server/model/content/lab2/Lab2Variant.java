@@ -86,7 +86,7 @@ public abstract class Lab2Variant extends LabVariant {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Lab2Variant)) return false;
-        Lab2Variant that = (Lab2Variant) o;
+        var that = (Lab2Variant) o;
         return Objects.equals(barometricPressure, that.barometricPressure) &&
                 Objects.equals(indoorsTemperature, that.indoorsTemperature) &&
                 Objects.equals(quantityOfSingleTypeEquipment, that.quantityOfSingleTypeEquipment) &&

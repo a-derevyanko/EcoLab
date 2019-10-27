@@ -46,7 +46,7 @@ public class OneFolderIterator extends BaseFolderIterator {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof OneFolderIterator)) return false;
-        OneFolderIterator strings = (OneFolderIterator) o;
+        var strings = (OneFolderIterator) o;
         return Objects.equals(path, strings.path) &&
                 Objects.equals(folderName, strings.folderName);
     }

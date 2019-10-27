@@ -89,13 +89,13 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     @Override
     public Set<DataValue> getInitialDataValues(Lab3Variant data, Locale locale) {
-        Set<DataValue> values = super.getInitialDataValues(data, locale);
-        DataValue cityValue = new DataValue();
+        var values = super.getInitialDataValues(data, locale);
+        var cityValue = new DataValue();
         cityValue.setName(messageSource.getMessage("lab3.initial-data.city", null, locale) + ": " + getFieldValueForPrint(data.getCity(), locale));
         cityValue.setValue(lab3ResourceService.getCoatOfArms(data.getCity().name()));
         values.add(cityValue);
 
-        DataValue desulphurizationUnitType = new DataValue();
+        var desulphurizationUnitType = new DataValue();
         desulphurizationUnitType.setName(messageSource.getMessage("desulphurizationUnitType", null, locale));
         desulphurizationUnitType.setValue(messageSource.getMessage("desulphurizationUnitType-none", null, locale));
         values.add(desulphurizationUnitType);
@@ -104,7 +104,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     @Override
     protected Map<String, Object> getInitialDataWithLocalizedValues(Lab3Variant data, Locale locale) {
-        Map<String, Object> map = super.getInitialDataWithLocalizedValues(data, locale);
+        var map = super.getInitialDataWithLocalizedValues(data, locale);
         map.put("windDirection", lab3ResourceService.getWindRose(data.getCity()));
         map.remove("city");
 
@@ -144,9 +144,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                 labData.getCarbonInFlyAsh() != null && labData.getFuelConsumer() != null &&
                 labData.getNumberOfUnits() != null) {
 
-            double V = labData.getCombustionProductsVolume() - labData.getWaterVaporVolume() +
+            var V = labData.getCombustionProductsVolume() - labData.getWaterVaporVolume() +
                     (labData.getExcessAirRatio() - 1) * labData.getAirVolume();
-            double B = (1 - labData.getCarbonInFlyAsh() / 100) * labData.getFuelConsumer();
+            var B = (1 - labData.getCarbonInFlyAsh() / 100) * labData.getFuelConsumer();
 
             labData.setNoxMassiveInjection(labData.getFlueGasNOxConcentration() * labData.getNumberOfUnits().value() * V * B * 0.000278);
             labData.setNo2MassiveInjection(0.8 * labData.getNoxMassiveInjection());
@@ -185,16 +185,16 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                 labData.getStacksDiameter() != null &&
                 labData.getStacksHeight() != null) {
             double dT = labData.getStackExitTemperature() - labData.getOutsideAirTemperature();
-            double f = 1000 * (Math.pow(labData.getStackAverageGasesSpeed(), 2) * labData.getStacksDiameter()) /
+            var f = 1000 * (Math.pow(labData.getStackAverageGasesSpeed(), 2) * labData.getStacksDiameter()) /
                     (Math.pow(labData.getStacksHeight(), 2) * dT);
 
-            double V1 = labData.getCombustionProductsVolume() * labData.getFuelConsumer() / 3.6;
-            double vm = 0.65 * Math.cbrt(V1 * labData.getNumberOfUnits().value() * dT / (labData.getStacksHeight() * labData.getNumberOfStacks().value()));
-            double vM = 1.3 * labData.getStackAverageGasesSpeed() * labData.getStacksDiameter() / labData.getStacksHeight();
+            var V1 = labData.getCombustionProductsVolume() * labData.getFuelConsumer() / 3.6;
+            var vm = 0.65 * Math.cbrt(V1 * labData.getNumberOfUnits().value() * dT / (labData.getStacksHeight() * labData.getNumberOfStacks().value()));
+            var vM = 1.3 * labData.getStackAverageGasesSpeed() * labData.getStacksDiameter() / labData.getStacksHeight();
 
             labData.setVM(vm);
 
-            double fe = 800 * Math.pow(vM, 3);
+            var fe = 800 * Math.pow(vM, 3);
 
             if (f < 100 && fe < f) {
                 f = fe;
@@ -202,7 +202,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
             labData.setF(f);
 
-            double m = f < 100 ?
+            var m = f < 100 ?
                     1.0 / (0.67 + 0.1 * Math.sqrt(f) + 0.34 * Math.cbrt(f)) :
                     1.47 / Math.cbrt(f);
 
@@ -252,8 +252,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                     labData.getTerrainCoefficient() != null &&
                     labData.getNumberOfStacks() != null && labData.getWindSpeed() != null) {
 
-                double uUm = labData.getWindSpeed() / labData.getBreakdownWindSpeed();
-                double r = uUm > 1 ?
+                var uUm = labData.getWindSpeed() / labData.getBreakdownWindSpeed();
+                var r = uUm > 1 ?
                         3 * uUm / (2 * Math.pow(uUm, 2) - uUm + 2) :
                         0.67 * uUm + 1.67 * Math.pow(uUm, 2) - 1.34 * Math.pow(uUm, 3);
 
@@ -317,8 +317,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                         (5.0 - labData.getHarmfulSubstancesDepositionCoefficient()) / 4.0);
 
                 if (labData.getWindSpeed() != null && labData.getBreakdownWindSpeed() != null) {
-                    double uUm = labData.getWindSpeed() / labData.getBreakdownWindSpeed();
-                    double p = uUm <= 0.25 ? 3 :
+                    var uUm = labData.getWindSpeed() / labData.getBreakdownWindSpeed();
+                    var p = uUm <= 0.25 ? 3 :
                             uUm <= 1 ? 8.43 * Math.pow((1 - uUm), 3) + 1:
                                     0.32 * uUm + 0.68;
                     labData.setWindSpeedMaxGroundLevelConcentrationDistance(p * labData.getBwdMaxGroundLevelConcentrationDistance());
@@ -334,9 +334,9 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     @Override
     public JFreeChart createChart(Lab3Data labData, Locale locale, Lab3ChartType chartType) {
-        Double bwdMaxGroundLevelConcentrationDistance = labData.getBwdMaxGroundLevelConcentrationDistance();
-        Double harmfulSubstancesDepositionCoefficient = labData.getHarmfulSubstancesDepositionCoefficient();
-        Double windSpeed = labData.getWindSpeed();
+        var bwdMaxGroundLevelConcentrationDistance = labData.getBwdMaxGroundLevelConcentrationDistance();
+        var harmfulSubstancesDepositionCoefficient = labData.getHarmfulSubstancesDepositionCoefficient();
+        var windSpeed = labData.getWindSpeed();
         if (bwdMaxGroundLevelConcentrationDistance != null && harmfulSubstancesDepositionCoefficient != null && windSpeed != null)
         {
             Double groundLevelConcentration;
@@ -363,14 +363,14 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
             }
 
             // Размеры графиков золы и серы зависят от размера графика NOx
-            JFreeChart noxDataChart = createSplineChart(labData, chartTitle, createDataset(bwdMaxGroundLevelConcentrationDistance,
+            var noxDataChart = createSplineChart(labData, chartTitle, createDataset(bwdMaxGroundLevelConcentrationDistance,
                     harmfulSubstancesDepositionCoefficient, labData.getBwdNoxGroundLevelConcentration(),
                     labData.getNo2BackgroundConcentration(), windSpeed, labData.getNo2MAC(), Integer.MAX_VALUE, locale),
                     bwdMaxGroundLevelConcentrationDistance, groundLevelConcentration, Integer.MAX_VALUE, locale);
             if (chartType == Lab3ChartType.ISOLINE) {
                 return noxDataChart;
             } else {
-                int rightBorder = (int) ((XYPlot) noxDataChart.getPlot()).getDomainAxis().getRange().getUpperBound();
+                var rightBorder = (int) ((XYPlot) noxDataChart.getPlot()).getDomainAxis().getRange().getUpperBound();
                 return createSplineChart(labData, chartTitle, createDataset(bwdMaxGroundLevelConcentrationDistance,
                         harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
                         backgroundConcentration, windSpeed, mac, rightBorder, locale),
@@ -387,38 +387,38 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     @Override
     protected Lab3Variant generateNewLabVariant() {
-        Lab3Variant variant = new Lab3Variant();
+        var variant = new Lab3Variant();
 
-        WindDirection randomDirection = WindDirection.values()[RandomUtils.nextInt(WindDirection.values().length)];
+        var randomDirection = WindDirection.values()[RandomUtils.nextInt(WindDirection.values().length)];
         variant.setWindDirection(randomDirection);
 
         //Получим случайный город, скорость ветра в нем
-        City randomCity = City.values()[RandomUtils.nextInt(City.values().length)];
+        var randomCity = City.values()[RandomUtils.nextInt(City.values().length)];
         variant.setCity(randomCity);
         variant.setWindSpeed(randomCity.getWindSpeed());
 
         //Получим список типов топлива для этого города
-        List<FuelType> fuelList = randomCity.getFuelTypesForTheCity();
+        var fuelList = randomCity.getFuelTypesForTheCity();
 
         //Получим случайный тип топлива из списка, низжую теплоту сгорания топлива для него
-        FuelType randomFuelType = fuelList.get(RandomUtils.nextInt(fuelList.size()));
+        var randomFuelType = fuelList.get(RandomUtils.nextInt(fuelList.size()));
         variant.setFuelType(randomFuelType);
         variant.setLowHeatValue(randomFuelType.getLowHeatValue());
 
         //Получим мощность 1 блока
-        UnitOutput randomUnitOutput = UnitOutput.values()[RandomUtils.nextInt(UnitOutput.values().length)];
+        var randomUnitOutput = UnitOutput.values()[RandomUtils.nextInt(UnitOutput.values().length)];
 
         //Получим количество блоков, паропроизводительность и общую мощность
-        boolean oil = randomFuelType == FuelType.STABILIZED_OIL || randomFuelType == FuelType.SULFUR_OIL;
-        List<NumberOfUnits> unitCounts = randomUnitOutput.getNumberOfUnits();
-        List<Integer> stacksHeights = randomUnitOutput.getStacksHeights();
-        NumberOfUnits randomUnitCount = unitCounts.get(RandomUtils.nextInt(unitCounts.size()));
+        var oil = randomFuelType == FuelType.STABILIZED_OIL || randomFuelType == FuelType.SULFUR_OIL;
+        var unitCounts = randomUnitOutput.getNumberOfUnits();
+        var stacksHeights = randomUnitOutput.getStacksHeights();
+        var randomUnitCount = unitCounts.get(RandomUtils.nextInt(unitCounts.size()));
         variant.setNumberOfUnits(randomUnitCount);
         variant.setSteamProductionCapacity(randomUnitOutput.getSteamProductionCapacity());
-        List<NumberOfStacks> stacksCounts = randomUnitCount.getStacksCounts();
-        NumberOfStacks randomStacksCount = stacksCounts.get(RandomUtils.nextInt(stacksCounts.size()));
+        var stacksCounts = randomUnitCount.getStacksCounts();
+        var randomStacksCount = stacksCounts.get(RandomUtils.nextInt(stacksCounts.size()));
         variant.setNumberOfStacks(randomStacksCount);
-        Integer randomStacksHeight = stacksHeights.get(RandomUtils.nextInt(stacksHeights.size()));
+        var randomStacksHeight = stacksHeights.get(RandomUtils.nextInt(stacksHeights.size()));
         variant.setStacksHeight(randomStacksHeight);
         variant.setTppOutput(randomUnitCount.value() * randomUnitOutput.getUnitOutput());
         variant.setFuelConsumer(randomUnitOutput.getUnitOutput() * 29.3 * randomUnitOutput.getBy(oil) /
@@ -448,15 +448,15 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
     private XYSeriesCollection createDataset(double bwdMaxGroundLevelConcentrationDistance,
                                              double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration,
                                              double backgroundConcentration, double windSpeed, double mac, int maxX,  Locale locale) {
-        XYSeriesCollection dataset = new XYSeriesCollection();
+        var dataset = new XYSeriesCollection();
 
-        int Xm = Math.toIntExact(Math.round(bwdMaxGroundLevelConcentrationDistance));
+        var Xm = Math.toIntExact(Math.round(bwdMaxGroundLevelConcentrationDistance));
 
-        for (double CyCoefficient = 0.1; CyCoefficient < 0.95; CyCoefficient += 0.1) {
-            double C = CyCoefficient * groundLevelConcentration;
+        for (var CyCoefficient = 0.1; CyCoefficient < 0.95; CyCoefficient += 0.1) {
+            var C = CyCoefficient * groundLevelConcentration;
             if (C > backgroundConcentration) {
-                String description = String.valueOf(Precision.round(CyCoefficient, 1));
-                XYSeries series = new XYSeries("C = " + description +" Cm", false);
+                var description = String.valueOf(Precision.round(CyCoefficient, 1));
+                var series = new XYSeries("C = " + description +" Cm", false);
                 series.setDescription(description);
                 dataset.addSeries(series);
                 fillIsoLineSeries(series, CyCoefficient, Xm, bwdMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
@@ -467,19 +467,19 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
         // Найдём максимальный X, для которого будем производить расчёт
         maxX = findMaxXWithBorder(dataset);
 
-        String backgroundName = messageSource.getMessage("lab3.isoline-background-name", new Object[]{backgroundConcentration}, locale);
-        XYSeries borderSeries = new XYSeries(backgroundName, false);
+        var backgroundName = messageSource.getMessage("lab3.isoline-background-name", new Object[]{backgroundConcentration}, locale);
+        var borderSeries = new XYSeries(backgroundName, false);
         borderSeries.setDescription(messageSource.getMessage("lab3.isoline-background-name-description", null, locale));
         dataset.addSeries(borderSeries);
-        double borderCyCoefficient = backgroundConcentration / groundLevelConcentration;
+        var borderCyCoefficient = backgroundConcentration / groundLevelConcentration;
         fillIsoLineSeries(borderSeries, borderCyCoefficient, Xm, bwdMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
                 windSpeed, maxX);
 
         if (groundLevelConcentration > mac) {
-            XYSeries macSeries = new XYSeries(messageSource.getMessage("lab3.isoline-mac-name", new Object[]{mac}, locale), false);
+            var macSeries = new XYSeries(messageSource.getMessage("lab3.isoline-mac-name", new Object[]{mac}, locale), false);
             macSeries.setDescription("MAC");
             dataset.addSeries(macSeries);
-            double macCyCoefficient = mac / groundLevelConcentration;
+            var macCyCoefficient = mac / groundLevelConcentration;
             fillIsoLineSeries(macSeries, macCyCoefficient, Xm, bwdMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, groundLevelConcentration,
                     windSpeed, maxX);
         }
@@ -488,10 +488,10 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
     }
 
     private int findMaxXWithBorder(XYSeriesCollection dataset) {
-        int maxX = BORDER;
+        var maxX = BORDER;
 
-        for (XYSeries series : (List<XYSeries>) dataset.getSeries()) {
-            XYDataItem item = series.getDataItem(0);
+        for (var series : (List<XYSeries>) dataset.getSeries()) {
+            var item = series.getDataItem(0);
             if (item.getX().intValue() > maxX) {
                 maxX = item.getX().intValue();
             }
@@ -501,11 +501,11 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     private void fillIsoLineSeries(XYSeries series, double CyCoefficient, int Xm, double windSpeedMaxGroundLevelConcentrationDistance,
                                    double harmfulSubstancesDepositionCoefficient, double groundLevelConcentration, double windSpeed, int maxBorderValue) {
-        double C = CyCoefficient * groundLevelConcentration;
+        var C = CyCoefficient * groundLevelConcentration;
 
         // Находим граничные точки
-        int x1 = countX0(0, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, CyCoefficient);
-        int xN = countX0(Xm, Integer.MAX_VALUE, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, CyCoefficient);
+        var x1 = countX0(0, Xm, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, CyCoefficient);
+        var xN = countX0(Xm, Integer.MAX_VALUE, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient, CyCoefficient);
 
         if (xN < maxBorderValue) {
             series.add(xN, 0);
@@ -516,13 +516,13 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
             }
         }
         Map<Integer, Double> points = new TreeMap<>();
-        int step = xN - x1 < 2000 ? SMALL_SERIES_STEP : BIG_SERIES_STEP;
-        for (int x = xN - 1; x > x1; x-=step) {
-            double C1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient) * groundLevelConcentration;
+        var step = xN - x1 < 2000 ? SMALL_SERIES_STEP : BIG_SERIES_STEP;
+        for (var x = xN - 1; x > x1; x-=step) {
+            var C1 = countS1(x, windSpeedMaxGroundLevelConcentrationDistance, harmfulSubstancesDepositionCoefficient) * groundLevelConcentration;
             EquationFunction f = new QuarticFunction(45.1, 17, 12.8, 5, 1 - Math.sqrt(C1 / C));
-            for (double t : f.findRealRoots()) {
+            for (var t : f.findRealRoots()) {
                 if (t > 0) {
-                    double y = Math.sqrt(windSpeed > 5 ? t * x * x / 5 : t * x * x / windSpeed);
+                    var y = Math.sqrt(windSpeed > 5 ? t * x * x / 5 : t * x * x / windSpeed);
                     points.put(x, y);
                     series.add(x, y);
                 }
@@ -531,7 +531,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
         series.add(x1, 0);
 
-        for (Map.Entry<Integer, Double> point : points.entrySet()) {
+        for (var point : points.entrySet()) {
             series.add((double) point.getKey(), -point.getValue());
         }
         if (series.getDescription() != null) {
@@ -541,8 +541,8 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     private int countX0(int fromDistance, int toDistance, double Xm,
                         double harmfulSubstancesDepositionCoefficient, double CyCoefficient) {
-        for (int x = fromDistance; x < toDistance; x++) {
-            double s1 = countS1(x, Xm, harmfulSubstancesDepositionCoefficient);
+        for (var x = fromDistance; x < toDistance; x++) {
+            var s1 = countS1(x, Xm, harmfulSubstancesDepositionCoefficient);
             if (MathUtils.checkEquals(s1, CyCoefficient)) {
                 return x;
             }
@@ -556,7 +556,7 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
     private double countS1(double x, double windSpeedMaxGroundLevelConcentrationDistance,
                            double harmfulSubstancesDepositionCoefficient) {
-        double d = x / windSpeedMaxGroundLevelConcentrationDistance;
+        var d = x / windSpeedMaxGroundLevelConcentrationDistance;
         if (d <= 1) {
             return 3 * pow(d, 4) - 8 * pow(d, 3) + 6 * pow(d, 2);
         } else if (d <= 8) {
@@ -577,16 +577,16 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                                          double Cm,
                                          int rightBorder,
                                          Locale locale) {
-        NumberAxis xAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-x-axis", null, locale));
-        NumberAxis yAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-y-axis", null, locale));
+        var xAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-x-axis", null, locale));
+        var yAxis = new NumberAxis(messageSource.getMessage("lab3.isoline-y-axis", null, locale));
         XYItemRenderer renderer = new XYLineAndShapeRenderer(true, false);
-        XYPlot plot = new XYPlot(dataSet, xAxis, yAxis, renderer);
+        var plot = new XYPlot(dataSet, xAxis, yAxis, renderer);
 
         // Добавляем маркер с Xm
-        final CircleDrawer cd = new CircleDrawer(Color.white, new BasicStroke(1.0f), Color.BLACK);
+        final var cd = new CircleDrawer(Color.white, new BasicStroke(1.0f), Color.BLACK);
         final XYAnnotation CmPoint = new XYDrawableAnnotation(Xm, 0.0, 5.0, 5.0, cd);
         plot.addAnnotation(CmPoint);
-        final XYTextAnnotation xMMarker = new XYTextAnnotation("Cm", Xm - 70.0, 0.0);
+        final var xMMarker = new XYTextAnnotation("Cm", Xm - 70.0, 0.0);
         xMMarker.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 9));
         xMMarker.setPaint(Color.BLUE);
         xMMarker.setTextAnchor(TextAnchor.HALF_ASCENT_RIGHT);
@@ -594,11 +594,11 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
 
         List<XYSeries> seriesWithLabels = new ArrayList<>(dataSet.getSeries());
 
-        boolean bigSeriesExists = seriesWithLabels.removeIf(xySeries -> xySeries.getDescription() == null);
-        boolean macSeriesExists = seriesWithLabels.removeIf(xySeries -> "MAC".equals(xySeries.getDescription()));
+        var bigSeriesExists = seriesWithLabels.removeIf(xySeries -> xySeries.getDescription() == null);
+        var macSeriesExists = seriesWithLabels.removeIf(xySeries -> "MAC".equals(xySeries.getDescription()));
 
-        for (XYSeries series : seriesWithLabels) {
-            final XYTextAnnotation seriesNameMarker = new XYTextAnnotation(series.getDescription(), series.getX(0).doubleValue(), 0.0);
+        for (var series : seriesWithLabels) {
+            final var seriesNameMarker = new XYTextAnnotation(series.getDescription(), series.getX(0).doubleValue(), 0.0);
             seriesNameMarker.setBackgroundPaint(Color.WHITE);
             seriesNameMarker.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 2));
             seriesNameMarker.setPaint(Color.BLUE);
@@ -608,20 +608,20 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
         plot.setBackgroundImage(lab3ResourceService.getBackgroundImage(labData.getCity(), labData.getWindDirection()));
         plot.setAxisOffset(new RectangleInsets(4, 4, 4, 4));
 
-        JFreeChart chart = new JFreeChart(chartName,
+        var chart = new JFreeChart(chartName,
                 JFreeChart.DEFAULT_TITLE_FONT, plot, false);
-        ImageTitle windRoseTitle = new ImageTitle(lab3ResourceService.getWindRoseImage(labData.getCity()), 150, 150,
+        var windRoseTitle = new ImageTitle(lab3ResourceService.getWindRoseImage(labData.getCity()), 150, 150,
                 Title.DEFAULT_POSITION, Title.DEFAULT_HORIZONTAL_ALIGNMENT,
                 Title.DEFAULT_VERTICAL_ALIGNMENT, Title.DEFAULT_PADDING);
         windRoseTitle.setPosition(RectangleEdge.LEFT);
         windRoseTitle.setPadding(10.0, 0.0, 20.0, 0.0);
 
-        LegendTitle legendTitle = new LegendTitle(plot);
+        var legendTitle = new LegendTitle(plot);
         legendTitle.setPosition(RectangleEdge.LEFT);
 
         ChartUtilities.applyCurrentTheme(chart);
 
-        TextTitle textTitle = new TextTitle(messageSource.getMessage("lab3.isoline-text-legend",
+        var textTitle = new TextTitle(messageSource.getMessage("lab3.isoline-text-legend",
                 new Object[]{
                         messageSource.getMessage(I18NUtils.getEnumName(labData.getCity()), null, locale),
                         labData.getTppOutput(),
@@ -630,12 +630,12 @@ public class Lab3ServiceImpl extends LabServiceImpl<Lab3Data, Lab3Variant, Lab3D
                         Precision.round(Xm, 1)}, locale), new Font(Font.SANS_SERIF, Font.BOLD, 12));
         textTitle.setTextAlignment(HorizontalAlignment.LEFT);
 
-        BlockContainer blockContainer = new BlockContainer();
+        var blockContainer = new BlockContainer();
         blockContainer.add(textTitle, RectangleEdge.TOP);
         blockContainer.add(windRoseTitle);
         blockContainer.add(legendTitle, RectangleEdge.BOTTOM);
         blockContainer.setPadding(5.0, 5.0, 5.0, 5.0);
-        CompositeTitle title = new CompositeTitle(blockContainer);
+        var title = new CompositeTitle(blockContainer);
         title.setPosition(RectangleEdge.LEFT);
         title.setMargin(new RectangleInsets(1.0, 1.0, 1.0, 1.0));
         title.setFrame(new LineBorder());

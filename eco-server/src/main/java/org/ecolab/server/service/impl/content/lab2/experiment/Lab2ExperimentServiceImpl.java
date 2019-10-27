@@ -28,7 +28,7 @@ public class Lab2ExperimentServiceImpl extends Lab2ServiceImpl<Lab2ExperimentLog
 
     @Override
     protected Lab2ExperimentLog generateNewLabVariant() {
-        Lab2ExperimentLog variant = new Lab2ExperimentLog();
+        var variant = new Lab2ExperimentLog();
         variant.setEstimatedGeometricMeanFrequency(Frequency.
                 values()[RandomUtils.nextInt(Frequency.values().length)]);
         variant.setSoundPressure(Collections.nCopies(8, new ArrayList<>(Collections.nCopies(9, 0.0))));

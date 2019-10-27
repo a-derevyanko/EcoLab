@@ -36,14 +36,14 @@ public abstract class UIUtils {
 
         @Override
         protected NumberFormat getFormat(Locale locale) {
-            NumberFormat format = super.getFormat(locale);
+            var format = super.getFormat(locale);
             format.setMaximumFractionDigits(6);
             return format;
         }
     }
 
     public static Converter<String, ?> getStringConverter(Field field, I18N i18N) {
-        Class<?> propClass = ReflectTools.convertPrimitiveType(field.getType());
+        var propClass = ReflectTools.convertPrimitiveType(field.getType());
         return getStringConverter(propClass, i18N);
     }
 
@@ -72,7 +72,7 @@ public abstract class UIUtils {
                     return ValidationResult.ok();
                 }
 
-                FieldValidationResult result = validationService.getFieldValidator(propertyField).validate(value, dataBinder.getBean());
+                var result = validationService.getFieldValidator(propertyField).validate(value, dataBinder.getBean());
                 return result.isError() ? ValidationResult.error(i18N.get(result.getErrorMessage())) : ValidationResult.ok();
             });
         }
@@ -88,7 +88,7 @@ public abstract class UIUtils {
     }
 
     public static Notification showNotification(String caption, String description) {
-        Notification notification = new Notification("Welcome to EcoLab");
+        var notification = new Notification("Welcome to EcoLab");
 
         notification.setCaption(caption);
         notification.setDescription(description);

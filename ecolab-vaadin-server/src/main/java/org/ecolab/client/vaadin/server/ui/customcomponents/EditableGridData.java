@@ -33,7 +33,7 @@ public class EditableGridData<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof EditableGridData)) return false;
-        EditableGridData<?> that = (EditableGridData<?>) o;
+        var that = (EditableGridData<?>) o;
         return Objects.equals(caption, that.caption) &&
                 Objects.equals(values, that.values);
     }

@@ -26,7 +26,7 @@ public class Lab2RandomVariant extends Lab2Variant {
         if (this == o) return true;
         if (!(o instanceof Lab2RandomVariant)) return false;
         if (!super.equals(o)) return false;
-        Lab2RandomVariant that = (Lab2RandomVariant) o;
+        var that = (Lab2RandomVariant) o;
         return name == that.name;
     }
 

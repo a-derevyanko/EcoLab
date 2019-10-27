@@ -36,7 +36,7 @@ public class LabTestHomeWorkQuestion extends LabTestQuestionVariant {
         if (this == o) return true;
         if (!(o instanceof LabTestHomeWorkQuestion)) return false;
         if (!super.equals(o)) return false;
-        LabTestHomeWorkQuestion question = (LabTestHomeWorkQuestion) o;
+        var question = (LabTestHomeWorkQuestion) o;
         return Objects.equals(valueType, question.valueType) &&
                 Objects.equals(dimension, question.dimension) &&
                 Objects.equals(formulae, question.formulae);

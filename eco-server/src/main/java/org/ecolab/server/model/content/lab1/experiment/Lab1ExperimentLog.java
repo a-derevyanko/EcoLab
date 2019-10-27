@@ -63,7 +63,7 @@ public class Lab1ExperimentLog extends Lab1Variant {
         if (this == o) return true;
         if (!(o instanceof Lab1ExperimentLog)) return false;
         if (!super.equals(o)) return false;
-        Lab1ExperimentLog that = (Lab1ExperimentLog) o;
+        var that = (Lab1ExperimentLog) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(time, that.time) &&
                 Objects.equals(stacksHeight, that.stacksHeight) &&

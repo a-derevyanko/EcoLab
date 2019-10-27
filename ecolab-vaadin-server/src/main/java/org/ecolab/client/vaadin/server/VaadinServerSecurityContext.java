@@ -72,7 +72,7 @@ public class VaadinServerSecurityContext extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        AuthenticationManager authenticationManager = super.authenticationManagerBean();
+        var authenticationManager = super.authenticationManagerBean();
         userDetailsManager.setAuthenticationManager(authenticationManager);
         return authenticationManager;
     }

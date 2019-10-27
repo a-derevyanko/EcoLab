@@ -83,7 +83,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
     }
 
     public void addField(Field propertyField) {
-        int lastRow = getRows() - 1;
+        var lastRow = getRows() - 1;
 
         addCaption(propertyField.getName(), lastRow);
         addComponent(propertyField, lastRow);
@@ -98,27 +98,27 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
     }
 
     public void addCaption(String fieldName, int row) {
-        String fieldCaption = parameterCustomizer.getParameterPrefix() + i18N.get(fieldName);
-        String fieldDimension = i18N.get(fieldName + "-dimension");
-        Label captionLabel = new Label(fieldDimension.isEmpty() ? fieldCaption : fieldCaption + " (" + fieldDimension + ')', ContentMode.HTML);
+        var fieldCaption = parameterCustomizer.getParameterPrefix() + i18N.get(fieldName);
+        var fieldDimension = i18N.get(fieldName + "-dimension");
+        var captionLabel = new Label(fieldDimension.isEmpty() ? fieldCaption : fieldCaption + " (" + fieldDimension + ')', ContentMode.HTML);
         captionLabel.addStyleName(EcoLabTheme.LABEL_TINY);
         super.addComponent(captionLabel, 0, row);
         setComponentAlignment(captionLabel, Alignment.MIDDLE_LEFT);
     }
 
     protected void addSign(String fieldName, int row) {
-        Label signLabel = new Label(i18N.get(fieldName + "-sign"), ContentMode.HTML);
+        var signLabel = new Label(i18N.get(fieldName + "-sign"), ContentMode.HTML);
         signLabel.addStyleName(EcoLabTheme.LABEL_SIGN);
         signLabel.addStyleName(EcoLabTheme.LABEL_TINY);
         super.addComponent(signLabel, 2, row);
     }
 
     protected void addComponent(Field propertyField, int row) {
-        Class<?> propClass = ReflectTools.convertPrimitiveType(propertyField.getType());
-        boolean readOnly = labService.isFieldCalculated(propertyField);
+        var propClass = ReflectTools.convertPrimitiveType(propertyField.getType());
+        var readOnly = labService.isFieldCalculated(propertyField);
         AbstractComponent component;
         if (Enum.class.isAssignableFrom(propClass)) {
-            ComboBox<Enum<?>> comboBox = new ComboBox<>(null, Arrays.asList((Enum<?>[]) propClass.getEnumConstants()));
+            var comboBox = new ComboBox<Enum<?>>(null, Arrays.asList((Enum<?>[]) propClass.getEnumConstants()));
             comboBox.setItemCaptionGenerator(i18N::get);
             comboBox.setTextInputAllowed(false);
             comboBox.setPageLength(15);
@@ -129,7 +129,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
             comboBox.setWidth(130, Unit.PIXELS);
             component = comboBox;
         } else if (propClass == Boolean.class) {
-            RadioButtonGroup<Boolean> yesNoComponent = new RadioButtonGroup<>(null, Arrays.asList(Boolean.FALSE, Boolean.TRUE));
+            var yesNoComponent = new RadioButtonGroup<Boolean>(null, Arrays.asList(Boolean.FALSE, Boolean.TRUE));
             yesNoComponent.setItemCaptionGenerator(item -> item ? i18N.get("labwizard.yes-value") : i18N.get("labwizard.no-value"));
             yesNoComponent.setStyleName(EcoLabTheme.OPTIONGROUP_HORIZONTAL);
             yesNoComponent.setSizeFull();
@@ -137,8 +137,8 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
             yesNoComponent.setWidth(130, Unit.PIXELS);
             component = yesNoComponent;
         } else if (propClass == String.class || Number.class.isAssignableFrom(propClass)) {
-            TextField field = new TextField();
-            Converter<String, ?> converter = UIUtils.getStringConverter(propertyField, i18N);
+            var field = new TextField();
+            var converter = UIUtils.getStringConverter(propertyField, i18N);
 
             UIUtils.bindField(propertyField, dataBinder.forField(field).withNullRepresentation(readOnly ? i18N.get("labwizard.unknown-value") : "")
                     .withConverter(converter), dataBinder, validationService, i18N);
@@ -147,15 +147,15 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
             field.setWidth(130, Unit.PIXELS);
             component = field;
         } else if (propClass == LocalDateTime.class) {
-            DateTimeField field = new DateTimeField();
+            var field = new DateTimeField();
             dataBinder.forField(field).bind(propertyField.getName());
             field.setWidth(200, Unit.PIXELS);
             component = field;
         }  else if (propClass == List.class) {
-            Type[] type = ((ParameterizedType) propertyField.getGenericType()).getActualTypeArguments();
+            var type = ((ParameterizedType) propertyField.getGenericType()).getActualTypeArguments();
             if (type[0] == Double.class) {
-                ListField<Double> field = new ListField<>(0.0);
-                List<String> columns = Arrays.asList(i18N.get(propertyField.getName() + "-columns").split(";"));
+                var field = new ListField<Double>(0.0);
+                var columns = Arrays.asList(i18N.get(propertyField.getName() + "-columns").split(";"));
                 field.createColumns(i18N, UIUtils.getStringConverter(Double.class, i18N), columns);
                 dataBinder.forField(field).bind(propertyField.getName());
                 field.setWidth(100 * columns.size(), Unit.PIXELS);
@@ -163,10 +163,10 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
                 view.setHideOnMouseOut(false);
                 field.addValueChangeListener(e -> view.setPopupVisible(false));
                 Button button = new Button(i18N.get("labwizard.input-values"), event -> view.setPopupVisible(true));*/
-                Window view = new Window(i18N.get("labwizard.input-values"), field);
+                var view = new Window(i18N.get("labwizard.input-values"), field);
                 view.setResizable(false);
                 field.addValueChangeListener(e -> UI.getCurrent().removeWindow(view));
-                Button button = new Button(i18N.get("labwizard.input-values"), event -> {
+                var button = new Button(i18N.get("labwizard.input-values"), event -> {
                     view.center();
                     UI.getCurrent().addWindow(view);
                 });
@@ -184,7 +184,7 @@ public class ParameterLayout<BEAN extends LabData<V>, V extends LabVariant> exte
 
     public void addInfoButton(String fieldName, int row) {
         if (res.isResourceExists(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX)) {
-            Button infoButton = new Button(VaadinIcons.QUESTION);
+            var infoButton = new Button(VaadinIcons.QUESTION);
             infoButton.addClickListener(event -> resourceWindow.show(
                     new ResourceWindow.ResourceWindowSettings(i18N.get(fieldName),
                             res.getHtmlData(additionsPath, fieldName + MustacheProperties.DEFAULT_SUFFIX), false)));

@@ -6,7 +6,7 @@ import org.vaadin.teemu.wizards.event.*;
  */
 public class Test {
     public void f() {
-        Wizard w = new Wizard();
+        var w = new Wizard();
         w.getBackButton().isDisableOnClick();
         w.setUriFragmentEnabled(true);
         //w.addStep();

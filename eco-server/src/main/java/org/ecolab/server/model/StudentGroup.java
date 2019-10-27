@@ -19,7 +19,7 @@ public class StudentGroup extends IdentifiedDomainModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof StudentGroup)) return false;
-        StudentGroup group = (StudentGroup) o;
+        var group = (StudentGroup) o;
         return Objects.equals(name, group.name);
     }
 

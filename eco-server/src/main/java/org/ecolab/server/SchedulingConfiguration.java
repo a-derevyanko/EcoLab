@@ -29,7 +29,7 @@ public class SchedulingConfiguration implements SchedulingConfigurer, AsyncConfi
     @Bean
     @Override
     public Executor getAsyncExecutor() {
-        ScheduledExecutorService delegateExecutor = Executors.newScheduledThreadPool(100);
+        var delegateExecutor = Executors.newScheduledThreadPool(100);
         return new DelegatingSecurityContextScheduledExecutorService(delegateExecutor);
     }
 

@@ -22,9 +22,9 @@ public class VaadinServlet extends Vaadin4SpringServlet {
 
     @Override
     protected VaadinServletService createServletService(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
-        VaadinServletService servletService = super.createServletService(deploymentConfiguration);
+        var servletService = super.createServletService(deploymentConfiguration);
         servletService.setSystemMessagesProvider((SystemMessagesProvider) systemMessagesInfo -> {
-            CustomizedSystemMessages systemMessages = new CustomizedSystemMessages();
+            var systemMessages = new CustomizedSystemMessages();
             systemMessages.setSessionExpiredCaption(messageSource.getMessage("vaadin.session-expired", null, systemMessagesInfo.getLocale()));
             systemMessages.setSessionExpiredMessage(messageSource.getMessage("vaadin.server-connection-lost", null, systemMessagesInfo.getLocale()));
             systemMessages.setCommunicationErrorCaption(messageSource.getMessage("vaadin.session-expired", null, systemMessagesInfo.getLocale()));

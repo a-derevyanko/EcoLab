@@ -119,7 +119,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
     addGroupButton.setCaption(i18N.get("student-data.add-group"));
     addGroupButton.setStyleName(EcoLabTheme.BUTTON_PRIMARY);
     addGroupButton.addClickListener(event -> {
-      Set<StudentGroupInfo> selected = groups.getSelectedItems();
+      var selected = groups.getSelectedItems();
       addTeacherGroupsWindow.show(new AddTeacherGroupsWindow.AddTeacherGroupsWindowSettings(currentUser.getName(), () -> {
         refreshTeacherGroups(selected);
       }));
@@ -129,7 +129,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
     removeGroupButton.setCaption(i18N.get("student-data.remove-group"));
     removeGroupButton.setStyleName(EcoLabTheme.BUTTON_DANGER);
     removeGroupButton.addClickListener(event -> {
-      Set<StudentGroupInfo> selected = groups.getSelectedItems();
+      var selected = groups.getSelectedItems();
       if (!selected.isEmpty()) {
         selected.forEach(s -> studentInfoService.removeGroupFromTeacher(currentUser.getName(), s.getName()));
         refreshTeacherGroups(selected);
@@ -138,7 +138,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
 
     manageGroupButton.setCaption(i18N.get("teacher-group-manage.view-group"));
     manageGroupButton.setStyleName(EcoLabTheme.BUTTON_PRIMARY);
-    Grid.Column<StudentGroupInfo, Integer> number = groups.addColumn(StudentGroupInfo::getIndex).setCaption(i18N.get("teacher-group-manage.groups.number"));
+    var number = groups.addColumn(StudentGroupInfo::getIndex).setCaption(i18N.get("teacher-group-manage.groups.number"));
     groups.addColumn(StudentGroupInfo::getName).setCaption(i18N.get("teacher-group-manage.groups.name"));
     groups.addColumn(StudentGroupInfo::getStudentCount).setCaption(i18N.get("teacher-group-manage.groups.student-count"));
     groups.addColumn(studentGroupInfo -> studentGroupInfo.getLabCount() + "/3").setCaption(i18N.get("teacher-group-manage.groups.lab-count"));
@@ -165,7 +165,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
     downloadManualButton.setStyleName(EcoLabTheme.BUTTON_PRIMARY);
     downloadManualButton.setSizeFull();
 
-    FileDownloader fileDownloader = new FileDownloader(new StreamResource(
+    var fileDownloader = new FileDownloader(new StreamResource(
             () -> getClass().getClassLoader().getResourceAsStream("org/ecolab/server/teacher-manual.pdf"), "manual.pdf"));
 
     fileDownloader.extend(downloadManualButton);
@@ -179,7 +179,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
   @Override
   public void enter(ViewChangeListener.ViewChangeEvent event) {
     refreshTeacherGroups(Collections.emptySet());
-    UserProfile userProfile = userLabService.getUserProfile(currentUser.getName());
+    var userProfile = userLabService.getUserProfile(currentUser.getName());
 
     todayDate.setValue(i18N.get("teacher-group-manage.today-date", LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
             "" /*LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm"))*/));
@@ -203,7 +203,7 @@ public class TeacherGroupsManagingView extends GridLayout implements View {
   }
 
   private void createPresentationButton(Button button, String title, int labNumber) {
-    FileDownloader fileDownloader = new FileDownloader(new StreamResource(
+    var fileDownloader = new FileDownloader(new StreamResource(
             () -> getClass().getClassLoader().getResourceAsStream("org/ecolab/server/service/impl/content/lab" + labNumber + "/experiment/report/experimentJournal.pdf"), "manual.pdf"));
 
     fileDownloader.extend(button);

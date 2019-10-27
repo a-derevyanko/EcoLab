@@ -31,7 +31,7 @@ public abstract class NewUserWindow<T extends UserDataWindowSettings> extends Us
                 ComponentErrorNotification.show(i18N.get("savable.save-exception-caption"), i18N.get("savable.save-exception"));
             }
         } else {
-            UserInfo savedUserInfo = saveUserInfo();
+            var savedUserInfo = saveUserInfo();
             userSavedWindow.show(new UserSavedWindow.UserSavedWindowSettings(savedUserInfo,
                     userInfoService.createDefaultPassword(savedUserInfo.getLogin())));
             super.save();

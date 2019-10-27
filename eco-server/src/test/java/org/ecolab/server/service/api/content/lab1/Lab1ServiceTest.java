@@ -49,10 +49,10 @@ public abstract class Lab1ServiceTest<V extends Lab1Variant> extends AbstractTes
 
     @Test
     public void testRemoveOldLabs() throws InterruptedException {
-        LocalDateTime startDate = LocalDateTime.now();
+        var startDate = LocalDateTime.now();
         Thread.sleep(1000L);
-        int count = RandomUtils.nextInt(15);
-        for (int i = 0; i < count; i++) {
+        var count = RandomUtils.nextInt(15);
+        for (var i = 0; i < count; i++) {
             lab1Service.startNewLab(USERNAME);
         }
         Assert.assertEquals(lab1Service.removeOldLabs(startDate), count);

@@ -45,7 +45,7 @@ public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S ext
         downloadExperimentLogJournal.addStyleName(EcoLabTheme.BUTTON_PRIMARY);
         downloadExperimentLogJournal.addStyleName(EcoLabTheme.BUTTON_TINY);
 
-        FileDownloader fileDownloader = new FileDownloader(new StreamResource(
+        var fileDownloader = new FileDownloader(new StreamResource(
                 () -> getClass().getClassLoader().
                         getResourceAsStream("org/ecolab/server/service/impl/content/lab" + labService.getLabNumber() +
                                 "/experiment/report/experimentJournal.pdf"),
@@ -80,7 +80,7 @@ public class LabExperimentView<T extends LabData<V>, V extends LabVariant, S ext
     @Override
     public boolean saveData(boolean showErrors) {
         if (isExperimentJournalStep() && hasVariantChanges) {
-            BinderValidationStatus<V> validationStatus = variantBinder.validate();
+            var validationStatus = variantBinder.validate();
             if (validationStatus.isOk()) {
                 ui.access(() -> {
                     variantBinder.readBean(labService.updateExperimentJournal(variantBinder.getBean()));

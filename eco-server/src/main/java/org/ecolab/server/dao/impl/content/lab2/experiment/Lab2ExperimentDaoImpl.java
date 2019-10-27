@@ -46,7 +46,7 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
 
         @Override
         public Lab2Data<Lab2ExperimentLog> map(Record record) {
-            Lab2Data<Lab2ExperimentLog> data = super.map(record);
+            var data = super.map(record);
             data.getVariant().setId(record.get(LAB2_EXPERIMENT_LOG.ID));
             data.getVariant().setName(record.get(LAB2_EXPERIMENT_LOG.NAME));
             data.getVariant().setId(record.get(LAB2_EXPERIMENT_LOG.ID));
@@ -74,7 +74,7 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
 
     @Override
     public Lab2Data<Lab2ExperimentLog> getLastLabByUser(String userName, boolean completed) {
-        Lab2Data<Lab2ExperimentLog> data = dsl.select().from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2_EXPERIMENT_LOG.ID.eq(LAB2DATA.ID)).
+        var data = dsl.select().from(LAB2DATA).join(LAB2_EXPERIMENT_LOG).on(LAB2_EXPERIMENT_LOG.ID.eq(LAB2DATA.ID)).
                 where(LAB2DATA.ID.eq(dsl.select(LAB2TEAM.ID).from(LAB2TEAM).where(LAB2TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
                         .and(LAB2DATA.COMPLETED.eq(completed)).
                 orderBy(LAB2DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());
@@ -121,9 +121,9 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
                         toArray(variant.getAverageSoundPressure())
                 ));
 
-        List<List<Double>> soundPressure1 = variant.getSoundPressure();
-        for (int i = 0; i < soundPressure1.size(); i++) {
-            List<Double> soundPressure = soundPressure1.get(i);
+        var soundPressure1 = variant.getSoundPressure();
+        for (var i = 0; i < soundPressure1.size(); i++) {
+            var soundPressure = soundPressure1.get(i);
             queries.add(dsl.insertInto(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE).
                     set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.ID, Long.valueOf(i)).
                     set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.LAB_ID, variant.getId()).
@@ -156,8 +156,8 @@ public class Lab2ExperimentDaoImpl extends Lab2DaoImpl<Lab2ExperimentLog> implem
 
         queries.add(dsl.deleteFrom(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE)
                 .where(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.LAB_ID.eq(experimentJournal.getId())));
-        for (int i = 0; i < experimentJournal.getSoundPressure().size(); i++) {
-            List<Double> soundPressure = experimentJournal.getSoundPressure().get(i);
+        for (var i = 0; i < experimentJournal.getSoundPressure().size(); i++) {
+            var soundPressure = experimentJournal.getSoundPressure().get(i);
             queries.add(dsl.insertInto(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE).
                     set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.ID, Long.valueOf(i)).
                     set(LAB2_EXPERIMENT_LOG_SOUND_PRESSURE.LAB_ID, experimentJournal.getId()).

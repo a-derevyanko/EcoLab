@@ -34,7 +34,7 @@ import static org.ecolab.server.db.h2.public_.tables.Lab2ExperimentLog.LAB2_EXPE
 @Service
 public class UserLabDaoImpl implements UserLabDao {
   private static final RecordMapper<Record6<Integer, Integer, LocalDateTime, LocalDateTime, Integer, Integer>, UserLabStatistics> USER_LAB_STATISTICS_RECORD_MAPPER = record -> {
-    UserLabStatistics statistics = new UserLabStatistics();
+    var statistics = new UserLabStatistics();
     statistics.setLabNumber(record.value1());
     statistics.setTryCount(record.value2() == null ? 0 : record.value2());
     statistics.setLabDate(record.value3());

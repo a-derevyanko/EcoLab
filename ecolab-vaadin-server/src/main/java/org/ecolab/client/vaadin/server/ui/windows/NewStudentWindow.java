@@ -56,7 +56,7 @@ public class NewStudentWindow extends NewUserWindow<StudentDataWindowSettings> {
                 studentInfoService::getStudentGroups,
                 StudentGroup::getName,
                 event -> {
-                    StudentGroup group = event.getValue();
+                    var group = event.getValue();
                     if (group == null) {
                         studentTeamComboBox.clear();
                         studentTeamComboBox.setEnabled(false);
@@ -102,10 +102,10 @@ public class NewStudentWindow extends NewUserWindow<StudentDataWindowSettings> {
      */
     @Override
     protected UserInfo saveUserInfo() {
-        boolean exists = userInfoBinder.getBean().getId() != null;
-        UserInfo userInfo = super.saveUserInfo();
+        var exists = userInfoBinder.getBean().getId() != null;
+        var userInfo = super.saveUserInfo();
         //todo эти проверки в сервис или в dao
-        StudentInfo studentInfo = exists ?
+        var studentInfo = exists ?
                 studentInfoService.updateStudentInfo(userInfo, studentGroupComboBox.getValue(), studentTeamComboBox.getValue()) :
                 studentInfoService.createStudentInfo(userInfo, studentGroupComboBox.getValue(), studentTeamComboBox.getValue());
 

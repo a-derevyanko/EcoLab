@@ -66,7 +66,7 @@ public class TelegramBotImpl extends TelegramLongPollingBot implements TelegramB
 
   @ExceptionHandler(Exception.class)
   private void notifyAboutException(Exception ex) {
-    SendDocument document = new SendDocument();
+    var document = new SendDocument();
     document.setDocument(ex.getLocalizedMessage() + "_"
                     + FastDateFormat.getInstance("dd_MM_yyyy_HH_mm_ss").format(new Date()) + ".txt",
             new ByteArrayInputStream(Throwables.getStackTraceAsString(ex).getBytes(StandardCharsets.UTF_8)));

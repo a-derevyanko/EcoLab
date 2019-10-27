@@ -41,7 +41,7 @@ public class LabPresentationsFolderIterator extends BaseFolderIterator {
     public String next() {
         if (hasNext()) {
             i++;
-            String next = "content/lab" + i + "/presentation";
+            var next = "content/lab" + i + "/presentation";
             hasNext = null;
             return next;
         } else {
@@ -53,7 +53,7 @@ public class LabPresentationsFolderIterator extends BaseFolderIterator {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof LabPresentationsFolderIterator)) return false;
-        LabPresentationsFolderIterator selector = (LabPresentationsFolderIterator) o;
+        var selector = (LabPresentationsFolderIterator) o;
         return Objects.equals(resourceService, selector.resourceService) &&
                 Objects.equals(i18N, selector.i18N);
     }

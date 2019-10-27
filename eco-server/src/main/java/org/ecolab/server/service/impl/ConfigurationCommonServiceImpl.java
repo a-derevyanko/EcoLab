@@ -24,11 +24,11 @@ public class ConfigurationCommonServiceImpl implements ConfigurationCommonServic
     @Override
     @Async
     public void printApplicationBeanNames() {
-        StringBuilder builder = new StringBuilder("Beans provided by Spring Boot for Server:\n");
+        var builder = new StringBuilder("Beans provided by Spring Boot for Server:\n");
 
-        String[] beanNames = appContext.getBeanDefinitionNames();
+        var beanNames = appContext.getBeanDefinitionNames();
         Arrays.sort(beanNames);
-        for (String beanName : beanNames) {
+        for (var beanName : beanNames) {
             builder.append(beanName).append('\n');
         }
         builder.append("-------------------------------------------------------\n");

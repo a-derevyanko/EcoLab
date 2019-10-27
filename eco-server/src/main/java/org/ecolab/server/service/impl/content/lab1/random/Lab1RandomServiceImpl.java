@@ -32,14 +32,14 @@ public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1RandomVariant, La
 
     @Override
     public Set<DataValue> getInitialDataValues(Lab1RandomVariant data, Locale locale) {
-        Set<DataValue> values = super.getInitialDataValues(data, locale);
+        var values = super.getInitialDataValues(data, locale);
 
-        DataValue imageValue = new DataValue();
+        var imageValue = new DataValue();
         imageValue.setName(messageSource.getMessage("lab1.initial-data.boiler", null, locale));
         imageValue.setValue(labResourceService.getBoiler());
         values.add(imageValue);
 
-        DataValue cityValue = new DataValue();
+        var cityValue = new DataValue();
         cityValue.setName(messageSource.getMessage("lab1.city", new Object[]{getFieldValueForPrint(data.getCity(), locale)}, locale));
         cityValue.setValue(labResourceService.getCoatOfArms(data.getCity().name()));
         values.add(cityValue);
@@ -49,7 +49,7 @@ public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1RandomVariant, La
 
     @Override
     protected Map<String, Object> getInitialDataWithLocalizedValues(Lab1RandomVariant data, Locale locale) {
-        Map<String, Object> map = super.getInitialDataWithLocalizedValues(data, locale);
+        var map = super.getInitialDataWithLocalizedValues(data, locale);
         map.remove("city");
 
         return map;
@@ -57,7 +57,7 @@ public class Lab1RandomServiceImpl extends Lab1ServiceImpl<Lab1RandomVariant, La
 
     @Override
     protected Lab1RandomVariant generateNewLabVariant() {
-        Lab1RandomVariant variant = new Lab1RandomVariant();
+        var variant = new Lab1RandomVariant();
 
         variant.setCity(City.values()[RandomUtils.nextInt(City.values().length)]);
         variant.setOutsideAirTemperature(-25 + RandomUtils.nextInt(11) * 5);

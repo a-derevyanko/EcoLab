@@ -35,7 +35,7 @@ public class Lab2RandomServiceImpl extends Lab2ServiceImpl<Lab2RandomVariant, La
 
     @Override
     protected Map<String, Object> getInitialDataWithLocalizedValues(Lab2RandomVariant data, Locale locale) {
-        Map<String, Object> map = super.getInitialDataWithLocalizedValues(data, locale);
+        var map = super.getInitialDataWithLocalizedValues(data, locale);
         map.remove("city");
 
         return map;
@@ -43,9 +43,9 @@ public class Lab2RandomServiceImpl extends Lab2ServiceImpl<Lab2RandomVariant, La
 
     @Override
     protected Lab2RandomVariant generateNewLabVariant() {
-        Lab2RandomVariant variant = new Lab2RandomVariant();
+        var variant = new Lab2RandomVariant();
 
-        ObjectType object = ObjectType.values()[RandomUtils.nextInt(ObjectType.values().length)];
+        var object = ObjectType.values()[RandomUtils.nextInt(ObjectType.values().length)];
         variant.setName(object);
         variant.setEstimatedGeometricMeanFrequency(Arrays.stream(Frequency.values())
                 .filter(frequency -> frequency != Frequency.F_315).sorted((o1, o2) ->
@@ -70,7 +70,7 @@ public class Lab2RandomServiceImpl extends Lab2ServiceImpl<Lab2RandomVariant, La
                 break;
             }
             case SUPPLING_PUMP: {
-                List<Double> averageSoundPressure = Lists.reverse(generateValues(ImmutableList.<Pair<Double, Double>>builder()
+                var averageSoundPressure = Lists.reverse(generateValues(ImmutableList.<Pair<Double, Double>>builder()
                         .add(Pair.of(115.0, 125.0))
                         .add(Pair.of(95.0, 105.0))
                         .add(Pair.of(95.0, 105.0))
@@ -105,8 +105,8 @@ public class Lab2RandomServiceImpl extends Lab2ServiceImpl<Lab2RandomVariant, La
 
     private List<Double> generateValues(List<Pair<Double, Double>> bounds, double step) {
         List<Double> values = new ArrayList<>(bounds.size());
-        double previous = Double.MAX_VALUE;
-        for (Pair<Double, Double> entry : bounds) {
+        var previous = Double.MAX_VALUE;
+        for (var entry : bounds) {
             previous = generateNextValue(entry.getKey(), entry.getValue(), step, previous);
             values.add(previous);
         }
@@ -125,7 +125,7 @@ public class Lab2RandomServiceImpl extends Lab2ServiceImpl<Lab2RandomVariant, La
         if (firstValue >= lastValue) {
             return lastValue;
         }
-        double r = firstValue + RandomUtils.nextInt((int) ((lastValue - firstValue) / step) + 1) * step;
+        var r = firstValue + RandomUtils.nextInt((int) ((lastValue - firstValue) / step) + 1) * step;
         if (r > previousValue) {
             return generateNextValue(firstValue, lastValue, step, previousValue);
         } else {

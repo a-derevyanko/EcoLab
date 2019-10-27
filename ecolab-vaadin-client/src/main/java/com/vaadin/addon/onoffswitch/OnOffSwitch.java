@@ -12,7 +12,7 @@ public class OnOffSwitch extends AbstractField<Boolean> {
             if (isReadOnly()) {
                 return;
             }
-            final Boolean oldValue = getValue(); // 서버 value
+            final var oldValue = getValue(); // 서버 value
             final Boolean newValue = checked;    // 클라이언트측 요청 Value
             // 양쪽 Value가 틀린 경우 Click 상태 값 변경
             if (!newValue.equals(oldValue)) {

@@ -34,7 +34,7 @@ public class AddableComboBox<T extends DomainModel> extends CustomField<T> imple
 
     @Override
     protected Component initContent() {
-        HorizontalLayout components = new HorizontalLayout(comboBox, addButton);
+        var components = new HorizontalLayout(comboBox, addButton);
 
         components.setSpacing(true);
         return components;

@@ -81,7 +81,7 @@ public class UserInfo extends IdentifiedDomainModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserInfo)) return false;
-        UserInfo userInfo = (UserInfo) o;
+        var userInfo = (UserInfo) o;
         return Objects.equals(login, userInfo.login) &&
                 Objects.equals(firstName, userInfo.firstName) &&
                 Objects.equals(middleName, userInfo.middleName) &&

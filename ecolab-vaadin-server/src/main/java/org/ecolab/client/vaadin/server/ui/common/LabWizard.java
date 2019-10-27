@@ -143,7 +143,7 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
     @Override
     public boolean saveData(boolean showErrors) {
         if (hasUnsavedData()) {
-            BinderValidationStatus<T> validationStatus = binder.validate();
+            var validationStatus = binder.validate();
             if (validationStatus.isOk()) {
                 ui.access(() -> {
                     binder.readBean(labService.updateLab(binder.getBean()));
@@ -166,12 +166,12 @@ public abstract class LabWizard<T extends LabData<V>, V extends LabVariant, S ex
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        T uncompletedLabData = labService.getLastUncompletedLabByUser(currentUser.getName());
+        var uncompletedLabData = labService.getLastUncompletedLabByUser(currentUser.getName());
         if (uncompletedLabData == null) {
             if (!DevUtils.isProductionVersion()) {
                 labService.removeLabsByUser(currentUser.getName());
             }
-            T newLabData = labService.startNewLab(currentUser.getName());
+            var newLabData = labService.startNewLab(currentUser.getName());
             binder.setBean(newLabData);
         } else {
             binder.setBean(uncompletedLabData);

@@ -22,9 +22,9 @@ public class DataBasePropertiesPostProcessor implements EnvironmentPostProcessor
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         if (environment.containsProperty("spring.datasource.url")) {
-            String dataSourceUrl = environment.getProperty("spring.datasource.url");
-            String username = environment.getProperty("spring.datasource.username");
-            String password = environment.getProperty("spring.datasource.password");
+            var dataSourceUrl = environment.getProperty("spring.datasource.url");
+            var username = environment.getProperty("spring.datasource.username");
+            var password = environment.getProperty("spring.datasource.password");
 
             Map<String, Object> propertySource =
                     DSL.using(dataSourceUrl, username, password).selectFrom(COMMON_SETTINGS).fetch().stream().collect

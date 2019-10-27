@@ -5,6 +5,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.MenuBar;
+import javax.annotation.PostConstruct;
 import org.ecolab.client.vaadin.server.service.impl.I18N;
 import org.ecolab.client.vaadin.server.ui.styles.EcoLabTheme;
 import org.ecolab.client.vaadin.server.ui.view.AdminManagingView;
@@ -15,14 +16,9 @@ import org.ecolab.client.vaadin.server.ui.windows.SimpleEditUserWindow;
 import org.ecolab.client.vaadin.server.ui.windows.UserDataWindowSettings;
 import org.ecolab.server.common.Role;
 import org.ecolab.server.common.UserInfoUtils;
-import org.ecolab.server.model.UserInfo;
 import org.ecolab.server.service.api.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.vaadin.spring.security.VaadinSecurity;
-
-import javax.annotation.PostConstruct;
-import java.util.Set;
 
 /**
  * При изменении VIEW меняются кнопки в тулбаре.
@@ -86,11 +82,11 @@ public class EcoLabMenuBar extends MenuBar implements ViewChangeListener {
     public boolean beforeViewChange(ViewChangeEvent event) {
         if (vaadinSecurity.isAuthenticated()) {
             if (VaadinUI.getCurrent().getCurrentUserInfo() == null) {
-                Authentication authentication = vaadinSecurity.getAuthentication();
+                var authentication = vaadinSecurity.getAuthentication();
                 getUI().setCurrentUserInfo(userDetailsManager.getUserInfo(authentication.getName()));
                 updateUserInfoItem();
 
-                Set<String> roles = UserInfoUtils.getRoles(authentication);
+                var roles = UserInfoUtils.getRoles(authentication);
 
                 if (roles.contains(Role.ADMIN)) {
                     adminManagingItem.setVisible(true);
@@ -114,7 +110,7 @@ public class EcoLabMenuBar extends MenuBar implements ViewChangeListener {
     }
 
     private void updateUserInfoItem() {
-        UserInfo userInfo = getUI().getCurrentUserInfo();
+        var userInfo = getUI().getCurrentUserInfo();
         userInfoItem.setText(UserInfoUtils.getShortInitials(userInfo));
     }
 }

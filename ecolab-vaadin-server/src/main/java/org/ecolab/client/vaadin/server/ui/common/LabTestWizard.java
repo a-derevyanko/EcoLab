@@ -84,10 +84,10 @@ public abstract class LabTestWizard extends Wizard implements View {
 
         getFinishButton().setIcon(VaadinIcons.FLAG_CHECKERED, i18N.get("test.check"));
 
-        LabTest test = labService.getLabTest(UI.getCurrent().getLocale());
+        var test = labService.getLabTest(UI.getCurrent().getLocale());
 
-        for (LabTestQuestion question : test.getQuestions()) {
-            LabTestQuestionVariant questionVariant = question.getVariants().get(RandomUtils.nextInt(0, question.getVariants().size()));
+        for (var question : test.getQuestions()) {
+            var questionVariant = question.getVariants().get(RandomUtils.nextInt(0, question.getVariants().size()));
             if (questionVariant instanceof LabTestQuestionVariantWithAnswers) {
                 addStep(new LabTestQuestionView(i18N, (LabTestQuestionVariantWithAnswers) questionVariant));
             } else {
@@ -102,10 +102,10 @@ public abstract class LabTestWizard extends Wizard implements View {
     @Override
     public void wizardCompleted(WizardCompletedEvent event) {
         Map<LabTestQuestionVariant, Object> answers = new HashMap<>();
-        List<WizardStep> steps = getSteps();
-        for (int i = 0; i < steps.size(); i++) {
-            BaseLabTestQuestionView step = (BaseLabTestQuestionView) steps.get(i);
-            Object answer = step.getAnswer();
+        var steps = getSteps();
+        for (var i = 0; i < steps.size(); i++) {
+            var step = (BaseLabTestQuestionView) steps.get(i);
+            var answer = step.getAnswer();
             if (answer == null) {
                 ComponentErrorNotification.show(i18N.get("test.not-selected", i + 1));
                 return;
@@ -114,7 +114,7 @@ public abstract class LabTestWizard extends Wizard implements View {
             }
         }
 
-        LabTestResult result = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers, UI.getCurrent().getLocale());
+        var result = labService.checkLabTest(labService.getCompletedLabByUser(currentUser.getName()), answers, UI.getCurrent().getLocale());
 
         if (result.getCompleted()) {
             userLabService.setTestCompleted(currentUser.getName(),
@@ -146,9 +146,9 @@ public abstract class LabTestWizard extends Wizard implements View {
             if (questionVariant.getImage() == null) {
                 setAnswerComponent(component);
             } else {
-                HorizontalLayout imageAndAnswer = new HorizontalLayout();
+                var imageAndAnswer = new HorizontalLayout();
                 imageAndAnswer.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-                Image image = new Image(null, new ThemeResource(questionVariant.getImage()));
+                var image = new Image(null, new ThemeResource(questionVariant.getImage()));
                 imageAndAnswer.addComponent(image);
                 imageAndAnswer.addComponent(component);
                 setAnswerComponent(imageAndAnswer);
@@ -171,19 +171,19 @@ public abstract class LabTestWizard extends Wizard implements View {
                         new Label(questionVariant.getDimension(), ContentMode.HTML)));
 
                 if (Integer.class.isAssignableFrom(questionVariant.getValueType())) {
-                    Binder<SimpleIntegerProperty> binder = new Binder<>();
+                    var binder = new Binder<SimpleIntegerProperty>();
                     binder.forField((TextField) component).withConverter(new StringToIntegerConverter(""))
                     .bind(IntegerExpression::getValue, WritableValue::setValue);
                     binder.setBean(new SimpleIntegerProperty());
                     answer = binder.getBean();
                 } else if (Double.class.isAssignableFrom(questionVariant.getValueType())) {
-                    Binder<SimpleDoubleProperty> binder = new Binder<>();
+                    var binder = new Binder<SimpleDoubleProperty>();
                     binder.forField((TextField) component).withConverter(new StringToDoubleConverter(""))
                             .bind(DoubleExpression::getValue, WritableValue::setValue);
                     binder.setBean(new SimpleDoubleProperty());
                     answer = binder.getBean();
                 }else if (String.class.isAssignableFrom(questionVariant.getValueType())) {
-                    Binder<SimpleStringProperty> binder = new Binder<>();
+                    var binder = new Binder<SimpleStringProperty>();
                     binder.forField((TextField) component)
                             .bind(WritableValue::getValue, WritableValue::setValue);
                     binder.setBean(new SimpleStringProperty());
@@ -193,7 +193,7 @@ public abstract class LabTestWizard extends Wizard implements View {
                 }
             } else {
                 setAnswerComponent((Component) component);
-                Binder<SimpleObjectProperty<Boolean>> binder = new Binder<>();
+                var binder = new Binder<SimpleObjectProperty<Boolean>>();
                 binder.forField((RadioButtonGroup<Boolean>) component).bind(WritableValue::getValue, WritableValue::setValue);
                 binder.setBean(new SimpleObjectProperty<>());
                 binder.getBean().setValue(null);
@@ -208,11 +208,11 @@ public abstract class LabTestWizard extends Wizard implements View {
 
         private static HasValue<?> getComponent(LabTestHomeWorkQuestion questionVariant, I18N i18N) {
             if (questionVariant.getValueType().equals(Boolean.class)) {
-                RadioButtonGroup<Boolean> answersGroup = new RadioButtonGroup<>(null, Arrays.asList(Boolean.FALSE, Boolean.TRUE));
+                var answersGroup = new RadioButtonGroup<Boolean>(null, Arrays.asList(Boolean.FALSE, Boolean.TRUE));
                 answersGroup.setItemCaptionGenerator(item -> Boolean.TRUE.equals(item) ? i18N.get("labwizard.yes-value") : i18N.get("labwizard.no-value"));
                 return answersGroup;
             } else if (questionVariant.getValueType() == String.class || Number.class.isAssignableFrom(questionVariant.getValueType())) {
-                TextField field = new TextField();
+                var field = new TextField();
                 field.addStyleName(EcoLabTheme.TEXTFIELD_TINY);
                 return field;
             } else {

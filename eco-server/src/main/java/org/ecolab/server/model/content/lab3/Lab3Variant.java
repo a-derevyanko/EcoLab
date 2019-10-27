@@ -383,7 +383,7 @@ public class Lab3Variant extends LabVariant {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Lab3Variant variant = (Lab3Variant) o;
+        var variant = (Lab3Variant) o;
         return Objects.equals(tppOutput, variant.tppOutput) &&
                 numberOfUnits == variant.numberOfUnits &&
                 city == variant.city &&

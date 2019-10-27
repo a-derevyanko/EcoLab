@@ -107,15 +107,15 @@ public class StudentsPanel extends BaseUsersPanel<StudentDataWindowSettings, Stu
         addStudentTeamButton.setDescription(i18N.get("student-data.add-team"));
         addStudentTeamButton.addClickListener(event -> newStudentTeamWindow.show(new NewLabeledItemWindow.NewItemWindowSettings<>(
                 team -> {
-                    String group = studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new).getName();
+                    var group = studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new).getName();
                     studentTeamComboBox.setItems(studentInfoService.getStudentTeams(group));
                     studentTeamComboBox.setSelectedItem(team);
                 }, o -> {
-                    StudentGroup group = studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new);
+            var group = studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new);
                     return studentInfoService.isTeamExists(group, o);
                 },
                 s -> {
-                    String group = studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new).getName();
+                    var group = studentGroupComboBox.getSelectedItem().orElseThrow(IllegalStateException::new).getName();
                     return studentInfoService.createStudentTeam(s, group);
                 })));
         removeStudentTeamButton.setStyleName(EcoLabTheme.BUTTON_DANGER);

@@ -26,7 +26,7 @@ public class CubicFunction implements EquationFunction {
         }
 
         // Normalize coefficients.
-        double denom = this.a;
+        var denom = this.a;
 
         this.a = this.b / denom;
         this.b = this.c / denom;
@@ -46,50 +46,50 @@ public class CubicFunction implements EquationFunction {
 
 
         // Commence solution.
-        double a_over_3 = a / 3.0;
-        double Q = (3 * b - a * a) / 9.0;
-        double Q_CUBE = Q * Q * Q;
-        double R = (9 * a * b - 27 * c - 2 * a * a * a) / 54.0;
-        double R_SQR = R * R;
-        double D = Q_CUBE + R_SQR;
+        var a_over_3 = a / 3.0;
+        var Q = (3 * b - a * a) / 9.0;
+        var Q_CUBE = Q * Q * Q;
+        var R = (9 * a * b - 27 * c - 2 * a * a * a) / 54.0;
+        var R_SQR = R * R;
+        var D = Q_CUBE + R_SQR;
 
         if (D < 0.0) {
             // Three unequal real roots.
             nRoots = 3;
-            double theta = Math.acos(R / Math.sqrt(-Q_CUBE));
-            double SQRT_Q = Math.sqrt(-Q);
+            var theta = Math.acos(R / Math.sqrt(-Q_CUBE));
+            var SQRT_Q = Math.sqrt(-Q);
             x1 = 2.0 * SQRT_Q * Math.cos(theta / 3.0) - a_over_3;
             x2 = 2.0 * SQRT_Q * Math.cos((theta + 2.0 * Math.PI) / 3.0) - a_over_3;
             x3 = 2.0 * SQRT_Q * Math.cos((theta + 4.0 * Math.PI) / 3.0) - a_over_3;
         } else if (D > 0.0) {
             // One real root.
             nRoots = 1;
-            double SQRT_D = Math.sqrt(D);
-            double S = Math.cbrt(R + SQRT_D);
-            double T = Math.cbrt(R - SQRT_D);
+            var SQRT_D = Math.sqrt(D);
+            var S = Math.cbrt(R + SQRT_D);
+            var T = Math.cbrt(R - SQRT_D);
             x1 = (S + T) - a_over_3;
             x2 = Double.NaN;
             x3 = Double.NaN;
         } else {
             // Three real roots, at least two equal.
             nRoots = 3;
-            double CBRT_R = Math.cbrt(R);
+            var CBRT_R = Math.cbrt(R);
             x1 = 2 * CBRT_R - a_over_3;
             x2 = x3 = CBRT_R - a_over_3;
         }
 
         if (x1 < x2) {
-            double tmp = x1;
+            var tmp = x1;
             x1 = x2;
             x2 = tmp;
         }
         if (x2 < x3) {
-            double tmp = x2;
+            var tmp = x2;
             x2 = x3;
             x3 = tmp;
         }
         if (x1 < x2) {
-            double tmp = x1;
+            var tmp = x1;
             x1 = x2;
             x2 = tmp;
         }

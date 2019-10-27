@@ -35,7 +35,7 @@ public class WizardProgressBar extends CustomComponent implements
         progressBar.setWidth(100, Unit.PERCENTAGE);
         progressBar.setHeight(13, Unit.PIXELS);
 
-        VerticalLayout layout = new VerticalLayout();
+        var layout = new VerticalLayout();
         layout.setWidth("100%");
         layout.addComponent(stepCaptions);
         layout.addComponent(progressBar);
@@ -48,28 +48,28 @@ public class WizardProgressBar extends CustomComponent implements
     }
 
     private void updateProgressBar() {
-        int stepCount = wizard.getSteps().size();
-        float padding = (1.0f / stepCount) / 2;
-        float progressValue = padding + activeStepIndex / (float) stepCount;
+        var stepCount = wizard.getSteps().size();
+        var padding = (1.0f / stepCount) / 2;
+        var progressValue = padding + activeStepIndex / (float) stepCount;
         progressBar.setValue(progressValue);
     }
 
     private void updateStepCaptions() {
         stepCaptions.removeAllComponents();
-        int index = 1;
-        for (WizardStep step : wizard.getSteps()) {
-            Label label = createCaptionLabel(index, step);
+        var index = 1;
+        for (var step : wizard.getSteps()) {
+            var label = createCaptionLabel(index, step);
             stepCaptions.addComponent(label);
             index++;
         }
     }
 
     private Label createCaptionLabel(int index, WizardStep step) {
-        Label label = new Label(StringUtils.hasText(step.getCaption()) ? index + ". " + step.getCaption() : String.valueOf(index));
+        var label = new Label(StringUtils.hasText(step.getCaption()) ? index + ". " + step.getCaption() : String.valueOf(index));
         label.setSizeFull();
         label.addStyleName("step-caption");
 
-        List<WizardStep> steps = wizard.getSteps();
+        var steps = wizard.getSteps();
         if (wizard.isCompleted(step)) {
             label.addStyleName("completed");
         }
@@ -94,7 +94,7 @@ public class WizardProgressBar extends CustomComponent implements
 
     @Override
     public void activeStepChanged(WizardStepActivationEvent event) {
-        List<WizardStep> allSteps = wizard.getSteps();
+        var allSteps = wizard.getSteps();
         activeStepIndex = allSteps.indexOf(event.getActivatedStep());
         updateProgressAndCaptions();
     }

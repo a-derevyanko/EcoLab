@@ -126,19 +126,19 @@ public class GroupManagingView extends HorizontalLayout implements View {
         gridWithButtons.setSizeFull();
         groupMembers.setSizeFull();
 
-        HeaderRow topHeader = groupMembers.prependHeaderRow();
-        Grid.Column<UserProfile, String> initials = groupMembers.addColumn(userProfile ->
+        var topHeader = groupMembers.prependHeaderRow();
+        var initials = groupMembers.addColumn(userProfile ->
                 userProfile.getUserInfo().getLastName() + ' ' +
                         userProfile.getUserInfo().getFirstName() + '\n' +
                         userProfile.getUserInfo().getMiddleName()
         ).setCaption(i18N.get("group-manage.group-members.student"));
 
-        Grid.Column<UserProfile, String> team = groupMembers.addColumn(userProfile -> null ==
+        var team = groupMembers.addColumn(userProfile -> null ==
                 userProfile.getStudentInfo().getTeam() ? i18N.get("group-manage.group-members.no-team") :
                 userProfile.getStudentInfo().getTeam().getName()
         ).setCaption(i18N.get("group-manage.group-members.team"));
 
-        Grid.Column<UserProfile, String> average = groupMembers.addColumn(userProfile ->
+        var average = groupMembers.addColumn(userProfile ->
         String.valueOf(userProfile.getStatistics().stream().mapToInt(UserLabStatistics::getMark).
                     average().orElse(0))
         ).setCaption(i18N.get("group-manage.group-members.average"));
@@ -171,11 +171,11 @@ public class GroupManagingView extends HorizontalLayout implements View {
 
         newStudentButton.setCaption(i18N.get("group-manage.group-members.add-student"));
         newStudentButton.addClickListener(event -> {
-            UserInfo newUserInfo = new UserInfo();
+            var newUserInfo = new UserInfo();
             newUserInfo.setGroup(UserGroup.STUDENT);
 
             newStudentWindow.show(new StudentDataWindowSettings(newUserInfo, userInfo -> {
-                Set<UserProfile> selected = groupMembers.getSelectedItems();
+                var selected = groupMembers.getSelectedItems();
                 refreshItems();
                 selected.forEach(s -> groupMembers.getSelectionModel().select(s));
             }, studentInfo));
@@ -210,13 +210,13 @@ public class GroupManagingView extends HorizontalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        String group = event.getParameterMap().get(GROUP_NAME);
+        var group = event.getParameterMap().get(GROUP_NAME);
         studentInfo.setGroup(studentInfoService.getStudentGroupByName(group));
         refreshItems();
     }
 
     private void refreshItems() {
-        Set<UserProfile> userProfiles = userLabService.getUserProfiles(studentInfo.getGroup().getName());
+        var userProfiles = userLabService.getUserProfiles(studentInfo.getGroup().getName());
 
         //todo
        /* UserProfile p = new UserProfile();
@@ -244,10 +244,10 @@ public class GroupManagingView extends HorizontalLayout implements View {
     }
 
     private void addLabColumns(int labNumber, String caption, HeaderRow topHeader) {
-        Grid.Column<UserProfile, VerticalLayout> execution = groupMembers.addComponentColumn(userProfile ->
+        var execution = groupMembers.addComponentColumn(userProfile ->
         {
-            OnOffSwitch onOffSwitch = new OnOffSwitch();
-            VerticalLayout layout = new VerticalLayout(onOffSwitch);
+            var onOffSwitch = new OnOffSwitch();
+            var layout = new VerticalLayout(onOffSwitch);
             layout.setSpacing(true);
             layout.setMargin(false);
             layout.setComponentAlignment(onOffSwitch, Alignment.MIDDLE_CENTER);
@@ -279,9 +279,9 @@ public class GroupManagingView extends HorizontalLayout implements View {
             return layout;
         }).setCaption(i18N.get("group-manage.group-members.execution"));
 
-        Grid.Column<UserProfile, VerticalLayout> defence = groupMembers.addComponentColumn(userProfile -> {
-            OnOffSwitch onOffSwitch = new OnOffSwitch();
-            VerticalLayout layout = new VerticalLayout(onOffSwitch);
+        var defence = groupMembers.addComponentColumn(userProfile -> {
+            var onOffSwitch = new OnOffSwitch();
+            var layout = new VerticalLayout(onOffSwitch);
             layout.setSpacing(true);
             layout.setMargin(false);
             layout.setComponentAlignment(onOffSwitch, Alignment.MIDDLE_CENTER);
@@ -313,16 +313,16 @@ public class GroupManagingView extends HorizontalLayout implements View {
             return layout;
         }).setCaption(i18N.get("group-manage.group-members.defence"));
 
-        Grid.Column<UserProfile, String> mark = groupMembers.addColumn(userProfile -> {
-            UserLabStatistics s = getUserLabStatistics(labNumber, userProfile);
+        var mark = groupMembers.addColumn(userProfile -> {
+            var s = getUserLabStatistics(labNumber, userProfile);
             return s == null ? "" : String.format("%d (%d)", s.getMark(), s.getPointCount());
         }).setCaption(i18N.get("group-manage.group-members.mark"));
 
         topHeader.join(execution, defence, mark).setText(caption);
 
-        CheckBox checkBox = new CheckBox("№ " + labNumber);
+        var checkBox = new CheckBox("№ " + labNumber);
         checkBox.addValueChangeListener(event -> {
-            boolean hide = !event.getValue();
+            var hide = !event.getValue();
             execution.setHidden(hide);
             defence.setHidden(hide);
             mark.setHidden(hide);
@@ -353,7 +353,7 @@ public class GroupManagingView extends HorizontalLayout implements View {
      */
     private void editUser(UserProfile user) {
         editStudentWindow.show(new ManageStudentWindow.EditStudentWindowSettings(user.getUserInfo(), studentInfo -> {
-            Set<UserProfile> selected = groupMembers.getSelectedItems();
+            var selected = groupMembers.getSelectedItems();
             refreshItems();
             selected.forEach(s -> groupMembers.getSelectionModel().select(s));
         }, user.getStudentInfo(), user.getStatistics()));

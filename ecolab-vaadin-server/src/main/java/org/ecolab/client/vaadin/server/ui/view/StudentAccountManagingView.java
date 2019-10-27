@@ -84,15 +84,15 @@ public class StudentAccountManagingView extends GridLayout implements View {
         labStatisticsGrid.addColumn(UserLabStatistics::getTestDate).setCaption(i18N.get("profile-view.statistics.defend-date"));
         labStatisticsGrid.addComponentColumn(userLabStatistics -> {
                 @SuppressWarnings("unchecked")
-                LabService<LabData<?>, ?> labService = (LabService<LabData<?>, ?>) labServices.stream().filter(s -> s.getLabNumber() == userLabStatistics.getLabNumber()).
+                var labService = (LabService<LabData<?>, ?>) labServices.stream().filter(s -> s.getLabNumber() == userLabStatistics.getLabNumber()).
                         findFirst().orElseThrow(IllegalStateException::new);
 
                 @SuppressWarnings("unchecked")
-                final LabData<?> data = labService.getCompletedLabByUser(currentUser.getName());
+                final var data = labService.getCompletedLabByUser(currentUser.getName());
 
                 if (data != null) {
-                    Button button = new Button(VaadinIcons.DOWNLOAD);
-                    VerticalLayout layout = new VerticalLayout(button);
+                    var button = new Button(VaadinIcons.DOWNLOAD);
+                    var layout = new VerticalLayout(button);
                     layout.setSpacing(true);
                     layout.setMargin(false);
                     layout.setComponentAlignment(button, Alignment.MIDDLE_CENTER);
@@ -101,7 +101,7 @@ public class StudentAccountManagingView extends GridLayout implements View {
                     button.setDescription(i18N.get("profile-view.download-report", userLabStatistics.getLabNumber()));
 
                     @SuppressWarnings("unchecked")
-                    FileDownloader fileDownloader = new FileDownloader(
+                    var fileDownloader = new FileDownloader(
                             new DownloadStreamResource(() -> labService.createReport(data, UI.getCurrent().getLocale()), "report.pdf"));
                     fileDownloader.extend(button);
                     return layout;
@@ -112,7 +112,7 @@ public class StudentAccountManagingView extends GridLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        UserProfile userProfile = userLabService.getUserProfile(currentUser.getName());
+        var userProfile = userLabService.getUserProfile(currentUser.getName());
 
         userInitialsLabel.setValue(userProfile.getUserInfo().getLastName() + ' ' + userProfile.getUserInfo().getFirstName()
                 + '\n' + userProfile.getUserInfo().getMiddleName());

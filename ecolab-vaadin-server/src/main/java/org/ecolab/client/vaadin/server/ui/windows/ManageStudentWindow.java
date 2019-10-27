@@ -60,16 +60,16 @@ public class ManageStudentWindow extends EditUserWindow<ManageStudentWindow.Edit
 
         menu.setCaption(i18N.get("group-manage.group-members.actions"));
         rootMenuItem.setStyleName(EcoLabTheme.BUTTON_QUIET);
-        for (int labNumber = 1; labNumber <= 3; labNumber++) {
-            MenuBar.MenuItem downloadItem = rootMenuItem.addItem(i18N.get("group-manage.group-members.actions-lab-report",
+        for (var labNumber = 1; labNumber <= 3; labNumber++) {
+            var downloadItem = rootMenuItem.addItem(i18N.get("group-manage.group-members.actions-lab-report",
                     labNumber),
                     VaadinIcons.DOWNLOAD, null);
-            int finalLabNumber = labNumber;
+            var finalLabNumber = labNumber;
             new BrowserWindowOpener(new DownloadStreamResource(
                     () -> {
-                        LabService<LabData<LabVariant>, LabVariant> service = getLabService(finalLabNumber);
+                        var service = getLabService(finalLabNumber);
 
-                        LabData<LabVariant> data = service.getCompletedLabByUser(settings.getUserInfo().getLogin());
+                        var data = service.getCompletedLabByUser(settings.getUserInfo().getLogin());
 
                         return service.createReport(data, UI.getCurrent().getLocale());
                     },
@@ -84,7 +84,7 @@ public class ManageStudentWindow extends EditUserWindow<ManageStudentWindow.Edit
 
         menu.setVisible(false);
 
-        for (MenuBar.MenuItem menuItem : rootMenuItem.getChildren()) {
+        for (var menuItem : rootMenuItem.getChildren()) {
             menuItem.setVisible(false);
         }
 

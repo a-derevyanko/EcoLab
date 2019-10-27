@@ -120,7 +120,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Cacheable("COMPILED_REPORTS")
     public JasperReport getCompiledReport(@NotNull URL templateUrl) {
-        try (InputStream is = templateUrl.openStream()) {
+        try (var is = templateUrl.openStream()) {
             return JasperCompileManager.compileReport(is);
         } catch (JRException | IOException e) {
             throw new UnhandledException(e);

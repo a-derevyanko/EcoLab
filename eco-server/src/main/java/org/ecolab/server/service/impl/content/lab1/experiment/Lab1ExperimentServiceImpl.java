@@ -23,7 +23,7 @@ public class Lab1ExperimentServiceImpl extends Lab1ServiceImpl<Lab1ExperimentLog
 
     @Override
     protected Lab1ExperimentLog generateNewLabVariant() {
-        Lab1ExperimentLog variant = new Lab1ExperimentLog();
+        var variant = new Lab1ExperimentLog();
         variant.setName("");
         return variant;
     }

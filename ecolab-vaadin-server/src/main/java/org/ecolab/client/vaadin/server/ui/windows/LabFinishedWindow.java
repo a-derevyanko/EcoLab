@@ -72,7 +72,7 @@ public class LabFinishedWindow<T extends LabData<V>, V extends LabVariant> exten
         toMainMenuButton.addStyleName(EcoLabTheme.BUTTON_PRIMARY);
         toMainMenuButton.addStyleName(EcoLabTheme.BUTTON_TINY);
 
-        FileDownloader fileDownloader = new FileDownloader(
+        var fileDownloader = new FileDownloader(
                 new DownloadStreamResource(() -> settings.labService.createReport(settings.labData, UI.getCurrent().getLocale()), "report.pdf"));
         fileDownloader.extend(saveReportButton);
 

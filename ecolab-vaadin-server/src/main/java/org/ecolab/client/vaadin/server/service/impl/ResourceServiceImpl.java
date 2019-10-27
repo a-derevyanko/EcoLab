@@ -100,11 +100,11 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     @Cacheable(value = "FILES_ARCHIVE", unless = "#result.length > 104857600")
     public byte[] getZipFolder(FolderIterator folderIterator) {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-            try (ZipOutputStream zos = new ZipOutputStream(bos)) {
-                for (String path : folderIterator) {
-                    try (PathReference pathReference = PathReference.getPath(VaadinServlet.getCurrent().getServletContext().getResource(getThemeDir() + path).toURI());
-                         Stream<Path> pathStream = Files.list(pathReference.getPath())) {
+        try (var bos = new ByteArrayOutputStream()) {
+            try (var zos = new ZipOutputStream(bos)) {
+                for (var path : folderIterator) {
+                    try (var pathReference = PathReference.getPath(VaadinServlet.getCurrent().getServletContext().getResource(getThemeDir() + path).toURI());
+                         var pathStream = Files.list(pathReference.getPath())) {
                         pathStream.filter(Files::isRegularFile).
                                 forEach(p -> addFileToZip(folderIterator.getFolderName(), p, zos, false));
                     }
@@ -126,7 +126,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     private String getThemeDir() {
-        String deploymentServerResourcesPath = VaadinService.getCurrent().getDeploymentConfiguration().getResourcesPath();
+        var deploymentServerResourcesPath = VaadinService.getCurrent().getDeploymentConfiguration().getResourcesPath();
         if (StringUtils.hasText(deploymentServerResourcesPath)) {
             LOGGER.info("deploymentServerResourcesPath — " + deploymentServerResourcesPath);
         }
@@ -163,12 +163,12 @@ public class ResourceServiceImpl implements ResourceService {
      */
     private void addFolderToZip(String path, Path folder, ZipOutputStream zip) {
         try {
-            List<Path> files = Files.list(folder).collect(Collectors.toList());
+            var files = Files.list(folder).collect(Collectors.toList());
 
             if (files.isEmpty()) {
                 addFileToZip(path, folder, zip, true);
             } else {
-                for (Path file : files) {
+                for (var file : files) {
                     addFileToZip(path.isEmpty() ? folder.getFileName().toString() : path + "/" + folder.getFileName().toString(),
                             file, zip, false);
                 }

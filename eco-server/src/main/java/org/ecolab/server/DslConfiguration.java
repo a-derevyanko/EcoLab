@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 public class DslConfiguration {
     @Bean
     public Settings getSettings() {
-        Settings settings = new Settings();
+        var settings = new Settings();
         settings.setExecuteWithOptimisticLocking(true);
         return settings;
     }

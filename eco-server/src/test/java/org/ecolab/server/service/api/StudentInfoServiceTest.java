@@ -45,18 +45,18 @@ public class StudentInfoServiceTest extends AbstractTestWithUser {
 
     @Test
     public void testGetStudentInfo() {
-        StudentInfo studentInfo = studentInfoService.getStudentInfo(USERNAME);
+        var studentInfo = studentInfoService.getStudentInfo(USERNAME);
         Assert.assertEquals(studentInfo.getGroup(), testGroup);
         Assert.assertEquals(studentInfo.getTeam(), testTeam);
     }
 
     @Test
     public void testSaveStudentInfo() {
-        String newGroupName = GROUPNAME + RandomStringUtils.randomAlphabetic(5);
+        var newGroupName = GROUPNAME + RandomStringUtils.randomAlphabetic(5);
         testGroup.setName(newGroupName);
         studentInfoService.updateStudentGroup(testGroup);
         studentInfoService.updateStudentInfo(userInfoService.getUserInfo(USERNAME), testGroup, testTeam);
-        StudentInfo studentInfo = studentInfoService.getStudentInfo(USERNAME);
+        var studentInfo = studentInfoService.getStudentInfo(USERNAME);
         Assert.assertEquals(studentInfo.getGroup(), testGroup);
         Assert.assertEquals(studentInfo.getTeam().getName(), TEAMNUMBER);
     }

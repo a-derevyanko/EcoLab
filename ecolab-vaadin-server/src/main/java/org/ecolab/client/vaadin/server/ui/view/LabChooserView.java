@@ -140,7 +140,7 @@ public class LabChooserView extends VerticalLayout implements View {
         downloadPresentationButton.setStyleName(EcoLabTheme.BUTTON_PRIMARY);
         downloadPresentationButton.setSizeFull();
 
-        FileDownloader fileDownloader = new FileDownloader(new StreamResource(
+        var fileDownloader = new FileDownloader(new StreamResource(
                 () -> getClass().getClassLoader().getResourceAsStream("org/ecolab/server/manual.pdf"), "manual.pdf"));
 
         fileDownloader.extend(downloadPresentationButton);
@@ -194,14 +194,14 @@ public class LabChooserView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        Set<Integer> allowedLabs = studentInfoService.getAllowedLabs(currentUser.getName());
-        Set<Integer> allowedTests = studentInfoService.getAllowedDefence(currentUser.getName());
-        Map<Integer, LabMode> completedLabs = userLabService.getCompletedLabs(currentUser.getName());
-        Collection<Integer> completedTests = userLabService.getCompletedTests(currentUser.getName());
+        var allowedLabs = studentInfoService.getAllowedLabs(currentUser.getName());
+        var allowedTests = studentInfoService.getAllowedDefence(currentUser.getName());
+        var completedLabs = userLabService.getCompletedLabs(currentUser.getName());
+        var completedTests = userLabService.getCompletedTests(currentUser.getName());
         setTestButtonSate(lab1TestButton, allowedTests.contains(1) && completedLabs.containsKey(1) && !completedTests.contains(1));
         setTestButtonSate(lab2TestButton, allowedTests.contains(2) && completedLabs.containsKey(2) && !completedTests.contains(2));
         setTestButtonSate(lab3TestButton, allowedTests.contains(3) && completedLabs.containsKey(3) && !completedTests.contains(3));
-        boolean isNotStudent = VaadinUI.getCurrent().getCurrentUserInfo().getGroup() != UserGroup.STUDENT;
+        var isNotStudent = VaadinUI.getCurrent().getCurrentUserInfo().getGroup() != UserGroup.STUDENT;
         setLabButtonSate(lab1Button, isNotStudent || (allowedLabs.contains(1) && !completedLabs.containsKey(1)));
         setLabButtonSate(lab2Button, isNotStudent || (allowedLabs.contains(2) && !completedLabs.containsKey(2)));
         setLabButtonSate(lab3Button, isNotStudent || (allowedLabs.contains(3) && !completedLabs.containsKey(3)));

@@ -37,7 +37,7 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
     protected abstract static class Lab2DataMapper<V extends Lab2Variant>  implements RecordMapper<Record, Lab2Data<V>> {
         @Override
         public Lab2Data<V> map(Record record) {
-            Lab2Data<V> data = new Lab2Data<>();
+            var data = new Lab2Data<V>();
             data.setId(record.get(LAB2DATA.ID));
             data.setStartDate(record.get(LAB2DATA.START_DATE));
             data.setSaveDate(record.get(LAB2DATA.SAVE_DATE));
@@ -58,7 +58,7 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
             data.setRoomConstant(record.get(LAB2DATA.ROOM_CONSTANT));
             data.setReflectedSoundPower(record.get(LAB2DATA.REFLECTED_SOUND_POWER));
 
-            V variant = createVariant();
+            var variant = createVariant();
             data.setVariant(variant);
 
             return data;
@@ -69,7 +69,7 @@ public abstract class Lab2DaoImpl<V extends Lab2Variant> extends LabDaoImpl<Lab2
 
     @Override
     public void saveLab(Lab2Data<V> data) {
-        Lab2dataRecord record = dsl.insertInto(LAB2DATA,
+        var record = dsl.insertInto(LAB2DATA,
                 LAB2DATA.START_DATE,
                 LAB2DATA.SAVE_DATE,
                 LAB2DATA.COMPLETED,

@@ -20,7 +20,7 @@ public class StudentTeam extends IdentifiedDomainModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof StudentTeam)) return false;
-        StudentTeam that = (StudentTeam) o;
+        var that = (StudentTeam) o;
         return Objects.equals(name, that.name);
     }
 

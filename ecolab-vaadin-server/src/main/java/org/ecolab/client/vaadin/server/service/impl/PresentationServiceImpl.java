@@ -28,7 +28,7 @@ public class PresentationServiceImpl implements PresentationService {
     @Override
     @Cacheable("PRESENTATION_OPTIONS")
     public Options getPresentationOptions() {
-        Options options = new Options();
+        var options = new Options();
         options.unloadElements = false;
         options.preloadRange = 2;
         options.closeOnSlideClick = false;

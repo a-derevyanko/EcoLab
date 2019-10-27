@@ -113,14 +113,14 @@ public class LabTestFinishedWindow extends BaseEcoLabWindow<LabTestFinishedWindo
         settings.questions.stream().
                 sorted(Comparator.comparingInt(LabTestQuestionVariant::getNumber)).
                 forEach(questionVariant -> {
-                    StringBuilder question = new StringBuilder(questionVariant.getQuestion());
+                    var question = new StringBuilder(questionVariant.getQuestion());
 
                     if (questionVariant instanceof LabTestQuestionVariantWithAnswers) {
-                        List<String> answers = ((LabTestQuestionVariantWithAnswers) questionVariant).getAnswers();
+                        var answers = ((LabTestQuestionVariantWithAnswers) questionVariant).getAnswers();
                         IntStream.rangeClosed(0, answers.size() - 1).forEachOrdered(i -> question.append("<br>").append(i + 1).append(") ").append(answers.get(i)));
                     }
 
-                    Label label = new Label(question.toString(), ContentMode.HTML);
+                    var label = new Label(question.toString(), ContentMode.HTML);
                     label.setWidth(500.0F, Unit.PIXELS);
 
                     Layout content = new VerticalLayout(label);

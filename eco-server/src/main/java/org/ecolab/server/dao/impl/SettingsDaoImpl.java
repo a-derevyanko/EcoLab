@@ -20,9 +20,9 @@ public class SettingsDaoImpl implements SettingsDao {
 
     @Override
     public <T> T getSetting(String valueName) {
-        CommonSettingsRecord r = dsl.selectFrom(COMMON_SETTINGS).where(COMMON_SETTINGS.NAME.eq(valueName)).fetchOne();
+        var r = dsl.selectFrom(COMMON_SETTINGS).where(COMMON_SETTINGS.NAME.eq(valueName)).fetchOne();
 
-        String value = r.getValue();
+        var value = r.getValue();
         try {
             Class valueClass = r.getType().equals("string") ? String.class : ClassUtils.primitiveToWrapper(ClassUtils.getClass(ClassLoader.getSystemClassLoader(),
                     r.getType(), true));

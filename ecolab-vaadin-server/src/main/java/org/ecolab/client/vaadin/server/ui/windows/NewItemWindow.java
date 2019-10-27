@@ -45,7 +45,7 @@ public abstract class NewItemWindow<V, T extends DomainModel> extends BaseEcoLab
 
     protected void save() {
         try {
-            T savedItem = settings.saveFunction.apply(getValue());
+            var savedItem = settings.saveFunction.apply(getValue());
             settings.valueConsumer.accept(savedItem);
             close();
         } catch (RuntimeException ex) {

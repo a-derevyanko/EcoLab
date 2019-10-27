@@ -22,7 +22,7 @@ public class SecurityServicesTest extends AbstractTestWithUser {
 
     @Test
     public void testPersistentTokenRepository() throws Exception {
-        PersistentRememberMeToken token = new PersistentRememberMeToken(USERNAME, "series", "tokenValue", new Date());
+        var token = new PersistentRememberMeToken(USERNAME, "series", "tokenValue", new Date());
         persistentTokenRepository.createNewToken(token);
 
         Assert.assertTrue(new ReflectionEquals(persistentTokenRepository.getTokenForSeries("series")).matches(token));

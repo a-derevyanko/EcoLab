@@ -22,7 +22,7 @@ public abstract class UserInfoUtils {
     }
 
     public static String getShortInitials(UserInfo userInfo) {
-        Gender gender = StringUtils.hasText(userInfo.getMiddleName()) ? Gender.detect(userInfo.getMiddleName()) : Gender.androgynous;
+        var gender = StringUtils.hasText(userInfo.getMiddleName()) ? Gender.detect(userInfo.getMiddleName()) : Gender.androgynous;
         return PETROVICH.inflectTo(
                 new Petrovich.Names(userInfo.getLastName(), userInfo.getFirstName(), userInfo.getMiddleName(), gender),
                 Case.GENITIVE).lastName

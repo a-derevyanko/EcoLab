@@ -36,9 +36,9 @@ public class LabMailServiceImpl implements LabMailService {
 
     @Override
     public void sentInitialDataToEmail(byte[] variant, Locale locale, String email) throws MailException {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        var mimeMessage = mailSender.createMimeMessage();
         try {
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
+            var mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
             mimeMessageHelper.setFrom("ecolabserver@gmail.com");
             mimeMessageHelper.setTo(email);
             mimeMessageHelper.setText(messageSource.getMessage("report.initial-data.email-data-in-attach", null, locale));

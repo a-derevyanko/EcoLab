@@ -48,7 +48,7 @@ public abstract class Lab2Step3<V extends Lab2Variant> extends VerticalLayout im
         Grid.Column<Data, ?> signColumn = resultGrid.addColumn(Data::getSign, new HtmlRenderer()).setCaption(i18N.get("lab2.step3.table-column-sign"));
         Grid.Column<Data, ?> dimensionColumn = resultGrid.addColumn(Data::getDimension).setCaption(i18N.get("lab2.step3.table-column-dimension"));
 
-        Grid.Column[] valuesColumns = Arrays.stream(Frequency.values()).map(frequency -> resultGrid.addColumn(
+        var valuesColumns = Arrays.stream(Frequency.values()).map(frequency -> resultGrid.addColumn(
                 data -> data.getValue(frequency.ordinal())).setCaption(i18N.get(frequency))).toArray(Grid.Column[]::new);
 
         /*
@@ -61,7 +61,7 @@ public abstract class Lab2Step3<V extends Lab2Variant> extends VerticalLayout im
 
     @Override
     public void beforeEnter() {
-        AtomicInteger i = new AtomicInteger();
+        var i = new AtomicInteger();
         resultGrid.setItems(Arrays.stream(CalculationResultType.values()).
                 map(type -> new Data(i.incrementAndGet(), binder.getBean().getCalculationResult().containsKey(type) ?
                         binder.getBean().getCalculationResult().get(type) : Collections.nCopies(9, 0.0),

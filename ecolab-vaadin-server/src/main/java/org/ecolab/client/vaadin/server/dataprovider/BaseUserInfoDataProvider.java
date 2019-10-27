@@ -22,7 +22,7 @@ public abstract class BaseUserInfoDataProvider<T extends UserInfoFilter> extends
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseUserInfoDataProvider.class);
 
     protected static final RecordMapper<Record, UserInfo> USER_INFO_RECORD_MAPPER = record -> {
-        UserInfo info = new UserInfo();
+        var info = new UserInfo();
         info.setLogin(record.get(USERS.LOGIN));
         info.setFirstName(record.get(USERS.FIRST_NAME));
         info.setMiddleName(record.get(USERS.MIDDLE_NAME));
@@ -42,7 +42,7 @@ public abstract class BaseUserInfoDataProvider<T extends UserInfoFilter> extends
         List<Condition> conditions = new ArrayList<>();
 
         if (query.getFilter().isPresent()) {
-            UserInfo filter = query.getFilter().get().getUserInfoFilter();
+            var filter = query.getFilter().get().getUserInfoFilter();
             if (!StringUtils.isEmpty(filter.getLogin())) {
                 conditions.add(USERS.LOGIN.lower().contains(filter.getLogin().toLowerCase()));
             }

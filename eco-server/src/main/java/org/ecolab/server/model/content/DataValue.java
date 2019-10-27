@@ -51,7 +51,7 @@ public class DataValue implements DomainModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DataValue)) return false;
-        DataValue dataValue = (DataValue) o;
+        var dataValue = (DataValue) o;
         return Objects.equals(name, dataValue.name) &&
                 Objects.equals(value, dataValue.value) &&
                 Objects.equals(sign, dataValue.sign) &&

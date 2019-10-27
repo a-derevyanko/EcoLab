@@ -25,7 +25,7 @@ public enum Frequency implements Valued<Double> {
     }
 
     public static Frequency valueOf(double value) {
-        for (Frequency e : values()) {
+        for (var e : values()) {
             if (e.value == value) {
                 return e;
             }

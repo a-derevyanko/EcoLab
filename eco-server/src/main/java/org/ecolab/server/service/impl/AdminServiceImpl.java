@@ -40,13 +40,13 @@ public class AdminServiceImpl implements AdminService {
     public void autoBackupDataBase() {
         String folder = settingsService.getSetting("server.backupPath");
 
-        File path = new File(System.getProperty("user.dir") + File.separator + folder);
+        var path = new File(System.getProperty("user.dir") + File.separator + folder);
         try {
             if (!path.exists() && !path.mkdir()) {
                 throw new IllegalStateException("Can`t create folder:" + path);
             }
 
-            File[] files = path.listFiles();
+            var files = path.listFiles();
 
             int maxBackupFileCount = settingsService.getSetting("server.backupCount");
             if (files != null && files.length > maxBackupFileCount) {

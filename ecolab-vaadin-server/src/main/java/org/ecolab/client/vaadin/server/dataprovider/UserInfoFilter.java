@@ -15,7 +15,7 @@ public class UserInfoFilter {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserInfoFilter)) return false;
-        UserInfoFilter that = (UserInfoFilter) o;
+        var that = (UserInfoFilter) o;
         return Objects.equals(userInfoFilter, that.userInfoFilter);
     }
 

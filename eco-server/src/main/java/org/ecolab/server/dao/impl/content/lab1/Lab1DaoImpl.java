@@ -34,7 +34,7 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
     protected abstract static class Lab1DataMapper<V extends Lab1Variant>  implements RecordMapper<Record, Lab1Data<V>> {
         @Override
         public Lab1Data<V> map(Record record) {
-            Lab1Data<V> data = new Lab1Data<>();
+            var data = new Lab1Data<V>();
             data.setId(record.get(LAB1DATA.ID));
             data.setStartDate(record.get(LAB1DATA.START_DATE));
             data.setSaveDate(record.get(LAB1DATA.SAVE_DATE));
@@ -65,7 +65,7 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
             data.setDistanceFromEmissionSource(record.get(LAB1DATA.DISTANCE_FROM_EMISSION_SOURCE));
             data.setMaximumSurfaceConcentration(record.get(LAB1DATA.MAXIMUM_SURFACE_CONCENTRATION));
 
-            V variant = createVariant();
+            var variant = createVariant();
             data.setVariant(variant);
 
             return data;
@@ -76,7 +76,7 @@ public abstract class Lab1DaoImpl<V extends Lab1Variant> extends LabDaoImpl<Lab1
 
     @Override
     public void saveLab(Lab1Data<V> data) {
-        Lab1dataRecord record = dsl.insertInto(LAB1DATA,
+        var record = dsl.insertInto(LAB1DATA,
                 LAB1DATA.COMPLETED,
                 LAB1DATA.STACKS_DIAMETER,
                 LAB1DATA.STACKS_HEIGHT,

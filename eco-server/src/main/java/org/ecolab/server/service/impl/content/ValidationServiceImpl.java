@@ -27,7 +27,7 @@ public class ValidationServiceImpl implements ValidationService {
     @Override
     @Cacheable("FIELD_VALIDATORS")
     public <M extends DomainModel> FieldValidator<Object, M> getFieldValidator(Field field) {
-        ValidatedBy annotation = AnnotationUtils.findAnnotation(field, ValidatedBy.class);
+        var annotation = AnnotationUtils.findAnnotation(field, ValidatedBy.class);
         if (annotation == null) {
             throw new IllegalArgumentException("No validator for: " + field);
         } else {

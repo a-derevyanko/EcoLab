@@ -46,7 +46,7 @@ public class TokenRepositoryDaoImpl implements TokenRepositoryDao {
 
     @Override
     public PersistentRememberMeToken getTokenForSeries(String seriesId) {
-        Record result = dsl.select(PERSISTENT_LOGINS.fields())
+        var result = dsl.select(PERSISTENT_LOGINS.fields())
                 .select(USERS.LOGIN).from(PERSISTENT_LOGINS).join(USERS).on(USERS.ID.eq(PERSISTENT_LOGINS.USER_ID))
                 .where(PERSISTENT_LOGINS.SERIES.eq(seriesId)).fetchOne();
         return result == null ? null : result.map(

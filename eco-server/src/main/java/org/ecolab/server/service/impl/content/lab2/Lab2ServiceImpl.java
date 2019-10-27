@@ -49,7 +49,7 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
             if (labData.getCorrectionFactor() != null) {
                 calculationResult.put(CalculationResultType.CORRECTION_FACTOR, Collections.nCopies(labData.getAverageSoundPressure().size(), Precision.round(labData.getCorrectionFactor(), 4)));
 
-                List<Double> soundPressureMeasuringSurface = labData.getAverageSoundPressure().stream().
+                var soundPressureMeasuringSurface = labData.getAverageSoundPressure().stream().
                                 map(a -> a + labData.getCorrectionFactor()).collect(Collectors.toList());
 
                 if (labData.getMeasuringFactor() != null) {
@@ -76,7 +76,7 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
                                     calculationResult.put(CalculationResultType._10_lgn, Collections.nCopies(labData.getAverageSoundPressure().size(), Double.valueOf(labData.getQuantityOfSingleTypeEquipment())));
 
                                     if (labData.getReflectedSoundPower() != null) {
-                                        List<Double> reflectedSoundPower =
+                                        var reflectedSoundPower =
                                                 calculationResult.get(CalculationResultType.SOUND_POWER_LEVEL).stream().
                                                         map(a -> Precision.round(a + 10 *
                                                                 Math.log10(labData.getQuantityOfSingleTypeEquipment()) - 10 * Math.log10(labData.getRoomConstant()) + 6, 3)).collect(Collectors.toList());
@@ -84,7 +84,7 @@ public abstract class Lab2ServiceImpl<V extends Lab2Variant, D extends Lab2Dao<V
                                         calculationResult.put(CalculationResultType.REFLECTED_SOUND_POWER, reflectedSoundPower);
 
 
-                                        List<Double> allowedSoundPowerLevels = Arrays.stream(Frequency.values()).map(Lab2CalcUtils::getSoundPowerLevelForWorkplace).map(Double::valueOf).collect(Collectors.toList());
+                                        var allowedSoundPowerLevels = Arrays.stream(Frequency.values()).map(Lab2CalcUtils::getSoundPowerLevelForWorkplace).map(Double::valueOf).collect(Collectors.toList());
 
                                         calculationResult.put(CalculationResultType.ALLOWED_SOUND_POWER_LEVELS, allowedSoundPowerLevels);
 

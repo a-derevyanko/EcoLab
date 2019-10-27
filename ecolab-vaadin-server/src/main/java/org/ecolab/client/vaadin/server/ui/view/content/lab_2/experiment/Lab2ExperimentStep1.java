@@ -105,20 +105,20 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
 
         averageSoundPressureControlPointGrid.getEditor().addSaveListener(event -> {
             List<Double> valuesSum = new ArrayList<>(Collections.nCopies(9, 0.0));
-            Collection<EditableGridData<Double>> editableGridData = averageSoundPressureControlPointGrid.getDataProvider().getItems();
+            var editableGridData = averageSoundPressureControlPointGrid.getDataProvider().getItems();
             experimentLogBinder.getBean().setSoundPressure(new ArrayList<>());
-            for (EditableGridData<Double> data : editableGridData) {
-                List<Double> values = data.getValues();
+            for (var data : editableGridData) {
+                var values = data.getValues();
                 experimentLogBinder.getBean().getSoundPressure().add(values);
                 IntStream.range(0, values.size()).forEachOrdered(i -> valuesSum.set(i, valuesSum.get(i) + values.get(i)));
             }
-            List<Double> average = valuesSum.stream().map(d -> Precision.round(d / editableGridData.size(), 3)).collect(Collectors.toList());
+            var average = valuesSum.stream().map(d -> Precision.round(d / editableGridData.size(), 3)).collect(Collectors.toList());
             soundPressureControlPointField.setValue(average);
             experimentLogBinder.getBean().setAverageSoundPressure(average);
         });
 
         soundPressureValidationLabel.setStyleName(EcoLabTheme.LABEL_FAILURE);
-        Binder.BindingBuilder<Lab2ExperimentLog, List<Double>> bindingBuilder =
+        var bindingBuilder =
                 experimentLogBinder.forField(soundPressureControlPointField).withStatusLabel(soundPressureValidationLabel);
         soundPressureControlPointField.getEditor().getBinder().setValidationStatusHandler((BinderValidationStatusHandler<EditableGridData<Double>>) statusChange -> soundPressureValidationLabel.setValue(statusChange.getValidationErrors().toString()));
         UIUtils.bindField(FieldUtils.getField(Lab2ExperimentLog.class, "averageSoundPressure"),
@@ -127,8 +127,8 @@ public class Lab2ExperimentStep1 extends LabExperimentJournalStep<Lab2Data<Lab2E
 
     @Override
     public void beforeEnter() {
-        List<List<Double>> soundPressure = experimentLogBinder.getBean().getSoundPressure();
-        List<EditableGridData<Double>> values = IntStream.range(0, soundPressure.size())
+        var soundPressure = experimentLogBinder.getBean().getSoundPressure();
+        var values = IntStream.range(0, soundPressure.size())
                 .mapToObj(i -> new EditableGridData<>(i + 1, new ArrayList<>(soundPressure.get(i)))).collect(Collectors.toList());
         pointCountComboBox.setSelectedItem(soundPressure.size());
         averageSoundPressureControlPointGrid.setItems(values);

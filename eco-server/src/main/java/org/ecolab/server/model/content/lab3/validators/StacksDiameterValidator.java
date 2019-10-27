@@ -10,7 +10,7 @@ public class StacksDiameterValidator implements FieldValidator<Double, Lab3Data>
     @Override
     public FieldValidationResult validate(Double value, Lab3Data labData) {
         if (labData.getCombustionProductsVolume() != null && labData.getFuelConsumer() != null && labData.getNumberOfUnits() != null && labData.getNumberOfStacks() != null) {
-            double stackAverageGasesSpeed = ((4 * labData.getCombustionProductsVolume() * labData.getFuelConsumer() * labData.getNumberOfUnits().value()) /
+            var stackAverageGasesSpeed = ((4 * labData.getCombustionProductsVolume() * labData.getFuelConsumer() * labData.getNumberOfUnits().value()) /
                     (3.6 * Math.PI * Math.pow(value, 2) * labData.getNumberOfStacks().value()));
 
             if (stackAverageGasesSpeed < 10.0) {

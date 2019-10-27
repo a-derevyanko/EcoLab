@@ -74,7 +74,7 @@ public class AdminManagingView extends VerticalLayout implements View {
 
         autoSaveRate.setCaption(i18N.get("autoSaveRate"));
 
-        Converter<String, Integer> converter = UIUtils.getStringConverter(Integer.class, i18N);
+        var converter = UIUtils.getStringConverter(Integer.class, i18N);
         binder.forField(autoSaveRate).withConverter(converter).
                 bind(EcoLabVaadinProperties.Lab::getAutoSaveRate, EcoLabVaadinProperties.Lab::setAutoSaveRate);
 
@@ -89,7 +89,7 @@ public class AdminManagingView extends VerticalLayout implements View {
 
         backUpButton.setCaption(i18N.get("backUp"));
 
-        FileDownloader fileDownloader = new FileDownloader(
+        var fileDownloader = new FileDownloader(
                 new DownloadStreamResource(adminService::getBackup, "backup.zip"));
         fileDownloader.extend(backUpButton);
     }

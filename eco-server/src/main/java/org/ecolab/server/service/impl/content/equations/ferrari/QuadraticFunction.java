@@ -23,13 +23,13 @@ public class QuadraticFunction implements EquationFunction {
      */
     @Override
     public double[] findRealRoots() {
-        double discriminant = Math.sqrt(b * b - 4 * a * c);
+        var discriminant = Math.sqrt(b * b - 4 * a * c);
 
         if (discriminant < 0) {
             return new double[0];
         } else {
-            double x1 = (-b + discriminant) / (2 * a);
-            double x2 = (-b - discriminant) / (2 * a);
+            var x1 = (-b + discriminant) / (2 * a);
+            var x2 = (-b - discriminant) / (2 * a);
             return new double[]{x1, x2};
         }
     }

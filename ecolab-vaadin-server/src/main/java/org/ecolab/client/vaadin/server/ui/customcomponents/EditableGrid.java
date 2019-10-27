@@ -30,22 +30,22 @@ public class EditableGrid<T> extends Grid<EditableGridData<T>> implements UIComp
         }
 
         IntStream.range(0, captions.size()).forEachOrdered(i -> {
-            String caption = captions.get(i);
-            TextField field = new TextField();
-            Binder<EditableGridData<T>> binder = getEditor().getBinder();
-            Binder.Binding<EditableGridData<T>, T> binding = binder.forField(field).
+            var caption = captions.get(i);
+            var field = new TextField();
+            var binder = getEditor().getBinder();
+            var binding = binder.forField(field).
                     withConverter(converter).
                     bind(data -> data.getValue(i), (doubleData, aDouble) -> doubleData.setValue(i, aDouble));
-            Column<EditableGridData<T>, T> column = addColumn(data -> data.getValue(i)).setCaption(caption).setSortable(false);
+            var column = addColumn(data -> data.getValue(i)).setCaption(caption).setSortable(false);
             column.setEditorBinding(binding);
         });
     }
 
     public void setRowCount(int rows, T defaultValue) {
-        List<EditableGridData<T>> items = getDataProvider().getItems().stream().limit(rows).collect(Collectors.toList());
+        var items = getDataProvider().getItems().stream().limit(rows).collect(Collectors.toList());
 
         IntStream.rangeClosed(items.size() + 1, rows).forEachOrdered(i -> {
-            EditableGridData<T> data = new EditableGridData<>(i, new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue)));
+            var data = new EditableGridData<T>(i, new ArrayList<>(Collections.nCopies(getColumns().size(), defaultValue)));
             items.add(data);
         });
         setItems(items);

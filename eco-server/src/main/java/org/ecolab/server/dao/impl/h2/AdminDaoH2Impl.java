@@ -25,10 +25,10 @@ public class AdminDaoH2Impl implements AdminDao {
     @Override
     public byte[] getBackup() {
         dsl.execute("BACKUP TO '" + BACKUP_FILE_NAME + "'");
-        File backup = new File(BACKUP_FILE_NAME);
+        var backup = new File(BACKUP_FILE_NAME);
         if (backup.exists()) {
             try {
-                byte[] file = Files.readAllBytes(backup.toPath());
+                var file = Files.readAllBytes(backup.toPath());
                 if (!backup.delete()) {
                     throw new IllegalStateException("Backup not deleted!");
                 }

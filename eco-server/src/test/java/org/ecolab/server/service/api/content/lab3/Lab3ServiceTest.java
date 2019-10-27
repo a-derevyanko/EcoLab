@@ -36,7 +36,7 @@ public class Lab3ServiceTest extends AbstractTestWithUser {
 
     @Test
     public void testGetLabByUser() throws Exception {
-        Lab3Data lab3Data = lab3Service.getLastUncompletedLabByUser(USERNAME);
+        var lab3Data = lab3Service.getLastUncompletedLabByUser(USERNAME);
         Assert.assertTrue(new ReflectionEquals(lab3Data).matches(createdLab));
     }
 
@@ -47,10 +47,10 @@ public class Lab3ServiceTest extends AbstractTestWithUser {
 
     @Test
     public void testRemoveOldLabs() throws InterruptedException {
-        LocalDateTime startDate = LocalDateTime.now();
+        var startDate = LocalDateTime.now();
         Thread.sleep(1000L);
-        int count = RandomUtils.nextInt(15);
-        for (int i = 0; i < count; i++) {
+        var count = RandomUtils.nextInt(15);
+        for (var i = 0; i < count; i++) {
             lab3Service.startNewLab(USERNAME);
         }
         Assert.assertEquals(lab3Service.removeOldLabs(startDate), count);

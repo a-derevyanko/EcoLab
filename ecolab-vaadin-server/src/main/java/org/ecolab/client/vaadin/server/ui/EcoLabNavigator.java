@@ -52,7 +52,7 @@ public class EcoLabNavigator extends SpringNavigator {
     public String getState() {
         if (vaadinSecurity.isAuthenticated()) {
             if (super.getState().isEmpty()) {
-                Set<String> roles = UserInfoUtils.getRoles(vaadinSecurity.getAuthentication());
+                var roles = UserInfoUtils.getRoles(vaadinSecurity.getAuthentication());
 
                 if (roles.contains(Role.ADMIN)) {
                     return AdminManagingView.NAME;

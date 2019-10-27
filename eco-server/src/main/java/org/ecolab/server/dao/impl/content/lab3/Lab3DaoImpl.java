@@ -34,7 +34,7 @@ import static org.ecolab.server.db.h2.public_.tables.Lab3variant.LAB3VARIANT;
 @Profile({Profiles.DB.H2, Profiles.DB.POSTGRES})
 public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
     private static final RecordMapper<Record, Lab3Data> LAB3DATA_MAPPER = record -> {
-        Lab3Data data = new Lab3Data();
+        var data = new Lab3Data();
         data.setId(record.get(LAB3DATA.ID));
         data.setStartDate(record.get(LAB3DATA.START_DATE));
         data.setSaveDate(record.get(LAB3DATA.SAVE_DATE));
@@ -80,7 +80,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
         data.setSo2MAC(record.get(LAB3DATA.SO2_MAC));
         data.setAshMAC(record.get(LAB3DATA.ASH_MAC));
 
-        Lab3Variant variant = new Lab3Variant();
+        var variant = new Lab3Variant();
         variant.setTppOutput(record.get(LAB3VARIANT.TPP_OUTPUT));
         variant.setNumberOfUnits(record.get(LAB3VARIANT.NUMBER_OF_UNITS) == null ? null : NumberOfUnits.valueOf(record.get(LAB3VARIANT.NUMBER_OF_UNITS)));
         variant.setFuelType(record.get(LAB3VARIANT.FUEL_TYPE) == null ? null : FuelType.valueOf(record.get(LAB3VARIANT.FUEL_TYPE)));
@@ -119,7 +119,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
 
     @Override
     public Lab3Data getLastLabByUser(String userName, boolean completed) {
-        Lab3Data data = dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID)).
+        var data = dsl.select().from(LAB3DATA).join(LAB3VARIANT).on(LAB3VARIANT.ID.eq(LAB3DATA.ID)).
                 where(LAB3DATA.ID.eq(dsl.select(LAB3TEAM.ID).from(LAB3TEAM).where(LAB3TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
                         .and(LAB3DATA.COMPLETED.eq(completed)).
                 orderBy(LAB3DATA.SAVE_DATE.desc()).limit(1).fetchOne(LAB3DATA_MAPPER);
@@ -224,7 +224,7 @@ public class Lab3DaoImpl extends LabDaoImpl<Lab3Data> implements Lab3Dao {
 
         saveLabUsers(data);
 
-        Lab3Variant variant = data.getVariant();
+        var variant = data.getVariant();
         dsl.insertInto(LAB3VARIANT,
                 LAB3VARIANT.ID,
                 LAB3VARIANT.TPP_OUTPUT,

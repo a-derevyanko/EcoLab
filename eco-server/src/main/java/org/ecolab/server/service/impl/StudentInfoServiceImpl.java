@@ -40,11 +40,11 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Cacheable(cacheNames = STUDENT_INFO_CACHE, key = "#userName")
     @Nullable
     public StudentInfo getStudentInfo(String userName) {
-        StudentGroup group = studentInfoDao.getStudentGroup(userName);
+        var group = studentInfoDao.getStudentGroup(userName);
         if (group == null) {
             return null;
         } else {
-            StudentInfo studentInfo = new StudentInfo();
+            var studentInfo = new StudentInfo();
             studentInfo.setGroup(group);
             studentInfo.setTeam(studentInfoDao.getStudentTeam(userName));
             return studentInfo;
@@ -60,7 +60,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         userInfoService.updateUserInfo(userInfo);
         studentInfoDao.updateStudentGroup(userInfo.getLogin(), group);
         studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
-        StudentInfo studentInfo = new StudentInfo();
+        var studentInfo = new StudentInfo();
         studentInfo.setGroup(group);
         studentInfo.setTeam(team);
         return studentInfo;
@@ -80,7 +80,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         if (team != null) {
             studentInfoDao.updateStudentTeam(userInfo.getLogin(), team);
         }
-        StudentInfo studentInfo = new StudentInfo();
+        var studentInfo = new StudentInfo();
         studentInfo.setGroup(group);
         studentInfo.setTeam(team);
         return studentInfo;

@@ -28,9 +28,9 @@ public class SpringBootAdminContext {
     @Bean
     public InitializingBean jmx(final MBeanServer mbs) {
         return () -> {
-            LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-            ObjectName objectName = new ObjectName(MBeanUtil.getObjectNameFor(loggerContext.getName(), JMXConfigurator.class));
-            JMXConfigurator jc = new JMXConfigurator(loggerContext, mbs, objectName);
+            var loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+            var objectName = new ObjectName(MBeanUtil.getObjectNameFor(loggerContext.getName(), JMXConfigurator.class));
+            var jc = new JMXConfigurator(loggerContext, mbs, objectName);
             mbs.registerMBean(jc, objectName);
         };
     }

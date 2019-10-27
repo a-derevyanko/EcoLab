@@ -25,7 +25,7 @@ public class Lab1ExperimentDaoImpl extends Lab1DaoImpl<Lab1ExperimentLog> implem
 
         @Override
         public Lab1Data<Lab1ExperimentLog> map(Record record) {
-            Lab1Data<Lab1ExperimentLog> data = super.map(record);
+            var data = super.map(record);
             data.getVariant().setId(record.get(LAB1_EXPERIMENT_LOG.ID));
             data.getVariant().setName(record.get(LAB1_EXPERIMENT_LOG.NAME));
             data.getVariant().setTime(record.get(LAB1_EXPERIMENT_LOG.TIME));
@@ -52,7 +52,7 @@ public class Lab1ExperimentDaoImpl extends Lab1DaoImpl<Lab1ExperimentLog> implem
 
     @Override
     public Lab1Data<Lab1ExperimentLog> getLastLabByUser(String userName, boolean completed) {
-        Lab1Data<Lab1ExperimentLog> data = dsl.select().from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1_EXPERIMENT_LOG.ID.eq(LAB1DATA.ID)).
+        var data = dsl.select().from(LAB1DATA).join(LAB1_EXPERIMENT_LOG).on(LAB1_EXPERIMENT_LOG.ID.eq(LAB1DATA.ID)).
                 where(LAB1DATA.ID.eq(dsl.select(LAB1TEAM.ID).from(LAB1TEAM).where(LAB1TEAM.USER_ID.eq(DaoUtils.getFindUserIdSelect(dsl, userName)))))
                         .and(LAB1DATA.COMPLETED.eq(completed)).
                 orderBy(LAB1DATA.SAVE_DATE.desc()).limit(1).fetchOne(getLabMapper());

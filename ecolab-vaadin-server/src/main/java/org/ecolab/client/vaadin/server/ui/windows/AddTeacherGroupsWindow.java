@@ -71,7 +71,7 @@ public class AddTeacherGroupsWindow extends BaseEcoLabWindow<AddTeacherGroupsWin
                 }, studentInfoService::isGroupExists,
                 s -> {
                     Set<StudentGroup> selected = new HashSet<>(groups.getSelectedItems());
-                    StudentGroup group = studentInfoService.createStudentGroup(s);
+                    var group = studentInfoService.createStudentGroup(s);
                     selected.add(group);
                     refreshItems();
                     selected.forEach(sel -> groups.getSelectionModel().select(sel));
@@ -95,7 +95,7 @@ public class AddTeacherGroupsWindow extends BaseEcoLabWindow<AddTeacherGroupsWin
     }
 
     private void refreshItems() {
-        Set<StudentGroup> studentGroups = studentInfoService.getGroupsAvailableForTeacher();
+        var studentGroups = studentInfoService.getGroupsAvailableForTeacher();
         groups.setItems(studentGroups);
     }
 

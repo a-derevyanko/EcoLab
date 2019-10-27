@@ -82,7 +82,7 @@ public abstract class Wizard extends org.vaadin.teemu.wizards.Wizard implements 
 
     protected void replaceHeader() {
         removeListener((WizardProgressListener) getHeader());
-        WizardProgressBar progressBar = new WizardProgressBar(this);
+        var progressBar = new WizardProgressBar(this);
         addListener(progressBar);
         setHeader(progressBar);
     }
@@ -92,7 +92,7 @@ public abstract class Wizard extends org.vaadin.teemu.wizards.Wizard implements 
     }
 
     protected void updateButtons() {
-        boolean lastStep = isLastStep(currentStep);
+        var lastStep = isLastStep(currentStep);
         getFinishButton().setVisible(lastStep);
         getNextButton().setVisible(!lastStep);
         getBackButton().setVisible(!isFirstStep(currentStep));

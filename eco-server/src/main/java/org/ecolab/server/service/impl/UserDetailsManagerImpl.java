@@ -64,7 +64,7 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     private static final String DEFAULT_USER_NAME = "user";
 
     private static final RecordMapper<Record, UserInfo> USER_INFO_RECORD_MAPPER = record -> {
-        UserInfo info = new UserInfo();
+        var info = new UserInfo();
         info.setId(record.get(USERS.ID));
         info.setLogin(record.get(USERS.LOGIN));
         info.setFirstName(record.get(USERS.FIRST_NAME));
@@ -149,8 +149,8 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     protected List<UserDetails> loadUsersByUsername(String username) {
         return dsl.fetch(getUsersByUsernameQuery(), username).map(record -> {
-            String username1 = record.getValue(0, String.class);
-            String password = record.getValue(1, String.class);
+            var username1 = record.getValue(0, String.class);
+            var password = record.getValue(1, String.class);
             boolean enabled = record.getValue(2, Boolean.class);
             return new User(username1, password, enabled, true, true, true,
                     AuthorityUtils.NO_AUTHORITIES);
@@ -173,14 +173,14 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
 
     @Override
     public void createUser(UserDetails userDetails) {
-        User user = new User(userDetails.getUsername(),
+        var user = new User(userDetails.getUsername(),
                 passwordEncoder.encode(userDetails.getPassword()), userDetails.getAuthorities());
         super.createUser(user);
     }
 
     @Override
     public void updateUser(UserDetails userDetails) {
-        User user = new User(userDetails.getUsername(),
+        var user = new User(userDetails.getUsername(),
                 passwordEncoder.encode(userDetails.getPassword()), userDetails.getAuthorities());
         super.updateUser(user);
     }
@@ -216,22 +216,22 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     @CachePut(cacheNames = "USER", key = "#result.login")
     public UserInfo createUserInfo(@Valid @NotNull UserInfo userInfo) {
         if (userInfo.getLogin() == null) {
-            String initials = userInfo.getLastName() + userInfo.getFirstName().charAt(0);
+            var initials = userInfo.getLastName() + userInfo.getFirstName().charAt(0);
 
             if (!userInfo.getMiddleName().isEmpty()) {
                 initials += userInfo.getMiddleName().charAt(0);
             }
 
-            String newLogin = ALPHANUMERIC_PATTERN.matcher(TRANSLITERATOR.transform(initials)).replaceAll("");
+            var newLogin = ALPHANUMERIC_PATTERN.matcher(TRANSLITERATOR.transform(initials)).replaceAll("");
             if (newLogin.isEmpty()) {
                 newLogin = DEFAULT_USER_NAME;
             }
 
-            List<String> sameUsers = dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.startsWith(newLogin)).fetchInto(String.class);
+            var sameUsers = dsl.select(USERS.LOGIN).from(USERS).where(USERS.LOGIN.startsWith(newLogin)).fetchInto(String.class);
 
             if (sameUsers.contains(newLogin)) {
-                for (int i = 1; i < Integer.MAX_VALUE; i++) {
-                    String loginWithPostfix = newLogin + i;
+                for (var i = 1; i < Integer.MAX_VALUE; i++) {
+                    var loginWithPostfix = newLogin + i;
                     if (!sameUsers.contains(newLogin + i)) {
                         newLogin = loginWithPostfix;
                         break;
@@ -261,26 +261,26 @@ public class UserDetailsManagerImpl extends JdbcUserDetailsManager implements Us
     @LogExecutionTime(500)
     @Override
     public byte[] printUsersData(Stream<UserInfo> users, Locale locale) {
-        DRDataSource dataSource = new DRDataSource("firstName", "lastName", "login", "password");
+        var dataSource = new DRDataSource("firstName", "lastName", "login", "password");
 
         users.forEach(value -> dataSource.add(value.getFirstName(), value.getLastName(),
                 value.getLogin(), createDefaultPassword(value.getLogin())));
 
-        JasperReportBuilder builder = report()
+        var builder = report()
                 .setTemplate(reportService.getReportTemplate(locale)).
                         title(reportService.createTitleComponent(
                                 messageSource.getMessage("report.user.title", null, locale) + " (" +
                                         FastDateFormat.getInstance("dd.MM.yyyy HH:mm").format(new Date()) +')'));
 
-        TextColumnBuilder<String> firstNameColumn = col.column(messageSource.
+        var firstNameColumn = col.column(messageSource.
                 getMessage("report.user.firstName", null, locale), "firstName", type.stringType()).setMinHeight(80);
-        TextColumnBuilder<String> lastNameColumn = col.column(messageSource.
+        var lastNameColumn = col.column(messageSource.
                 getMessage("report.user.lastName", null, locale), "lastName", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
-        TextColumnBuilder<String> loginColumn = col.column(messageSource.
+        var loginColumn = col.column(messageSource.
                 getMessage("report.user.login", null, locale), "login", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
-        TextColumnBuilder<String> passwordColumn = col.column(messageSource.
+        var passwordColumn = col.column(messageSource.
                 getMessage("report.user.password", null, locale), "password", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
 

@@ -28,7 +28,7 @@ public class ParameterWithFormulaeLayout<BEAN extends LabData<V>, V extends LabV
 
     @Override
     protected void addSign(String fieldName, int row) {
-        String resKey = fieldName + '.' + ImageFormat.PNG;
+        var resKey = fieldName + '.' + ImageFormat.PNG;
         if (res.isResourceExists(formulaePath, resKey)) {
             Component signLabelComponent = new Image(null, res.getImage(formulaePath, resKey));
             super.addComponent(signLabelComponent, 2, row);

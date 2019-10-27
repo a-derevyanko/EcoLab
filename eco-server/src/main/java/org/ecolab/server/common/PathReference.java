@@ -47,7 +47,7 @@ public class PathReference implements Closeable {
             return new PathReference(Paths.get(resPath), null);
         } catch (final FileSystemNotFoundException e) {
             final Map<String, ?> env = Collections.emptyMap();
-            final FileSystem fs = FileSystems.newFileSystem(resPath, env);
+            final var fs = FileSystems.newFileSystem(resPath, env);
             return new PathReference(fs.provider().getPath(resPath), fs);
         }
     }

@@ -31,14 +31,14 @@ public class LogExecutionTimeAspect {
     }
 
     private Object logExecutionTime(ProceedingJoinPoint joinPoint, long normalExecutionTime) throws Throwable {
-        StopWatch stopWatch = new StopWatch();
+        var stopWatch = new StopWatch();
         stopWatch.start();
         try {
             return joinPoint.proceed();
         } finally {
             stopWatch.stop();
             if (stopWatch.getTotalTimeMillis() > normalExecutionTime) {
-                String logMessage = String.format(LOG_MESSAGE_FORMAT,
+                var logMessage = String.format(LOG_MESSAGE_FORMAT,
                         joinPoint.getTarget().getClass().getName(), joinPoint.getSignature().getName(), stopWatch.getTotalTimeMillis());
                 LOG.warn(logMessage);
             }

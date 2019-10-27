@@ -29,7 +29,7 @@ public class ServerSecurityContext {
     public AuthenticationProvider authenticationProvider(UserCache userCache,
                                                          PasswordEncoder passwordEncoder,
                                                          UserDetailsService userDetailsService) {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        var authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder);
         authenticationProvider.setUserCache(userCache);

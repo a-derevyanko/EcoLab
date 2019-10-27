@@ -16,7 +16,7 @@ public class StudentInfoFilter extends UserInfoFilter {
         if (this == o) return true;
         if (!(o instanceof StudentInfoFilter)) return false;
         if (!super.equals(o)) return false;
-        StudentInfoFilter that = (StudentInfoFilter) o;
+        var that = (StudentInfoFilter) o;
         return Objects.equals(studentInfoFilter, that.studentInfoFilter);
     }
 

@@ -125,7 +125,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     @Transactional
     //@CachePut(cacheNames = "LABDATA", key = "#userName")
     public T startNewLab(String userName) {
-        T labData = createBaseLabData(userName);
+        var labData = createBaseLabData(userName);
         labData.setVariant(generateNewLabVariant());
         labDao.saveLab(labData);
         updateCalculatedFields(labData);
@@ -167,7 +167,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     @Override
     @Cacheable(value = "LAB_TEST", key = "#root.targetClass.simpleName")
     public LabTest getLabTest(Locale locale) {
-        LabTest test = new LabTest();
+        var test = new LabTest();
         test.setQuestions(labDao.getTestQuestions(locale));
         return test;
     }
@@ -177,16 +177,16 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         List<Integer> errors = new ArrayList<>();
         Bindings values = new SimpleBindings(getValuesFromModel(data));
 
-        for (Map.Entry<LabTestQuestionVariant, Object> entry : answers.entrySet()) {
+        for (var entry : answers.entrySet()) {
             if (entry.getKey() instanceof LabTestQuestionVariantWithAnswers) {
-                LabTestQuestionVariantWithAnswers variant = (LabTestQuestionVariantWithAnswers) entry.getKey();
+                var variant = (LabTestQuestionVariantWithAnswers) entry.getKey();
                 if (!variant.getAnswers().get(variant.getRightAnswer() - 1).equals(entry.getValue())) {
                     errors.add(variant.getNumber());
                 }
             } else {
-                LabTestHomeWorkQuestion question = (LabTestHomeWorkQuestion) entry.getKey();
+                var question = (LabTestHomeWorkQuestion) entry.getKey();
                 try {
-                    Object value = JAVASCRIPT_ENGINE.eval(question.getFormulae(), values);
+                    var value = JAVASCRIPT_ENGINE.eval(question.getFormulae(), values);
                     if (Number.class.isAssignableFrom(question.getValueType())) {
                         if (!MathUtils.checkEquals(((Number) entry.getValue()).doubleValue(), ((Number) value).doubleValue(), 1.5)) {
                             errors.add(question.getNumber());
@@ -202,8 +202,8 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
             }
         }
 
-        LabTestResult result = new LabTestResult();
-        int pointCount = getLabTest(locale).getQuestions().stream().
+        var result = new LabTestResult();
+        var pointCount = getLabTest(locale).getQuestions().stream().
                 filter(q -> !errors.contains(q.getQuestionNumber())).
                 mapToInt(LabTestQuestion::getPointCount).sum();
 
@@ -230,7 +230,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     @LogExecutionTime(500)
     @Override
     public byte[] printInitialData(V variant, Locale locale) {
-        DRDataSource dataSource = new DRDataSource("parameterName", "parameterSign", "parameterValue", "parameterDimension");
+        var dataSource = new DRDataSource("parameterName", "parameterSign", "parameterValue", "parameterDimension");
         Map<String, Image> images = new HashMap<>();
         getInitialDataValues(variant, locale).forEach((value) -> {
             try {
@@ -244,28 +244,28 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
             }
         });
 
-        JasperReportBuilder builder = report()
+        var builder = report()
                 .setTemplate(reportService.getReportTemplate(locale)).
                         title(reportService.createTitleComponent(
                                 messageSource.getMessage("report.initial-data.title",
                                         new Object[]{getLabNumber()}, locale)));
         if (!images.isEmpty()) {
-            HorizontalListBuilder imageListBuilder = cmp.horizontalList();
-            for (Map.Entry<String, Image> image : images.entrySet()) {
+            var imageListBuilder = cmp.horizontalList();
+            for (var image : images.entrySet()) {
                 imageListBuilder.add(reportService.createImageWithTitle(image.getValue(), image.getKey()));
             }
             builder.title(imageListBuilder, cmp.verticalGap(20));
         }
 
-        TextColumnBuilder<String> parameterNameColumn = col.column(messageSource.
+        var parameterNameColumn = col.column(messageSource.
                 getMessage("report.lab-data.parameter-name", null, locale), "parameterName", type.stringType());
-        TextColumnBuilder<String> parameterSignColumn = col.column(messageSource.
+        var parameterSignColumn = col.column(messageSource.
                 getMessage("report.lab-data.parameter-sign", null, locale), "parameterSign", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
-        TextColumnBuilder<String> parameterValueColumn = col.column(messageSource.
+        var parameterValueColumn = col.column(messageSource.
                 getMessage("report.lab-data.parameter-value", null, locale), "parameterValue", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
-        TextColumnBuilder<String> parameterDimensionColumn = col.column(messageSource.
+        var parameterDimensionColumn = col.column(messageSource.
                 getMessage("report.lab-data.parameter-dimension", null, locale), "parameterDimension", type.stringType())
                 .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
 
@@ -277,8 +277,8 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     @Override
     public Set<DataValue> getInitialDataValues(V data, Locale locale) {
         Set<DataValue> printData = new LinkedHashSet<>();
-        for (Map.Entry<String, Object> entry : getInitialDataWithLocalizedValues(data, locale).entrySet()) {
-            DataValue dataValue = new DataValue();
+        for (var entry : getInitialDataWithLocalizedValues(data, locale).entrySet()) {
+            var dataValue = new DataValue();
             dataValue.setName(messageSource.getMessage(entry.getKey(), null, locale));
             dataValue.setValue(entry.getValue());
             dataValue.setSign(messageSource.getMessage(entry.getKey() + "-sign", null, locale));
@@ -296,11 +296,11 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
 
     protected Map<String, Object> getInitialDataWithLocalizedValues(V data, Locale locale) {
         Map<String, Object> printData = new LinkedHashMap<>();
-        for (Map.Entry<String, Object> entry : getValuesFromModel(data).entrySet()) {
+        for (var entry : getValuesFromModel(data).entrySet()) {
             if (entry.getValue() instanceof List) {
                 List<?> value = (List) entry.getValue();
                 if (value.isEmpty() || !(value.get(0) instanceof List)) {
-                    List<String> captions = Arrays.asList(messageSource.getMessage(entry.getKey() + "-columns", null, locale).split(";"));
+                    var captions = Arrays.asList(messageSource.getMessage(entry.getKey() + "-columns", null, locale).split(";"));
                     Map<String, Object> valueMap = IntStream.range(0, captions.size()).boxed().
                             collect(Collectors.toMap(captions::get, i -> getFieldValueForPrint(value.get(i), locale), (a, b) -> b, LinkedHashMap::new));
                     printData.put(entry.getKey(), valueMap);
@@ -327,9 +327,9 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     protected Map<String, Object> getValuesForReport(T data, Locale locale) {
         Map<String, Object> values = new HashMap<>();
 
-        UserInfo userInfo = userInfoService.getUserInfo(data.getUsers().iterator().next()); //todo переделать и не использовать ервый элемент списка
+        var userInfo = userInfoService.getUserInfo(data.getUsers().iterator().next()); //todo переделать и не использовать ервый элемент списка
         if (userInfo.getGroup() == UserGroup.STUDENT) {
-            StudentInfo studentInfo = studentInfoService.getStudentInfo(data.getUsers().iterator().next());
+            var studentInfo = studentInfoService.getStudentInfo(data.getUsers().iterator().next());
             values.put("teacherName", UserInfoUtils.getShortInitials(studentInfoService.getGroupTeacher(studentInfo.getGroup().getName())));
             values.put("groupNumber", studentInfo.getGroup().getName());
             values.put("teamNumber", studentInfo.getTeam() == null ? "0" : studentInfo.getTeam().getName());
@@ -345,7 +345,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
             values.put("studentsList",  "");
         }
 
-        Map<String, Object> labVariantAndDataValues = getValuesFromModel(data.getVariant());
+        var labVariantAndDataValues = getValuesFromModel(data.getVariant());
 
         labVariantAndDataValues.putAll(getValuesFromModel(data));
         values.putAll(labVariantAndDataValues.entrySet().stream().
@@ -360,7 +360,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
         Map<String, Object> values = new LinkedHashMap<>();
         ReflectionUtils.doWithFields(data.getClass(), field -> {
             ReflectionUtils.makeAccessible(field);
-            Object value = ReflectionUtils.getField(field, data);
+            var value = ReflectionUtils.getField(field, data);
             if (value instanceof Valued) {
                 values.put(field.getName(), ((Valued) value).value());
             } else if (value == null || value instanceof Enum) {
@@ -384,9 +384,9 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     @Override
     public byte[] createReport(T labData, Locale locale) {
         try {
-            JasperReport report = reportService.getCompiledReport(this.getClass().getResource("report/report.jrxml"));
+            var report = reportService.getCompiledReport(this.getClass().getResource("report/report.jrxml"));
             JRDataSource dataSource = new JREmptyDataSource();
-            JasperPrint print = JasperFillManager.fillReport(report, getValuesForReport(labData, locale), dataSource);
+            var print = JasperFillManager.fillReport(report, getValuesForReport(labData, locale), dataSource);
             return JasperExportManager.exportReportToPdf(print);
         } catch (JRException e) {
             throw new UnhandledException(e);
@@ -394,11 +394,11 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     }
 
     protected T createBaseLabData(String userName) {
-        T labData = createNewLabData();
+        var labData = createNewLabData();
         Set<String> users = new HashSet<>();
         labData.setUsers(users);
 
-        StudentInfo studentInfo = studentInfoService.getStudentInfo(userName);
+        var studentInfo = studentInfoService.getStudentInfo(userName);
         if (studentInfo == null || studentInfo.getTeam() == null) {
             users.add(userName);
         } else {
@@ -411,7 +411,7 @@ public abstract class LabServiceImpl<T extends LabData<V>, V extends LabVariant,
     }
 
     private T getLastLabByUser(String userName, boolean completed) {
-        T data = labDao.getLastLabByUser(userName, completed);
+        var data = labDao.getLastLabByUser(userName, completed);
         if (data != null) {
             updateCalculatedFields(data);
         }

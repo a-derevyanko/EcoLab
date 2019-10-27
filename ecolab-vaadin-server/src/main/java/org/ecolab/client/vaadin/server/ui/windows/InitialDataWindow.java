@@ -108,7 +108,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
 
         List<Component> additionalComponents = new ArrayList<>();
 
-        for (DataValue dataValue : settings.labService.getInitialDataValues(settings.variant, UI.getCurrent().getLocale())) {
+        for (var dataValue : settings.labService.getInitialDataValues(settings.variant, UI.getCurrent().getLocale())) {
             // Т. к. Grid до сих пор не поддерживает ячейки из нескольких строк, заменяем на пробелы все переходы на новую строку
             dataValue.setName(dataValue.getName().replaceAll("<br>", " "));
             if (dataValue.getValue() instanceof URL) {
@@ -120,7 +120,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
                         Lists.newArrayList(val.keySet()));
                 field.setValue(Lists.newArrayList(((Map) val).values()));
                 field.setReadOnly(true);
-                Label caption = new Label(dataValue.getName());
+                var caption = new Label(dataValue.getName());
                 caption.setStyleName(EcoLabTheme.LABEL_LARGE);
                 additionalComponents.add(caption);
                 additionalComponents.add(field);
@@ -132,7 +132,7 @@ public class InitialDataWindow<T extends LabData<V>, V extends LabVariant> exten
         if (images.isEmpty()) {
             imagesLayout.setVisible(false);
         } else {
-            for (Map.Entry<String, URL> entry : images.entrySet()) {
+            for (var entry : images.entrySet()) {
                 Component component = new com.vaadin.ui.Image(entry.getKey(), new StreamResource(() -> {
                     try {
                         return entry.getValue().openStream();

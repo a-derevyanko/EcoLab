@@ -41,7 +41,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     private static final String STUDENT_COUNT = "STUDENT_COUNT";
     private static final String LAB_COUNT = "LAB_COUNT";
     private static final RecordMapper<Record, StudentGroupInfo> STUDENT_INFO_RECORD_MAPPER = record -> {
-        StudentGroupInfo group = new StudentGroupInfo();
+        var group = new StudentGroupInfo();
         group.setIndex(record.get(0, Integer.class));
         group.setName(record.get(1, String.class));
         group.setStudentCount(record.get(STUDENT_COUNT, Integer.class));
@@ -50,14 +50,14 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
         return group;
     };
     private static final RecordMapper<Record, StudentGroup> STUDENT_GROUP_RECORD_MAPPER = record -> {
-        StudentGroup group = new StudentGroup();
+        var group = new StudentGroup();
         group.setId(record.get(STUDY_GROUPS.ID));
         group.setName(record.get(STUDY_GROUPS.NAME));
         return group;
     };
 
     private static final RecordMapper<Record, StudentTeam> STUDENT_TEAM_RECORD_MAPPER = record -> {
-        StudentTeam team = new StudentTeam();
+        var team = new StudentTeam();
         team.setId(record.get(STUDY_TEAMS.ID));
         team.setName(record.get(STUDY_TEAMS.NAME));
         return team;
@@ -86,7 +86,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
         if (teamRecord == null) {
             return null;
         } else {
-            StudentTeam team = new StudentTeam();
+            var team = new StudentTeam();
             team.setName(teamRecord.get(STUDY_TEAMS.NAME));
             return team;
         }
@@ -124,7 +124,7 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
 
     @Override
     public Set<StudentGroupInfo> getTeacherGroupsInfo(String teacher) {
-        Table<Record> nested = dsl.<Record>select(STUDY_GROUPS.NAME, DSL.count(STUDY_GROUP_MEMBERS.ID).as(STUDENT_COUNT),
+        var nested = dsl.<Record>select(STUDY_GROUPS.NAME, DSL.count(STUDY_GROUP_MEMBERS.ID).as(STUDENT_COUNT),
                 DSL.count(DSL.coalesce(USER_LAB_HISTORY.LAB_NUMBER)).as(LAB_COUNT),
                 DSL.count(DSL.coalesce(USER_TEST_HISTORY.LAB_NUMBER)).as(TEST_COUNT)).from(STUDY_GROUPS).
                 join(STUDY_GROUP_TEACHERS).on(STUDY_GROUP_TEACHERS.GROUP_ID.eq(STUDY_GROUPS.ID)).
@@ -266,10 +266,10 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     public void changeLabAllowance(String userName, boolean allow, int... labs) {
         if (allow) {
             long currentUserId =  DaoUtils.getFindUserIdSelect(dsl, userName).fetchOneInto(Long.class);
-            BatchBindStep step = dsl.batch(dsl.insertInto(USER_LAB_ALLOWANCE, USER_LAB_ALLOWANCE.USER_ID, USER_LAB_ALLOWANCE.LAB_NUMBER).
+            var step = dsl.batch(dsl.insertInto(USER_LAB_ALLOWANCE, USER_LAB_ALLOWANCE.USER_ID, USER_LAB_ALLOWANCE.LAB_NUMBER).
                     values((Long) null, null));
 
-            for (int lab : labs) {
+            for (var lab : labs) {
                 step = step.bind(currentUserId, lab);
             }
             step.execute();
@@ -283,10 +283,10 @@ public class StudentInfoDaoImpl implements StudentInfoDao {
     public void changeDefenceAllowance(String userName, boolean allow, int... labs) {
         if (allow) {
             long currentUserId =  DaoUtils.getFindUserIdSelect(dsl, userName).fetchOneInto(Long.class);
-            BatchBindStep step = dsl.batch(dsl.insertInto(USER_DEFENCE_ALLOWANCE, USER_DEFENCE_ALLOWANCE.USER_ID, USER_DEFENCE_ALLOWANCE.LAB_NUMBER).
+            var step = dsl.batch(dsl.insertInto(USER_DEFENCE_ALLOWANCE, USER_DEFENCE_ALLOWANCE.USER_ID, USER_DEFENCE_ALLOWANCE.LAB_NUMBER).
                     values((Long) null, null));
 
-            for (int lab : labs) {
+            for (var lab : labs) {
                 step = step.bind(currentUserId, lab);
             }
             step.execute();

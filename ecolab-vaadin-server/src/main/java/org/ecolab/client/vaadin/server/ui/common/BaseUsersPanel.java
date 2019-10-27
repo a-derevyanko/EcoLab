@@ -99,7 +99,7 @@ public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extend
         findPanel.setSpacing(true);
         findPanel.setMargin(true);
 
-        ConfigurableFilterDataProvider<UserInfo, Void, T> dataProvider = userInfoDataProvider.withConfigurableFilter();
+        var dataProvider = userInfoDataProvider.withConfigurableFilter();
         filter = createFilter();
         dataProvider.setFilter(filter);
         users.setSizeFull();
@@ -108,7 +108,7 @@ public abstract class BaseUsersPanel<S extends  UserDataWindowSettings, T extend
         users.setDataProvider(dataProvider);
 
         users.addSelectionListener((SelectionListener<UserInfo>) event -> {
-            boolean hasSelection = event.getFirstSelectedItem().isPresent();
+            var hasSelection = event.getFirstSelectedItem().isPresent();
             editUser.setEnabled(hasSelection);
             removeUser.setEnabled(hasSelection);
         });

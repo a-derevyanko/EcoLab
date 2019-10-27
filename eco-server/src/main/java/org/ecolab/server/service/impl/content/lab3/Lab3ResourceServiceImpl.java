@@ -45,7 +45,7 @@ public class Lab3ResourceServiceImpl extends LabResourceServiceImpl implements L
     @Cacheable("WIND_ROSE_CACHE")
     @LogExecutionTime(200)
     public Image getWindRoseImage(City city) {
-        try (InputStream is = getWindRose(city).openStream()){
+        try (var is = getWindRose(city).openStream()){
             return ImageIO.read(is);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -56,17 +56,17 @@ public class Lab3ResourceServiceImpl extends LabResourceServiceImpl implements L
     @Cacheable("BACKGROUND_CACHE")
     @LogExecutionTime(200)
     public Image getBackgroundImage(City city, WindDirection windDirection) {
-        Image background = BACKGROUND_CACHE.computeIfAbsent(city, cityName -> loadImage("map/" + city.name() + ".png", -1.0));
+        var background = BACKGROUND_CACHE.computeIfAbsent(city, cityName -> loadImage("map/" + city.name() + ".png", -1.0));
 
-        double angle = - windDirection.ordinal() * (Math.PI / 4.0);
-        BufferedImage rotatedBackground = ImageUtil.createRotated(background, angle);
+        var angle = - windDirection.ordinal() * (Math.PI / 4.0);
+        var rotatedBackground = ImageUtil.createRotated(background, angle);
         rotatedBackground = rotatedBackground.getSubimage(rotatedBackground.getWidth() / 2,
                 rotatedBackground.getHeight() / 2 - rotatedBackground.getWidth() / 8, 635, 400);
-        BufferedImage copyOfImage = new BufferedImage(rotatedBackground.getWidth(), rotatedBackground.getHeight(), BufferedImage.TYPE_INT_RGB);
+        var copyOfImage = new BufferedImage(rotatedBackground.getWidth(), rotatedBackground.getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics g = copyOfImage.createGraphics();
         g.drawImage(rotatedBackground, 0, 0, null);
-        BufferedImage rotatedArrow = ImageUtil.createRotated(COMPASS_ARROW, angle);
-        Graphics2D g2d = copyOfImage.createGraphics();
+        var rotatedArrow = ImageUtil.createRotated(COMPASS_ARROW, angle);
+        var g2d = copyOfImage.createGraphics();
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
         g2d.drawImage(rotatedArrow, 0, 0, null);
         g2d.dispose();
@@ -79,7 +79,7 @@ public class Lab3ResourceServiceImpl extends LabResourceServiceImpl implements L
     }
 
     private static Image loadImage(String imageName, double scale) {
-        try (InputStream is = Lab3ResourceServiceImpl.class.getResourceAsStream(imageName)) {
+        try (var is = Lab3ResourceServiceImpl.class.getResourceAsStream(imageName)) {
             Image i = ImageIO.read(is);
             return scale == -1.0 ? i : i.getScaledInstance((int) Math.round(i.getWidth(null) * scale), (int) Math.round(i.getHeight(null) * scale), Image.SCALE_DEFAULT);
         } catch (IOException ex) {
