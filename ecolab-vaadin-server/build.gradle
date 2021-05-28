@@ -98,13 +98,14 @@ compileJava.dependsOn(processResources)
 nativeImage {
     mainClassName = 'org.ecolab.client.vaadin.server.VaadinApplication'
 
+    initializeAtBuildTime = ["org.springframework.util.unit.DataSize"]
+
     reportExceptionStackTraces = true
     removeUnusedAutoConfig     = true
     removeYamlSupport          = true
     maxHeapSize                = '6G'
 
     javaVersion = 11
-    traceClassInitialization   = true
     reportExceptionStackTraces = true
     removeUnusedAutoConfig     = true
     printAnalysisCallTree      = true

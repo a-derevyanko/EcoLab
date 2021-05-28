@@ -75,6 +75,8 @@ springBoot {
 nativeImage {
     mainClassName = 'org.ecolab.client.vaadin.desktop.DesktopVaadinApplication'
 
+    initializeAtBuildTime = ["org.springframework.util.unit.DataSize"]
+
     reportExceptionStackTraces = true
     removeUnusedAutoConfig     = true
     removeYamlSupport          = true
