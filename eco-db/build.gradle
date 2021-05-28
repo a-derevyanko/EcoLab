@@ -7,14 +7,14 @@ apply plugin: 'java'
 
 
 dependencies {
-    compile 'org.jooq:jooq:3.12.2'
+    implementation 'org.jooq:jooq:3.12.2'
 
-    compile "com.h2database:h2:$h2Version"
+    implementation "com.h2database:h2:$h2Version"
 
     jooqRuntime "com.h2database:h2:$h2Version"
     jooqRuntime "postgresql:postgresql:$pgVersion"
 
-    testCompile "com.h2database:h2:$h2Version"
+    testImplementation "com.h2database:h2:$h2Version"
 }
 
 jooq {

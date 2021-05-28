@@ -33,7 +33,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.util.ResourceBundle;
 
-@SpringBootApplication
+@SpringBootApplication(proxyBeanMethods = false)
 @EnableAdminServer
 @EnableConfigurationProperties(EcoLabVaadinProperties.class)
 public class DesktopVaadinApplication extends VaadinApplication {

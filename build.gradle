@@ -1,5 +1,9 @@
 plugins {
-    id 'io.franzbecker.gradle-lombok' version '3.2.0'
+    id "io.freefair.lombok" version "6.0.0-m2"
+}
+
+repositories {
+    mavenCentral()
 }
 import org.ecolab.gradle.CustomTest
 
@@ -7,14 +11,10 @@ import java.nio.charset.StandardCharsets
 
 apply plugin: 'groovy'
 dependencies {
-    compile localGroovy()
+    implementation localGroovy()
 }
 
-allprojects {
-    apply plugin: 'io.franzbecker.gradle-lombok'
-}
 subprojects {
-    apply plugin: 'io.franzbecker.gradle-lombok'
     group 'EcoLab'
     version '0.1-SNAPSHOT'
 
@@ -33,13 +33,13 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
 
-    sourceCompatibility = JavaVersion.VERSION_13
-    targetCompatibility = JavaVersion.VERSION_13
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     dependencies {
-        testCompile group: 'org.springframework.boot',  name: 'spring-boot-starter-test',           version: '2.2.0.RELEASE'
+        testImplementation group: 'org.springframework.boot',  name: 'spring-boot-starter-test',           version: '2.5.0'
 
-        testCompile group: 'org.testng',                name: 'testng',                             version: '6.8.13'
+        testImplementation group: 'org.testng',                name: 'testng',                             version: '6.8.13'
     }
 
     /*check.dependsOn.remove(test)

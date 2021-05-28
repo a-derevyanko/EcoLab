@@ -11,7 +11,6 @@ import org.ecolab.server.model.content.LabData;
 import org.ecolab.server.model.content.LabVariant;
 import org.ecolab.server.service.api.content.LabService;
 import org.ecolab.server.service.api.content.ValidationService;
-import org.jfree.chart.encoders.ImageFormat;
 
 /**
  * Created by 777Al on 08.04.2017.
@@ -28,7 +27,7 @@ public class ParameterWithFormulaeLayout<BEAN extends LabData<V>, V extends LabV
 
     @Override
     protected void addSign(String fieldName, int row) {
-        var resKey = fieldName + '.' + ImageFormat.PNG;
+        var resKey = fieldName + ".png";
         if (res.isResourceExists(formulaePath, resKey)) {
             Component signLabelComponent = new Image(null, res.getImage(formulaePath, resKey));
             super.addComponent(signLabelComponent, 2, row);

@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.ApplicationContext;
 
-@SpringBootApplication
+@SpringBootApplication(proxyBeanMethods = false)
 @EnableAdminServer
 @EnableConfigurationProperties(EcoLabVaadinProperties.class)
 public class VaadinApplication extends ServerApplication {

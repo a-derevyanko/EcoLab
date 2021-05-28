@@ -100,14 +100,14 @@ public class LoginView extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeEvent event) {
         if (currentNotification != null) {
-            currentNotification.close();
+            //currentNotification.close(); todo
         }
         currentNotification = UIUtils.showNotification(i18N.get("login-view.ecolab-welcome"), i18N.get("login-view.ecolab-welcome-demo"));
         username.focus();
     }
 
     protected void login() {
-        currentNotification.close();
+        //currentNotification.close(); todo
         if (username.isEmpty() || password.isEmpty()) {
             currentNotification = UIUtils.showNotification(i18N.get("login-view.ecolab-welcome-login-error"),
                     i18N.get("login-view.ecolab-welcome-login-empty"));

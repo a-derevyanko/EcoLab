@@ -5,15 +5,17 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.0.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.5.0")
     }
 }
 
 plugins {
     id "com.gorylenko.gradle-git-properties" version "2.2.0"
+    id('com.github.ayltai.spring-graalvm-native-plugin') version '1.4.9'
 }
 
 apply plugin: 'org.springframework.boot'
+apply plugin: 'java'
 
 repositories {
     mavenCentral()
@@ -30,9 +32,12 @@ repositories {
 }
 
 dependencies {
-    compile project (':ecolab-vaadin-server')
-    compile group: 'de.huxhorn.lilith',         name: 'de.huxhorn.lilith.3rdparty.junique',     version: '1.0.4'
-    compile("org.springframework.boot:spring-boot-starter-jetty:2.0.0.BUILD-SNAPSHOT")
+    implementation project (':eco-server')
+    implementation project (':ecolab-vaadin-server')
+    implementation group: 'de.huxhorn.lilith',         name: 'de.huxhorn.lilith.3rdparty.junique',     version: '1.0.4'
+    implementation group: 'commons-lang',            name: 'commons-lang',                      version: '2.6'
+    implementation group: 'de.codecentric',                name: 'spring-boot-admin-server',               version: '1.5.4'
+    compile("org.springframework.boot:spring-boot-starter-jetty:2.5.0")
 }
 
 springBoot.mainClassName = 'org.ecolab.client.vaadin.desktop.DesktopVaadinApplication'
@@ -65,6 +70,23 @@ bootRun {
 
 springBoot {
     buildInfo()
+}
+
+nativeImage {
+    mainClassName = 'org.ecolab.client.vaadin.desktop.DesktopVaadinApplication'
+
+    reportExceptionStackTraces = true
+    removeUnusedAutoConfig     = true
+    removeYamlSupport          = true
+    maxHeapSize                = '6G'
+
+    javaVersion = 11
+    traceClassInitialization   = true
+    reportExceptionStackTraces = true
+    removeUnusedAutoConfig     = true
+    printAnalysisCallTree      = true
+    verbose                    = true
+    enableHttps                = true
 }
 
 gitProperties {

@@ -14,7 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-@SpringBootApplication(scanBasePackageClasses = ServerApplication.class)
+@SpringBootApplication(proxyBeanMethods = false, scanBasePackageClasses = ServerApplication.class)
 @EnableWebSecurity
 @EnableWebMvc
 @EnableCaching

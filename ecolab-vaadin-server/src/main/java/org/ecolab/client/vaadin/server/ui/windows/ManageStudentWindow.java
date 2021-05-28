@@ -2,8 +2,10 @@ package org.ecolab.client.vaadin.server.ui.windows;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.BrowserWindowOpener;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.UI;
@@ -61,20 +63,19 @@ public class ManageStudentWindow extends EditUserWindow<ManageStudentWindow.Edit
         menu.setCaption(i18N.get("group-manage.group-members.actions"));
         rootMenuItem.setStyleName(EcoLabTheme.BUTTON_QUIET);
         for (var labNumber = 1; labNumber <= 3; labNumber++) {
-            var downloadItem = rootMenuItem.addItem(i18N.get("group-manage.group-members.actions-lab-report",
+            String name = String.format("report-lab-%s.pdf", labNumber);
+            int finalLabNumber1 = labNumber;
+            rootMenuItem.addItem(i18N.get("group-manage.group-members.actions-lab-report",
                     labNumber),
-                    VaadinIcons.DOWNLOAD, null);
-            var finalLabNumber = labNumber;
-            new BrowserWindowOpener(new DownloadStreamResource(
-                    () -> {
-                        var service = getLabService(finalLabNumber);
+                    VaadinIcons.DOWNLOAD, (MenuBar.Command) selectedItem -> Page.getCurrent().open(new DownloadStreamResource(
+                            () -> {
+                                var service = getLabService(finalLabNumber1);
 
-                        var data = service.getCompletedLabByUser(settings.getUserInfo().getLogin());
+                                var data = service.getCompletedLabByUser(settings.getUserInfo().getLogin());
 
-                        return service.createReport(data, UI.getCurrent().getLocale());
-                    },
-                    String.format("report-lab-%s.pdf", labNumber)
-            )).extend(downloadItem);
+                                return service.createReport(data, UI.getCurrent().getLocale());
+                            }, name),
+                            name, false));
         }
     }
 
